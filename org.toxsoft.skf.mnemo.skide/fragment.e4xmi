@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_a_OfYO_pEe2sPN0wm3qaiQ">
+  <imports xsi:type="commands:Category" xmi:id="_wAI1wPS9Ee2VSOGyOIriRg" elementId="org.toxsoft.mws.cmdcategory.global"/>
+  <imports xsi:type="commands:Command" xmi:id="_-xQgsPS9Ee2VSOGyOIriRg" elementId="org.toxsoft.mws.cmd.switch_persp">
+    <parameters xmi:id="_DHC1MPS-Ee2VSOGyOIriRg" elementId="org.toxsoft.mws.cmd.switch_persp.arg.perspId" name="org.toxsoft.mws.cmd.switch_persp.arg.perspId"/>
+  </imports>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_chZcwO_pEe2sPN0wm3qaiQ" featurename="addons" parentElementId="org.toxsoft.mws.app.main">
+    <elements xsi:type="application:Addon" xmi:id="_divlAO_pEe2sPN0wm3qaiQ" elementId="org.toxsoft.skide.plugin.template.addon.0" contributionURI="bundleclass://org.toxsoft.skf.mnemo.skide/org.toxsoft.skf.mnemo.skide.e4.addons.AddonSkidePluginMnemos"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_ahFg8PTCEe2VSOGyOIriRg" featurename="children" parentElementId="org.toxsoft.mws.perspectivestack.main">
+    <elements xsi:type="advanced:Perspective" xmi:id="_BXOEEPTDEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemos.skide.perspective.mnemo_editor" label="&#x420;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x43e;&#x440; &#x43c;&#x43d;&#x435;&#x43c;&#x43e;&#x441;&#x445;&#x435;&#x43c;" tooltip="&#x420;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x43e;&#x440; &#x43c;&#x43d;&#x435;&#x43c;&#x43e;&#x441;&#x445;&#x435;&#x43c;">
+      <children xsi:type="basic:Part" xmi:id="_DbnrUPTwEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemos.skide.part.0" contributionURI="bundleclass://org.toxsoft.skf.mnemo.skide/org.toxsoft.skf.mnemo.skide.e4.addons.UipartMnemoEditor"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Y6ZagPTDEe2VSOGyOIriRg" featurename="children" parentElementId="org.toxsoft.mws.menu.main.perspectives" positionInList="">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_gtJlIPTDEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemos.skide.handledmenuitem." label="%Persp_MnemoEditor" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.skide/icons/is24x24/mnemo-editor.png" tooltip="%Perps_MnemoEditor_D" command="_-xQgsPS9Ee2VSOGyOIriRg">
+      <parameters xmi:id="_nbeeUPTDEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemos.skide.parameter.0" name="org.toxsoft.mws.cmd.switch_persp.arg.perspId" value="org.toxsoft.skf.mnemos.skide.perspective.mnemo_editor"/>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_nlq7IPTOEe2VSOGyOIriRg" featurename="children" parentElementId="org.toxsoft.mws.toolbar.perspectives">
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_uI9B8PTOEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemos.skide.handledtoolitem." label="&#x420;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x43e;&#x440; &#x43c;&#x43d;&#x435;&#x43c;&#x43e;&#x441;&#x445;&#x435;&#x43c;" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.skide/icons/is24x24/mnemo-editor.png" tooltip="&#x420;&#x435;&#x434;&#x430;&#x43a;&#x442;&#x43e;&#x440; &#x43c;&#x43d;&#x435;&#x43c;&#x43e;&#x441;&#x445;&#x435;&#x43c;" command="_-xQgsPS9Ee2VSOGyOIriRg">
+      <parameters xmi:id="__ZANcPTOEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemos.skide.parameter.1" name="org.toxsoft.mws.cmd.switch_persp.arg.perspId" value="org.toxsoft.skf.mnemos.skide.perspective.mnemo_editor"/>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>
