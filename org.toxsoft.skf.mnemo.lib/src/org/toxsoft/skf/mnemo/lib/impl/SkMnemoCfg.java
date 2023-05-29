@@ -26,10 +26,10 @@ class SkMnemoCfg
   }
 
   // ------------------------------------------------------------------------------------
-  // implementation
+  // package API
   //
 
-  private Gwid dataGwid() {
+  Gwid dataGwid() {
     if( dataGwid == null ) {
       dataGwid = Gwid.createClob( classId(), strid(), CLBID_MNEMO_CFG_DATA );
     }
