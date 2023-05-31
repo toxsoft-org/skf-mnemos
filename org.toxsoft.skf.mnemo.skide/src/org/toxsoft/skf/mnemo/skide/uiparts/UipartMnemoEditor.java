@@ -1,8 +1,7 @@
-package org.toxsoft.skf.mnemo.skide.e4.addons;
+package org.toxsoft.skf.mnemo.skide.uiparts;
 
-import org.eclipse.swt.*;
-import org.eclipse.swt.custom.*;
 import org.toxsoft.core.tsgui.widgets.*;
+import org.toxsoft.sandbox.test.vs.mnemo.gui.*;
 import org.toxsoft.uskat.core.gui.e4.uiparts.*;
 
 /**
@@ -13,10 +12,11 @@ import org.toxsoft.uskat.core.gui.e4.uiparts.*;
 public class UipartMnemoEditor
     extends SkMwsAbstractPart {
 
+  private MnemoEditorPanel editorPanel = null;
+
   @Override
   protected void doCreateContent( TsComposite aParent ) {
-    CLabel l = new CLabel( aParent, SWT.CENTER );
-    l.setText( "Редактор мнемосхем" );
+    editorPanel = new MnemoEditorPanel( aParent, tsContext() );
   }
 
 }
