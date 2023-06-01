@@ -1,5 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.km5;
 
+import static org.toxsoft.core.tsgui.m5.IM5Constants.*;
+
 import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.m5.model.*;
 import org.toxsoft.core.tslib.utils.errors.*;
@@ -23,6 +25,8 @@ public class SkMnemoM5Model
    */
   public SkMnemoM5Model( ISkConnection aConn ) {
     super( ISkMnemoCfg.CLASS_ID, ISkMnemoCfg.class, aConn );
+    DESCRIPTION.setFlags( M5FF_COLUMN );
+    addFieldDefs( STRID, NAME, DESCRIPTION );
   }
 
   @Override

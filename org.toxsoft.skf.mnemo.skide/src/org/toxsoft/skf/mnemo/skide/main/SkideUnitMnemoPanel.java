@@ -5,8 +5,6 @@ import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.m5.gui.panels.*;
 import org.toxsoft.core.tsgui.m5.model.*;
-import org.toxsoft.core.tslib.coll.*;
-import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.skf.mnemo.lib.impl.*;
 import org.toxsoft.skide.core.api.*;
@@ -33,26 +31,31 @@ class SkideUnitMnemoPanel
     ISkCoreApi coreApi = tsContext().get( ISkConnectionSupplier.class ).defConn().coreApi();
     if( !coreApi.services().hasKey( ISkMnemosService.SERVICE_ID ) ) {
       coreApi.addService( SkMnemosService.CREATOR );
-      tsContext().put( ISkMnemosService.class, coreApi.getService( ISkMnemosService.SERVICE_ID ) );
+      // NICHT! tsContext().put( ISkMnemosService.class, coreApi.getService( ISkMnemosService.SERVICE_ID ) );
     }
 
     ISkConnection skConn = tsContext().get( ISkConnectionSupplier.class ).defConn();
     IM5Domain m5d = skConn.scope().get( IM5Domain.class );
-    IM5Model<Object> model = m5d.findModel( ISkMnemoCfg.CLASS_ID );
+    // IM5Model<Object> model = m5d.findModel( ISkMnemoCfg.CLASS_ID );
     // SkMnemoM5Model model = SkMnemoM5Model.class.cast( m5d.findModel( ISkMnemoCfg.CLASS_ID ) );
     // SkMnemoM5Model model = SkMnemoM5Model.class.cast( m5().findModel( ISkMnemoCfg.CLASS_ID ) );
 
-    ISkMnemosService mnemoService = tsContext().get( ISkMnemosService.class );
+    // NICHT! ISkMnemosService mnemoService = tsContext().get( ISkMnemosService.class );
 
-    IM5CollectionPanel<Object> panel;
-    IM5ItemsProvider<Object> ip = () -> {
-      IListEdit<Object> result = new ElemArrayList<>();
-      for( String id : mnemoService.listMnemosIds() ) {
-        result.add( mnemoService.findMnemo( id ) );
-      }
-      return result;
-    };
-    panel = model.panelCreator().createCollEditPanel( tsContext(), ip, model.getLifecycleManager( mnemoService ) );
+    IM5Model<ISkMnemoCfg> model = m5d.getModel( ISkMnemoCfg.CLASS_ID, ISkMnemoCfg.class );
+
+    ISkMnemosService mnemoService = coreApi.getService( ISkMnemosService.SERVICE_ID );
+    IM5LifecycleManager<ISkMnemoCfg> lm = model.getLifecycleManager( mnemoService );
+
+    IM5CollectionPanel<ISkMnemoCfg> panel;
+    // IM5ItemsProvider<Object> ip = () -> {
+    // IListEdit<Object> result = new ElemArrayList<>();
+    // for( String id : mnemoService.listMnemosIds() ) {
+    // result.add( mnemoService.findMnemo( id ) );
+    // }
+    // return result;
+    // };
+    panel = model.panelCreator().createCollEditPanel( tsContext(), lm.itemsProvider(), lm );
 
     return panel.createControl( aParent );
 
