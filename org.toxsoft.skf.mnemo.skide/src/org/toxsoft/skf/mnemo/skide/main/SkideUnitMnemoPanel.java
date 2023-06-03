@@ -1,7 +1,11 @@
 package org.toxsoft.skf.mnemo.skide.main;
 
+import static org.toxsoft.core.tsgui.m5.gui.mpc.IMultiPaneComponentConstants.*;
+import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
+
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
+import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.m5.gui.panels.*;
 import org.toxsoft.core.tsgui.m5.model.*;
@@ -55,7 +59,9 @@ class SkideUnitMnemoPanel
     // }
     // return result;
     // };
-    panel = model.panelCreator().createCollEditPanel( tsContext(), lm.itemsProvider(), lm );
+    ITsGuiContext ctx = new TsGuiContext( tsContext() );
+    OPDEF_IS_FILTER_PANE.setValue( ctx.params(), AV_TRUE );
+    panel = model.panelCreator().createCollEditPanel( ctx, lm.itemsProvider(), lm );
 
     return panel.createControl( aParent );
 

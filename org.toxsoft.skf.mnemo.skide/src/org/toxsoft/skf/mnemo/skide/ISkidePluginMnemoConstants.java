@@ -12,6 +12,13 @@ import org.toxsoft.core.tsgui.graphics.icons.*;
 public interface ISkidePluginMnemoConstants {
 
   // ------------------------------------------------------------------------------------
+  // E4
+  //
+
+  String PERSPID_MENMOS_EDITOR    = "org.toxsoft.skf.mnemo.persp.mnemos_editor"; //$NON-NLS-1$
+  String PARTSTACKID_MNEMOS_STACK = "org.toxsoft.skf.mnemo.partstack.mnemos";    //$NON-NLS-1$
+
+  // ------------------------------------------------------------------------------------
   // Icons
 
   String PREFIX_OF_ICON_FIELD_NAME = "ICONID_"; //$NON-NLS-1$
