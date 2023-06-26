@@ -8,13 +8,14 @@ import org.toxsoft.skf.mnemo.gui.inspector.*;
 public class UipartSkMnemoObjInspector
     extends MwsAbstractPart {
 
-  VedInspectorPanel inspectorPanel;
+  // VedInspectorPanel inspectorPanel;
+  InspectorPanel inspectorPanel;
 
   @Override
   protected void doInit( Composite aParent ) {
 
     aParent.setLayout( new BorderLayout() );
-    inspectorPanel = new VedInspectorPanel( aParent, tsContext() );
+    inspectorPanel = new InspectorPanel( aParent, tsContext() );
     inspectorPanel.setLayoutData( BorderLayout.CENTER );
   }
 
