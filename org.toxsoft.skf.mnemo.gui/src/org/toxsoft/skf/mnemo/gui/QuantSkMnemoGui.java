@@ -4,7 +4,6 @@ import org.eclipse.e4.core.contexts.*;
 import org.toxsoft.core.tsgui.bricks.quant.*;
 import org.toxsoft.core.tsgui.graphics.patterns.*;
 import org.toxsoft.core.tslib.utils.valobj.*;
-import org.toxsoft.sandbox.test.vs.e4.services.*;
 import org.toxsoft.skf.mnemo.gui.km5.*;
 import org.toxsoft.uskat.core.gui.km5.*;
 
@@ -32,9 +31,6 @@ public class QuantSkMnemoGui
   @Override
   protected void doInitWin( IEclipseContext aWinContext ) {
     ISkMnemoGuiConstants.init( aWinContext );
-
-    ICurrentVedSelectionService selService = new CurrentVedSelectionService();
-    aWinContext.set( ICurrentVedSelectionService.class, selService );
 
     TsValobjUtils.registerKeeper( ETsFillKind.KEEPER_ID, ETsFillKind.KEEPER );
   }
