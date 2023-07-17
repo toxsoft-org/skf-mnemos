@@ -24,7 +24,6 @@ Require-Bundle: javax.annotation,
  org.toxsoft.uskat.core,
  org.toxsoft.uskat.core.gui,
  org.toxsoft.skide.core,
- org.toxsoft.sandbox.test.vs,
  org.toxsoft.skf.mnemo.lib,
  org.toxsoft.skf.mnemo.gui
 Bundle-RequiredExecutionEnvironment: JavaSE-17
