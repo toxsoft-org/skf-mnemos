@@ -29,7 +29,7 @@ public class SkideUnitMnemo
     super( UNIT_ID, OptionSetUtils.createOpSet( //
         TSID_NAME, STR_SKIDE_MNEMOS_UNIT, //
         TSID_DESCRIPTION, STR_SKIDE_MNEMOS_UNIT_D, //
-        TSID_ICON_ID, ICONID_MNEMOS_EDITOR_PLUGIN //
+        TSID_ICON_ID, ICONID_SKIDE_UNIT_MNEMOS_EDITOR //
     ), aContext, aCreator );
     unitActions().add( ACDEF_ABOUT );
   }

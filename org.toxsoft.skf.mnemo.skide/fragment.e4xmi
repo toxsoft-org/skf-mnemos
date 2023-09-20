@@ -8,7 +8,7 @@
     <elements xsi:type="application:Addon" xmi:id="_divlAO_pEe2sPN0wm3qaiQ" elementId="org.toxsoft.skide.plugin.template.addon.0" contributionURI="bundleclass://org.toxsoft.skf.mnemo.skide/org.toxsoft.skf.mnemo.skide.e4.addons.AddonSkidePluginMnemos"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_ahFg8PTCEe2VSOGyOIriRg" featurename="children" parentElementId="org.toxsoft.mws.perspectivestack.main">
-    <elements xsi:type="advanced:Perspective" xmi:id="_BXOEEPTDEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemo.persp.mnemos_editor" label="%Persp_MnemoEditor" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.skide/icons/is24x24/mnemo-editor.png" tooltip="%Persp_MnemoEditor_D">
+    <elements xsi:type="advanced:Perspective" xmi:id="_BXOEEPTDEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemo.persp.mnemos_editor" label="%Persp_MnemoEditor" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.skide/icons/is24x24/skide-plugin-mnemos.png" tooltip="%Persp_MnemoEditor_D">
       <children xsi:type="basic:PartSashContainer" xmi:id="_kYbpEAz2Ee64ntOcyXO0lw" elementId="org.toxsoft.skf.mnemo.skide.partsashcontainer.0" containerData="" horizontal="true">
         <children xsi:type="basic:PartStack" xmi:id="_5EBI0AHpEe6T9vr-ZWM7SA" elementId="org.toxsoft.skf.mnemo.partstack.mnemos" containerData="80"/>
         <children xsi:type="basic:PartStack" xmi:id="_JTUyEAz4Ee64ntOcyXO0lw" elementId="org.toxsoft.skf.mnemo.skide.partstack.0" containerData="20">
@@ -18,13 +18,13 @@
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Y6ZagPTDEe2VSOGyOIriRg" featurename="children" parentElementId="org.toxsoft.mws.menu.main.perspectives" positionInList="">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_gtJlIPTDEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemos.skide.handledmenuitem." label="%Persp_MnemoEditor" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.skide/icons/is24x24/mnemo-editor.png" tooltip="%Persp_MnemoEditor_D" command="_-xQgsPS9Ee2VSOGyOIriRg">
-      <parameters xmi:id="_nbeeUPTDEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemos.skide.parameter.0" name="org.toxsoft.mws.cmd.switch_persp.arg.perspId" value="org.toxsoft.skf.mnemos.skide.perspective.mnemo_editor"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_gtJlIPTDEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemos.skide.handledmenuitem." label="%Persp_MnemoEditor" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.skide/icons/is24x24/skide-plugin-mnemos.png" tooltip="%Persp_MnemoEditor_D" type="Radio" command="_-xQgsPS9Ee2VSOGyOIriRg">
+      <parameters xmi:id="_nbeeUPTDEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemos.skide.parameter.0" name="org.toxsoft.mws.cmd.switch_persp.arg.perspId" value="org.toxsoft.skf.mnemo.persp.mnemos_editor"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_nlq7IPTOEe2VSOGyOIriRg" featurename="children" parentElementId="org.toxsoft.mws.toolbar.perspectives">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_uI9B8PTOEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemos.skide.handledtoolitem." label="%Persp_MnemoEditor" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.skide/icons/is24x24/mnemo-editor.png" tooltip="%Persp_MnemoEditor_D" command="_-xQgsPS9Ee2VSOGyOIriRg">
-      <parameters xmi:id="__ZANcPTOEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemos.skide.parameter.1" name="org.toxsoft.mws.cmd.switch_persp.arg.perspId" value="org.toxsoft.skf.mnemos.skide.perspective.mnemo_editor"/>
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_uI9B8PTOEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemos.skide.handledtoolitem." label="%Persp_MnemoEditor" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.skide/icons/is24x24/skide-plugin-mnemos.png" tooltip="%Persp_MnemoEditor_D" type="Radio" command="_-xQgsPS9Ee2VSOGyOIriRg">
+      <parameters xmi:id="__ZANcPTOEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemos.skide.parameter.1" name="org.toxsoft.mws.cmd.switch_persp.arg.perspId" value="org.toxsoft.skf.mnemo.persp.mnemos_editor"/>
     </elements>
   </fragments>
 </fragment:ModelFragments>

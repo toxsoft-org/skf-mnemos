@@ -32,7 +32,7 @@ public class SkidePluginMnemo
     super( SKIDE_PLUGIN_ID, OptionSetUtils.createOpSet( //
         TSID_NAME, STR_SKIDE_MNEMOS_UNIT, //
         TSID_DESCRIPTION, STR_SKIDE_MNEMOS_UNIT_D, //
-        TSID_ICON_ID, ICONID_MNEMOS_PLUGIN //
+        TSID_ICON_ID, ICONID_SKIDE_PLUGIN_MNEMOS //
     ) );
   }
 

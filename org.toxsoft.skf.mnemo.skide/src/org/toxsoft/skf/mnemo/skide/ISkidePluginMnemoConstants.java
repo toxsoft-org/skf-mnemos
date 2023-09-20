@@ -21,10 +21,9 @@ public interface ISkidePluginMnemoConstants {
   // ------------------------------------------------------------------------------------
   // Icons
 
-  String PREFIX_OF_ICON_FIELD_NAME = "ICONID_"; //$NON-NLS-1$
-  // String ICONID_SKIDE_PLUGIN = "skide-plugin"; //$NON-NLS-1$
-  String ICONID_MNEMOS_PLUGIN        = "mnemo-editor";          //$NON-NLS-1$
-  String ICONID_MNEMOS_EDITOR_PLUGIN = "app-mnemoshema-editor"; //$NON-NLS-1$
+  String PREFIX_OF_ICON_FIELD_NAME       = "ICONID_";                  //$NON-NLS-1$
+  String ICONID_SKIDE_PLUGIN_MNEMOS      = "skide-plugin-mnemos";      //$NON-NLS-1$
+  String ICONID_SKIDE_UNIT_MNEMOS_EDITOR = "skide-unit-mnemos-editor"; //$NON-NLS-1$
 
   /**
    * Constants registration.
