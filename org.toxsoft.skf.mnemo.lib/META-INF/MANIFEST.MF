@@ -10,5 +10,4 @@ Require-Bundle: org.toxsoft.core.tslib,
  org.toxsoft.core.txtproj.lib,
  org.toxsoft.uskat.core
 Export-Package: org.toxsoft.skf.mnemo.lib,
- org.toxsoft.skf.mnemo.lib.cfg,
  org.toxsoft.skf.mnemo.lib.impl

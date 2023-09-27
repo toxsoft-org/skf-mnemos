@@ -30,9 +30,6 @@ public interface ISkMnemosService
 
   /**
    * Finds the mnemoscheme by ID.
-   * <p>
-   * Note: mnemoscheme ID {@link ISkMnemoCfg#strid()} is unique across all sections, so this method works for any mnemo
-   * regardless of owner section.
    *
    * @param aMnemoId String - the mnemo ID
    * @return {@link ISkMnemoCfg} - found mnemoscheme or <code>null</code>
@@ -42,9 +39,6 @@ public interface ISkMnemosService
 
   /**
    * Returns the mnemoscheme by ID.
-   * <p>
-   * Note: mnemoscheme ID {@link ISkMnemoCfg#strid()} is unique across all sections, so this method works for any mnemo
-   * regardless of owner section.
    *
    * @param aMnemoId String - the mnemo ID
    * @return {@link ISkMnemoCfg} - found mnemoscheme
