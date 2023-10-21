@@ -12,7 +12,7 @@ import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.*;
 import org.toxsoft.skf.mnemo.gui.e4.services.*;
 import org.toxsoft.skf.mnemo.lib.*;
-import org.toxsoft.skf.mnemo.skide.uiparts.*;
+import org.toxsoft.skf.mnemo.skide.e4.uiparts.*;
 
 public class SkMnemoEditService
     implements ISkMnemoEditService, ITsGuiContextable {

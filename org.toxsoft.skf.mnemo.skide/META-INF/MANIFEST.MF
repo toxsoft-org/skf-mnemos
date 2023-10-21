@@ -7,6 +7,9 @@ Bundle-Activator: org.toxsoft.skf.mnemo.skide.Activator
 Bundle-Vendor: toxsoft.org
 Export-Package: org.toxsoft.skf.mnemo.skide,
  org.toxsoft.skf.mnemo.skide.e4.addons,
+ org.toxsoft.skf.mnemo.skide.e4.services,
+ org.toxsoft.skf.mnemo.skide.e4.uiparts,
+ org.toxsoft.skf.mnemo.skide.glib,
  org.toxsoft.skf.mnemo.skide.main
 Require-Bundle: javax.annotation,
  javax.inject,
@@ -20,6 +23,7 @@ Require-Bundle: javax.annotation,
  org.toxsoft.core.singlesrc.rcp,
  org.toxsoft.core.tsgui,
  org.toxsoft.core.tsgui.rcp,
+ org.toxsoft.core.tsgui.ved,
  org.toxsoft.core.tsgui.mws,
  org.toxsoft.uskat.core,
  org.toxsoft.uskat.core.gui,

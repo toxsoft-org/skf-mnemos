@@ -9,12 +9,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_ahFg8PTCEe2VSOGyOIriRg" featurename="children" parentElementId="org.toxsoft.mws.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_BXOEEPTDEe2VSOGyOIriRg" elementId="org.toxsoft.skf.mnemo.persp.mnemos_editor" label="%Persp_MnemoEditor" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.skide/icons/is24x24/skide-plugin-mnemos.png" tooltip="%Persp_MnemoEditor_D">
-      <children xsi:type="basic:PartSashContainer" xmi:id="_kYbpEAz2Ee64ntOcyXO0lw" elementId="org.toxsoft.skf.mnemo.skide.partsashcontainer.0" containerData="" horizontal="true">
-        <children xsi:type="basic:PartStack" xmi:id="_5EBI0AHpEe6T9vr-ZWM7SA" elementId="org.toxsoft.skf.mnemo.partstack.mnemos" containerData="80"/>
-        <children xsi:type="basic:PartStack" xmi:id="_JTUyEAz4Ee64ntOcyXO0lw" elementId="org.toxsoft.skf.mnemo.skide.partstack.0" containerData="20">
-          <children xsi:type="basic:Part" xmi:id="_nKuxkAz2Ee64ntOcyXO0lw" elementId="org.toxsoft.skf.mnemo.skide.part.inspector" containerData="" contributionURI="bundleclass://org.toxsoft.skf.mnemo.skide/org.toxsoft.skf.mnemo.skide.uiparts.UipartSkMnemoObjInspector" label="Inspector"/>
-        </children>
-      </children>
+      <children xsi:type="basic:PartStack" xmi:id="_5EBI0AHpEe6T9vr-ZWM7SA" elementId="org.toxsoft.skf.mnemo.partstack.mnemos" containerData="2000"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Y6ZagPTDEe2VSOGyOIriRg" featurename="children" parentElementId="org.toxsoft.mws.menu.main.perspectives" positionInList="">
