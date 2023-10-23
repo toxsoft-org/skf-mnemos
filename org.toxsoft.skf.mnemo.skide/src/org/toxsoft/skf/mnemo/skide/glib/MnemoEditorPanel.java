@@ -6,15 +6,19 @@ import static org.toxsoft.skf.mnemo.skide.glib.ISkResources.*;
 import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
 import org.eclipse.swt.widgets.*;
+import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tsgui.panels.toolbar.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.ved.editor.*;
 import org.toxsoft.core.tsgui.ved.editor.palette.*;
+import org.toxsoft.core.tsgui.ved.incub.undoman.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
+import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
+import org.toxsoft.core.tslib.coll.helpers.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 
 /**
@@ -26,10 +30,15 @@ public class MnemoEditorPanel
     extends TsPanel
     implements IMnemoEditorPanel {
 
+  /**
+   * TODO canvasCfg editing and wasChange=true<br>
+   */
+
   private final IVedScreen             vedScreen;
   private final VedObjectsTree         objTree;
   private final VedScreenItemInspector viselInspector;
   private final VedScreenItemInspector actorInspector;
+  private final IUndoRedoManager       undoManager = new UndoManager();
 
   private final IVedViselSelectionManager selectionManager;
   private final VedViselVertexSetManager  vertexSetManager;
@@ -44,6 +53,9 @@ public class MnemoEditorPanel
   private final TabFolder eastFolder;
   private final TabItem   tiViselInsp;
   private final TabItem   tiActorInsp;
+
+  private ITsActionHandler externalHandler = null;
+  private boolean          wasChanged      = false;
 
   /**
    * Constructor.
@@ -74,7 +86,7 @@ public class MnemoEditorPanel
     Composite centerBoard = new Composite( sfMain, SWT.BORDER );
     centerBoard.setLayout( new BorderLayout() );
     toolbar = TsToolbar.create( centerBoard, tsContext(), //
-        ACDEF_SAVE, ACDEF_SAVE_AS, ACDEF_SEPARATOR, //
+        ACDEF_SAVE, ACDEF_SEPARATOR, //
         ACDEF_UNDO, ACDEF_REDO, ACDEF_SEPARATOR, //
         ACDEF_ZOOM_IN, ACDEF_ZOOM_ORIGINAL, ACDEF_ZOOM_OUT, ACDEF_SEPARATOR, //
         ACDEF_SEPARATOR //
@@ -103,9 +115,14 @@ public class MnemoEditorPanel
     VedScreenDropTarget dropTarget = new VedScreenDropTarget();
     dropTarget.attachToScreen( vedScreen );
     guiTimersService().quickTimers().addListener( vedScreen );
-    guiTimersService().slowTimers().addListener( time -> vedScreen.whenGwTimePassed( time ) );
+    guiTimersService().slowTimers().addListener( vedScreen );
     vedScreen.model().screenHandlersBefore().add( vertexSetManager );
     selectionManager.genericChangeEventer().addListener( aSource -> updateViselInspectorFromSingleSelection() );
+    toolbar.addListener( this::processToolbarButton );
+    vedScreen.model().actors().eventer().addListener( this::whenVedItemsChanged );
+    vedScreen.model().visels().eventer().addListener( this::whenVedItemsChanged );
+
+    updateActionsState();
   }
 
   // ------------------------------------------------------------------------------------
@@ -142,12 +159,55 @@ public class MnemoEditorPanel
   }
 
   // ------------------------------------------------------------------------------------
+  // implementation: toolbar
+  //
+
+  private void processToolbarButton( String aActionId ) {
+    switch( aActionId ) {
+      case ACTID_SAVE: {
+        if( externalHandler != null ) {
+          externalHandler.handleAction( aActionId );
+        }
+        break;
+      }
+      // TODO MnemoEditorPanel.processToolbarButton()
+      default:
+        break;
+    }
+    updateActionsState();
+  }
+
+  private void updateActionsState() {
+    toolbar.setActionEnabled( ACTID_SAVE, wasChanged );
+    toolbar.setActionEnabled( ACTID_UNDO, undoManager.canUndo() );
+    toolbar.setActionEnabled( ACTID_REDO, undoManager.canRedo() );
+    // TODO MnemoEditorPanel.getControl()
+  }
+
+  private void whenVedItemsChanged( IVedItemsManager<?> aSource, ECrudOp aOp, String aId ) {
+    wasChanged = true;
+    updateActionsState();
+  }
+
+  // ------------------------------------------------------------------------------------
   // IMnemoEditorPanel
   //
 
   @Override
-  public Control getControl() {
-    return this;
+  public void setExternelHandler( ITsActionHandler aHandler ) {
+    externalHandler = aHandler;
+  }
+
+  @Override
+  public IVedScreenCfg getCurrentConfig() {
+    return VedEditorUtils.getVedScreenConfig( vedScreen );
+  }
+
+  @Override
+  public void setCurrentConfig( IVedScreenCfg aCfg ) {
+    VedEditorUtils.setVedScreenConfig( vedScreen, aCfg );
+    wasChanged = false;
+    updateActionsState();
   }
 
 }

@@ -22,6 +22,11 @@ public final class GenericCommand {
   // API
   //
 
+  /**
+   * Returns the command ID.
+   *
+   * @return String - the command ID, always an IDpath
+   */
   public String cmdId() {
     return cmdId;
   }

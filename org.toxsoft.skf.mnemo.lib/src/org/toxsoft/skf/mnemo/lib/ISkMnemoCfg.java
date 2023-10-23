@@ -1,5 +1,6 @@
 package org.toxsoft.skf.mnemo.lib;
 
+import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.uskat.core.api.objserv.*;
 
 /**
@@ -28,5 +29,13 @@ public interface ISkMnemoCfg
    * @return String - huge string with configuration data
    */
   String cfgData();
+
+  /**
+   * Sets the mnemoscheme configuration data.
+   *
+   * @param aCfgData String - the mnemoscheme configuration data
+   * @throws TsNullArgumentRtException any argument = <code>null</code>
+   */
+  void setCfgData( String aCfgData );
 
 }

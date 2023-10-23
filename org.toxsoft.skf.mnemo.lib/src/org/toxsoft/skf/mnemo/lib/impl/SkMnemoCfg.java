@@ -1,8 +1,5 @@
 package org.toxsoft.skf.mnemo.lib.impl;
 
-import static org.toxsoft.skf.mnemo.lib.ISkMnemosServiceHardConstants.*;
-
-import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.api.objserv.*;
@@ -19,21 +16,8 @@ class SkMnemoCfg
 
   static final ISkObjectCreator<SkMnemoCfg> CREATOR = SkMnemoCfg::new;
 
-  private transient Gwid dataGwid = null;
-
   SkMnemoCfg( Skid aSkid ) {
     super( aSkid );
-  }
-
-  // ------------------------------------------------------------------------------------
-  // package API
-  //
-
-  Gwid dataGwid() {
-    if( dataGwid == null ) {
-      dataGwid = Gwid.createClob( classId(), strid(), CLBID_MNEMO_CFG_DATA );
-    }
-    return dataGwid;
   }
 
   // ------------------------------------------------------------------------------------
@@ -42,7 +26,14 @@ class SkMnemoCfg
 
   @Override
   public String cfgData() {
-    return coreApi().clobService().readClob( dataGwid() );
+    ISkMnemosService ms = coreApi().getService( ISkMnemosService.SERVICE_ID );
+    return ms.getMnemoData( id() );
+  }
+
+  @Override
+  public void setCfgData( String aCfgData ) {
+    ISkMnemosService ms = coreApi().getService( ISkMnemosService.SERVICE_ID );
+    ms.setMnemoData( id(), aCfgData );
   }
 
 }

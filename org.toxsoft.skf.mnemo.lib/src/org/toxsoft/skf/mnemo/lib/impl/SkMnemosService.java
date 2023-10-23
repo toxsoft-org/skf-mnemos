@@ -15,6 +15,7 @@ import org.toxsoft.core.tslib.bricks.validator.impl.*;
 import org.toxsoft.core.tslib.coll.helpers.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
+import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
@@ -293,6 +294,10 @@ public class SkMnemosService
     return new Skid( CLSID_MNEMO_CFG, aMnemoId );
   }
 
+  private Gwid makeMnemoGwid( String aMnemoId ) {
+    return Gwid.createClob( CLSID_MNEMO_CFG, aMnemoId, CLBID_MNEMO_CFG_DATA );
+  }
+
   // ------------------------------------------------------------------------------------
   // ISkMnemosService
   //
@@ -353,7 +358,7 @@ public class SkMnemosService
     TsValidationFailedRtException.checkError( svs.canSetMnemoData( aMnemoId, aData, mnemo ) );
     pauseCoreValidation();
     try {
-      clobService().writeClob( mnemo.dataGwid(), aData );
+      clobService().writeClob( makeMnemoGwid( aMnemoId ), aData );
       // TODO generate event
     }
     finally {
@@ -364,7 +369,7 @@ public class SkMnemosService
   @Override
   public String getMnemoData( String aMnemoId ) {
     ISkMnemoCfg mnemo = getMnemo( aMnemoId );
-    return mnemo.cfgData();
+    return clobService().readClob( makeMnemoGwid( aMnemoId ) );
   }
 
   @Override
