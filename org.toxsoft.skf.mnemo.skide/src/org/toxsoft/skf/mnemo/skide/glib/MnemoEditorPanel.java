@@ -167,6 +167,7 @@ public class MnemoEditorPanel
       case ACTID_SAVE: {
         if( externalHandler != null ) {
           externalHandler.handleAction( aActionId );
+          wasChanged = false;
         }
         break;
       }
@@ -184,6 +185,7 @@ public class MnemoEditorPanel
     // TODO MnemoEditorPanel.getControl()
   }
 
+  @SuppressWarnings( "unused" )
   private void whenVedItemsChanged( IVedItemsManager<?> aSource, ECrudOp aOp, String aId ) {
     wasChanged = true;
     updateActionsState();
