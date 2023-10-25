@@ -35,6 +35,7 @@ public class MnemoEditorPanel
 
   /**
    * TODO canvasCfg editing and wasChange=true<br>
+   * TODO VISEL and canvas pop-up menu<br>
    */
 
   /**
@@ -132,7 +133,7 @@ public class MnemoEditorPanel
     guiTimersService().quickTimers().addListener( vedScreen );
     guiTimersService().slowTimers().addListener( vedScreen );
     vedScreen.model().screenHandlersBefore().add( vertexSetManager );
-    selectionManager.genericChangeEventer().addListener( aSource -> updateViselInspectorFromSingleSelection() );
+    selectionManager.genericChangeEventer().addListener( aSource -> whenSelectionManagerSelectionChanges() );
     toolbar.addListener( this::processToolbarButton );
     vedScreen.model().actors().eventer().addListener( this::whenVedItemsChanged );
     vedScreen.model().visels().eventer().addListener( this::whenVedItemsChanged );
@@ -164,16 +165,20 @@ public class MnemoEditorPanel
     }
   }
 
-  private void updateViselInspectorFromSingleSelection() {
+  private void whenSelectionManagerSelectionChanges() {
+    // update VISEL inspector from single selection
+    VedAbstractVisel selVisel = null;
     String viselId = selectionManager.singleSelectedViselId();
     if( viselId != null ) {
-      VedAbstractVisel currItem = vedScreen.model().visels().list().getByKey( viselId );
-      viselInspector.setVedItem( currItem );
+      selVisel = vedScreen.model().visels().list().getByKey( viselId );
+      viselInspector.setVedItem( selVisel );
       eastFolder.setSelection( tiViselInsp );
     }
     else {
       viselInspector.setVedItem( null );
     }
+    // update panelVisels selection
+    panelVisels.setSelectedItem( selVisel );
   }
 
   /**
