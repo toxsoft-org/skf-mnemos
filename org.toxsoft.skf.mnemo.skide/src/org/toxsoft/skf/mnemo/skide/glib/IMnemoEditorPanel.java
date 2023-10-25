@@ -2,6 +2,7 @@ package org.toxsoft.skf.mnemo.skide.glib;
 
 import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
+import org.toxsoft.core.tslib.bricks.events.change.*;
 
 /**
  * The mnemoscheme editing panel.
@@ -13,15 +14,14 @@ public interface IMnemoEditorPanel {
   /**
    * Sets the handler of the action to be performed externally.
    * <p>
-   * Called when user performs some actions in the mnemo editor GUI. Right now following actions may be reuested:
+   * Called when user performs some actions in the mnemo editor GUI. Right now following actions may be requested:
    * <ul>
    * <li>{@link ITsStdActionDefs#ACTID_SAVE};</li>
    * <li>TODO what else?.</li>
    * </ul>
    * <p>
-   * FIXME change to external command executor to return value to panel, eg. SAVE_AS was proceeded or cancelled
    *
-   * @param aHandler {@link ITsActionHandler} - external actions handler
+   * @param aHandler {@link ITsActionHandler} - external actions handler or <code>null</code>
    */
   void setExternelHandler( ITsActionHandler aHandler );
 
@@ -38,5 +38,31 @@ public interface IMnemoEditorPanel {
    * @param aCfg {@link IVedScreenCfg} - the VED screen configuration
    */
   void setCurrentConfig( IVedScreenCfg aCfg );
+
+  /**
+   * Determines if VED screen content was changed.
+   * <p>
+   * The flag is set to <code>true</code> when user edits mnemoscheme content.
+   * <p>
+   * {@link #setCurrentConfig(IVedScreenCfg)} and {@link #setChanged(boolean)} may set changed flag to
+   * <code>false</code>.
+   *
+   * @return boolean - <code>true</code> editor content was changed, need o save
+   */
+  boolean isChanged();
+
+  /**
+   * Sets value of the flag {@link #isChanged()}.
+   *
+   * @param aState boolean - <code>false</code> to indicate that content was
+   */
+  void setChanged( boolean aState );
+
+  /**
+   * Returns the {@link #isChanged()} flag state change eventer.
+   *
+   * @return {@link IGenericChangeEventer} - the {@link #isChanged()} flag state change eventer
+   */
+  IGenericChangeEventer mnemoChangedEventer();
 
 }

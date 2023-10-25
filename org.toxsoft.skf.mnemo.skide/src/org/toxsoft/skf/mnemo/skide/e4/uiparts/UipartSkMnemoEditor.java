@@ -4,6 +4,7 @@ import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
 
 import java.io.*;
 
+import org.eclipse.e4.ui.di.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.mws.bases.*;
@@ -28,6 +29,10 @@ import org.toxsoft.skf.mnemo.skide.glib.*;
 public class UipartSkMnemoEditor
     extends MwsAbstractPart {
 
+  /**
+   * TODO prevent UIpart close when editor is dirty<br>
+   */
+
   IMnemoEditorPanel panel;
 
   ISkMnemoCfg skMnemocfg = null; // non-null value means mnemoscheme is loaded from Skconnection
@@ -37,6 +42,7 @@ public class UipartSkMnemoEditor
   protected void doInit( Composite aParent ) {
     panel = new MnemoEditorPanel( aParent, tsContext() );
     panel.setExternelHandler( this::processEditorPanelExternalAction );
+    panel.mnemoChangedEventer().addListener( s -> whenEditorDirtyStateChanges() );
   }
 
   // ------------------------------------------------------------------------------------
@@ -46,20 +52,38 @@ public class UipartSkMnemoEditor
   private void processEditorPanelExternalAction( String aActionId ) {
     switch( aActionId ) {
       case ACTID_SAVE: {
-        IVedScreenCfg scrCfg = panel.getCurrentConfig();
-        if( skMnemocfg != null ) {
-          String cfgStr = VedScreenCfg.KEEPER.ent2str( scrCfg );
-          skMnemocfg.setCfgData( cfgStr );
-          break;
-        }
-        if( mnemoFile != null ) {
-          VedScreenCfg.KEEPER.write( mnemoFile, scrCfg );
-        }
-        throw new TsInternalErrorRtException();
+        save();
+        break;
       }
       default:
         throw new TsNotAllEnumsUsedRtException( aActionId );
     }
+  }
+
+  /**
+   * Saves the mnemoscheme to is's source.
+   * <p>
+   * Method is also called when closing the dirty view (if user selects to svae the changes).
+   */
+  @Persist
+  void save() {
+    IVedScreenCfg scrCfg = panel.getCurrentConfig();
+    if( skMnemocfg != null ) {
+      String cfgStr = VedScreenCfg.KEEPER.ent2str( scrCfg );
+      skMnemocfg.setCfgData( cfgStr );
+      panel.setChanged( false );
+      return;
+    }
+    if( mnemoFile != null ) {
+      VedScreenCfg.KEEPER.write( mnemoFile, scrCfg );
+      panel.setChanged( false );
+      return;
+    }
+    throw new TsInternalErrorRtException();
+  }
+
+  private void whenEditorDirtyStateChanges() {
+    getSelfPart().setDirty( panel.isChanged() );
   }
 
   // ------------------------------------------------------------------------------------

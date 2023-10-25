@@ -2,21 +2,16 @@ package org.toxsoft.skf.mnemo.skide.temporary;
 
 import static org.toxsoft.core.tsgui.bricks.tin.tti.ITtiConstants.*;
 import static org.toxsoft.core.tsgui.graphics.ITsGraphicsConstants.*;
-import static org.toxsoft.core.tsgui.valed.api.IValedControlConstants.*;
 import static org.toxsoft.core.tsgui.ved.ITsguiVedConstants.*;
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 import static org.toxsoft.core.tslib.av.EAtomicType.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 
-import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
 import org.toxsoft.core.tsgui.bricks.tin.tti.*;
-import org.toxsoft.core.tsgui.bricks.uievents.*;
 import org.toxsoft.core.tsgui.graphics.colors.*;
-import org.toxsoft.core.tsgui.graphics.cursors.*;
-import org.toxsoft.core.tsgui.valed.controls.graphics.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
@@ -24,11 +19,8 @@ import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
-import org.toxsoft.core.tslib.bricks.d2.*;
-import org.toxsoft.core.tslib.bricks.geometry.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
-import org.toxsoft.core.tslib.utils.*;
 
 /**
  * Simple blinker switches VISEL's property color ON/OFF with specified PERIOD.
@@ -44,10 +36,9 @@ public class ActorSimpleColorBlinker
 
   private static final IDataDef PROP_PERIOD = DataDef.create( PROPID_PERIOD, INTEGER, //
       TSID_NAME, "Period (1/10 sec)", //
-      TSID_DESCRIPTION, "The blinking period specified in 1/10th of secons (that is in 100 msec units)", //
+      TSID_DESCRIPTION, "The blinking period specified in 1/10th of secodns (that is in 100 msec units)", //
       TSID_MIN_INCLUSIVE, AV_1, // 0,1 second
       TSID_MAX_INCLUSIVE, avInt( 50 ), // 5 seconds
-      OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjSimpleRgb.FACTORY_NAME, //
       TSID_DEFAULT_VALUE, avInt( 5 ) //
   );
 
@@ -92,7 +83,7 @@ public class ActorSimpleColorBlinker
       fields.add( TFI_PERIOD );
       fields.add( TFI_ON_COLOR );
       fields.add( TFI_OFF_COLOR );
-      return new PropertableEntitiesTinTypeInfo<>( fields, ViselSimpleRect.class );
+      return new PropertableEntitiesTinTypeInfo<>( fields, ActorSimpleColorBlinker.class );
     }
 
     @Override
@@ -117,55 +108,55 @@ public class ActorSimpleColorBlinker
     }
   }
 
-  @Override
-  public boolean onMouseMove( Object aSource, int aState, ITsPoint aCoors, Control aWidget ) {
-    String viselId = props().getStr( PROP_VISEL_ID );
-    VedAbstractVisel visel = findVisel( viselId );
-    if( visel != null ) {
-      ID2Point mouseCoors = coorsConverter().swt2Visel( aCoors, visel );
-      if( visel.isYours( mouseCoors ) ) {
-        vedScreen().view().setCursor( cursorManager().getCursor( ECursorType.HAND ) );
-      }
-      else {
-        vedScreen().view().setCursor( null );
-      }
-    }
-    return false;
-  }
+  // @Override
+  // public boolean onMouseMove( Object aSource, int aState, ITsPoint aCoors, Control aWidget ) {
+  // String viselId = props().getStr( PROP_VISEL_ID );
+  // VedAbstractVisel visel = findVisel( viselId );
+  // if( visel != null ) {
+  // ID2Point mouseCoors = coorsConverter().swt2Visel( aCoors, visel );
+  // if( visel.isYours( mouseCoors ) ) {
+  // vedScreen().view().setCursor( cursorManager().getCursor( ECursorType.HAND ) );
+  // }
+  // else {
+  // vedScreen().view().setCursor( null );
+  // }
+  // }
+  // return false;
+  // }
 
-  @Override
-  public boolean onMouseUp( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors, Control aWidget ) {
-
-    TsTestUtils.pl( "MOUSE UP" );
-
-    String viselId = props().getStr( PROP_VISEL_ID );
-    IVedVisel visel = findVisel( viselId );
-    if( visel != null ) {
-      /**
-       * TODO here we need methods of the base class to convert coordinates from virtual to SWT and vice versa<br>
-       * TODO determine if mouse is in bounds of the visel
-       */
-
-      boolean isInVisel = true;
-      double x = 30.0 + visel.props().getDouble( PROP_X );
-      double y = 20.0 + visel.props().getDouble( PROP_Y );
-      ID2Conversion d2c = visel.getConversion();
-      d2c = new D2Conversion( D2Angle.ofDegrees( d2c.rotation().degrees() + 16 ), d2c.zoomFactor() * 1.1,
-          new D2Point( x, y ) );
-      if( x > 300.0 ) {
-        x = 180.0;
-        y = 100.0;
-        d2c = ID2Conversion.NONE;
-      }
-      visel.props().setPropPairs( //
-          PROP_X, x, //
-          PROP_Y, y, //
-          PROP_TRANSFORM, avValobj( d2c ) //
-      );
-
-    }
-    return false;
-  }
+  // @Override
+  // public boolean onMouseUp( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors, Control aWidget ) {
+  //
+  // TsTestUtils.pl( "MOUSE UP" );
+  //
+  // String viselId = props().getStr( PROP_VISEL_ID );
+  // IVedVisel visel = findVisel( viselId );
+  // if( visel != null ) {
+  // /**
+  // * TODO here we need methods of the base class to convert coordinates from virtual to SWT and vice versa<br>
+  // * TODO determine if mouse is in bounds of the visel
+  // */
+  //
+  // boolean isInVisel = true;
+  // double x = 30.0 + visel.props().getDouble( PROP_X );
+  // double y = 20.0 + visel.props().getDouble( PROP_Y );
+  // ID2Conversion d2c = visel.getConversion();
+  // d2c = new D2Conversion( D2Angle.ofDegrees( d2c.rotation().degrees() + 16 ), d2c.zoomFactor() * 1.1,
+  // new D2Point( x, y ) );
+  // if( x > 300.0 ) {
+  // x = 180.0;
+  // y = 100.0;
+  // d2c = ID2Conversion.NONE;
+  // }
+  // visel.props().setPropPairs( //
+  // PROP_X, x, //
+  // PROP_Y, y, //
+  // PROP_TRANSFORM, avValobj( d2c ) //
+  // );
+  //
+  // }
+  // return false;
+  // }
 
   @Override
   public void whenRealTimePassed( long aRtTime ) {

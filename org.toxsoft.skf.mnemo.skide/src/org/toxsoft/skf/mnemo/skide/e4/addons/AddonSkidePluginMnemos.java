@@ -54,8 +54,6 @@ public class AddonSkidePluginMnemos
     aWinContext.set( ISkMnemoEditService.class, vss );
 
     // DEBUG ---
-    IVedViselFactoriesRegistry visFact = aWinContext.get( IVedViselFactoriesRegistry.class );
-    visFact.register( ViselSimpleRect.FACTORY );
     IVedActorFactoriesRegistry actFact = aWinContext.get( IVedActorFactoriesRegistry.class );
     actFact.register( ActorSimpleColorBlinker.FACTORY );
     // ---
