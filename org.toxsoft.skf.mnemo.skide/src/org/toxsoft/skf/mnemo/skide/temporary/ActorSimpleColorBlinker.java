@@ -16,6 +16,7 @@ import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.*;
+import org.toxsoft.core.tslib.av.errors.*;
 import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
@@ -170,11 +171,16 @@ public class ActorSimpleColorBlinker
         avColor = props().getValue( PROPID_OFF_COLOR );
       }
       String viselId = props().getStr( PROP_VISEL_ID );
+      String viselPropId = props().getStr( PROP_VISEL_PROP_ID );
       IVedVisel visel = findVisel( viselId );
       if( visel != null ) {
-        String viselPropId = props().getStr( PROP_VISEL_PROP_ID );
-        visel.props().setValue( viselPropId, avColor );
-        vedScreen().view().redrawVisel( viselId );
+        IDataDef propDef = visel.props().propDefs().findByKey( viselPropId );
+        if( propDef != null ) {
+          if( AvTypeCastRtException.canAssign( propDef.atomicType(), avColor.atomicType() ) ) {
+            visel.props().setValue( viselPropId, avColor );
+            vedScreen().view().redrawVisel( viselId );
+          }
+        }
       }
       lastTimestamp = aRtTime;
     }
