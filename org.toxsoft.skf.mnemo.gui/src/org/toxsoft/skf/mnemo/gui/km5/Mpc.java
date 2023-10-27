@@ -3,6 +3,7 @@ package org.toxsoft.skf.mnemo.gui.km5;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
+import static org.toxsoft.skf.mnemo.gui.km5.ISkResources.*;
 
 import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
@@ -17,14 +18,19 @@ import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.e4.services.*;
 import org.toxsoft.skf.mnemo.lib.*;
 
+/**
+ * {@link MultiPaneComponentModown} implementation for {@link SkMnemoCfgM5Model}.
+ *
+ * @author hazard157
+ */
 class Mpc
     extends MultiPaneComponentModown<ISkMnemoCfg> {
 
-  public static final String ACTID_EDIT_MNEMO = "org.toxsoft.mnemos.edit_mnemo";
+  public static final String ACTID_EDIT_MNEMO = "org.toxsoft.mnemos.edit_mnemo"; //$NON-NLS-1$
 
   public static final ITsActionDef ACDEF_EDIT_MNEMO = TsActionDef.ofPush1( ACTID_EDIT_MNEMO, //
-      TSID_NAME, "Правка менемо", //
-      TSID_DEFAULT_VALUE, "", //
+      TSID_NAME, STR_ACT_EDIT_MNEMO, //
+      TSID_DEFAULT_VALUE, STR_ACT_EDIT_MNEMO_D, //
       TSID_ICON_ID, ICONID_MNEMO_EDIT //
   );
 
@@ -48,7 +54,7 @@ class Mpc
       case ACTID_EDIT_MNEMO: {
         if( sel != null ) {
           ISkMnemoEditService vss = tsContext().get( ISkMnemoEditService.class );
-          vss.switchTpPerspectiveAndEditMnemo( sel );
+          vss.openMnemoForEditing( sel );
         }
         break;
       }

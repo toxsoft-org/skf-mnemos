@@ -13,7 +13,7 @@ import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.skf.mnemo.lib.*;
 
 /**
- * LM for {@link SkMnemoM5Model}.
+ * LM for {@link SkMnemoCfgM5Model}.
  *
  * @author vs
  */

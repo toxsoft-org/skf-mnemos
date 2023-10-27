@@ -26,7 +26,4 @@ Automatic-Module-Name: org.toxsoft.skf.mnemo.gui
 Bundle-ActivationPolicy: lazy
 Export-Package: org.toxsoft.skf.mnemo.gui,
  org.toxsoft.skf.mnemo.gui.e4.services,
- org.toxsoft.skf.mnemo.gui.glib,
- org.toxsoft.skf.mnemo.gui.inspector,
- org.toxsoft.skf.mnemo.gui.km5,
- org.toxsoft.skf.mnemo.gui.tmp_mws_plugin
+ org.toxsoft.skf.mnemo.gui.km5

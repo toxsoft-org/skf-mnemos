@@ -38,7 +38,7 @@ public class KM5MnemosContributor
 
   @Override
   protected IStringList papiCreateModels() {
-    m5().addModel( new SkMnemoM5Model( skConn() ) );
+    m5().addModel( new SkMnemoCfgM5Model( skConn() ) );
     return CONRTIBUTED_MODEL_IDS;
   }
 }

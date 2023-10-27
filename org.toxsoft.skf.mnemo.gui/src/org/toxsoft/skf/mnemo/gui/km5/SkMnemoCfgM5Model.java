@@ -21,7 +21,7 @@ import org.toxsoft.uskat.core.gui.km5.*;
  *
  * @author hazard157
  */
-public class SkMnemoM5Model
+public class SkMnemoCfgM5Model
     extends KM5ModelBasic<ISkMnemoCfg> {
 
   /**
@@ -30,7 +30,7 @@ public class SkMnemoM5Model
    * @param aConn {@link ISkConnection} - the connection
    * @throws TsNullArgumentRtException any argument = <code>null</code>
    */
-  public SkMnemoM5Model( ISkConnection aConn ) {
+  public SkMnemoCfgM5Model( ISkConnection aConn ) {
     super( ISkMnemoCfg.CLASS_ID, ISkMnemoCfg.class, aConn );
     DESCRIPTION.setFlags( M5FF_COLUMN );
     addFieldDefs( STRID, NAME, DESCRIPTION );
@@ -50,7 +50,7 @@ public class SkMnemoM5Model
   @Override
   protected IM5LifecycleManager<ISkMnemoCfg> doCreateLifecycleManager( Object aMaster ) {
     IM5Model<Object> model = skConn().scope().find( IM5Domain.class ).findModel( ISkMnemoCfg.CLASS_ID );
-    return new MnemoM5LifecycleManager( SkMnemoM5Model.class.cast( model ), ISkMnemosService.class.cast( aMaster ) );
+    return new MnemoM5LifecycleManager( SkMnemoCfgM5Model.class.cast( model ), ISkMnemosService.class.cast( aMaster ) );
   }
 
 }

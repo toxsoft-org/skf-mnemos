@@ -17,7 +17,7 @@ public interface ISkMnemoGuiConstants {
   String PREFIX_OF_ICON_FIELD_NAME = "ICONID_";     //$NON-NLS-1$
   String ICONID_MNEMO              = "mnemo";       //$NON-NLS-1$
   String ICONID_MNEMOS_LIST        = "mnemos-list"; //$NON-NLS-1$
-  String ICONID_MNEMO_EDIT         = "mnemo";       //$NON-NLS-1$ // FIXME сделать зачок!
+  String ICONID_MNEMO_EDIT         = "mnemo-edit";  //$NON-NLS-1$
 
   /**
    * Constants registration.
