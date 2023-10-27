@@ -63,7 +63,7 @@ public class SkMnemoEditService
   //
 
   @Override
-  public void switchTpPerspectiveAndEditMnemo( ISkMnemoCfg aMnemoCfg ) {
+  public void openMnemoForEditing( ISkMnemoCfg aMnemoCfg ) {
     e4Helper().switchToPerspective( PERSPID_MENMOS_EDITOR, null );
     // activate part for menmo if already exists
     String partId = makePartId( aMnemoCfg.id() );
