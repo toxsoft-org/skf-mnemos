@@ -1,6 +1,7 @@
 package org.toxsoft.skf.mnemo.skide.glib;
 
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
+import static org.toxsoft.core.tsgui.ved.ITsguiVedConstants.*;
 import static org.toxsoft.skf.mnemo.skide.glib.ISkResources.*;
 
 import org.eclipse.swt.*;
@@ -105,7 +106,7 @@ public class MnemoEditorPanel
         ACDEF_SAVE, ACDEF_SEPARATOR, //
         ACDEF_UNDO, ACDEF_REDO, ACDEF_SEPARATOR, //
         ACDEF_ZOOM_IN, ACDEF_ZOOM_ORIGINAL_PUSHBUTTON, ACDEF_ZOOM_OUT, ACDEF_SEPARATOR, //
-        ACDEF_SEPARATOR //
+        ACDEF_ENABLE_ACTORS_CHECK, ACDEF_SEPARATOR //
     );
     toolbar.getControl().setLayoutData( BorderLayout.NORTH );
     vedPalette = new VedItemsSimplePaletteBar( centerBoard, SWT.BORDER, vedScreen, true );
@@ -140,6 +141,7 @@ public class MnemoEditorPanel
     panelVisels.addTsSelectionListener( ( src, sel ) -> whenPanelViselsSelectionChanges( sel ) );
     panelActors.addTsSelectionListener( ( src, sel ) -> whenPanelActorsSelectionChanges( sel ) );
 
+    vedScreen.setActorsEnabled( false );
     updateActionsState();
   }
 
@@ -249,6 +251,11 @@ public class MnemoEditorPanel
         vedScreen.view().redraw();
         break;
       }
+      case ACTID_ENABLE_ACTORS: {
+        vedScreen.setActorsEnabled( !vedScreen.isActorsEnabled() );
+        // TODO when actors ENabled, turn off editing, UNDO, SAVE, etc.
+        break;
+      }
       default:
         break;
     }
@@ -264,6 +271,7 @@ public class MnemoEditorPanel
     toolbar.setActionEnabled( ACTID_ZOOM_IN, zoomFactor < D2Utils.ZOOM_RANGE.maxValue() );
     toolbar.setActionEnabled( ACTID_ZOOM_ORIGINAL, zoomFactor != originalZoom );
     toolbar.setActionEnabled( ACTID_ZOOM_OUT, zoomFactor > D2Utils.ZOOM_RANGE.minValue() );
+    toolbar.setActionChecked( ACTID_ENABLE_ACTORS, vedScreen.isActorsEnabled() );
   }
 
   @SuppressWarnings( "unused" )
