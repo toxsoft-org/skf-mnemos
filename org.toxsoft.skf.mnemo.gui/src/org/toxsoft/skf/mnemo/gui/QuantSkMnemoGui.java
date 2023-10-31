@@ -27,6 +27,7 @@ public class QuantSkMnemoGui
   protected void doInitApp( IEclipseContext aAppContext ) {
     IVedActorFactoriesRegistry actFact = aAppContext.get( IVedActorFactoriesRegistry.class );
     actFact.register( SkActorRtdataText.FACTORY );
+    actFact.register( SkActorCmdButton.FACTORY );
   }
 
   @Override
