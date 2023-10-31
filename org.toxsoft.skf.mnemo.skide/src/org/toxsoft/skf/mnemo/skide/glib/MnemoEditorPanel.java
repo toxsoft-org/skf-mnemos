@@ -24,6 +24,8 @@ import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
 import org.toxsoft.core.tslib.coll.helpers.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.skf.mnemo.gui.skved.*;
+import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
  * The mnemoscheme editor panel.
@@ -56,6 +58,8 @@ public class MnemoEditorPanel
   private final IVedViselSelectionManager selectionManager;
   private final VedViselVertexSetManager  vertexSetManager;
 
+  private final SkVedEnvironment skVedEnvironment;
+
   private final TabFolder westFolder;
   private final TabItem   tiObjTree;
 
@@ -86,7 +90,10 @@ public class MnemoEditorPanel
     SashForm sfMain = new SashForm( this, SWT.HORIZONTAL );
     sfMain.setLayoutData( BorderLayout.CENTER );
     //
-    vedScreen = new VedScreen( tsContext() );
+    vedScreen = new VedScreen( new TsGuiContext( tsContext() ) );
+    ISkConnectionSupplier skConnSupp = tsContext().get( ISkConnectionSupplier.class );
+    skVedEnvironment = new SkVedEnvironment( skConnSupp.defConn() );
+    vedScreen.tsContext().put( ISkVedEnvironment.class, skVedEnvironment );
     selectionManager = new VedViselSelectionManager( vedScreen );
     vertexSetManager = new VedViselVertexSetManager( vedScreen, selectionManager );
     // WEST

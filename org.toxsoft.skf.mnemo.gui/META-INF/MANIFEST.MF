@@ -16,6 +16,7 @@ Require-Bundle: javax.annotation,
  org.eclipse.e4.ui.workbench,
  org.toxsoft.core.tslib,
  org.toxsoft.core.tsgui,
+ org.toxsoft.core.tsgui.ved,
  org.toxsoft.core.tsgui.mws,
  org.toxsoft.core.txtproj.lib,
  org.toxsoft.uskat.core,
@@ -26,4 +27,5 @@ Automatic-Module-Name: org.toxsoft.skf.mnemo.gui
 Bundle-ActivationPolicy: lazy
 Export-Package: org.toxsoft.skf.mnemo.gui,
  org.toxsoft.skf.mnemo.gui.e4.services,
- org.toxsoft.skf.mnemo.gui.km5
+ org.toxsoft.skf.mnemo.gui.km5,
+ org.toxsoft.skf.mnemo.gui.skved

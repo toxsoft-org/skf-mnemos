@@ -14,8 +14,17 @@ import org.toxsoft.skf.mnemo.gui.e4.services.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.skf.mnemo.skide.e4.uiparts.*;
 
+/**
+ * {@link ISkMnemoEditService} implementation for SkIDE.
+ *
+ * @author hazard157
+ */
 public class SkMnemoEditService
     implements ISkMnemoEditService, ITsGuiContextable {
+
+  /**
+   * TODO add doCanCloseWindows() listener to prohibit unsaved data loss
+   */
 
   private static final String MNEMO_PART_ID_PREFIX = "TheMnemoPart"; //$NON-NLS-1$
 
@@ -65,7 +74,7 @@ public class SkMnemoEditService
   @Override
   public void openMnemoForEditing( ISkMnemoCfg aMnemoCfg ) {
     e4Helper().switchToPerspective( PERSPID_MENMOS_EDITOR, null );
-    // activate part for menmo if already exists
+    // activate part for mnemo if already exists
     String partId = makePartId( aMnemoCfg.id() );
     MPart found = psManager().findPart( partId );
     if( found != null ) {
@@ -82,10 +91,9 @@ public class SkMnemoEditService
     partInfo.setLabel( aMnemoCfg.nmName() );
     partInfo.setTooltip( aMnemoCfg.description() );
     MPart newPart = psManager().createPart( partInfo );
-    // TODO set mnemo to edit
+    // set mnemo to edit
     UipartSkMnemoEditor editor = (UipartSkMnemoEditor)newPart.getObject();
     editor.setMnemoCfg( aMnemoCfg );
-
   }
 
 }
