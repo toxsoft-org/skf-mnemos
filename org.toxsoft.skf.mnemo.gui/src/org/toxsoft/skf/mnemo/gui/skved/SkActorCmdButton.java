@@ -45,7 +45,7 @@ public class SkActorCmdButton
       fields.add( TFI_NAME );
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
-      fields.add( TFI_RTD_GWID );
+      fields.add( TFI_CMD_GWID );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorCmdButton.class );
     }
 

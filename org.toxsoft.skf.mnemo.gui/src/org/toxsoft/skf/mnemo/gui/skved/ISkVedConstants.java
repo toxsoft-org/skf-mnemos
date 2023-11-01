@@ -1,5 +1,6 @@
 package org.toxsoft.skf.mnemo.gui.skved;
 
+import static org.toxsoft.core.tsgui.valed.api.IValedControlConstants.*;
 import static org.toxsoft.core.tslib.av.EAtomicType.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
@@ -12,6 +13,7 @@ import org.toxsoft.core.tsgui.bricks.tin.tti.*;
 import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.skf.reports.gui.panels.valed.*;
 
 /**
  * The package constants.
@@ -24,17 +26,30 @@ public interface ISkVedConstants {
   String SKVED_ID = SK_ID + ".ved"; //$NON-NLS-1$
 
   String PROPID_RTD_GWID      = SKVED_ID + ".prop.RtDataGwid";   //$NON-NLS-1$
+  String PROPID_CMD_GWID      = SKVED_ID + ".prop.CmdGwid";      //$NON-NLS-1$
   String PROPID_FORMAT_STRING = SKVED_ID + ".prop.FormatString"; //$NON-NLS-1$
 
   IDataDef PROP_RTD_GWID = DataDef.create( PROPID_RTD_GWID, VALOBJ, //
       TSID_NAME, "RtData", //
       TSID_DESCRIPTION, "RtData GWID", //
       TSID_KEEPER_ID, Gwid.KEEPER_ID, //
-      // TODO OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjSkGwid.EDITOR_NAME, //
-      // TODO ValedSkAvValobjGwid.OPDEF_GWID_KIND, avValobj( EGwidKind.GW_RTDATA ), //
+      OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjGwidEditor.FACTORY_NAME, //
+      ValedGwidEditor.OPDEF_GWID_KIND, avValobj( EGwidKind.GW_RTDATA ), //
       // TODO ValedSkAvValobjGwid.OPDEF_IS_ONLY_CONCRETE, AV_TRUE, //
       // TODO ValedSkAvValobjGwid.OPDEF_IS_<ULTI_ALLOWED, AV_FALSE, //
       TSID_DEFAULT_VALUE, avValobj( Gwid.createRtdata( NONE_ID, NONE_ID, NONE_ID ) ) //
+  // DEBUG TSID_DEFAULT_VALUE, avValobj( Gwid.createRtdata( "AnalogInput", "TP1", "rtdCurrentValue" ) ) //
+  );
+
+  IDataDef PROP_CMD_GWID = DataDef.create( PROPID_CMD_GWID, VALOBJ, //
+      TSID_NAME, "Command", //
+      TSID_DESCRIPTION, "Command GWID", //
+      TSID_KEEPER_ID, Gwid.KEEPER_ID, //
+      OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjGwidEditor.FACTORY_NAME, //
+      ValedGwidEditor.OPDEF_GWID_KIND, avValobj( EGwidKind.GW_CMD ), //
+      // TODO ValedSkAvValobjGwid.OPDEF_IS_ONLY_CONCRETE, AV_TRUE, //
+      // TODO ValedSkAvValobjGwid.OPDEF_IS_<ULTI_ALLOWED, AV_FALSE, //
+      TSID_DEFAULT_VALUE, avValobj( Gwid.createCmd( NONE_ID, NONE_ID ) ) //
   // DEBUG TSID_DEFAULT_VALUE, avValobj( Gwid.createRtdata( "AnalogInput", "TP1", "rtdCurrentValue" ) ) //
   );
 
@@ -46,6 +61,8 @@ public interface ISkVedConstants {
 
   ITinTypeInfo  TTI_RTD_GWID      = new TinAtomicTypeInfo.TtiValobj<>( PROP_RTD_GWID, Gwid.class );
   ITinFieldInfo TFI_RTD_GWID      = new TinFieldInfo( PROP_RTD_GWID, TTI_RTD_GWID );
+  ITinTypeInfo  TTI_CMD_GWID      = new TinAtomicTypeInfo.TtiValobj<>( PROP_CMD_GWID, Gwid.class );
+  ITinFieldInfo TFI_CMD_GWID      = new TinFieldInfo( PROP_CMD_GWID, TTI_CMD_GWID );
   ITinTypeInfo  TTI_FORMAT_STRING = new TinAtomicTypeInfo.TtiString( PROP_FORMAT_STRING );
   ITinFieldInfo TFI_FORMAT_STRING = new TinFieldInfo( PROP_FORMAT_STRING, TTI_FORMAT_STRING );
 
