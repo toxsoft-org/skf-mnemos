@@ -13,6 +13,7 @@ import org.toxsoft.skf.mnemo.skide.Activator;
 import org.toxsoft.skf.mnemo.skide.e4.services.*;
 import org.toxsoft.skf.mnemo.skide.main.*;
 import org.toxsoft.skf.mnemo.skide.temporary.*;
+import org.toxsoft.skf.reports.gui.QuantVtReportTemplate;
 import org.toxsoft.skide.core.api.*;
 
 /**
@@ -38,6 +39,7 @@ public class AddonSkidePluginMnemos
   protected void doRegisterQuants( IQuantRegistrator aQuantRegistrator ) {
     aQuantRegistrator.registerQuant( new QuantTsGuiVed() );
     aQuantRegistrator.registerQuant( new QuantSkMnemoGui() );
+    aQuantRegistrator.registerQuant( new QuantVtReportTemplate() );
   }
 
   @Override

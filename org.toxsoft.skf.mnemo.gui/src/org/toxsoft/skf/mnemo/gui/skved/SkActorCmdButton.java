@@ -66,8 +66,7 @@ public class SkActorCmdButton
 
   @Override
   protected IGwidList doListUsedGwids() {
-    // TODO Auto-generated method stub
-    return null;
+    return IGwidList.EMPTY;
   }
 
 }
