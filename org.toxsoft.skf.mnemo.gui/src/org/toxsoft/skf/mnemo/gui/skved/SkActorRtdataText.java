@@ -18,6 +18,7 @@ import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.utils.*;
@@ -39,8 +40,8 @@ public class SkActorRtdataText
    * The VISEL factory singleton.
    */
   public static final IVedActorFactory FACTORY = new VedAbstractActorFactory( FACTORY_ID, //
-      TSID_NAME, "SimpleColorBlinker", //
-      TSID_DESCRIPTION, "Switches specified VISEL's specified color property periodicaly between two colors", //
+      TSID_NAME, "RtData -> Text", //
+      TSID_DESCRIPTION, "Displays RTDATA on the text VISEL", //
       TSID_ICON_ID, ICONID_VED_ACTOR //
   ) {
 
@@ -71,6 +72,13 @@ public class SkActorRtdataText
 
   SkActorRtdataText( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
+
+    // DEBUG ---
+    Gwid g = Gwid.createRtdata( "AnalogInput", "TP1", "rtdCurrentValue" );
+    TsTestUtils.pl( "GWID = %s", g );
+    props().setValobj( PROP_RTD_GWID, g );
+    // ---
+
   }
 
   // ------------------------------------------------------------------------------------
@@ -125,12 +133,12 @@ public class SkActorRtdataText
     }
 
     // DEBUG ---
-    if( aRtTime - lastTime >= 1000 ) {
-      double rand = Math.random() * 100;
-      String s = String.format( "%.3f", rand );
-      setStdViselPropValue( avStr( s ) );
-      lastTime = aRtTime;
-    }
+    // if( aRtTime - lastTime >= 1000 ) {
+    // double rand = Math.random() * 100;
+    // String s = String.format( "%.3f", rand );
+    // setStdViselPropValue( avStr( s ) );
+    // lastTime = aRtTime;
+    // }
     // ---
 
   }

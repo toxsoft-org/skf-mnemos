@@ -259,8 +259,17 @@ public class MnemoEditorPanel
         break;
       }
       case ACTID_ENABLE_ACTORS: {
-        vedScreen.setActorsEnabled( !vedScreen.isActorsEnabled() );
-        // TODO when actors ENabled, turn off editing, UNDO, SAVE, etc.
+        boolean enable = !vedScreen.isActorsEnabled();
+        if( enable ) {
+          // TODO when actors enabled, turn off editing, UNDO, SAVE, etc.
+          skVedEnvironment.restart();
+          vedScreen.setActorsEnabled( true );
+        }
+        else {
+          // TODO when actors enabled, turn on editing, UNDO, SAVE, etc.
+          vedScreen.setActorsEnabled( false );
+          skVedEnvironment.close();
+        }
         break;
       }
       default:

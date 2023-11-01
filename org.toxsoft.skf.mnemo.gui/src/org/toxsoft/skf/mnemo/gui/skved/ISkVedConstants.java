@@ -35,6 +35,7 @@ public interface ISkVedConstants {
       // TODO ValedSkAvValobjGwid.OPDEF_IS_ONLY_CONCRETE, AV_TRUE, //
       // TODO ValedSkAvValobjGwid.OPDEF_IS_<ULTI_ALLOWED, AV_FALSE, //
       TSID_DEFAULT_VALUE, avValobj( Gwid.createRtdata( NONE_ID, NONE_ID, NONE_ID ) ) //
+  // DEBUG TSID_DEFAULT_VALUE, avValobj( Gwid.createRtdata( "AnalogInput", "TP1", "rtdCurrentValue" ) ) //
   );
 
   IDataDef PROP_FORMAT_STRING = DataDef.create( PROPID_FORMAT_STRING, STRING, //
