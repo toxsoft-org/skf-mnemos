@@ -127,7 +127,8 @@ public class SkActorRtdataText
   public void whenRealTimePassed( long aRtTime ) {
     IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
     if( !newValue.equals( lastValue ) ) {
-      String text = AvUtils.printAv( fmtStr, newValue );
+      // FIXME String text = AvUtils.printAv( fmtStr, newValue );
+      String text = AvUtils.printAv( null, newValue );
       setStdViselPropValue( avStr( text ) );
       lastValue = newValue;
     }

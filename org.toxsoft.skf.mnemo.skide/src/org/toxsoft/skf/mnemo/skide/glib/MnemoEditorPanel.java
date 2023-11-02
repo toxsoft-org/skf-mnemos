@@ -261,12 +261,12 @@ public class MnemoEditorPanel
       case ACTID_ENABLE_ACTORS: {
         boolean enable = !vedScreen.isActorsEnabled();
         if( enable ) {
-          // TODO when actors enabled, turn off editing, UNDO, SAVE, etc.
+          // TODO when actors enabled, turn on editing, screen redraw, UNDO, SAVE, etc.
           skVedEnvironment.restart();
           vedScreen.setActorsEnabled( true );
         }
         else {
-          // TODO when actors enabled, turn on editing, UNDO, SAVE, etc.
+          // TODO when actors disabled, turn off editing, screen redraw, UNDO, SAVE, etc.
           vedScreen.setActorsEnabled( false );
           skVedEnvironment.close();
         }
