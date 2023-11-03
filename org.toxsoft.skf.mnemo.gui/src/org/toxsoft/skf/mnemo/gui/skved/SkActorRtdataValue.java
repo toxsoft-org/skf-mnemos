@@ -2,7 +2,6 @@ package org.toxsoft.skf.mnemo.gui.skved;
 
 import static org.toxsoft.core.tsgui.ved.ITsguiVedConstants.*;
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
-import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
@@ -12,35 +11,31 @@ import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.*;
-import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
-import org.toxsoft.uskat.core.api.sysdescr.*;
-import org.toxsoft.uskat.core.api.sysdescr.dto.*;
-import org.toxsoft.uskat.core.utils.*;
 
 /**
- * Actor: reads specified RTDATA value and supplies it to the VISEL as a text.
+ * Actor: reads specified RTDATA value and supplies it to the specified property of the VISEL.
  *
  * @author hazard157
  */
-public class SkActorRtdataText
+public class SkActorRtdataValue
     extends AbstractSkVedActor {
 
   /**
    * The actor factor ID.
    */
-  public static final String FACTORY_ID = SKVED_ID + ".actor.RtdataText"; //$NON-NLS-1$
+  public static final String FACTORY_ID = SKVED_ID + ".actor.RtdataValue"; //$NON-NLS-1$
 
   /**
    * The VISEL factory singleton.
    */
   public static final IVedActorFactory FACTORY = new VedAbstractActorFactory( FACTORY_ID, //
-      TSID_NAME, "RtData -> Text", //
-      TSID_DESCRIPTION, "Displays RTDATA on the text VISEL", //
+      TSID_NAME, "RtData -> Value", //
+      TSID_DESCRIPTION, "Sends RTDATA value to the specified property of the VISEL", //
       TSID_ICON_ID, ICONID_VED_ACTOR //
   ) {
 
@@ -53,23 +48,21 @@ public class SkActorRtdataText
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_VISEL_PROP_ID );
       fields.add( TFI_RTD_GWID );
-      fields.add( TFI_FORMAT_STRING );
-      return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRtdataText.class );
+      return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRtdataValue.class );
     }
 
     @Override
     protected VedAbstractActor doCreate( IVedItemCfg aCfg, VedScreen aVedScreen ) {
-      return new SkActorRtdataText( aCfg, propDefs(), aVedScreen );
+      return new SkActorRtdataValue( aCfg, propDefs(), aVedScreen );
     }
 
   };
 
   private Gwid         gwid      = null;
   private IGwidList    gwidList  = null;
-  private String       fmtStr    = null;
   private IAtomicValue lastValue = IAtomicValue.NULL;
 
-  SkActorRtdataText( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
+  SkActorRtdataValue( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
   }
 
@@ -94,34 +87,13 @@ public class SkActorRtdataText
       gwid = props().getValobj( PROP_RTD_GWID );
       gwidList = new GwidList( gwid );
     }
-    if( aChangedValues.hasKey( PROPID_FORMAT_STRING ) ) {
-      fmtStr = props().getStr( PROP_FORMAT_STRING );
-      if( fmtStr.isBlank() ) {
-        fmtStr = null;
-        ISkClassInfo classInfo = skSysdescr().findClassInfo( gwid.classId() );
-        if( classInfo != null ) {
-          IDtoRtdataInfo rtdInfo = classInfo.rtdata().list().findByKey( gwid.propId() );
-          if( rtdInfo != null ) {
-            IAtomicValue avFmtStr = SkHelperUtils.getConstraint( rtdInfo, TSID_FORMAT_STRING );
-            if( avFmtStr != null ) {
-              fmtStr = avFmtStr.asString();
-            }
-          }
-        }
-      }
-      if( fmtStr != null && fmtStr.isBlank() ) {
-        fmtStr = null;
-      }
-    }
   }
 
   @Override
   public void whenRealTimePassed( long aRtTime ) {
     IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
     if( !newValue.equals( lastValue ) ) {
-      // FIXME String text = AvUtils.printAv( fmtStr, newValue );
-      String text = AvUtils.printAv( null, newValue );
-      setStdViselPropValue( avStr( text ) );
+      setStdViselPropValue( newValue );
       lastValue = newValue;
     }
   }
