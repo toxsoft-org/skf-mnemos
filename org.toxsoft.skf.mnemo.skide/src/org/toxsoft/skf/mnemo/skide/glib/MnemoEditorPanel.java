@@ -8,6 +8,7 @@ import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.actions.*;
+import org.toxsoft.core.tsgui.bricks.actions.asp.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.panels.*;
@@ -17,10 +18,10 @@ import org.toxsoft.core.tsgui.ved.editor.*;
 import org.toxsoft.core.tsgui.ved.editor.palette.*;
 import org.toxsoft.core.tsgui.ved.incub.undoman.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
+import org.toxsoft.core.tsgui.ved.screen.asp.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
-import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
 import org.toxsoft.core.tslib.coll.helpers.*;
 import org.toxsoft.core.tslib.utils.errors.*;
@@ -41,10 +42,44 @@ public class MnemoEditorPanel
    * TODO VISEL and canvas pop-up menu<br>
    */
 
-  /**
-   * Zoom factor increase/decrease amount.
-   */
-  private static final double deltaZoom = Math.sqrt( Math.sqrt( 2.0 ) ); // 4 times zoom means 2 times larger/smaller
+  class AspLocal
+      extends MethodPerActionTsActionSetProvider {
+
+    public AspLocal() {
+      defineAction( ACDEF_SAVE, this::doHandleSave, this::isEnabledSave );
+      defineAction( ACDEF_ENABLE_ACTORS_CHECK, this::doHandleEnableActors, IBooleanState.ALWAY_TRUE,
+          this::isCheckedEnableActors );
+    }
+
+    void doHandleSave() {
+      if( externalHandler != null ) {
+        externalHandler.handleAction( ACTID_SAVE );
+      }
+    }
+
+    boolean isEnabledSave() {
+      return isChanged();
+    }
+
+    void doHandleEnableActors() {
+      boolean enable = !vedScreen.isActorsEnabled();
+      if( enable ) {
+        // TODO when actors enabled, turn on editing, screen redraw, UNDO, SAVE, etc.
+        skVedEnvironment.restart();
+        vedScreen.setActorsEnabled( true );
+      }
+      else {
+        // TODO when actors disabled, turn off editing, screen redraw, UNDO, SAVE, etc.
+        vedScreen.setActorsEnabled( false );
+        skVedEnvironment.close();
+      }
+    }
+
+    boolean isCheckedEnableActors() {
+      return vedScreen.isActorsEnabled();
+    }
+
+  }
 
   private final GenericChangeEventer mnemoChangedEventer;
 
@@ -59,6 +94,8 @@ public class MnemoEditorPanel
   private final VedViselVertexSetManager  vertexSetManager;
 
   private final SkVedEnvironment skVedEnvironment;
+
+  private final CompoundTsActionSetProvider actionsProvider;
 
   private final TabFolder westFolder;
   private final TabItem   tiObjTree;
@@ -85,6 +122,7 @@ public class MnemoEditorPanel
    */
   public MnemoEditorPanel( Composite aParent, ITsGuiContext aContext ) {
     super( aParent, aContext );
+    actionsProvider = new CompoundTsActionSetProvider();
     mnemoChangedEventer = new GenericChangeEventer( this );
     this.setLayout( new BorderLayout() );
     SashForm sfMain = new SashForm( this, SWT.HORIZONTAL );
@@ -96,6 +134,13 @@ public class MnemoEditorPanel
     vedScreen.tsContext().put( ISkVedEnvironment.class, skVedEnvironment );
     selectionManager = new VedViselSelectionManager( vedScreen );
     vertexSetManager = new VedViselVertexSetManager( vedScreen, selectionManager );
+    actionsProvider.addHandler( new AspLocal() );
+    actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
+    actionsProvider.addHandler( new VedAspFileImpex( vedScreen ) );
+    actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
+    actionsProvider.addHandler( new AspUndoRedo( undoManager ) );
+    actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
+    actionsProvider.addHandler( new VedAspCanvasActions( vedScreen ) );
     // WEST
     westFolder = new TabFolder( sfMain, SWT.TOP | SWT.BORDER );
     tiObjTree = new TabItem( westFolder, SWT.NONE );
@@ -110,11 +155,8 @@ public class MnemoEditorPanel
     Composite centerBoard = new Composite( sfMain, SWT.BORDER );
     centerBoard.setLayout( new BorderLayout() );
     toolbar = TsToolbar.create( centerBoard, tsContext(), //
-        ACDEF_SAVE, ACDEF_SEPARATOR, //
-        ACDEF_UNDO, ACDEF_REDO, ACDEF_SEPARATOR, //
-        ACDEF_ZOOM_IN, ACDEF_ZOOM_ORIGINAL_PUSHBUTTON, ACDEF_ZOOM_OUT, ACDEF_SEPARATOR, //
-        ACDEF_ENABLE_ACTORS_CHECK, ACDEF_SEPARATOR //
-    );
+        actionsProvider.listHandledActionDefs().toArray( new ITsActionDef[0] ) );
+    toolbar.addListener( actionsProvider );
     toolbar.getControl().setLayoutData( BorderLayout.NORTH );
     vedPalette = new VedItemsSimplePaletteBar( centerBoard, SWT.BORDER, vedScreen, true );
     vedPalette.getControl().setLayoutData( BorderLayout.WEST );
@@ -142,7 +184,7 @@ public class MnemoEditorPanel
     guiTimersService().slowTimers().addListener( vedScreen );
     vedScreen.model().screenHandlersBefore().add( vertexSetManager );
     selectionManager.genericChangeEventer().addListener( aSource -> whenSelectionManagerSelectionChanges() );
-    toolbar.addListener( this::processToolbarButton );
+    toolbar.addListener( actionsProvider );
     vedScreen.model().actors().eventer().addListener( this::whenVedItemsChanged );
     vedScreen.model().visels().eventer().addListener( this::whenVedItemsChanged );
     panelVisels.addTsSelectionListener( ( src, sel ) -> whenPanelViselsSelectionChanges( sel ) );
@@ -216,78 +258,39 @@ public class MnemoEditorPanel
   // implementation: toolbar
   //
 
-  private void processToolbarButton( String aActionId ) {
-    switch( aActionId ) {
-      case ACTID_SAVE: {
-        if( externalHandler != null ) {
-          externalHandler.handleAction( aActionId );
-        }
-        break;
-      }
-      case ACTID_UNDO: {
-        if( undoManager.canUndo() ) {
-          undoManager.undo();
-        }
-        break;
-      }
-      case ACTID_REDO: {
-        if( undoManager.canRedo() ) {
-          undoManager.redo();
-        }
-        break;
-      }
-      case ACTID_ZOOM_IN: {
-        D2ConversionEdit d2conv = new D2ConversionEdit( vedScreen.view().getConversion() );
-        d2conv.setZoomFactor( D2Utils.ZOOM_RANGE.inRange( d2conv.zoomFactor() * deltaZoom ) );
-        vedScreen.view().setConversion( d2conv );
-        vedScreen.view().redraw();
-        break;
-      }
-      case ACTID_ZOOM_ORIGINAL: {
-        double originalZoom = vedScreen.view().canvasConfig().conversion().zoomFactor();
-        D2ConversionEdit d2conv = new D2ConversionEdit( vedScreen.view().getConversion() );
-        d2conv.setZoomFactor( D2Utils.ZOOM_RANGE.inRange( originalZoom ) );
-        vedScreen.view().setConversion( d2conv );
-        vedScreen.view().redraw();
-        break;
-      }
-      case ACTID_ZOOM_OUT: {
-        D2ConversionEdit d2conv = new D2ConversionEdit( vedScreen.view().getConversion() );
-        d2conv.setZoomFactor( D2Utils.ZOOM_RANGE.inRange( d2conv.zoomFactor() / deltaZoom ) );
-        vedScreen.view().setConversion( d2conv );
-        vedScreen.view().redraw();
-        break;
-      }
-      case ACTID_ENABLE_ACTORS: {
-        boolean enable = !vedScreen.isActorsEnabled();
-        if( enable ) {
-          // TODO when actors enabled, turn on editing, screen redraw, UNDO, SAVE, etc.
-          skVedEnvironment.restart();
-          vedScreen.setActorsEnabled( true );
-        }
-        else {
-          // TODO when actors disabled, turn off editing, screen redraw, UNDO, SAVE, etc.
-          vedScreen.setActorsEnabled( false );
-          skVedEnvironment.close();
-        }
-        break;
-      }
-      default:
-        break;
-    }
-    updateActionsState();
-  }
+  // private void processToolbarButton( String aActionId ) {
+  // switch( aActionId ) {
+  // case ACTID_SAVE: {
+  // if( externalHandler != null ) {
+  // externalHandler.handleAction( aActionId );
+  // }
+  // break;
+  // }
+  // case ACTID_ENABLE_ACTORS: {
+  // boolean enable = !vedScreen.isActorsEnabled();
+  // if( enable ) {
+  // // TODO when actors enabled, turn on editing, screen redraw, UNDO, SAVE, etc.
+  // skVedEnvironment.restart();
+  // vedScreen.setActorsEnabled( true );
+  // }
+  // else {
+  // // TODO when actors disabled, turn off editing, screen redraw, UNDO, SAVE, etc.
+  // vedScreen.setActorsEnabled( false );
+  // skVedEnvironment.close();
+  // }
+  // break;
+  // }
+  // default:
+  // break;
+  // }
+  // updateActionsState();
+  // }
 
   private void updateActionsState() {
-    toolbar.setActionEnabled( ACTID_SAVE, isChanged() );
-    toolbar.setActionEnabled( ACTID_UNDO, undoManager.canUndo() );
-    toolbar.setActionEnabled( ACTID_REDO, undoManager.canRedo() );
-    double zoomFactor = vedScreen.view().getConversion().zoomFactor();
-    double originalZoom = vedScreen.view().canvasConfig().conversion().zoomFactor();
-    toolbar.setActionEnabled( ACTID_ZOOM_IN, zoomFactor < D2Utils.ZOOM_RANGE.maxValue() );
-    toolbar.setActionEnabled( ACTID_ZOOM_ORIGINAL, zoomFactor != originalZoom );
-    toolbar.setActionEnabled( ACTID_ZOOM_OUT, zoomFactor > D2Utils.ZOOM_RANGE.minValue() );
-    toolbar.setActionChecked( ACTID_ENABLE_ACTORS, vedScreen.isActorsEnabled() );
+    for( String aid : actionsProvider.listHandledActionIds() ) {
+      toolbar.setActionEnabled( aid, actionsProvider.isActionEnabled( aid ) );
+      toolbar.setActionChecked( aid, actionsProvider.isActionChecked( aid ) );
+    }
   }
 
   @SuppressWarnings( "unused" )
