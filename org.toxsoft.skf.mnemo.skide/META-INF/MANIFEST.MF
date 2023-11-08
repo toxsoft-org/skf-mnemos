@@ -10,8 +10,7 @@ Export-Package: org.toxsoft.skf.mnemo.skide,
  org.toxsoft.skf.mnemo.skide.e4.services,
  org.toxsoft.skf.mnemo.skide.e4.uiparts,
  org.toxsoft.skf.mnemo.skide.glib,
- org.toxsoft.skf.mnemo.skide.main,
- org.toxsoft.skf.mnemo.skide.temporary
+ org.toxsoft.skf.mnemo.skide.main
 Require-Bundle: javax.annotation,
  javax.inject,
  org.eclipse.core.runtime,

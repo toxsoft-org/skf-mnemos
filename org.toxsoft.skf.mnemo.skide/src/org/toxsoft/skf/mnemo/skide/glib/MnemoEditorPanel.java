@@ -123,6 +123,7 @@ public class MnemoEditorPanel
   public MnemoEditorPanel( Composite aParent, ITsGuiContext aContext ) {
     super( aParent, aContext );
     actionsProvider = new CompoundTsActionSetProvider();
+    actionsProvider.actionsStateEventer().addListener( s -> updateActionsState() );
     mnemoChangedEventer = new GenericChangeEventer( this );
     this.setLayout( new BorderLayout() );
     SashForm sfMain = new SashForm( this, SWT.HORIZONTAL );

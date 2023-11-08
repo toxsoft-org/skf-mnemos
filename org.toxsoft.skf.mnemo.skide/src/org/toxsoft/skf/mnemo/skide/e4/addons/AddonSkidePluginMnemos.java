@@ -5,15 +5,13 @@ import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.bricks.quant.*;
 import org.toxsoft.core.tsgui.mws.bases.*;
 import org.toxsoft.core.tsgui.ved.*;
-import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.skf.mnemo.gui.*;
 import org.toxsoft.skf.mnemo.gui.e4.services.*;
 import org.toxsoft.skf.mnemo.skide.*;
 import org.toxsoft.skf.mnemo.skide.Activator;
 import org.toxsoft.skf.mnemo.skide.e4.services.*;
 import org.toxsoft.skf.mnemo.skide.main.*;
-import org.toxsoft.skf.mnemo.skide.temporary.*;
-import org.toxsoft.skf.reports.gui.QuantVtReportTemplate;
+import org.toxsoft.skf.reports.gui.*;
 import org.toxsoft.skide.core.api.*;
 
 /**
@@ -54,12 +52,6 @@ public class AddonSkidePluginMnemos
     //
     ISkMnemoEditService vss = new SkMnemoEditService( new TsGuiContext( aWinContext ) );
     aWinContext.set( ISkMnemoEditService.class, vss );
-
-    // DEBUG ---
-    IVedActorFactoriesRegistry actFact = aWinContext.get( IVedActorFactoriesRegistry.class );
-    actFact.register( ActorSimpleColorBlinker.FACTORY );
-    // ---
-
   }
 
 }
