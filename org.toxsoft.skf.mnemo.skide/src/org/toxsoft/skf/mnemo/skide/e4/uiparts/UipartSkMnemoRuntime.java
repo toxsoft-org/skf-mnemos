@@ -4,6 +4,7 @@ import java.io.*;
 
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.mws.bases.*;
+import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.skf.mnemo.gui.e4.services.*;
 import org.toxsoft.skf.mnemo.gui.glib.*;
@@ -36,6 +37,7 @@ public class UipartSkMnemoRuntime
 
   @Override
   protected void doInit( Composite aParent ) {
+    aParent.setLayout( new BorderLayout() );
     panel = new RuntimeMnemoPanel( aParent, tsContext() );
   }
 
