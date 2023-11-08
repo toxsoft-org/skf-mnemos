@@ -97,21 +97,9 @@ public class SkVedEnvironment
   }
 
   @Override
-  public String sendCommand( Gwid aCmdGwid, Skid aAuthorSkid, IOptionSet aArgs ) {
-    // TODO реализовать SkVedEnvironment.sendCommand()
-    throw new TsUnderDevelopmentRtException( "SkVedEnvironment.sendCommand()" );
-  }
-
-  @Override
-  public boolean isCommandRunning( String aCmdInstanceId ) {
-    // TODO реализовать SkVedEnvironment.isCommandRunning()
-    throw new TsUnderDevelopmentRtException( "SkVedEnvironment.isCommandRunning()" );
-  }
-
-  @Override
-  public SkCommandState getCommandState( String aCmdInstanceId ) {
-    // TODO реализовать SkVedEnvironment.getCommandState()
-    throw new TsUnderDevelopmentRtException( "SkVedEnvironment.getCommandState()" );
+  public ISkCommand sendCommand( Gwid aCmdGwid, Skid aAuthorSkid, IOptionSet aArgs ) {
+    TsNullArgumentRtException.checkNulls( aCmdGwid, aAuthorSkid, aArgs );
+    return skCmdServ().sendCommand( aCmdGwid, aAuthorSkid, aArgs );
   }
 
   @Override
