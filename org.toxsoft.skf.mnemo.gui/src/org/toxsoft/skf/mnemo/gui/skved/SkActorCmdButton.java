@@ -3,6 +3,7 @@ package org.toxsoft.skf.mnemo.gui.skved;
 import static org.toxsoft.core.tsgui.ved.ITsguiVedConstants.*;
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
+import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
 import org.toxsoft.core.tsgui.bricks.tin.*;
@@ -33,8 +34,8 @@ public class SkActorCmdButton
    * The VISEL factory singleton.
    */
   public static final IVedActorFactory FACTORY = new VedAbstractActorFactory( FACTORY_ID, //
-      TSID_NAME, "Button handler", //
-      TSID_DESCRIPTION, "process push button so that on click send command", //
+      TSID_NAME, STR_ACTOR_CMD_BUTTON, //
+      TSID_DESCRIPTION, STR_ACTOR_CMD_BUTTON_D, //
       TSID_ICON_ID, ICONID_VED_ACTOR //
   ) {
 
@@ -59,7 +60,10 @@ public class SkActorCmdButton
   protected SkActorCmdButton( IVedItemCfg aCfg, IStridablesList<IDataDef> aDataDefs, VedScreen aVedScreen ) {
     super( aCfg, aDataDefs, aVedScreen );
     IButtonClickHandler buttonHandler = aVisel -> {
-      TsDialogUtils.info( vedScreen().view().getControl().getShell(), "Ти нажяль!" );
+      /**
+       * TODO send Sk-command on click
+       */
+      TsDialogUtils.underDevelopment( getShell() );
     };
     setButtonClickHandler( buttonHandler );
   }
