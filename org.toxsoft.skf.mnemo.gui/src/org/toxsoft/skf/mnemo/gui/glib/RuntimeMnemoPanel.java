@@ -2,6 +2,7 @@ package org.toxsoft.skf.mnemo.gui.glib;
 
 import static org.toxsoft.skf.mnemo.gui.glib.ISkResources.*;
 
+import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
@@ -42,6 +43,7 @@ public class RuntimeMnemoPanel
     ITsGuiContext ctx = new TsGuiContext( tsContext() );
     vedScreen = new VedScreen( ctx );
     vedScreen.pause();
+    vedScreen.view().getControl().setBackground( new Color( 255, 255, 255 ) );
   }
 
   // ------------------------------------------------------------------------------------
