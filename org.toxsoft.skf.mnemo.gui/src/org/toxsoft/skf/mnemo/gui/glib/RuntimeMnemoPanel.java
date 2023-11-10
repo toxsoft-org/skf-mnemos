@@ -44,6 +44,8 @@ public class RuntimeMnemoPanel
 
   String lastPath = TsLibUtils.EMPTY_STRING;
 
+  ISkVedEnvironment vedEnv;
+  
   /**
    * Constructor.
    * <p>
@@ -64,9 +66,12 @@ public class RuntimeMnemoPanel
     vedScreen.pause();
     vedScreen.view().getControl().setBackground( new Color( 255, 255, 255 ) );
 
-    ISkVedEnvironment vedEnv = new SkVedEnvironment( aContext.get( ISkConnectionSupplier.class ).defConn() );
+    vedEnv = new SkVedEnvironment( aContext.get( ISkConnectionSupplier.class ).defConn() );
     vedScreen.tsContext().put( ISkVedEnvironment.class, vedEnv );
 
+    guiTimersService().quickTimers().addListener( vedScreen );
+    guiTimersService().slowTimers().addListener( vedScreen );
+    
     theCanvas.addMouseListener( new MouseListener() {
 
       @Override
@@ -81,11 +86,14 @@ public class RuntimeMnemoPanel
 
       @Override
       public void mouseDoubleClick( MouseEvent aE ) {
+    	pause();
         File f = TsRcpDialogUtils.askFileOpen( getShell(), lastPath, new StringArrayList( SCREEN_CFG_FILE_AST_EXT ) );
         if( f != null ) {
           IVedScreenCfg screenCfg = VedScreenCfg.KEEPER.read( f );
           VedEditorUtils.setVedScreenConfig( vedScreen, screenCfg );
           lastPath = f.getAbsolutePath();
+          vedEnv.restart();
+          resume();
         }
       }
     } );
