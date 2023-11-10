@@ -3,6 +3,7 @@ package org.toxsoft.skf.mnemo.gui.skved;
 import static org.toxsoft.core.tsgui.ved.ITsguiVedConstants.*;
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
+import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
 import org.toxsoft.core.tsgui.bricks.tin.*;
@@ -34,8 +35,8 @@ public class SkActorRtdataValue
    * The VISEL factory singleton.
    */
   public static final IVedActorFactory FACTORY = new VedAbstractActorFactory( FACTORY_ID, //
-      TSID_NAME, "RtData -> Value", //
-      TSID_DESCRIPTION, "Sends RTDATA value to the specified property of the VISEL", //
+      TSID_NAME, STR_ACTOR_RTDATA_VALUE, //
+      TSID_DESCRIPTION, STR_ACTOR_RTDATA_VALUE_D, //
       TSID_ICON_ID, ICONID_VED_ACTOR //
   ) {
 
