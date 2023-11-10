@@ -9,13 +9,19 @@ import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
 import org.toxsoft.core.tsgui.dialogs.*;
+import org.toxsoft.core.tsgui.ved.comps.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.uskat.core.api.cmdserv.*;
+import org.toxsoft.uskat.core.api.users.*;
+import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
  * Actor: process push button so that on click send command.
@@ -57,20 +63,66 @@ public class SkActorCmdButton
 
   };
 
+  private ISkCommand currCommand = null;
+
   protected SkActorCmdButton( IVedItemCfg aCfg, IStridablesList<IDataDef> aDataDefs, VedScreen aVedScreen ) {
     super( aCfg, aDataDefs, aVedScreen );
     IButtonClickHandler buttonHandler = aVisel -> {
-      /**
-       * TODO send Sk-command on click
-       */
-      TsDialogUtils.underDevelopment( getShell() );
+
+      VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
+      visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+      ISkVedEnvironment vedEnv = aVedScreen.tsContext().get( ISkVedEnvironment.class );
+
+      ISkConnectionSupplier conn = aVedScreen.tsContext().get( ISkConnectionSupplier.class );
+      ISkUser user = conn.defConn().coreApi().userService().findUser( "root" );
+
+      Gwid cmdGwid = props().getValobj( PROP_CMD_GWID );
+      currCommand = vedEnv.sendCommand( cmdGwid, user.skid(), IOptionSet.NULL );
+      if( currCommand == null ) {
+
+      }
+      //
+      // /**
+      // * TODO send Sk-command on click
+      // */
+      // TsDialogUtils.underDevelopment( getShell() );
     };
     setButtonClickHandler( buttonHandler );
+
+    guiTimersService().quickTimers().addListener( aRtTime -> {
+      if( currCommand != null ) {
+        SkCommandState cmdState = currCommand.state();
+        VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
+        switch( cmdState.state() ) {
+          case SENDING:
+          case EXECUTING:
+            return;
+          case SUCCESS:
+            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+            currCommand = null;
+            break;
+          case FAILED:
+          case TIMEOUTED:
+          case UNHANDLED:
+            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+            currCommand = null;
+            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+            TsDialogUtils.error( getShell(), cmdState.toString() );
+            break;
+          default:
+            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+            currCommand = null;
+            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+            throw new TsNotAllEnumsUsedRtException();
+        }
+      }
+    } );
   }
 
   @Override
   protected IGwidList doListUsedGwids() {
-    return IGwidList.EMPTY;
+    Gwid cmdGwid = props().getValobj( PROP_CMD_GWID );
+    return new GwidList( cmdGwid );
   }
 
 }
