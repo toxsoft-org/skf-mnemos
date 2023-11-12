@@ -95,6 +95,7 @@ public class SkActorCmdButton
         VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
         switch( cmdState.state() ) {
           case SENDING:
+            return;
           case EXECUTING:
             return;
           case SUCCESS:
