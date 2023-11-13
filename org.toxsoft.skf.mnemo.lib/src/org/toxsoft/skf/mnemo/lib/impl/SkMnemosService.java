@@ -294,7 +294,7 @@ public class SkMnemosService
     return new Skid( CLSID_MNEMO_CFG, aMnemoId );
   }
 
-  private Gwid makeMnemoGwid( String aMnemoId ) {
+  private static Gwid makeMnemoGwid( String aMnemoId ) {
     return Gwid.createClob( CLSID_MNEMO_CFG, aMnemoId, CLBID_MNEMO_CFG_DATA );
   }
 
