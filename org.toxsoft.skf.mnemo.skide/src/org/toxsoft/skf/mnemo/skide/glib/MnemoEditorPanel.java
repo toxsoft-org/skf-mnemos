@@ -1,7 +1,6 @@
 package org.toxsoft.skf.mnemo.skide.glib;
 
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
-import static org.toxsoft.core.tsgui.ved.ITsguiVedConstants.*;
 import static org.toxsoft.skf.mnemo.skide.glib.ISkResources.*;
 
 import org.eclipse.swt.*;
@@ -26,6 +25,7 @@ import org.toxsoft.core.tslib.bricks.events.change.*;
 import org.toxsoft.core.tslib.coll.helpers.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
+import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
@@ -42,44 +42,94 @@ public class MnemoEditorPanel
    * TODO VISEL and canvas pop-up menu<br>
    */
 
-  class AspLocal
-      extends MethodPerActionTsActionSetProvider {
+  /**
+   * Action: save mnemoscheme to the {@link ISkMnemosService} - calls external action handler.
+   *
+   * @author hazard157
+   */
+  class AspSaveMnemo
+      extends AbstractSingleActionSetProvider {
 
-    public AspLocal() {
-      defineAction( ACDEF_SAVE, this::doHandleSave, this::isEnabledSave );
-      defineAction( ACDEF_ENABLE_ACTORS_CHECK, this::doHandleEnableActors, IBooleanState.ALWAY_TRUE,
-          this::isCheckedEnableActors );
+    public AspSaveMnemo() {
+      super( ACDEF_SAVE );
     }
 
-    void doHandleSave() {
+    @Override
+    public void run() {
       if( externalHandler != null ) {
         externalHandler.handleAction( ACTID_SAVE );
       }
     }
 
-    boolean isEnabledSave() {
+    @Override
+    protected boolean doIsActionEnabled() {
       return isChanged();
     }
 
-    void doHandleEnableActors() {
-      boolean enable = !vedScreen.isActorsEnabled();
-      if( enable ) {
-        // TODO when actors enabled, turn on editing, screen redraw, UNDO, SAVE, etc.
-        skVedEnvironment.restart();
-        vedScreen.setActorsEnabled( true );
-      }
-      else {
-        // TODO when actors disabled, turn off editing, screen redraw, UNDO, SAVE, etc.
-        vedScreen.setActorsEnabled( false );
-        skVedEnvironment.close();
-      }
+  }
+
+  /**
+   * Runs editor in "live" mode.
+   *
+   * @author hazard157
+   */
+  static class AspRunActors
+      extends AspActorsRunner {
+
+    public AspRunActors( IVedScreen aVedScreen ) {
+      super( aVedScreen );
     }
 
-    boolean isCheckedEnableActors() {
-      return vedScreen.isActorsEnabled();
+    @Override
+    protected void doAfterActionHandled( String aActionId ) {
+      // TODO when actors enabled, turn on editing, screen redraw, UNDO, SAVE, etc.
+    }
+
+    @Override
+    protected void doBeforeActorsStopActorsRun() {
+      // TODO when actors disabled, turn off editing, screen redraw, UNDO, SAVE, etc.
     }
 
   }
+
+  // class AspLocal
+  // extends MethodPerActionTsActionSetProvider {
+  //
+  // public AspLocal() {
+  // defineAction( ACDEF_SAVE, this::doHandleSave, this::isEnabledSave );
+  // defineAction( ACDEF_ENABLE_ACTORS_CHECK, this::doHandleEnableActors, IBooleanState.ALWAY_TRUE,
+  // this::isCheckedEnableActors );
+  // }
+  //
+  // void doHandleSave() {
+  // if( externalHandler != null ) {
+  // externalHandler.handleAction( ACTID_SAVE );
+  // }
+  // }
+  //
+  // boolean isEnabledSave() {
+  // return isChanged();
+  // }
+  //
+  // void doHandleEnableActors() {
+  // boolean enable = !vedScreen.isActorsEnabled();
+  // if( enable ) {
+  // // TODO when actors enabled, turn on editing, screen redraw, UNDO, SAVE, etc.
+  // skVedEnvironment.restart();
+  // vedScreen.setActorsEnabled( true );
+  // }
+  // else {
+  // // TODO when actors disabled, turn off editing, screen redraw, UNDO, SAVE, etc.
+  // vedScreen.setActorsEnabled( false );
+  // skVedEnvironment.close();
+  // }
+  // }
+  //
+  // boolean isCheckedEnableActors() {
+  // return vedScreen.isActorsEnabled();
+  // }
+  //
+  // }
 
   private final GenericChangeEventer mnemoChangedEventer;
 
@@ -135,13 +185,15 @@ public class MnemoEditorPanel
     vedScreen.tsContext().put( ISkVedEnvironment.class, skVedEnvironment );
     selectionManager = new VedViselSelectionManager( vedScreen );
     vertexSetManager = new VedViselVertexSetManager( vedScreen, selectionManager );
-    actionsProvider.addHandler( new AspLocal() );
+    actionsProvider.addHandler( new AspSaveMnemo() );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
     actionsProvider.addHandler( new VedAspFileImpex( vedScreen ) );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
     actionsProvider.addHandler( new AspUndoRedo( undoManager ) );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
     actionsProvider.addHandler( new VedAspCanvasActions( vedScreen ) );
+    actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
+    actionsProvider.addHandler( new AspActorsRunner( vedScreen ) );
     // WEST
     westFolder = new TabFolder( sfMain, SWT.TOP | SWT.BORDER );
     tiObjTree = new TabItem( westFolder, SWT.NONE );
