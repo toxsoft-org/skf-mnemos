@@ -14,6 +14,7 @@ import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tsgui.panels.toolbar.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.ved.editor.*;
+import org.toxsoft.core.tsgui.ved.editor.IVedViselSelectionManager.*;
 import org.toxsoft.core.tsgui.ved.editor.palette.*;
 import org.toxsoft.core.tsgui.ved.incub.undoman.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
@@ -140,8 +141,10 @@ public class MnemoEditorPanel
   private final VedScreenItemInspector actorInspector;
   private final IUndoRedoManager       undoManager = new UndoManager();
 
-  private final IVedViselSelectionManager selectionManager;
-  private final VedViselVertexSetManager  vertexSetManager;
+  private final IVedViselSelectionManager     selectionManager;
+  private final VedViselVertexSetManager      vertexSetManager;
+  private final VedViselPositionManager       viselPositionManager;
+  private final VedViselMultiselectionManager multiSelectionManager;
 
   private final SkVedEnvironment skVedEnvironment;
 
@@ -185,6 +188,8 @@ public class MnemoEditorPanel
     vedScreen.tsContext().put( ISkVedEnvironment.class, skVedEnvironment );
     selectionManager = new VedViselSelectionManager( vedScreen );
     vertexSetManager = new VedViselVertexSetManager( vedScreen, selectionManager );
+    viselPositionManager = new VedViselPositionManager( vedScreen, selectionManager );
+    multiSelectionManager = new VedViselMultiselectionManager( (VedScreen)vedScreen, selectionManager );
     actionsProvider.addHandler( new AspSaveMnemo() );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
     actionsProvider.addHandler( new VedAspFileImpex( vedScreen ) );
@@ -235,7 +240,12 @@ public class MnemoEditorPanel
     dropTarget.attachToScreen( vedScreen );
     guiTimersService().quickTimers().addListener( vedScreen );
     guiTimersService().slowTimers().addListener( vedScreen );
+
+    // установим обработчики пользовательского ввода
     vedScreen.model().screenHandlersBefore().add( vertexSetManager );
+    vedScreen.model().screenHandlersBefore().add( multiSelectionManager );
+    vedScreen.model().screenHandlersBefore().add( viselPositionManager );
+
     selectionManager.genericChangeEventer().addListener( aSource -> whenSelectionManagerSelectionChanges() );
     toolbar.addListener( actionsProvider );
     vedScreen.model().actors().eventer().addListener( this::whenVedItemsChanged );
@@ -292,7 +302,9 @@ public class MnemoEditorPanel
    */
   private void whenPanelViselsSelectionChanges( IVedVisel aVisel ) {
     String viselId = aVisel != null ? aVisel.id() : null;
-    selectionManager.setSingleSelectedViselId( viselId );
+    if( selectionManager.selectionKind() != ESelectionKind.MULTI ) {
+      selectionManager.setSingleSelectedViselId( viselId );
+    }
   }
 
   /**
