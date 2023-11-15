@@ -145,6 +145,7 @@ public class MnemoEditorPanel
   private final VedViselVertexSetManager      vertexSetManager;
   private final VedViselPositionManager       viselPositionManager;
   private final VedViselMultiselectionManager multiSelectionManager;
+  private final VedViselContextMenuManager    viselCtxMenuManager;
 
   private final SkVedEnvironment skVedEnvironment;
 
@@ -189,7 +190,9 @@ public class MnemoEditorPanel
     selectionManager = new VedViselSelectionManager( vedScreen );
     vertexSetManager = new VedViselVertexSetManager( vedScreen, selectionManager );
     viselPositionManager = new VedViselPositionManager( vedScreen, selectionManager );
-    multiSelectionManager = new VedViselMultiselectionManager( (VedScreen)vedScreen, selectionManager );
+    multiSelectionManager = new VedViselMultiselectionManager( vedScreen, selectionManager );
+    viselCtxMenuManager = new VedViselContextMenuManager( vedScreen, selectionManager );
+
     actionsProvider.addHandler( new AspSaveMnemo() );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
     actionsProvider.addHandler( new VedAspFileImpex( vedScreen ) );
@@ -245,6 +248,7 @@ public class MnemoEditorPanel
     vedScreen.model().screenHandlersBefore().add( vertexSetManager );
     vedScreen.model().screenHandlersBefore().add( multiSelectionManager );
     vedScreen.model().screenHandlersBefore().add( viselPositionManager );
+    vedScreen.model().screenHandlersBefore().add( viselCtxMenuManager );
 
     selectionManager.genericChangeEventer().addListener( aSource -> whenSelectionManagerSelectionChanges() );
     toolbar.addListener( actionsProvider );
