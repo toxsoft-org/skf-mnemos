@@ -139,7 +139,7 @@ public class MnemoEditorPanel
   private final VedPanelActorsList     panelActors;
   private final VedScreenItemInspector viselInspector;
   private final VedScreenItemInspector actorInspector;
-  private final IUndoRedoManager       undoManager = new UndoManager();
+  // private final IUndoRedoManager undoManager = new UndoManager();
 
   private final IVedViselSelectionManager     selectionManager;
   private final VedViselVertexSetManager      vertexSetManager;
@@ -164,6 +164,8 @@ public class MnemoEditorPanel
 
   private ITsActionHandler externalHandler           = null;
   private boolean          internalContentChangeFlag = false;
+
+  private final VedUndoManager undoManager;
 
   /**
    * Constructor.
@@ -192,6 +194,8 @@ public class MnemoEditorPanel
     viselPositionManager = new VedViselPositionManager( vedScreen, selectionManager );
     multiSelectionManager = new VedViselMultiselectionManager( vedScreen, selectionManager );
     viselCtxMenuManager = new VedViselContextMenuManager( vedScreen, selectionManager );
+
+    undoManager = new VedUndoManager( vedScreen );
 
     actionsProvider.addHandler( new AspSaveMnemo() );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
