@@ -17,6 +17,7 @@ import org.toxsoft.core.tsgui.ved.editor.*;
 import org.toxsoft.core.tsgui.ved.editor.IVedViselSelectionManager.*;
 import org.toxsoft.core.tsgui.ved.editor.palette.*;
 import org.toxsoft.core.tsgui.ved.incub.undoman.*;
+import org.toxsoft.core.tsgui.ved.incub.undoman.tsgui.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.asp.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
@@ -201,7 +202,7 @@ public class MnemoEditorPanel
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
     actionsProvider.addHandler( new VedAspFileImpex( vedScreen ) );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
-    actionsProvider.addHandler( new AspUndoRedo( undoManager ) );
+    actionsProvider.addHandler( new AspUndoManager( undoManager ) );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
     actionsProvider.addHandler( new VedAspCanvasActions( vedScreen ) );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
@@ -388,6 +389,7 @@ public class MnemoEditorPanel
   @Override
   public void setCurrentConfig( IVedScreenCfg aCfg ) {
     VedEditorUtils.setVedScreenConfig( vedScreen, aCfg );
+    undoManager.reset();
     setChanged( false );
   }
 
