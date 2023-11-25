@@ -2,6 +2,7 @@ package org.toxsoft.skf.mnemo.lib;
 
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.events.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.validator.*;
 import org.toxsoft.core.tslib.bricks.validator.impl.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
@@ -53,6 +54,13 @@ public interface ISkMnemosService
    * @return {@link IStringList} - all mnemo IDs
    */
   IStringList listMnemosIds();
+
+  /**
+   * Returns all existing mnemos.
+   *
+   * @return {@link IStridablesList}&lt;{@link ISkMnemoCfg}&gt; - all mnemos
+   */
+  IStridablesList<ISkMnemoCfg> listMnemosCfgs();
 
   /**
    * Creates new mnemoscheme with an empty config data.

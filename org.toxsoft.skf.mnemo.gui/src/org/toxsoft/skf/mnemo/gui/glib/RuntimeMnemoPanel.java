@@ -1,24 +1,18 @@
 package org.toxsoft.skf.mnemo.gui.glib;
 
-import static org.toxsoft.core.tsgui.ved.ITsguiVedConstants.*;
 import static org.toxsoft.skf.mnemo.gui.glib.ISkResources.*;
 
-import java.io.*;
-
 import org.eclipse.swt.*;
-import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.panels.*;
-import org.toxsoft.core.tsgui.rcp.utils.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
-import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
@@ -71,31 +65,34 @@ public class RuntimeMnemoPanel
     guiTimersService().quickTimers().addListener( vedScreen );
     guiTimersService().slowTimers().addListener( vedScreen );
 
-    theCanvas.addMouseListener( new MouseListener() {
+    // DEBUG --- load mnemo from file by mouse double click on an empty area
+    // theCanvas.addMouseListener( new MouseListener() {
+    //
+    // @Override
+    // public void mouseUp( MouseEvent aE ) {
+    // // nop
+    // }
+    //
+    // @Override
+    // public void mouseDown( MouseEvent aE ) {
+    // // nop
+    // }
+    //
+    // @Override
+    // public void mouseDoubleClick( MouseEvent aE ) {
+    // pause();
+    // File f = TsRcpDialogUtils.askFileOpen( getShell(), lastPath, new StringArrayList( SCREEN_CFG_FILE_AST_EXT ) );
+    // if( f != null ) {
+    // IVedScreenCfg screenCfg = VedScreenCfg.KEEPER.read( f );
+    // VedScreenUtils.setVedScreenConfig( vedScreen, screenCfg );
+    // lastPath = f.getAbsolutePath();
+    // vedEnv.restart();
+    // resume();
+    // }
+    // }
+    // } );
+    // ---
 
-      @Override
-      public void mouseUp( MouseEvent aE ) {
-        // TODO Auto-generated method stub
-      }
-
-      @Override
-      public void mouseDown( MouseEvent aE ) {
-        // TODO Auto-generated method stub
-      }
-
-      @Override
-      public void mouseDoubleClick( MouseEvent aE ) {
-        pause();
-        File f = TsRcpDialogUtils.askFileOpen( getShell(), lastPath, new StringArrayList( SCREEN_CFG_FILE_AST_EXT ) );
-        if( f != null ) {
-          IVedScreenCfg screenCfg = VedScreenCfg.KEEPER.read( f );
-          VedScreenUtils.setVedScreenConfig( vedScreen, screenCfg );
-          lastPath = f.getAbsolutePath();
-          vedEnv.restart();
-          resume();
-        }
-      }
-    } );
   }
 
   // ------------------------------------------------------------------------------------

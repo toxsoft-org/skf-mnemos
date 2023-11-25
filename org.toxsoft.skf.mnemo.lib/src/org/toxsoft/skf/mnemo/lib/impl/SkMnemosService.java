@@ -10,8 +10,11 @@ import static org.toxsoft.uskat.core.ISkHardConstants.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.ctx.*;
 import org.toxsoft.core.tslib.bricks.events.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.bricks.validator.*;
 import org.toxsoft.core.tslib.bricks.validator.impl.*;
+import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.helpers.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
@@ -239,6 +242,8 @@ public class SkMnemosService
     objServ().svs().addValidator( claimingValidator );
     linkService().svs().addValidator( claimingValidator );
     clobService().svs().addValidator( claimingValidator );
+    // listen to the mnemo content changes
+    clobService().eventer().addListener( this::whenClobChanged );
   }
 
   @Override
@@ -298,6 +303,12 @@ public class SkMnemosService
     return Gwid.createClob( CLSID_MNEMO_CFG, aMnemoId, CLBID_MNEMO_CFG_DATA );
   }
 
+  private void whenClobChanged( ISkCoreApi aCoreApi, Gwid aClobGwid ) {
+    if( aClobGwid.classId().equals( CLSID_MNEMO_CFG ) ) {
+      eventer.fireConfigChanged( ECrudOp.EDIT, aClobGwid.strid() );
+    }
+  }
+
   // ------------------------------------------------------------------------------------
   // ISkMnemosService
   //
@@ -320,6 +331,12 @@ public class SkMnemosService
       ll.add( s.strid() );
     }
     return ll;
+  }
+
+  @Override
+  public IStridablesList<ISkMnemoCfg> listMnemosCfgs() {
+    IList<ISkMnemoCfg> ll = objServ().listObjs( CLSID_MNEMO_CFG, true );
+    return new StridablesList<>( ll );
   }
 
   @Override
@@ -368,7 +385,7 @@ public class SkMnemosService
 
   @Override
   public String getMnemoData( String aMnemoId ) {
-    ISkMnemoCfg mnemo = getMnemo( aMnemoId );
+    getMnemo( aMnemoId ); // checks for existence
     return clobService().readClob( makeMnemoGwid( aMnemoId ) );
   }
 

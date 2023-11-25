@@ -24,7 +24,7 @@ public interface IRuntimeMnemoPanel
   /**
    * Sets the configuration of the mnemoscheme to display.
    *
-   * @param aCfg {@link ISkMnemoCfg} - the mnemoscheme config
+   * @param aCfg {@link ISkMnemoCfg} - the mnemoscheme config or <code>null</code> for no mnemo
    */
   void setMnemoConfig( ISkMnemoCfg aCfg );
 
