@@ -10,6 +10,7 @@ import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.bricks.actions.asp.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
+import org.toxsoft.core.tsgui.graphics.icons.*;
 import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tsgui.panels.toolbar.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
@@ -24,7 +25,6 @@ import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
-import org.toxsoft.core.tslib.coll.helpers.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.lib.*;
@@ -94,45 +94,6 @@ public class MnemoEditorPanel
 
   }
 
-  // class AspLocal
-  // extends MethodPerActionTsActionSetProvider {
-  //
-  // public AspLocal() {
-  // defineAction( ACDEF_SAVE, this::doHandleSave, this::isEnabledSave );
-  // defineAction( ACDEF_ENABLE_ACTORS_CHECK, this::doHandleEnableActors, IBooleanState.ALWAY_TRUE,
-  // this::isCheckedEnableActors );
-  // }
-  //
-  // void doHandleSave() {
-  // if( externalHandler != null ) {
-  // externalHandler.handleAction( ACTID_SAVE );
-  // }
-  // }
-  //
-  // boolean isEnabledSave() {
-  // return isChanged();
-  // }
-  //
-  // void doHandleEnableActors() {
-  // boolean enable = !vedScreen.isActorsEnabled();
-  // if( enable ) {
-  // // TODO when actors enabled, turn on editing, screen redraw, UNDO, SAVE, etc.
-  // skVedEnvironment.restart();
-  // vedScreen.setActorsEnabled( true );
-  // }
-  // else {
-  // // TODO when actors disabled, turn off editing, screen redraw, UNDO, SAVE, etc.
-  // vedScreen.setActorsEnabled( false );
-  // skVedEnvironment.close();
-  // }
-  // }
-  //
-  // boolean isCheckedEnableActors() {
-  // return vedScreen.isActorsEnabled();
-  // }
-  //
-  // }
-
   private final GenericChangeEventer mnemoChangedEventer;
 
   private final IVedScreen             vedScreen;
@@ -140,7 +101,6 @@ public class MnemoEditorPanel
   private final VedPanelActorsList     panelActors;
   private final VedScreenItemInspector viselInspector;
   private final VedScreenItemInspector actorInspector;
-  // private final IUndoRedoManager undoManager = new UndoManager();
 
   private final IVedViselSelectionManager     selectionManager;
   private final VedViselVertexSetManager      vertexSetManager;
@@ -234,11 +194,13 @@ public class MnemoEditorPanel
     tiViselInsp = new TabItem( eastFolder, SWT.NONE );
     tiViselInsp.setText( STR_TAB_VISEL_INSP );
     tiViselInsp.setToolTipText( STR_TAB_VISEL_INSP_D );
+    tiViselInsp.setImage( iconManager().loadStdIcon( EVedItemKind.VISEL.iconId(), EIconSize.IS_16X16 ) );
     viselInspector = new VedScreenItemInspector( eastFolder, vedScreen );
     tiViselInsp.setControl( viselInspector );
     tiActorInsp = new TabItem( eastFolder, SWT.NONE );
     tiActorInsp.setText( STR_TAB_ACTOR_INSP );
     tiActorInsp.setToolTipText( STR_TAB_ACTOR_INSP_D );
+    tiActorInsp.setImage( iconManager().loadStdIcon( EVedItemKind.ACTOR.iconId(), EIconSize.IS_16X16 ) );
     actorInspector = new VedScreenItemInspector( eastFolder, vedScreen );
     tiActorInsp.setControl( actorInspector );
     // setup
@@ -249,7 +211,7 @@ public class MnemoEditorPanel
     guiTimersService().quickTimers().addListener( vedScreen );
     guiTimersService().slowTimers().addListener( vedScreen );
 
-    // установим обработчики пользовательского ввода
+    // add VED snippets: user input handler for editing needs
     vedScreen.model().screenHandlersBefore().add( vertexSetManager );
     vedScreen.model().screenHandlersBefore().add( multiSelectionManager );
     vedScreen.model().screenHandlersBefore().add( viselPositionManager );
@@ -257,8 +219,9 @@ public class MnemoEditorPanel
 
     selectionManager.genericChangeEventer().addListener( aSource -> whenSelectionManagerSelectionChanges() );
     toolbar.addListener( actionsProvider );
-    vedScreen.model().actors().eventer().addListener( this::whenVedItemsChanged );
-    vedScreen.model().visels().eventer().addListener( this::whenVedItemsChanged );
+    vedScreen.model().actors().eventer().addListener( ( src, op, id ) -> setChanged( true ) );
+    vedScreen.model().visels().eventer().addListener( ( src, op, id ) -> setChanged( true ) );
+    vedScreen.view().configChangeEventer().addListener( src -> setChanged( true ) );
     panelVisels.addTsSelectionListener( ( src, sel ) -> whenPanelViselsSelectionChanges( sel ) );
     panelActors.addTsSelectionListener( ( src, sel ) -> whenPanelActorsSelectionChanges( sel ) );
 
@@ -288,6 +251,9 @@ public class MnemoEditorPanel
     }
   }
 
+  /**
+   * When VISEL selection changes need to update inspector and left list of VISELs.
+   */
   private void whenSelectionManagerSelectionChanges() {
     // update VISEL inspector from single selection
     VedAbstractVisel selVisel = null;
@@ -305,7 +271,7 @@ public class MnemoEditorPanel
   }
 
   /**
-   * Called when user selects VISEL in {@link #panelActors}.
+   * Called when user selects VISEL in {@link #panelVisels}, tell news to the selection manager.
    *
    * @param aVisel {@link IVedVisel} - selected VISEL or <code>null</code>
    */
@@ -317,7 +283,7 @@ public class MnemoEditorPanel
   }
 
   /**
-   * Called when user selects actor in {@link #panelActors}.
+   * Called when user selects actor in {@link #panelActors}, tell news to the actor inspector.
    *
    * @param aActor {@link IVedActor} - selected actor or <code>null</code>
    */
@@ -328,48 +294,14 @@ public class MnemoEditorPanel
     }
   }
 
-  // ------------------------------------------------------------------------------------
-  // implementation: toolbar
-  //
-
-  // private void processToolbarButton( String aActionId ) {
-  // switch( aActionId ) {
-  // case ACTID_SAVE: {
-  // if( externalHandler != null ) {
-  // externalHandler.handleAction( aActionId );
-  // }
-  // break;
-  // }
-  // case ACTID_ENABLE_ACTORS: {
-  // boolean enable = !vedScreen.isActorsEnabled();
-  // if( enable ) {
-  // // TODO when actors enabled, turn on editing, screen redraw, UNDO, SAVE, etc.
-  // skVedEnvironment.restart();
-  // vedScreen.setActorsEnabled( true );
-  // }
-  // else {
-  // // TODO when actors disabled, turn off editing, screen redraw, UNDO, SAVE, etc.
-  // vedScreen.setActorsEnabled( false );
-  // skVedEnvironment.close();
-  // }
-  // break;
-  // }
-  // default:
-  // break;
-  // }
-  // updateActionsState();
-  // }
-
+  /**
+   * Updates toolbar actions state.
+   */
   private void updateActionsState() {
     for( String aid : actionsProvider.listHandledActionIds() ) {
       toolbar.setActionEnabled( aid, actionsProvider.isActionEnabled( aid ) );
       toolbar.setActionChecked( aid, actionsProvider.isActionChecked( aid ) );
     }
-  }
-
-  @SuppressWarnings( "unused" )
-  private void whenVedItemsChanged( IVedItemsManager<?> aSource, ECrudOp aOp, String aId ) {
-    setChanged( true );
   }
 
   // ------------------------------------------------------------------------------------
