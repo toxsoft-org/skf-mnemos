@@ -383,12 +383,12 @@ public class MnemoEditorPanel
 
   @Override
   public IVedScreenCfg getCurrentConfig() {
-    return VedEditorUtils.getVedScreenConfig( vedScreen );
+    return VedScreenUtils.getVedScreenConfig( vedScreen );
   }
 
   @Override
   public void setCurrentConfig( IVedScreenCfg aCfg ) {
-    VedEditorUtils.setVedScreenConfig( vedScreen, aCfg );
+    VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
     undoManager.reset();
     setChanged( false );
   }

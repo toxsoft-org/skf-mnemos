@@ -15,7 +15,6 @@ import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tsgui.rcp.utils.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
-import org.toxsoft.core.tsgui.ved.editor.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
@@ -45,7 +44,7 @@ public class RuntimeMnemoPanel
   String lastPath = TsLibUtils.EMPTY_STRING;
 
   ISkVedEnvironment vedEnv;
-  
+
   /**
    * Constructor.
    * <p>
@@ -71,7 +70,7 @@ public class RuntimeMnemoPanel
 
     guiTimersService().quickTimers().addListener( vedScreen );
     guiTimersService().slowTimers().addListener( vedScreen );
-    
+
     theCanvas.addMouseListener( new MouseListener() {
 
       @Override
@@ -86,11 +85,11 @@ public class RuntimeMnemoPanel
 
       @Override
       public void mouseDoubleClick( MouseEvent aE ) {
-    	pause();
+        pause();
         File f = TsRcpDialogUtils.askFileOpen( getShell(), lastPath, new StringArrayList( SCREEN_CFG_FILE_AST_EXT ) );
         if( f != null ) {
           IVedScreenCfg screenCfg = VedScreenCfg.KEEPER.read( f );
-          VedEditorUtils.setVedScreenConfig( vedScreen, screenCfg );
+          VedScreenUtils.setVedScreenConfig( vedScreen, screenCfg );
           lastPath = f.getAbsolutePath();
           vedEnv.restart();
           resume();
@@ -149,7 +148,7 @@ public class RuntimeMnemoPanel
   public void setMnemoConfig( ISkMnemoCfg aCfg ) {
     pause();
     if( mnemoCfg != null ) {
-      VedEditorUtils.setVedScreenConfig( vedScreen, IVedScreenCfg.NONE );
+      VedScreenUtils.setVedScreenConfig( vedScreen, IVedScreenCfg.NONE );
       mnemoCfg = null;
     }
     mnemoCfg = aCfg;
@@ -157,7 +156,7 @@ public class RuntimeMnemoPanel
       try {
         String cfgStr = mnemoCfg.cfgData();
         IVedScreenCfg vedCfg = VedScreenCfg.KEEPER.str2ent( cfgStr );
-        VedEditorUtils.setVedScreenConfig( vedScreen, vedCfg );
+        VedScreenUtils.setVedScreenConfig( vedScreen, vedCfg );
       }
       catch( Exception ex ) {
         LoggerUtils.errorLogger().error( ex );
