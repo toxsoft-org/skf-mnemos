@@ -8,6 +8,8 @@ import org.eclipse.e4.ui.model.application.commands.*;
 import org.eclipse.e4.ui.model.application.ui.basic.*;
 import org.eclipse.e4.ui.model.application.ui.menu.*;
 import org.eclipse.e4.ui.workbench.modeling.*;
+import org.eclipse.e4.ui.workbench.renderers.swt.*;
+import org.eclipse.jface.action.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.mws.e4.helpers.partman.*;
 import org.toxsoft.core.tslib.bricks.strid.impl.*;
@@ -61,20 +63,32 @@ public class MnemoschemesPerspectiveController
     return coreApi().getService( ISkMnemosService.SERVICE_ID );
   }
 
+  @SuppressWarnings( "restriction" ) // needed for MenuManagerRenderer, see comment below. in method body
   private void refreshMainMenuMnemoschemesList( IList<ISkMnemoCfg> aList ) {
     // find main menu item
     MApplication mApp = tsContext.find( MApplication.class );
-
-    // TODO WTF when closing the application ?
-    if( mApp == null ) {
+    if( mApp == null ) { // TODO WTF when closing the application ?
       return; // to avoid exception when application closes
     }
-
     MWindow mainWindow = tsContext.get( MWindow.class );
     EModelService modelService = tsContext.get( EModelService.class );
     MMenu mmnuMnemosList =
         e4Helper().findElement( mainWindow, MMENUID_MNEMOS_LIST, MMenu.class, EModelService.IN_MAIN_MENU );
-    mmnuMnemosList.getChildren().clear();
+    // first, clear whole sub-menu
+    mmnuMnemosList.getChildren().clear(); // clear the E4 menu
+    /**
+     * GOGA: there is the E4 bug - when removing menu items from E4 MMenu, they remain in SWT Menu. SO we need to clear
+     * SWT menu also. That's why MenuanagerRenderer is used here. <br>
+     * Note: at early stage of application initialization renderer is <code>null</code>. <br>
+     * Links:<br>
+     * https://stackoverflow.com/questions/32160827/change-menus-and-menu-items-programmatically-in-eclipse-e4 <br>
+     * https://bugs.eclipse.org/bugs/show_bug.cgi?id=365724
+     */
+    MenuManagerRenderer renderer = (MenuManagerRenderer)mmnuMnemosList.getRenderer();
+    if( renderer != null ) { // also clear SWT menu
+      MenuManager mgr = renderer.getManager( mmnuMnemosList );
+      mgr.removeAll();
+    }
     // if no mnemos exist, just add one disable menu item
     if( aList.isEmpty() ) {
       MHandledMenuItem mItem = modelService.createModelElement( MHandledMenuItem.class );
