@@ -107,6 +107,7 @@ public class MnemoEditorPanel
   private final VedViselPositionManager       viselPositionManager;
   private final VedViselMultiselectionManager multiSelectionManager;
   private final VedViselContextMenuManager    viselCtxMenuManager;
+  private final PaletteSelectionManager       paletteSelectionManager;
 
   private final SkVedEnvironment skVedEnvironment;
 
@@ -115,9 +116,10 @@ public class MnemoEditorPanel
   private final TabFolder westFolder;
   private final TabItem   tiObjTree;
 
-  private final TsToolbar        toolbar;
-  private final IVedItemsPalette vedPalette;
-  private final Canvas           theCanvas;
+  private final TsToolbar toolbar;
+  // private final IVedItemsPalette vedPalette;
+  private final VedItemsPaletteBar vedPalette;
+  private final Canvas             theCanvas;
 
   private final TabFolder eastFolder;
   private final TabItem   tiViselInsp;
@@ -184,10 +186,14 @@ public class MnemoEditorPanel
         actionsProvider.listHandledActionDefs().toArray( new ITsActionDef[0] ) );
     toolbar.addListener( actionsProvider );
     toolbar.getControl().setLayoutData( BorderLayout.NORTH );
-    vedPalette = new VedItemsSimplePaletteBar( centerBoard, SWT.BORDER, vedScreen, true );
+    // vedPalette = new VedItemsSimplePaletteBar( centerBoard, SWT.BORDER, vedScreen, true );
+    vedPalette = new VedItemsPaletteBar( centerBoard, SWT.BORDER, vedScreen, true );
     vedPalette.getControl().setLayoutData( BorderLayout.WEST );
+    paletteSelectionManager = new PaletteSelectionManager( vedScreen, vedPalette );
+
     theCanvas = new Canvas( centerBoard, SWT.DOUBLE_BUFFERED | SWT.BORDER );
     theCanvas.setLayoutData( BorderLayout.CENTER );
+
     vedScreen.attachTo( theCanvas );
     // EAST
     eastFolder = new TabFolder( sfMain, SWT.BORDER );
@@ -216,6 +222,7 @@ public class MnemoEditorPanel
     vedScreen.model().screenHandlersBefore().add( multiSelectionManager );
     vedScreen.model().screenHandlersBefore().add( viselPositionManager );
     vedScreen.model().screenHandlersBefore().add( viselCtxMenuManager );
+    vedScreen.model().screenHandlersBefore().add( paletteSelectionManager );
 
     selectionManager.genericChangeEventer().addListener( aSource -> whenSelectionManagerSelectionChanges() );
     toolbar.addListener( actionsProvider );
