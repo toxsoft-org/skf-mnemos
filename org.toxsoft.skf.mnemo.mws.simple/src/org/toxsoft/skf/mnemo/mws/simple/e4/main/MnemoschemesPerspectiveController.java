@@ -47,8 +47,10 @@ public class MnemoschemesPerspectiveController
     skConn = aConn;
     tsContext = aContext;
     partStackManager = new TsPartStackManager( eclipseContext(), PARTSTACKID_MNEMOS_MAIN );
-    skConn.addConnectionListener( ( aSource, aOldState ) -> updateMnemoschemesListGui() );
-    mnemoServ().eventer().addListener( ( aCoreApi, aOp, aMnemoId ) -> updateMnemoschemesListGui() );
+    skConn.addConnectionListener( this::whenConnStateChanged );
+    if( skConn.state().isOpen() ) {
+      processConnectionGetsOpen();
+    }
     updateMnemoschemesListGui();
   }
 
@@ -67,7 +69,7 @@ public class MnemoschemesPerspectiveController
   private void refreshMainMenuMnemoschemesList( IList<ISkMnemoCfg> aList ) {
     // find main menu item
     MApplication mApp = tsContext.find( MApplication.class );
-    if( mApp == null ) { // TODO WTF when closing the application ?
+    if( mApp == null ) { // TODO WTF when closing the application ? without this check an exception occurs
       return; // to avoid exception when application closes
     }
     MWindow mainWindow = tsContext.get( MWindow.class );
@@ -118,6 +120,18 @@ public class MnemoschemesPerspectiveController
       mnemosList = mnemoServ().listMnemosCfgs();
     }
     refreshMainMenuMnemoschemesList( mnemosList );
+  }
+
+  private void processConnectionGetsOpen() {
+    mnemoServ().eventer().addListener( ( aCoreApi, aOp, aMnemoId ) -> updateMnemoschemesListGui() );
+  }
+
+  private void whenConnStateChanged( ISkConnection aSource, ESkConnState aOldState ) {
+    ESkConnState state = aSource.state();
+    if( state.isOpen() && state.isOpen() != aOldState.isOpen() ) { // when connection becomes open
+      processConnectionGetsOpen();
+    }
+    updateMnemoschemesListGui();
   }
 
   // ------------------------------------------------------------------------------------
