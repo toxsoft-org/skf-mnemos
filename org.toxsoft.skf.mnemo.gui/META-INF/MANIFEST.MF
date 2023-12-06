@@ -31,4 +31,7 @@ Export-Package: org.toxsoft.skf.mnemo.gui,
  org.toxsoft.skf.mnemo.gui.e4.services,
  org.toxsoft.skf.mnemo.gui.glib,
  org.toxsoft.skf.mnemo.gui.km5,
- org.toxsoft.skf.mnemo.gui.skved
+ org.toxsoft.skf.mnemo.gui.skved,
+ org.toxsoft.skf.mnemo.gui.skved.panels,
+ org.toxsoft.skf.mnemo.gui.tools,
+ org.toxsoft.skf.mnemo.gui.tools.rgbaset

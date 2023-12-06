@@ -35,4 +35,12 @@ interface ISkResources {
   String STR_ACTOR_RTDATA_VALUE   = Messages.getString( "STR_ACTOR_RTDATA_VALUE" );   //$NON-NLS-1$
   String STR_ACTOR_RTDATA_VALUE_D = Messages.getString( "STR_ACTOR_RTDATA_VALUE_D" ); //$NON-NLS-1$
 
+  /**
+   * {@link SkActorColorDecorator}
+   */
+  String STR_RGBA_SET                = "Набор цветов";
+  String STR_RGBA_SET_D              = "Набор цветов в виде RGBA";
+  String STR_ACTOR_COLOR_DECORATOR   = "Декоратор цветом";
+  String STR_ACTOR_COLOR_DECORATOR_D = "В зависимости от значения данного задает цвет указанного свойства";
+
 }

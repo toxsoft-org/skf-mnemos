@@ -14,10 +14,11 @@ public interface ISkMnemoGuiConstants {
   // ------------------------------------------------------------------------------------
   // Icons
 
-  String PREFIX_OF_ICON_FIELD_NAME = "ICONID_";     //$NON-NLS-1$
-  String ICONID_MNEMO              = "mnemo";       //$NON-NLS-1$
-  String ICONID_MNEMOS_LIST        = "mnemos-list"; //$NON-NLS-1$
-  String ICONID_MNEMO_EDIT         = "mnemo-edit";  //$NON-NLS-1$
+  String PREFIX_OF_ICON_FIELD_NAME        = "ICONID_";                   //$NON-NLS-1$
+  String ICONID_MNEMO                     = "mnemo";                     //$NON-NLS-1$
+  String ICONID_MNEMOS_LIST               = "mnemos-list";               //$NON-NLS-1$
+  String ICONID_MNEMO_EDIT                = "mnemo-edit";                //$NON-NLS-1$
+  String ICONID_VED_ACTOR_COLOR_DECORATOR = "ved-actor-color-decorator"; //$NON-NLS-1$
 
   /**
    * Constants registration.
