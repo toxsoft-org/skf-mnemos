@@ -5,6 +5,7 @@ import static org.toxsoft.skf.mnemo.skide.glib.ISkResources.*;
 
 import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.bricks.actions.asp.*;
@@ -27,6 +28,8 @@ import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
+import org.toxsoft.skf.mnemo.gui.skved.panels.*;
+import org.toxsoft.skf.mnemo.gui.tools.rgbaset.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
@@ -130,6 +133,8 @@ public class MnemoEditorPanel
 
   private final VedUndoManager undoManager;
 
+  private final MnemoScrollManager scrollManager;
+
   /**
    * Constructor.
    * <p>
@@ -191,7 +196,7 @@ public class MnemoEditorPanel
     vedPalette.getControl().setLayoutData( BorderLayout.WEST );
     paletteSelectionManager = new PaletteSelectionManager( vedScreen, vedPalette );
 
-    theCanvas = new Canvas( centerBoard, SWT.DOUBLE_BUFFERED | SWT.BORDER );
+    theCanvas = new Canvas( centerBoard, SWT.DOUBLE_BUFFERED | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL );
     theCanvas.setLayoutData( BorderLayout.CENTER );
 
     vedScreen.attachTo( theCanvas );
@@ -232,8 +237,29 @@ public class MnemoEditorPanel
     panelVisels.addTsSelectionListener( ( src, sel ) -> whenPanelViselsSelectionChanges( sel ) );
     panelActors.addTsSelectionListener( ( src, sel ) -> whenPanelActorsSelectionChanges( sel ) );
 
+    scrollManager = new MnemoScrollManager( vedScreen );
+
     vedScreen.setActorsEnabled( false );
     updateActionsState();
+
+    theCanvas.addKeyListener( new KeyListener() {
+
+      @Override
+      public void keyReleased( KeyEvent aE ) {
+        // TODO Auto-generated method stub
+
+      }
+
+      @Override
+      public void keyPressed( KeyEvent aE ) {
+        if( aE.character == 'g' ) {
+          PanelImageSetEditor.editInfo( null, aContext );
+        }
+        if( aE.character == 'h' ) {
+          PanelRgbaSetEditor.editRgbaSet( null, aContext );
+        }
+      }
+    } );
   }
 
   // ------------------------------------------------------------------------------------
