@@ -38,6 +38,7 @@ public class AddonSkidePluginMnemos
     aQuantRegistrator.registerQuant( new QuantTsGuiVed() );
     aQuantRegistrator.registerQuant( new QuantSkMnemoGui() );
     aQuantRegistrator.registerQuant( new QuantVtReportTemplate() );
+    aQuantRegistrator.registerQuant( new QuantSkMnemoGui() );
   }
 
   @Override
