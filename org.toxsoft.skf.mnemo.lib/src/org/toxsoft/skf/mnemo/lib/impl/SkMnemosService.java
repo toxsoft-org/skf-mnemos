@@ -8,6 +8,7 @@ import static org.toxsoft.skf.mnemo.lib.ISkMnemosServiceSharedResources.*;
 import static org.toxsoft.uskat.core.ISkHardConstants.*;
 
 import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.ctx.*;
 import org.toxsoft.core.tslib.bricks.events.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
@@ -274,7 +275,10 @@ public class SkMnemosService
    * @return {@link IDtoClassInfo} - class info
    */
   public static IDtoClassInfo internalCreateMnemoCfgClassDto() {
-    DtoClassInfo cinf = new DtoClassInfo( CLSID_MNEMO_CFG, GW_ROOT_CLASS_ID, IOptionSet.NULL );
+    DtoClassInfo cinf = new DtoClassInfo( CLSID_MNEMO_CFG, GW_ROOT_CLASS_ID, OptionSetUtils.createOpSet( //
+        TSID_NAME, STR_MNEMOSCHEME_CLASS, //
+        TSID_DESCRIPTION, STR_MNEMOSCHEME_CLASS_D //
+    ) );
     OPDEF_SK_IS_SOURCE_CODE_DEFINED_CLASS.setValue( cinf.params(), AV_TRUE );
     cinf.clobInfos().add( CLBINF_MNEMO_CFG_DATA );
     return cinf;

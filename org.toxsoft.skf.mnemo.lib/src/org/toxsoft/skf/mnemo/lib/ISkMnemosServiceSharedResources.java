@@ -24,4 +24,10 @@ public interface ISkMnemosServiceSharedResources {
   String FMT_ERR_MNEMO_NOT_EXISTS  = Messages.getString( "FMT_ERR_MNEMO_NOT_EXISTS" );  //$NON-NLS-1$
   String FMT_WARN_MNEMO_NOT_EXISTS = Messages.getString( "FMT_WARN_MNEMO_NOT_EXISTS" ); //$NON-NLS-1$
 
+  // ------------------------------------------------------------------------------------
+  // USkat entities are defined only in English, l10n done via USkat localization service
+
+  String STR_MNEMOSCHEME_CLASS   = "Mnemoscheme";                                                                   //$NON-NLS-1$
+  String STR_MNEMOSCHEME_CLASS_D = "Mnomoscheme - the screen for real-time data visualization and command sending"; //$NON-NLS-1$
+
 }
