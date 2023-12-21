@@ -13,6 +13,8 @@ import org.eclipse.swt.graphics.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
 import org.toxsoft.core.tsgui.bricks.tin.tti.*;
+import org.toxsoft.core.tsgui.graphics.patterns.*;
+import org.toxsoft.core.tsgui.ved.editor.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
@@ -22,6 +24,8 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
+import org.toxsoft.core.tslib.coll.*;
+import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.skf.mnemo.gui.tools.rgbaset.*;
 
@@ -71,23 +75,26 @@ public class SkActorColorDecorator
       fields.add( TFI_VISEL_PROP_ID );
       fields.add( TFI_RTD_GWID );
       fields.add( TFI_RGBA_SET );
-      return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRtdataValue.class );
+      return new PropertableEntitiesTinTypeInfo<>( fields, SkActorColorDecorator.class );
     }
 
     @Override
     protected VedAbstractActor doCreate( IVedItemCfg aCfg, VedScreen aVedScreen ) {
-      return new SkActorRtdataValue( aCfg, propDefs(), aVedScreen );
+      return new SkActorColorDecorator( aCfg, propDefs(), aVedScreen );
     }
 
   };
 
-  private Gwid         gwid      = null;
-  private IGwidList    gwidList  = null;
-  private IAtomicValue lastValue = IAtomicValue.NULL;
+  private Gwid      gwid     = null;
+  private IGwidList gwidList = null;
+  // private IAtomicValue lastValue = IAtomicValue.NULL;
+  private IAtomicValue lastValue = null;
   private IRgbaSet     rgbaSet   = new RgbaSet();
 
   SkActorColorDecorator( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
+    IList<Class<?>> propClasses = new ElemArrayList<>( TsFillInfo.class, RGB.class, RGBA.class );
+    addInterceptor( new VedActorInterceptorViselPropertyValidator( propClasses, aVedScreen.tsContext() ) );
   }
 
   // ------------------------------------------------------------------------------------
@@ -119,9 +126,18 @@ public class SkActorColorDecorator
   @Override
   public void whenRealTimePassed( long aRtTime ) {
     IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
-    if( !newValue.equals( lastValue ) ) {
-      RGBA rgba = rgbaSet.getRgba( newValue.asInt() );
-      setStdViselPropValue( avValobj( rgba ) );
+    if( !newValue.equals( lastValue ) && rgbaSet != null ) {
+      RGBA rgba = rgbaSet.getRgba( 0 );
+      if( newValue.isAssigned() ) {
+        rgba = rgbaSet.getRgba( newValue.asInt() );
+      }
+      String viselPropId = props().getStr( PROPID_VISEL_PROP_ID );
+      if( VedEditorUtils.isPropertyClass( TsFillInfo.class, viselPropId, getVisel(), tsContext() ) ) {
+        setStdViselPropValue( avValobj( new TsFillInfo( rgba ) ) );
+      }
+      else {
+        setStdViselPropValue( avValobj( rgba ) );
+      }
       lastValue = newValue;
     }
   }

@@ -78,7 +78,7 @@ public class MnemoEditorPanel
    *
    * @author hazard157
    */
-  static class AspRunActors
+  class AspRunActors
       extends AspActorsRunner {
 
     public AspRunActors( IVedScreen aVedScreen ) {
@@ -88,6 +88,10 @@ public class MnemoEditorPanel
     @Override
     protected void doAfterActionHandled( String aActionId ) {
       // TODO when actors enabled, turn on editing, screen redraw, UNDO, SAVE, etc.
+      if( isActionEnabled( aActionId ) ) {
+        ISkVedEnvironment vedEnv = vedScreen.tsContext().get( ISkVedEnvironment.class );
+        vedEnv.restart();
+      }
     }
 
     @Override
@@ -173,7 +177,8 @@ public class MnemoEditorPanel
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
     actionsProvider.addHandler( new VedAspCanvasActions( vedScreen ) );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
-    actionsProvider.addHandler( new AspActorsRunner( vedScreen ) );
+    // actionsProvider.addHandler( new AspActorsRunner( vedScreen ) );
+    actionsProvider.addHandler( new AspRunActors( vedScreen ) );
     // WEST
     westFolder = new TabFolder( sfMain, SWT.TOP | SWT.BORDER );
     tiObjTree = new TabItem( westFolder, SWT.NONE );
@@ -247,7 +252,7 @@ public class MnemoEditorPanel
       @Override
       public void keyReleased( KeyEvent aE ) {
         // TODO Auto-generated method stub
-
+        skVedEnvironment.restart();
       }
 
       @Override
@@ -260,6 +265,7 @@ public class MnemoEditorPanel
         }
       }
     } );
+
   }
 
   // ------------------------------------------------------------------------------------
