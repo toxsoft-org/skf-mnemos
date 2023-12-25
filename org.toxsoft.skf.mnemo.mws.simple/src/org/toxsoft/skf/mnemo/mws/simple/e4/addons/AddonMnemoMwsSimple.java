@@ -3,10 +3,12 @@ package org.toxsoft.skf.mnemo.mws.simple.e4.addons;
 import org.eclipse.e4.core.contexts.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.mws.bases.*;
+import org.toxsoft.skf.mnemo.lib.impl.*;
 import org.toxsoft.skf.mnemo.mws.simple.*;
 import org.toxsoft.skf.mnemo.mws.simple.e4.main.*;
 import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.gui.conn.*;
+import org.toxsoft.uskat.core.impl.*;
 
 /**
  * The plugin addon.
@@ -21,6 +23,7 @@ public class AddonMnemoMwsSimple
    */
   public AddonMnemoMwsSimple() {
     super( Activator.PLUGIN_ID );
+    SkCoreUtils.registerSkServiceCreator( SkMnemosService.CREATOR );
   }
 
   // ------------------------------------------------------------------------------------

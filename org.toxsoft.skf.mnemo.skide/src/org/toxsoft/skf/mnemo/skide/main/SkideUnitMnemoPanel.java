@@ -10,7 +10,6 @@ import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.m5.gui.panels.*;
 import org.toxsoft.core.tsgui.m5.model.*;
 import org.toxsoft.skf.mnemo.lib.*;
-import org.toxsoft.skf.mnemo.lib.impl.*;
 import org.toxsoft.skide.core.api.*;
 import org.toxsoft.skide.core.api.impl.*;
 import org.toxsoft.uskat.core.*;
@@ -33,10 +32,6 @@ class SkideUnitMnemoPanel
   protected Control doCreateControl( Composite aParent ) {
 
     ISkCoreApi coreApi = tsContext().get( ISkConnectionSupplier.class ).defConn().coreApi();
-    if( !coreApi.services().hasKey( ISkMnemosService.SERVICE_ID ) ) {
-      coreApi.addService( SkMnemosService.CREATOR );
-      // NICHT! tsContext().put( ISkMnemosService.class, coreApi.getService( ISkMnemosService.SERVICE_ID ) );
-    }
 
     ISkConnection skConn = tsContext().get( ISkConnectionSupplier.class ).defConn();
     IM5Domain m5d = skConn.scope().get( IM5Domain.class );

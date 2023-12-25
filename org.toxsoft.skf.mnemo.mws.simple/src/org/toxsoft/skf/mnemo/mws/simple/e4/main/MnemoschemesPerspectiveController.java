@@ -16,7 +16,6 @@ import org.toxsoft.core.tslib.bricks.strid.impl.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.lib.*;
-import org.toxsoft.skf.mnemo.lib.impl.*;
 import org.toxsoft.skf.mnemo.mws.simple.*;
 import org.toxsoft.skf.mnemo.mws.simple.e4.uiparts.*;
 import org.toxsoft.uskat.core.connection.*;
@@ -59,9 +58,6 @@ public class MnemoschemesPerspectiveController
   //
 
   private ISkMnemosService mnemoServ() {
-    if( !coreApi().services().hasKey( ISkMnemosService.SERVICE_ID ) ) {
-      coreApi().addService( SkMnemosService.CREATOR );
-    }
     return coreApi().getService( ISkMnemosService.SERVICE_ID );
   }
 

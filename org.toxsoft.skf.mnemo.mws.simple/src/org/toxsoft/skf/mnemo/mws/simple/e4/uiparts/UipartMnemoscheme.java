@@ -5,7 +5,6 @@ import org.toxsoft.core.tsgui.widgets.*;
 import org.toxsoft.core.tslib.coll.helpers.*;
 import org.toxsoft.skf.mnemo.gui.glib.*;
 import org.toxsoft.skf.mnemo.lib.*;
-import org.toxsoft.skf.mnemo.lib.impl.*;
 import org.toxsoft.skf.mnemo.mws.simple.e4.main.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.gui.e4.uiparts.*;
@@ -48,9 +47,6 @@ public class UipartMnemoscheme
   }
 
   private ISkMnemosService mnemoServ() {
-    if( !coreApi().services().hasKey( ISkMnemosService.SERVICE_ID ) ) {
-      coreApi().addService( SkMnemosService.CREATOR );
-    }
     return coreApi().getService( ISkMnemosService.SERVICE_ID );
   }
 
