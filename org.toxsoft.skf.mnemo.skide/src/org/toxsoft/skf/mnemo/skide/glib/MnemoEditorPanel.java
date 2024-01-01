@@ -5,7 +5,6 @@ import static org.toxsoft.skf.mnemo.skide.glib.ISkResources.*;
 
 import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
-import org.eclipse.swt.events.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.bricks.actions.asp.*;
@@ -28,8 +27,6 @@ import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
-import org.toxsoft.skf.mnemo.gui.skved.panels.*;
-import org.toxsoft.skf.mnemo.gui.tools.rgbaset.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
@@ -86,17 +83,22 @@ public class MnemoEditorPanel
     }
 
     @Override
-    protected void doAfterActionHandled( String aActionId ) {
-      // TODO when actors enabled, turn on editing, screen redraw, UNDO, SAVE, etc.
-      if( isActionEnabled( aActionId ) ) {
-        ISkVedEnvironment vedEnv = vedScreen.tsContext().get( ISkVedEnvironment.class );
-        vedEnv.restart();
-      }
+    protected void doBeforeActorsRun() {
+      // TODO when actors enabled, turn off editing
+      // TODO when actors enabled, turn off SAVE, etc.
+      undoManager.setEnabled( false ); // when actors enabled, turn off UNDO/REDO
     }
 
     @Override
-    protected void doBeforeActorsStopActorsRun() {
-      // TODO when actors disabled, turn off editing, screen redraw, UNDO, SAVE, etc.
+    protected void doBeforeActorsStop() {
+      skVedEnvironment.restart();
+      // TODO when actors disabled, turn on editing
+      // TODO when actors disabled, turn on SAVE, etc.
+    }
+
+    @Override
+    protected void doAfterActorsStop() {
+      undoManager.setEnabled( true ); // when actors disabled, turn on UNDO/REDO
     }
 
   }
@@ -132,11 +134,12 @@ public class MnemoEditorPanel
   private final TabItem   tiViselInsp;
   private final TabItem   tiActorInsp;
 
-  private ITsActionHandler externalHandler           = null;
-  private boolean          internalContentChangeFlag = false;
+  private ITsActionHandler externalHandler       = null;
+  private boolean          internalIsChangedFlag = false;
 
   private final VedUndoManager undoManager;
 
+  @SuppressWarnings( "unused" )
   private final MnemoScrollManager scrollManager;
 
   /**
@@ -236,8 +239,8 @@ public class MnemoEditorPanel
 
     selectionManager.genericChangeEventer().addListener( aSource -> whenSelectionManagerSelectionChanges() );
     toolbar.addListener( actionsProvider );
-    vedScreen.model().actors().eventer().addListener( ( src, op, id ) -> setChanged( true ) );
-    vedScreen.model().visels().eventer().addListener( ( src, op, id ) -> setChanged( true ) );
+    vedScreen.model().actors().eventer().addListener( ( src, op, id ) -> whenVedItemChanged() );
+    vedScreen.model().visels().eventer().addListener( ( src, op, id ) -> whenVedItemChanged() );
     vedScreen.view().configChangeEventer().addListener( src -> setChanged( true ) );
     panelVisels.addTsSelectionListener( ( src, sel ) -> whenPanelViselsSelectionChanges( sel ) );
     panelActors.addTsSelectionListener( ( src, sel ) -> whenPanelActorsSelectionChanges( sel ) );
@@ -246,26 +249,6 @@ public class MnemoEditorPanel
 
     vedScreen.setActorsEnabled( false );
     updateActionsState();
-
-    theCanvas.addKeyListener( new KeyListener() {
-
-      @Override
-      public void keyReleased( KeyEvent aE ) {
-        // TODO Auto-generated method stub
-        skVedEnvironment.restart();
-      }
-
-      @Override
-      public void keyPressed( KeyEvent aE ) {
-        if( aE.character == 'g' ) {
-          PanelImageSetEditor.editInfo( null, aContext );
-        }
-        if( aE.character == 'h' ) {
-          PanelRgbaSetEditor.editRgbaSet( null, aContext );
-        }
-      }
-    } );
-
   }
 
   // ------------------------------------------------------------------------------------
@@ -287,6 +270,17 @@ public class MnemoEditorPanel
       for( IVedItemsPaletteEntry e : f.paletteEntries() ) {
         vedPalette.addEntry( e );
       }
+    }
+  }
+
+  /**
+   * Called when any VED item (VISEL, actor) property changes.
+   * <p>
+   * Calls {@link #setChanged(boolean) setChanged(true)} if necessary.
+   */
+  private void whenVedItemChanged() {
+    if( !vedScreen.isActorsEnabled() ) {
+      setChanged( true );
     }
   }
 
@@ -366,13 +360,13 @@ public class MnemoEditorPanel
 
   @Override
   public boolean isChanged() {
-    return internalContentChangeFlag;
+    return internalIsChangedFlag;
   }
 
   @Override
   public void setChanged( boolean aState ) {
-    if( internalContentChangeFlag != aState ) {
-      internalContentChangeFlag = aState;
+    if( internalIsChangedFlag != aState ) {
+      internalIsChangedFlag = aState;
       mnemoChangedEventer.fireChangeEvent();
       updateActionsState();
     }

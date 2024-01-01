@@ -38,7 +38,7 @@ public class SkActorColorDecorator
     extends AbstractSkVedActor {
 
   /**
-   * The actor factor ID.
+   * The actor factory ID.
    */
   public static final String FACTORY_ID = SKVED_ID + ".actor.ColorDecorator"; //$NON-NLS-1$
 
@@ -57,7 +57,7 @@ public class SkActorColorDecorator
   static final ITinFieldInfo TFI_RGBA_SET = new TinFieldInfo( PROP_RGBA_SET, TTI_RGBA_SET );
 
   /**
-   * The VISEL factory singleton.
+   * The actor factory singleton.
    */
   public static final IVedActorFactory FACTORY = new VedAbstractActorFactory( FACTORY_ID, //
       TSID_NAME, STR_ACTOR_COLOR_DECORATOR, //

@@ -10,7 +10,9 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_o3XpQIuMEe6MbcF9qfHl9w" featurename="children" parentElementId="org.toxsoft.mws.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_ADQhEIuNEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.persp.main" label="%Persp_MnemoSimple" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.gui/icons/is24x24/mnemos-list.png" tooltip="%Persp_MnemoSimple_D">
-      <children xsi:type="basic:PartStack" xmi:id="_IRqF4IuNEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.partstack.main"/>
+      <children xsi:type="basic:PartStack" xmi:id="_IRqF4IuNEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.partstack.main">
+        <tags>NoAutoCollapse</tags>
+      </children>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_pIl8IIuMEe6MbcF9qfHl9w" featurename="children" parentElementId="org.toxsoft.mws.menu.main.perspectives">

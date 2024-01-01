@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.graphics.colors.*;
-import org.toxsoft.core.tsgui.utils.layout.*;
+import org.toxsoft.core.tsgui.utils.layout.BorderLayout;
 import org.toxsoft.core.tsgui.valed.controls.graphics.*;
 import org.toxsoft.core.tsgui.ved.incub.*;
 import org.toxsoft.core.tslib.bricks.strid.impl.*;

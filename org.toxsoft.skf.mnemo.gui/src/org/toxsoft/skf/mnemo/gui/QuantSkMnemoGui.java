@@ -8,7 +8,9 @@ import org.toxsoft.core.tslib.utils.valobj.*;
 import org.toxsoft.skf.mnemo.gui.km5.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.tools.rgbaset.*;
+import org.toxsoft.skf.mnemo.lib.impl.*;
 import org.toxsoft.uskat.core.gui.km5.*;
+import org.toxsoft.uskat.core.impl.*;
 
 /**
  * The library quant.
@@ -23,6 +25,7 @@ public class QuantSkMnemoGui
    */
   public QuantSkMnemoGui() {
     super( QuantSkMnemoGui.class.getSimpleName() );
+    SkCoreUtils.registerSkServiceCreator( SkMnemosService.CREATOR );
     KM5Utils.registerContributorCreator( KM5MnemosContributor.CREATOR );
   }
 

@@ -107,11 +107,13 @@ public class RuntimeMnemoPanel
   @Override
   public void pause() {
     vedScreen.pause();
+    vedScreen.setActorsEnabled( false );
   }
 
   @Override
   public void resume() {
     vedScreen.resume();
+    vedScreen.setActorsEnabled( true );
   }
 
   // ------------------------------------------------------------------------------------
