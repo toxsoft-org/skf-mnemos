@@ -154,7 +154,10 @@ public class RuntimeMnemoPanel
     if( mnemoCfg != null ) {
       try {
         String cfgStr = mnemoCfg.cfgData();
-        IVedScreenCfg vedCfg = VedScreenCfg.KEEPER.str2ent( cfgStr );
+        IVedScreenCfg vedCfg = IVedScreenCfg.NONE;
+        if( !cfgStr.isEmpty() ) {
+          vedCfg = VedScreenCfg.KEEPER.str2ent( cfgStr );
+        }
         VedScreenUtils.setVedScreenConfig( vedScreen, vedCfg );
       }
       catch( Exception ex ) {
