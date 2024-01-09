@@ -33,6 +33,7 @@ public class QuantSkMnemoGui
   protected void doInitApp( IEclipseContext aAppContext ) {
     TsValobjUtils.registerKeeperIfNone( RgbaSet.KEEPER_ID, RgbaSet.KEEPER );
     IVedActorFactoriesRegistry actFact = aAppContext.get( IVedActorFactoriesRegistry.class );
+    actFact.register( SkActorAttrText.FACTORY );
     actFact.register( SkActorRtdataText.FACTORY );
     actFact.register( SkActorRtdataValue.FACTORY );
     actFact.register( SkActorCmdButton.FACTORY );

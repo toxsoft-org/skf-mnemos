@@ -10,6 +10,8 @@ interface ISkResources {
   /**
    * {@link ISkVedConstants}
    */
+  String STR_PROP_ATTR_GWID       = Messages.getString( "STR_PROP_ATTR_GWID" );       //$NON-NLS-1$
+  String STR_PROP_ATTR_GWID_D     = Messages.getString( "STR_PROP_ATTR_GWID_D" );     //$NON-NLS-1$
   String STR_PROP_RTD_GWID        = Messages.getString( "STR_PROP_RTD_GWID" );        //$NON-NLS-1$
   String STR_PROP_RTD_GWID_D      = Messages.getString( "STR_PROP_RTD_GWID_D" );      //$NON-NLS-1$
   String STR_PROP_CMD_GWID        = Messages.getString( "STR_PROP_CMD_GWID" );        //$NON-NLS-1$
@@ -28,6 +30,12 @@ interface ISkResources {
    */
   String STR_ACTOR_RTDATA_TEXT   = Messages.getString( "STR_ACTOR_RTDATA_TEXT" );   //$NON-NLS-1$
   String STR_ACTOR_RTDATA_TEXT_D = Messages.getString( "STR_ACTOR_RTDATA_TEXT_D" ); //$NON-NLS-1$
+
+  /**
+   * {@link SkActorAttrText}
+   */
+  String STR_ACTOR_ATTR_TEXT   = Messages.getString( "STR_ACTOR_ATTR_TEXT" );   //$NON-NLS-1$
+  String STR_ACTOR_ATTR_TEXT_D = Messages.getString( "STR_ACTOR_ATTR_TEXT_D" ); //$NON-NLS-1$
 
   /**
    * {@link SkActorRtdataValue}
