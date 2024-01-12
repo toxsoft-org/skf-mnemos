@@ -51,4 +51,11 @@ interface ISkResources {
   String STR_ACTOR_COLOR_DECORATOR   = "Декоратор цветом";
   String STR_ACTOR_COLOR_DECORATOR_D = "В зависимости от значения данного задает цвет указанного свойства";
 
+  /**
+   * {@link SkActorRtdataImage}
+   */
+  String STR_IMAGE_SET            = "Набор изображений";
+  String STR_IMAGE_SET_D          = "Набор изображений в виде их описаний";
+  String STR_ACTOR_RTDATA_IMAGE   = "Отображение значения изображением";
+  String STR_ACTOR_RTDATA_IMAGE_D = "Выбирает одно изображение из набора, используя значение РВ_данного как индекс";
 }

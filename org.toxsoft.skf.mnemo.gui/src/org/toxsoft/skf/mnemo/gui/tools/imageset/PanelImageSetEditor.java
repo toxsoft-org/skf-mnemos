@@ -1,6 +1,6 @@
-package org.toxsoft.skf.mnemo.gui.skved.panels;
+package org.toxsoft.skf.mnemo.gui.tools.imageset;
 
-import static org.toxsoft.skf.mnemo.gui.skved.panels.ISkResources.*;
+import static org.toxsoft.skf.mnemo.gui.tools.ITsResources.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -15,21 +15,32 @@ import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.graphics.image.*;
 import org.toxsoft.core.tsgui.rcp.graphics.images.*;
-import org.toxsoft.core.tsgui.utils.layout.BorderLayout;
+import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
+import org.toxsoft.core.tslib.bricks.strid.idgen.*;
+import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
 
+/**
+ * Панель редактирования набора описаний изображений.
+ * <p>
+ *
+ * @author vs
+ */
 public class PanelImageSetEditor
-    extends AbstractTsDialogPanel<IMnemoImageSetInfo, ITsGuiContext>
-    implements ITsGuiContextable {
+    extends AbstractTsDialogPanel<IMnemoImageSetInfo, ITsGuiContext> {
 
   Text fldId;
   Text fldName;
   Text fldDescription;
 
+  TableViewer imgViewer;
+
   private final IStridablesListEdit<IImageEntryInfo> imgInfoList = new StridablesList<>();
+
+  private static IStridGenerator idGen = new SimpleStridGenerator( "imageSet", 1, 0 );
 
   /**
    * Конструктор.<br>
@@ -71,15 +82,25 @@ public class PanelImageSetEditor
 
   @Override
   protected void doSetDataRecord( IMnemoImageSetInfo aData ) {
+    fldId.setEditable( false );
+    if( aData == null || aData == IMnemoImageSetInfo.EMPTY ) {
+      fldId.setText( idGen.nextId() );
+    }
     if( aData != null ) {
-      fldId.setEditable( false );
+      if( aData != IMnemoImageSetInfo.EMPTY ) {
+        fldId.setText( aData.id() );
+      }
+      fldName.setText( aData.nmName() );
+      fldDescription.setText( aData.description() );
+      imgInfoList.clear();
+      imgInfoList.addAll( aData.imageInfoes() );
+      imgViewer.setInput( imgInfoList.toArray() );
     }
   }
 
   @Override
   protected IMnemoImageSetInfo doGetDataRecord() {
-    // TODO Auto-generated method stub
-    return null;
+    return new MnemoImageSetInfo( fldId.getText(), fldName.getText(), fldDescription.getText(), imgInfoList );
   }
 
   // ------------------------------------------------------------------------------------
@@ -111,7 +132,7 @@ public class PanelImageSetEditor
     imgPanel.setLayout( new GridLayout( 2, false ) );
     imgPanel.setLayoutData( BorderLayout.CENTER );
 
-    TableViewer imgViewer = new TableViewer( imgPanel, SWT.BORDER );
+    imgViewer = new TableViewer( imgPanel, SWT.BORDER );
     imgViewer.getTable().setHeaderVisible( true );
     imgViewer.getTable().setLinesVisible( true );
     imgViewer.getTable().setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
@@ -127,7 +148,7 @@ public class PanelImageSetEditor
 
     TableViewerColumn columnImage = new TableViewerColumn( imgViewer, SWT.NONE );
     columnImage.getColumn().setWidth( 150 );
-    columnImage.getColumn().setText( "Изображение" ); //$NON-NLS-1$
+    columnImage.getColumn().setText( STR_C_IMGAGE );
     columnImage.setLabelProvider( new CellLabelProvider() {
 
       @Override
@@ -148,7 +169,7 @@ public class PanelImageSetEditor
       public void update( ViewerCell aCell ) {
         IImageEntryInfo info = (IImageEntryInfo)aCell.getElement();
         int idx = imgInfoList.indexOf( info );
-        aCell.setText( "" + idx );
+        aCell.setText( TsLibUtils.EMPTY_STRING + idx );
       }
     } );
 
@@ -159,7 +180,7 @@ public class PanelImageSetEditor
     btnsPanel.setLayoutData( gd );
 
     Button btnAdd = new Button( btnsPanel, SWT.PUSH );
-    btnAdd.setText( "Добавить..." );
+    btnAdd.setText( STR_B_ADD );
     btnAdd.addSelectionListener( new SelectionAdapter() {
 
       @Override
@@ -183,15 +204,15 @@ public class PanelImageSetEditor
     } );
 
     Button btnDelete = new Button( btnsPanel, SWT.PUSH );
-    btnDelete.setText( "Удалить" );
+    btnDelete.setText( STR_B_REMOVE );
     btnDelete.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
 
     Button btnUp = new Button( btnsPanel, SWT.PUSH );
-    btnUp.setText( "Вверх" );
+    btnUp.setText( STR_B_UP );
     btnUp.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
 
     Button btnDown = new Button( btnsPanel, SWT.PUSH );
-    btnDown.setText( "Вниз" );
+    btnDown.setText( STR_B_DOWN );
     btnDown.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
 
   }

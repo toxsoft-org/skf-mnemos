@@ -1,4 +1,4 @@
-package org.toxsoft.skf.mnemo.gui.skved.panels;
+package org.toxsoft.skf.mnemo.gui.tools.imageset;
 
 import org.toxsoft.core.tsgui.graphics.image.*;
 import org.toxsoft.core.tslib.bricks.strid.*;
@@ -9,7 +9,7 @@ import org.toxsoft.core.tslib.bricks.strid.*;
  * @author vs
  */
 public interface IImageEntryInfo
-    extends IStridableParameterized {
+    extends IStridable {
 
   /**
    * Возвращает описание способа создания изображения.

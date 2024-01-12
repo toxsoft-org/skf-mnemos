@@ -105,7 +105,7 @@ public class SkVedEnvironment
   @Override
   public void registerActor( AbstractSkVedActor aActor ) {
     TsNullArgumentRtException.checkNull( aActor );
-    TsIllegalStateRtException.checkTrue( started );
+    // TsIllegalStateRtException.checkTrue( started );
     TsItemAlreadyExistsRtException.checkTrue( actorsList.hasKey( aActor.id() ) );
     actorsList.add( aActor );
   }

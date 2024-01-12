@@ -119,15 +119,17 @@ public class SkActorAttrText
 
   @Override
   public void whenRealTimePassed( long aRtTime ) {
-    ISkObject skObj = skVedEnv().skConn().coreApi().objService().find( gwid.skid() );
-    IAtomicValue newValue = IAtomicValue.NULL;
-    if( skObj != null ) {
-      newValue = skObj.attrs().getValue( gwid.propId() );
-    }
-    if( !newValue.equals( lastValue ) ) {
-      String text = AvUtils.printAv( fmtStr, newValue );
-      setStdViselPropValue( avStr( text ) );
-      lastValue = newValue;
+    if( gwid != null && gwid.skid() != null ) {
+      ISkObject skObj = skVedEnv().skConn().coreApi().objService().find( gwid.skid() );
+      IAtomicValue newValue = IAtomicValue.NULL;
+      if( skObj != null ) {
+        newValue = skObj.attrs().getValue( gwid.propId() );
+      }
+      if( !newValue.equals( lastValue ) ) {
+        String text = AvUtils.printAv( fmtStr, newValue );
+        setStdViselPropValue( avStr( text ) );
+        lastValue = newValue;
+      }
     }
   }
 
