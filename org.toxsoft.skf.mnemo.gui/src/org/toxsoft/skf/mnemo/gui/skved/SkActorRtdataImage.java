@@ -26,8 +26,8 @@ import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.skf.mnemo.gui.tools.imageset.*;
 
 /**
- * Actor: reads specified RTDATA value, select the image descriptor from set of descriptors with number depends on value
- * and set it to Visel's property.
+ * Actor: reads specified RTDATA value, select the image descriptor from set of descriptors using value as index and set
+ * it to Visel's property.
  * <p>
  *
  * @author hazard157
@@ -86,7 +86,7 @@ public class SkActorRtdataImage
 
   private Gwid         gwid      = null;
   private IGwidList    gwidList  = null;
-  private IAtomicValue lastValue = IAtomicValue.NULL;
+  private IAtomicValue lastValue = null;                    // IAtomicValue.NULL;
   IMnemoImageSetInfo   imageSet  = IMnemoImageSetInfo.EMPTY;
 
   SkActorRtdataImage( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
@@ -117,19 +117,26 @@ public class SkActorRtdataImage
     if( aChangedValues.hasKey( PROPID_IMAGE_SET ) ) {
       imageSet = props().getValobj( PROP_IMAGE_SET );
     }
+    if( !props().getStr( PROPID_VISEL_ID ).isBlank() ) {
+      if( imageSet != null && imageSet.imageInfoes().size() > 0 ) {
+        TsImageDescriptor imd = imageSet.imageInfoes().get( 0 ).imageDescriptor();
+        setStdViselPropValue( avValobj( imd ) );
+      }
+    }
   }
 
   @Override
   public void whenRealTimePassed( long aRtTime ) {
     IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
     if( !newValue.equals( lastValue ) ) {
-      TsImageDescriptor imd = imageSet.imageInfoes().get( newValue.asInt() ).imageDescriptor();
-      setStdViselPropValue( avValobj( imd ) );
+      if( newValue.isAssigned() ) {
+        TsImageDescriptor imd = imageSet.imageInfoes().get( newValue.asInt() ).imageDescriptor();
+        setStdViselPropValue( avValobj( imd ) );
+      }
+      else {
+        setStdViselPropValue( avValobj( TsImageDescriptor.NONE ) );
+      }
       lastValue = newValue;
-    }
-    if( !newValue.isAssigned() ) {
-      TsImageDescriptor imd = imageSet.imageInfoes().get( 0 ).imageDescriptor();
-      setStdViselPropValue( avValobj( imd ) );
     }
   }
 

@@ -136,13 +136,13 @@ public class PanelImageSetEditor
     imgViewer.getTable().setHeaderVisible( true );
     imgViewer.getTable().setLinesVisible( true );
     imgViewer.getTable().setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
-    imgViewer.getTable().addListener( SWT.MeasureItem, event -> {
-      // height cannot be per row so simply set
-      if( event.height < 67 ) {
-        event.height = 67;
-        event.doit = false;
-      }
-    } );
+    // imgViewer.getTable().addListener( SWT.MeasureItem, event -> {
+    // // height cannot be per row so simply set
+    // if( event.height < 67 ) {
+    // event.height = 67;
+    // event.doit = false;
+    // }
+    // } );
 
     imgViewer.setContentProvider( new ArrayContentProvider() );
 
@@ -210,11 +210,53 @@ public class PanelImageSetEditor
     Button btnUp = new Button( btnsPanel, SWT.PUSH );
     btnUp.setText( STR_B_UP );
     btnUp.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
+    btnUp.addSelectionListener( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( SelectionEvent aEvent ) {
+        IImageEntryInfo imd = selectedEnty();
+        int idx = imgInfoList.indexOf( imd );
+        imgInfoList.removeByIndex( idx );
+        idx--;
+        imgInfoList.insert( idx, imd );
+        imgViewer.setInput( imgInfoList.toArray() );
+        imgViewer.setSelection( new StructuredSelection( imd ) );
+      }
+    } );
 
     Button btnDown = new Button( btnsPanel, SWT.PUSH );
     btnDown.setText( STR_B_DOWN );
     btnDown.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
+    btnDown.addSelectionListener( new SelectionAdapter() {
 
+      @Override
+      public void widgetSelected( SelectionEvent aEvent ) {
+        IImageEntryInfo imd = selectedEnty();
+        int idx = imgInfoList.indexOf( imd );
+        imgInfoList.removeByIndex( idx );
+        idx++;
+        imgInfoList.insert( idx, imd );
+        imgViewer.setInput( imgInfoList.toArray() );
+        imgViewer.setSelection( new StructuredSelection( imd ) );
+      }
+    } );
+
+    imgViewer.addSelectionChangedListener( aEvent -> {
+      boolean enable = !aEvent.getSelection().isEmpty();
+      IImageEntryInfo imd = selectedEnty();
+      btnUp.setEnabled( enable );
+      btnDown.setEnabled( enable );
+      btnDelete.setEnabled( enable );
+      if( imd != null ) {
+        int idx = imgInfoList.indexOf( imd );
+        if( idx <= 0 ) {
+          btnUp.setEnabled( false );
+        }
+        if( idx >= imgInfoList.size() - 1 ) {
+          btnDown.setEnabled( false );
+        }
+      }
+    } );
   }
 
   String getUniqueName( String aFileName ) {
@@ -242,6 +284,14 @@ public class PanelImageSetEditor
       return true;
     }
     return false;
+  }
+
+  IImageEntryInfo selectedEnty() {
+    IStructuredSelection s = (IStructuredSelection)imgViewer.getSelection();
+    if( !s.isEmpty() ) {
+      return (IImageEntryInfo)s.getFirstElement();
+    }
+    return null;
   }
 
   // ------------------------------------------------------------------------------------
