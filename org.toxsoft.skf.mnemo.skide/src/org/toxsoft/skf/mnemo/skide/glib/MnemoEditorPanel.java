@@ -86,11 +86,23 @@ public class MnemoEditorPanel
     protected void doBeforeActorsRun() {
       // TODO when actors enabled, turn off editing
       // TODO when actors enabled, turn off SAVE, etc.
+
+      vedScreen.model().screenHandlersBefore().remove( vertexSetManager );
+      vedScreen.model().screenHandlersBefore().remove( multiSelectionManager );
+      vedScreen.model().screenHandlersBefore().remove( viselPositionManager );
+      vedScreen.model().screenHandlersBefore().remove( viselCtxMenuManager );
+      vedScreen.model().screenHandlersBefore().remove( paletteSelectionManager );
+
       undoManager.setEnabled( false ); // when actors enabled, turn off UNDO/REDO
     }
 
     @Override
     protected void doBeforeActorsStop() {
+      vedScreen.model().screenHandlersBefore().add( vertexSetManager );
+      vedScreen.model().screenHandlersBefore().add( multiSelectionManager );
+      vedScreen.model().screenHandlersBefore().add( viselPositionManager );
+      vedScreen.model().screenHandlersBefore().add( viselCtxMenuManager );
+      vedScreen.model().screenHandlersBefore().add( paletteSelectionManager );
       skVedEnvironment.restart();
       // TODO when actors disabled, turn on editing
       // TODO when actors disabled, turn on SAVE, etc.

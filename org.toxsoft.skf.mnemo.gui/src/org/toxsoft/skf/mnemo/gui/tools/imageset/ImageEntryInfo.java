@@ -5,8 +5,10 @@ import java.io.*;
 import org.toxsoft.core.tsgui.graphics.image.*;
 import org.toxsoft.core.tslib.bricks.keeper.*;
 import org.toxsoft.core.tslib.bricks.keeper.AbstractEntityKeeper.*;
+import org.toxsoft.core.tslib.bricks.strid.impl.*;
 import org.toxsoft.core.tslib.bricks.strio.*;
 import org.toxsoft.core.tslib.utils.*;
+import org.toxsoft.core.tslib.utils.errors.*;
 
 /**
  * Вхождение в список описаний изображений.
@@ -51,6 +53,7 @@ public class ImageEntryInfo
   private final String id;
 
   ImageEntryInfo( String aId, TsImageDescriptor aImageDescriptor ) {
+    TsIllegalArgumentRtException.checkFalse( StridUtils.isValidIdPath( aId ) );
     id = aId;
     imageDescriptor = aImageDescriptor;
   }

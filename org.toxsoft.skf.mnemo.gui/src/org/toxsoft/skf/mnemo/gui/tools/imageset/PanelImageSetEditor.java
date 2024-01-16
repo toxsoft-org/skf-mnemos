@@ -19,6 +19,7 @@ import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.idgen.*;
+import org.toxsoft.core.tslib.bricks.strid.impl.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
@@ -206,6 +207,16 @@ public class PanelImageSetEditor
     Button btnDelete = new Button( btnsPanel, SWT.PUSH );
     btnDelete.setText( STR_B_REMOVE );
     btnDelete.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
+    btnDelete.addSelectionListener( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( SelectionEvent aEvent ) {
+        IImageEntryInfo imd = selectedEnty();
+        imgInfoList.remove( imd );
+        imgViewer.setInput( imgInfoList.toArray() );
+        imgViewer.setSelection( new StructuredSelection( imd ) );
+      }
+    } );
 
     Button btnUp = new Button( btnsPanel, SWT.PUSH );
     btnUp.setText( STR_B_UP );
@@ -266,7 +277,7 @@ public class PanelImageSetEditor
       un += num;
       num++;
     }
-    return un;
+    return StridUtils.str2id( un );
   }
 
   boolean isImage( String aFilePath ) {
