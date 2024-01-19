@@ -42,6 +42,8 @@ interface ISkResources {
    */
   String STR_ACTOR_RTDATA_VALUE   = Messages.getString( "STR_ACTOR_RTDATA_VALUE" );   //$NON-NLS-1$
   String STR_ACTOR_RTDATA_VALUE_D = Messages.getString( "STR_ACTOR_RTDATA_VALUE_D" ); //$NON-NLS-1$
+  String STR_INVERSE_BOOLEAN      = Messages.getString( "STR_INVERSE_BOOLEAN" );      //$NON-NLS-1$
+  String STR_INVERSE_BOOLEAN_D    = Messages.getString( "STR_INVERSE_BOOLEAN_D" );    //$NON-NLS-1$
 
   /**
    * {@link SkActorColorDecorator}
