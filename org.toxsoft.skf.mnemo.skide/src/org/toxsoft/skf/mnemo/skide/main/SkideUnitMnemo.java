@@ -8,8 +8,11 @@ import static org.toxsoft.skide.core.ISkideCoreConstants.*;
 
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
+import org.toxsoft.skf.mnemo.skide.tasks.codegen.*;
 import org.toxsoft.skide.core.api.*;
 import org.toxsoft.skide.core.api.impl.*;
+import org.toxsoft.skide.core.api.tasks.*;
 
 /**
  * SkiDE unit: unit template 1.
@@ -36,6 +39,12 @@ public class SkideUnitMnemo
   @Override
   protected AbstractSkideUnitPanel doCreateUnitPanel( ITsGuiContext aContext ) {
     return new SkideUnitMnemoPanel( aContext, this );
+  }
+
+  @Override
+  protected void doFillTasks( IStringMapEdit<AbstractSkideUnitTask> aTaskRunnersMap ) {
+    AbstractSkideUnitTask task = new TaskMnemosCodegen( this );
+    aTaskRunnersMap.put( task.taskInfo().id(), task );
   }
 
 }
