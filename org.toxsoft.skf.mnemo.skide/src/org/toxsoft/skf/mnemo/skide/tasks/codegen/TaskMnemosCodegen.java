@@ -14,7 +14,6 @@ import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.skf.mnemo.skide.main.*;
 import org.toxsoft.skide.core.api.*;
-import org.toxsoft.skide.core.api.impl.*;
 import org.toxsoft.skide.core.api.tasks.*;
 import org.toxsoft.skide.task.codegen.gen.*;
 import org.toxsoft.skide.task.codegen.main.*;
@@ -22,7 +21,7 @@ import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
- * SkIDE task {@link SkideTaskCodegenInfo} runner for {@link SkideUnitMnemo}.
+ * SkIDE task {@link CodegenTaskProcessor} runner for {@link SkideUnitMnemo}.
  *
  * @author hazard157
  */
@@ -38,7 +37,8 @@ public class TaskMnemosCodegen
    * @throws TsNullArgumentRtException any argument = <code>null</code>
    */
   public TaskMnemosCodegen( AbstractSkideUnit aOwnerUnit ) {
-    super( aOwnerUnit, SkideTaskCodegenInfo.INSTANCE, new StridablesList<>( OPDEF_GW_MNEMOS_INTERFACE_NAME ) );
+    super( aOwnerUnit, CodegenTaskProcessor.INSTANCE.taskInfo(),
+        new StridablesList<>( OPDEF_GW_MNEMOS_INTERFACE_NAME ) );
   }
 
   // ------------------------------------------------------------------------------------
