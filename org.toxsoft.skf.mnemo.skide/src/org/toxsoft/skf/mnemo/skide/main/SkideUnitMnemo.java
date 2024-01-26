@@ -10,6 +10,7 @@ import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.skf.mnemo.skide.tasks.codegen.*;
+import org.toxsoft.skf.mnemo.skide.tasks.upload.*;
 import org.toxsoft.skide.core.api.*;
 import org.toxsoft.skide.core.api.impl.*;
 import org.toxsoft.skide.core.api.tasks.*;
@@ -44,6 +45,8 @@ public class SkideUnitMnemo
   @Override
   protected void doFillTasks( IStringMapEdit<AbstractSkideUnitTask> aTaskRunnersMap ) {
     AbstractSkideUnitTask task = new TaskMnemosCodegen( this );
+    aTaskRunnersMap.put( task.taskInfo().id(), task );
+    task = new TaskMnemosUploadToServer( this );
     aTaskRunnersMap.put( task.taskInfo().id(), task );
   }
 

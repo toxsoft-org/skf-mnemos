@@ -32,7 +32,8 @@ Require-Bundle: javax.annotation,
  org.toxsoft.skf.mnemo.lib,
  org.toxsoft.skf.mnemo.gui,
  org.toxsoft.skf.reports.gui,
- org.toxsoft.skide.task.codegen
+ org.toxsoft.skide.task.codegen,
+ org.toxsoft.skide.plugin.exconn
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: org.toxsoft.skide.plugin.template
 Bundle-ActivationPolicy: lazy
