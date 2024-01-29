@@ -16,7 +16,7 @@ import org.toxsoft.uskat.core.impl.*;
 /**
  * The library quant.
  *
- * @author goga, vs
+ * @author hazard157, vs
  */
 public class QuantSkMnemoGui
     extends AbstractQuant {
