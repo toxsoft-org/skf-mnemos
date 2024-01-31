@@ -5,6 +5,7 @@ import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.skide.ISkidePluginMnemoConstants.*;
 import static org.toxsoft.skf.mnemo.skide.ISkidePluginMnemoSharedResources.*;
 import static org.toxsoft.skide.core.ISkideCoreConstants.*;
+import static org.toxsoft.skide.core.api.ucateg.ISkideUnitCategoryConstants.*;
 
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
@@ -32,6 +33,7 @@ public class SkideUnitMnemo
     super( UNIT_ID, OptionSetUtils.createOpSet( //
         TSID_NAME, STR_SKIDE_MNEMOS_UNIT, //
         TSID_DESCRIPTION, STR_SKIDE_MNEMOS_UNIT_D, //
+        OPDEF_SKIDE_UNIT_CATEGORY, UCATEGID_SYSDESCR, //
         TSID_ICON_ID, ICONID_SKIDE_UNIT_MNEMOS_EDITOR //
     ), aContext, aCreator );
     unitActions().add( ACDEF_ABOUT );
