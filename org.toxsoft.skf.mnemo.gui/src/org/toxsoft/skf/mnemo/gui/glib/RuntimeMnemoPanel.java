@@ -114,6 +114,7 @@ public class RuntimeMnemoPanel
   public void resume() {
     vedScreen.resume();
     vedScreen.setActorsEnabled( true );
+    vedEnv.restart();
   }
 
   // ------------------------------------------------------------------------------------
