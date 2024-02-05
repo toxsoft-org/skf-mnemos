@@ -20,7 +20,7 @@ import org.toxsoft.uskat.core.connection.*;
  *
  * @author hazard157
  */
-public class TaskMnemosUploadToServer
+public class TaskMnemosUpload
     extends AbstractSkideUnitTaskSync {
 
   /**
@@ -29,7 +29,7 @@ public class TaskMnemosUploadToServer
    * @param aOwnerUnit {@link AbstractSkideUnit} - the owner unit
    * @throws TsNullArgumentRtException any argument = <code>null</code>
    */
-  public TaskMnemosUploadToServer( AbstractSkideUnit aOwnerUnit ) {
+  public TaskMnemosUpload( AbstractSkideUnit aOwnerUnit ) {
     super( aOwnerUnit, UploadToServerTaskProcessor.INSTANCE.taskInfo(), IStridablesList.EMPTY );
   }
 

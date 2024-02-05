@@ -61,7 +61,7 @@ public class TaskMnemosCodegen
   protected void doRunSync( ITsContextRo aInput, ITsContext aOutput ) {
     ILongOpProgressCallback lop = REFDEF_IN_PROGRESS_MONITOR.getRef( aInput );
     ICodegenEnvironment codegenEnv = REFDEF_CODEGEN_ENV.getRef( aInput );
-    String interfaceName = OPDEF_GW_MNEMOS_INTERFACE_NAME.getValue( aInput.params() ).asString();
+    String interfaceName = OPDEF_GW_MNEMOS_INTERFACE_NAME.getValue( getCfgOptionValues() ).asString();
     IJavaConstantsInterfaceWriter jw = codegenEnv.createJavaInterfaceWriter( interfaceName );
     ISkConnectionSupplier cs = tsContext().get( ISkConnectionSupplier.class );
     writeConstants( cs.defConn(), jw );

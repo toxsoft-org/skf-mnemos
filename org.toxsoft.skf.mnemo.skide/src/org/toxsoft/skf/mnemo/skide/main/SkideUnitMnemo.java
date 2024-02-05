@@ -48,7 +48,7 @@ public class SkideUnitMnemo
   protected void doFillTasks( IStringMapEdit<AbstractSkideUnitTask> aTaskRunnersMap ) {
     AbstractSkideUnitTask task = new TaskMnemosCodegen( this );
     aTaskRunnersMap.put( task.taskInfo().id(), task );
-    task = new TaskMnemosUploadToServer( this );
+    task = new TaskMnemosUpload( this );
     aTaskRunnersMap.put( task.taskInfo().id(), task );
   }
 
