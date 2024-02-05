@@ -39,6 +39,7 @@ public class QuantSkMnemoGui
     actFact.register( SkActorAttrText.FACTORY );
     actFact.register( SkActorRtdataText.FACTORY );
     actFact.register( SkActorRtdataValue.FACTORY );
+    actFact.register( SkActorRtBooleanValue.FACTORY );
     actFact.register( SkActorCmdButton.FACTORY );
     actFact.register( SkActorColorDecorator.FACTORY );
     actFact.register( SkActorRtdataImage.FACTORY );

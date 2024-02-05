@@ -1,7 +1,10 @@
 package org.toxsoft.skf.mnemo.gui.skved;
 
+import static org.toxsoft.core.tsgui.bricks.tin.tti.ITtiConstants.*;
 import static org.toxsoft.core.tsgui.ved.ITsguiVedConstants.*;
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
+import static org.toxsoft.core.tslib.av.EAtomicType.*;
+import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
@@ -12,6 +15,7 @@ import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.*;
+import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
@@ -23,20 +27,30 @@ import org.toxsoft.core.tslib.gw.gwid.*;
  *
  * @author hazard157
  */
-public class SkActorRtdataValue
+public class SkActorRtBooleanValue
     extends AbstractSkVedActor {
 
   /**
    * The actor factor ID.
    */
-  public static final String FACTORY_ID = SKVED_ID + ".actor.RtdataValue"; //$NON-NLS-1$
+  public static final String FACTORY_ID = SKVED_ID + ".actor.RtBooleanValue"; //$NON-NLS-1$
+
+  static final String PROPID_INVERSE_BOOLEAN = "inverse.boolean"; //$NON-NLS-1$
+
+  static final IDataDef PROP_INVERSE = DataDef.create( PROPID_INVERSE_BOOLEAN, BOOLEAN, //
+      TSID_NAME, STR_INVERSE_BOOLEAN, //
+      TSID_DESCRIPTION, STR_INVERSE_BOOLEAN_D, //
+      TSID_DEFAULT_VALUE, AV_FALSE //
+  );
+
+  static final ITinFieldInfo TFI_INVERSE_BOOLEAN = new TinFieldInfo( PROP_INVERSE, TTI_AT_BOOLEAN );
 
   /**
    * The VISEL factory singleton.
    */
   public static final IVedActorFactory FACTORY = new VedAbstractActorFactory( FACTORY_ID, //
-      TSID_NAME, STR_ACTOR_RTDATA_VALUE, //
-      TSID_DESCRIPTION, STR_ACTOR_RTDATA_VALUE_D, //
+      TSID_NAME, STR_ACTOR_RTBOOLEAN_VALUE, //
+      TSID_DESCRIPTION, STR_ACTOR_RTBOOLEAN_VALUE_D, //
       TSID_ICON_ID, ICONID_VED_ACTOR //
   ) {
 
@@ -49,12 +63,13 @@ public class SkActorRtdataValue
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_VISEL_PROP_ID );
       fields.add( TFI_RTD_GWID );
-      return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRtdataValue.class );
+      fields.add( TFI_INVERSE_BOOLEAN );
+      return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRtBooleanValue.class );
     }
 
     @Override
     protected VedAbstractActor doCreate( IVedItemCfg aCfg, VedScreen aVedScreen ) {
-      return new SkActorRtdataValue( aCfg, propDefs(), aVedScreen );
+      return new SkActorRtBooleanValue( aCfg, propDefs(), aVedScreen );
     }
 
   };
@@ -63,7 +78,7 @@ public class SkActorRtdataValue
   private IGwidList    gwidList  = null;
   private IAtomicValue lastValue = IAtomicValue.NULL;
 
-  SkActorRtdataValue( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
+  SkActorRtBooleanValue( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
   }
 
@@ -94,7 +109,14 @@ public class SkActorRtdataValue
   public void whenRealTimePassed( long aRtTime ) {
     IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
     if( !newValue.equals( lastValue ) ) {
-      setStdViselPropValue( newValue );
+      IAtomicValue val2set = newValue;
+      if( newValue.atomicType() == EAtomicType.BOOLEAN && props().hasKey( PROPID_INVERSE_BOOLEAN ) ) {
+        boolean inverse = props().getBool( PROPID_INVERSE_BOOLEAN );
+        if( inverse ) {
+          val2set = avBool( !newValue.asBool() );
+        }
+      }
+      setStdViselPropValue( val2set );
       lastValue = newValue;
     }
   }
