@@ -10,6 +10,8 @@ interface ISkResources {
   /**
    * {@link ISkVedConstants}
    */
+  String STR_PROP_GWID            = Messages.getString( "STR_PROP_GWID" );            //$NON-NLS-1$
+  String STR_PROP_GWID_D          = Messages.getString( "STR_PROP_GWID_D" );          //$NON-NLS-1$
   String STR_PROP_ATTR_GWID       = Messages.getString( "STR_PROP_ATTR_GWID" );       //$NON-NLS-1$
   String STR_PROP_ATTR_GWID_D     = Messages.getString( "STR_PROP_ATTR_GWID_D" );     //$NON-NLS-1$
   String STR_PROP_RTD_GWID        = Messages.getString( "STR_PROP_RTD_GWID" );        //$NON-NLS-1$
@@ -66,4 +68,13 @@ interface ISkResources {
   String STR_IMAGE_SET_D          = "Набор изображений в виде их описаний";
   String STR_ACTOR_RTDATA_IMAGE   = "Отображение значения изображением";
   String STR_ACTOR_RTDATA_IMAGE_D = "Выбирает одно изображение из набора, используя значение РВ_данного как индекс";
+
+  /**
+   * {@link SkActorInputField}
+   */
+  String STR_ACTOR_INPUT_FIELD   = Messages.getString( "STR_ACTOR_INPUT_FIELD" );   //$NON-NLS-1$
+  String STR_ACTOR_INPUT_FIELD_D = Messages.getString( "STR_ACTOR_INPUT_FIELD_D" ); //$NON-NLS-1$
+  String STR_PROP_SOURCE_GWID    = Messages.getString( "STR_PROP_SOURCE_GWID" );    //$NON-NLS-1$
+  String STR_PROP_SOURCE_GWID_D  = Messages.getString( "STR_PROP_SOURCE_GWID_D" );  //$NON-NLS-1$
+
 }

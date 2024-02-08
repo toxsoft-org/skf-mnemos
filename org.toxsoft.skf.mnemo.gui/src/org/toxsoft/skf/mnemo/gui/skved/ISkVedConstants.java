@@ -26,10 +26,19 @@ public interface ISkVedConstants {
 
   String SKVED_ID = SK_ID + ".ved"; //$NON-NLS-1$
 
+  String PROPID_GWID          = SKVED_ID + ".prop.Gwid";         //$NON-NLS-1$
   String PROPID_ATTR_GWID     = SKVED_ID + ".prop.AttrGwid";     //$NON-NLS-1$
   String PROPID_RTD_GWID      = SKVED_ID + ".prop.RtDataGwid";   //$NON-NLS-1$
   String PROPID_CMD_GWID      = SKVED_ID + ".prop.CmdGwid";      //$NON-NLS-1$
   String PROPID_FORMAT_STRING = SKVED_ID + ".prop.FormatString"; //$NON-NLS-1$
+
+  IDataDef PROP_GWID = DataDef.create( PROPID_GWID, VALOBJ, //
+      TSID_NAME, STR_PROP_GWID, //
+      TSID_DESCRIPTION, STR_PROP_GWID_D, //
+      TSID_KEEPER_ID, Gwid.KEEPER_ID, //
+      OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjAnyGwidEditor.FACTORY_NAME, //
+      TSID_DEFAULT_VALUE, avValobj( Gwid.of( "classId[*]" ) ) //
+  );
 
   IDataDef PROP_ATTR_GWID = DataDef.create( PROPID_ATTR_GWID, VALOBJ, //
       TSID_NAME, STR_PROP_ATTR_GWID, //
@@ -64,11 +73,13 @@ public interface ISkVedConstants {
       TSID_DEFAULT_VALUE, AV_STR_EMPTY //
   );
 
+  ITinTypeInfo TTI_GWID          = new TinAtomicTypeInfo.TtiValobj<>( PROP_GWID, Gwid.class );
   ITinTypeInfo TTI_ATTR_GWID     = new TinAtomicTypeInfo.TtiValobj<>( PROP_ATTR_GWID, Gwid.class );
   ITinTypeInfo TTI_RTD_GWID      = new TinAtomicTypeInfo.TtiValobj<>( PROP_RTD_GWID, Gwid.class );
   ITinTypeInfo TTI_CMD_GWID      = new TinAtomicTypeInfo.TtiValobj<>( PROP_CMD_GWID, Gwid.class );
   ITinTypeInfo TTI_FORMAT_STRING = new TinAtomicTypeInfo.TtiString( PROP_FORMAT_STRING );
 
+  ITinFieldInfo TFI_GWID          = new TinFieldInfo( PROP_GWID, TTI_GWID );
   ITinFieldInfo TFI_ATTR_GWID     = new TinFieldInfo( PROP_ATTR_GWID, TTI_ATTR_GWID );
   ITinFieldInfo TFI_RTD_GWID      = new TinFieldInfo( PROP_RTD_GWID, TTI_RTD_GWID );
   ITinFieldInfo TFI_CMD_GWID      = new TinFieldInfo( PROP_CMD_GWID, TTI_CMD_GWID );

@@ -54,6 +54,8 @@ public class QuantSkMnemoGui
     vcfRegistry.registerFactory( ValedAvValobjRgbaSet.FACTORY );
     vcfRegistry.registerFactory( ValedImageInfoesSet.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjImageInfoesSet.FACTORY );
+    vcfRegistry.registerFactory( ValedAnyGwidEditor.FACTORY );
+    vcfRegistry.registerFactory( ValedAvValobjAnyGwidEditor.FACTORY );
   }
 
 }

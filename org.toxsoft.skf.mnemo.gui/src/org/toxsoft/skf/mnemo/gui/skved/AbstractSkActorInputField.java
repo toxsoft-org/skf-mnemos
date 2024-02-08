@@ -11,6 +11,13 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.bricks.geometry.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 
+/**
+ * Базовый класс для акторов, работающих с полем ввода и устанавливающих введенные значения соотвествующим свойствам
+ * sk-сущностей.
+ * <p>
+ *
+ * @author vs
+ */
 public abstract class AbstractSkActorInputField
     extends AbstractSkVedActor {
 
@@ -19,7 +26,6 @@ public abstract class AbstractSkActorInputField
   protected AbstractSkActorInputField( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs,
       VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
-    // TODO Auto-generated constructor stub
   }
 
   // ------------------------------------------------------------------------------------
@@ -32,9 +38,6 @@ public abstract class AbstractSkActorInputField
   public void whenRealTimePassed( long aRtTime ) {
     VedAbstractVisel visel = getVisel();
     if( visel != null ) {
-      if( inputHandler == null ) {
-        inputHandler = new InputFieldHandler( vedScreen(), visel );
-      }
       if( !inputHandler.isEditing() || !props().getBool( PROPID_IS_ACTIVE ) ) {
         visel.props().setInt( PROPID_CARET_POS, -1 );
         return;
@@ -60,7 +63,16 @@ public abstract class AbstractSkActorInputField
 
   @Override
   public boolean onMouseDown( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors, Control aWidget ) {
+    VedAbstractVisel visel = getVisel();
+    if( visel != null ) {
+      if( inputHandler == null ) {
+        inputHandler = new InputFieldHandler( vedScreen(), visel );
+      }
+    }
     if( inputHandler != null ) {
+      if( !inputHandler.isEditing() && inputHandler.isViselPointed( aCoors ) ) {
+        onStartEdit();
+      }
       return inputHandler.onMouseDown( aSource, aButton, aState, aCoors, aWidget );
     }
     return false;
@@ -118,6 +130,8 @@ public abstract class AbstractSkActorInputField
   // ------------------------------------------------------------------------------------
   // To override
   //
+
+  protected abstract void onStartEdit();
 
   protected abstract void onFinishEdit();
 

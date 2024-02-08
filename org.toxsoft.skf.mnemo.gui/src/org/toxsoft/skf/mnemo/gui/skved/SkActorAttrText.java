@@ -67,7 +67,7 @@ public class SkActorAttrText
   };
 
   private Gwid         gwid      = null;
-  private IGwidList    gwidList  = null;
+  private IGwidList    gwidList  = IGwidList.EMPTY;
   private String       fmtStr    = null;
   private IAtomicValue lastValue = IAtomicValue.NULL;
 
