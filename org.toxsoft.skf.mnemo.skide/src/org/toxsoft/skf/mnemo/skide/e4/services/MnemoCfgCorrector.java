@@ -91,7 +91,7 @@ public class MnemoCfgCorrector
         }
       }
       // iterate over properties in factory declaration
-      for( String propId : cIn.propValues().keys() ) {
+      for( String propId : vFac.propDefs().keys() ) {
         // add value of property in factory but not in config
         if( !cOut.propValues().hasKey( propId ) ) {
           IDataDef propDef = vFac.propDefs().findByKey( propId );
@@ -129,7 +129,7 @@ public class MnemoCfgCorrector
         }
       }
       // iterate over properties in factory declaration
-      for( String propId : cIn.propValues().keys() ) {
+      for( String propId : vFac.propDefs().keys() ) {
         // add value of property in factory but not in config
         if( !cOut.propValues().hasKey( propId ) ) {
           IDataDef propDef = vFac.propDefs().findByKey( propId );
