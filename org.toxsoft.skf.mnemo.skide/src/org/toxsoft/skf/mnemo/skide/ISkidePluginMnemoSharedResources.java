@@ -17,4 +17,6 @@ public interface ISkidePluginMnemoSharedResources {
 
   String FMT_INFO_MNEMOSCHEMES_UPLOADED = Messages.getString( "FMT_INFO_MNEMOSCHEMES_UPLOADED" ); //$NON-NLS-1$
 
+  String STR_ASK_ACCEPT_MNEMO_CORRECTIONS = Messages.getString( "STR_ASK_ACCEPT_MNEMO_CORRECTIONS" ); //$NON-NLS-1$
+
 }

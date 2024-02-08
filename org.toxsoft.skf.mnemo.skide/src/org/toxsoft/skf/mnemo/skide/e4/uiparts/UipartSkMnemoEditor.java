@@ -1,16 +1,22 @@
 package org.toxsoft.skf.mnemo.skide.e4.uiparts;
 
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
+import static org.toxsoft.skf.mnemo.skide.ISkidePluginMnemoSharedResources.*;
 
 import java.io.*;
 
 import org.eclipse.e4.ui.di.*;
 import org.eclipse.swt.widgets.*;
+import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.mws.bases.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
+import org.toxsoft.core.tslib.bricks.validator.*;
+import org.toxsoft.core.tslib.bricks.validator.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.mnemo.gui.e4.services.*;
 import org.toxsoft.skf.mnemo.lib.*;
+import org.toxsoft.skf.mnemo.skide.e4.services.*;
 import org.toxsoft.skf.mnemo.skide.glib.*;
 
 /**
@@ -81,6 +87,23 @@ public class UipartSkMnemoEditor
     getSelfPart().setDirty( panel.isChanged() );
   }
 
+  private IVedScreenCfg correctConfigForDevelopment( IVedScreenCfg aInCfg ) {
+    MnemoCfgCorrector mcc = new MnemoCfgCorrector( tsContext() );
+    ValResList vrl = new ValResList();
+    IVedScreenCfg sc = mcc.correctMnemoConfig( aInCfg, vrl );
+    if( vrl.isError() ) {
+      // log messages
+      for( ValidationResult vr : vrl.results() ) {
+        LoggerUtils.errorLogger().debug( vr.message() );
+      }
+      // ask user to continue
+      if( TsDialogUtils.askYesNoCancel( getShell(), STR_ASK_ACCEPT_MNEMO_CORRECTIONS ) != ETsDialogCode.YES ) {
+        return null;
+      }
+    }
+    return sc;
+  }
+
   // ------------------------------------------------------------------------------------
   // API
   //
@@ -103,9 +126,12 @@ public class UipartSkMnemoEditor
     if( !strMnemoCfg.isEmpty() ) {
       scrCfg = VedScreenCfg.KEEPER.str2ent( strMnemoCfg );
     }
-    panel.setCurrentConfig( scrCfg );
-    skMnemocfg = aSkCfg;
-    mnemoFile = null;
+    scrCfg = correctConfigForDevelopment( scrCfg );
+    if( scrCfg != null ) {
+      panel.setCurrentConfig( scrCfg );
+      skMnemocfg = aSkCfg;
+      mnemoFile = null;
+    }
   }
 
   /**
@@ -119,10 +145,12 @@ public class UipartSkMnemoEditor
     TsInternalErrorRtException.checkNoNull( skMnemocfg );
     TsInternalErrorRtException.checkNoNull( mnemoFile );
     // load
-    IVedScreenCfg scrCfg = VedScreenCfg.KEEPER.read( aFile );
-    panel.setCurrentConfig( scrCfg );
-    skMnemocfg = null;
-    mnemoFile = aFile;
+    IVedScreenCfg scrCfg = correctConfigForDevelopment( VedScreenCfg.KEEPER.read( aFile ) );
+    if( scrCfg != null ) {
+      panel.setCurrentConfig( scrCfg );
+      skMnemocfg = null;
+      mnemoFile = aFile;
+    }
   }
 
 }
