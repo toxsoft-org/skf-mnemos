@@ -19,7 +19,7 @@ import org.toxsoft.skf.reports.gui.panels.valed.*;
 /**
  * The package constants.
  *
- * @author hazard157
+ * @author hazard157, vs
  */
 @SuppressWarnings( "javadoc" )
 public interface ISkVedConstants {
@@ -31,6 +31,7 @@ public interface ISkVedConstants {
   String PROPID_RTD_GWID      = SKVED_ID + ".prop.RtDataGwid";   //$NON-NLS-1$
   String PROPID_CMD_GWID      = SKVED_ID + ".prop.CmdGwid";      //$NON-NLS-1$
   String PROPID_FORMAT_STRING = SKVED_ID + ".prop.FormatString"; //$NON-NLS-1$
+  String PROPID_RRI_ID        = SKVED_ID + ".prop.RriId";        //$NON-NLS-1$
 
   IDataDef PROP_GWID = DataDef.create( PROPID_GWID, VALOBJ, //
       TSID_NAME, STR_PROP_GWID, //
@@ -73,16 +74,26 @@ public interface ISkVedConstants {
       TSID_DEFAULT_VALUE, AV_STR_EMPTY //
   );
 
+  IDataDef PROP_RRI_ID = DataDef.create( PROPID_RRI_ID, VALOBJ, //
+      TSID_NAME, STR_PROP_RRI_ID, //
+      TSID_DESCRIPTION, STR_PROP_RRI_ID_D, //
+      TSID_KEEPER_ID, RriId.KEEPER_ID, //
+      OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjRriIdEditor.FACTORY_NAME, //
+      TSID_DEFAULT_VALUE, avValobj( RriId.NONE ) //
+  );
+
   ITinTypeInfo TTI_GWID          = new TinAtomicTypeInfo.TtiValobj<>( PROP_GWID, Gwid.class );
   ITinTypeInfo TTI_ATTR_GWID     = new TinAtomicTypeInfo.TtiValobj<>( PROP_ATTR_GWID, Gwid.class );
   ITinTypeInfo TTI_RTD_GWID      = new TinAtomicTypeInfo.TtiValobj<>( PROP_RTD_GWID, Gwid.class );
   ITinTypeInfo TTI_CMD_GWID      = new TinAtomicTypeInfo.TtiValobj<>( PROP_CMD_GWID, Gwid.class );
   ITinTypeInfo TTI_FORMAT_STRING = new TinAtomicTypeInfo.TtiString( PROP_FORMAT_STRING );
+  ITinTypeInfo TTI_RRI_ID        = new TinAtomicTypeInfo.TtiValobj<>( PROP_RRI_ID, RriId.class );
 
   ITinFieldInfo TFI_GWID          = new TinFieldInfo( PROP_GWID, TTI_GWID );
   ITinFieldInfo TFI_ATTR_GWID     = new TinFieldInfo( PROP_ATTR_GWID, TTI_ATTR_GWID );
   ITinFieldInfo TFI_RTD_GWID      = new TinFieldInfo( PROP_RTD_GWID, TTI_RTD_GWID );
   ITinFieldInfo TFI_CMD_GWID      = new TinFieldInfo( PROP_CMD_GWID, TTI_CMD_GWID );
   ITinFieldInfo TFI_FORMAT_STRING = new TinFieldInfo( PROP_FORMAT_STRING, TTI_FORMAT_STRING );
+  ITinFieldInfo TFI_RRI_ID        = new TinFieldInfo( PROP_RRI_ID, TTI_RRI_ID );
 
 }

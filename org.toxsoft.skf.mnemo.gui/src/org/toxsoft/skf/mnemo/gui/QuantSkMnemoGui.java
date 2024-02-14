@@ -35,6 +35,7 @@ public class QuantSkMnemoGui
     TsValobjUtils.registerKeeperIfNone( RgbaSet.KEEPER_ID, RgbaSet.KEEPER );
     TsValobjUtils.registerKeeperIfNone( ImageEntryInfo.KEEPER_ID, ImageEntryInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( MnemoImageSetInfo.KEEPER_ID, MnemoImageSetInfo.KEEPER );
+    TsValobjUtils.registerKeeperIfNone( RriId.KEEPER_ID, RriId.KEEPER );
     IVedActorFactoriesRegistry actFact = aAppContext.get( IVedActorFactoriesRegistry.class );
     actFact.register( SkActorAttrText.FACTORY );
     actFact.register( SkActorRtdataText.FACTORY );
@@ -44,6 +45,7 @@ public class QuantSkMnemoGui
     actFact.register( SkActorColorDecorator.FACTORY );
     actFact.register( SkActorRtdataImage.FACTORY );
     actFact.register( SkActorInputField.FACTORY );
+    actFact.register( SkActorRriInputField.FACTORY );
   }
 
   @Override
@@ -56,6 +58,8 @@ public class QuantSkMnemoGui
     vcfRegistry.registerFactory( ValedAvValobjImageInfoesSet.FACTORY );
     vcfRegistry.registerFactory( ValedAnyGwidEditor.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjAnyGwidEditor.FACTORY );
+    vcfRegistry.registerFactory( ValedRriIdEditor.FACTORY );
+    vcfRegistry.registerFactory( ValedAvValobjRriIdEditor.FACTORY );
   }
 
 }

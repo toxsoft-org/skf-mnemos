@@ -20,6 +20,8 @@ interface ISkResources {
   String STR_PROP_CMD_GWID_D      = Messages.getString( "STR_PROP_CMD_GWID_D" );      //$NON-NLS-1$
   String STR_PROP_FORMAT_STRING   = Messages.getString( "STR_PROP_FORMAT_STRING" );   //$NON-NLS-1$
   String STR_PROP_FORMAT_STRING_D = Messages.getString( "STR_PROP_FORMAT_STRING_D" ); //$NON-NLS-1$
+  String STR_PROP_RRI_ID          = Messages.getString( "STR_PROP_RRI_ID" );          //$NON-NLS-1$
+  String STR_PROP_RRI_ID_D        = Messages.getString( "STR_PROP_RRI_ID_D" );        //$NON-NLS-1$
 
   /**
    * {@link SkActorCmdButton}
@@ -76,5 +78,15 @@ interface ISkResources {
   String STR_ACTOR_INPUT_FIELD_D = Messages.getString( "STR_ACTOR_INPUT_FIELD_D" ); //$NON-NLS-1$
   String STR_PROP_SOURCE_GWID    = Messages.getString( "STR_PROP_SOURCE_GWID" );    //$NON-NLS-1$
   String STR_PROP_SOURCE_GWID_D  = Messages.getString( "STR_PROP_SOURCE_GWID_D" );  //$NON-NLS-1$
+
+  /**
+   * {@link SkActorRriInputField}
+   */
+  String STR_ACTOR_RRI_INPUT_FIELD   = Messages.getString( "STR_ACTOR_RRI_INPUT_FIELD" );   //$NON-NLS-1$
+  String STR_ACTOR_RRI_INPUT_FIELD_D = Messages.getString( "STR_ACTOR_RRI_INPUT_FIELD_D" ); //$NON-NLS-1$
+
+  /**
+   * {@link PanelRriSectionIdSelector}
+   */
 
 }

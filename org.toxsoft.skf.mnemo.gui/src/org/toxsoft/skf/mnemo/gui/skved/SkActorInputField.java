@@ -230,21 +230,21 @@ public class SkActorInputField
   }
 
   void setAttrValue( String aText ) {
-    ISkObject skObj = skVedEnv().skConn().coreApi().objService().find( gwid.skid() );
+    ISkObject skObj = coreApi().objService().find( gwid.skid() );
     IAtomicValue value = IAtomicValue.NULL;
     if( skObj != null ) {
       value = skObj.attrs().getValue( gwid.propId() );
       switch( value.atomicType() ) {
         case BOOLEAN:
-          Boolean bv = Boolean.parseBoolean( aText );
+          Boolean bv = Boolean.valueOf( Boolean.parseBoolean( aText ) );
           value = AvUtils.avFromObj( bv );
           break;
         case FLOATING:
-          Double dv = Double.parseDouble( aText );
+          Double dv = Double.valueOf( Double.parseDouble( aText ) );
           value = AvUtils.avFromObj( dv );
           break;
         case INTEGER:
-          Integer iv = Integer.parseInt( aText );
+          Integer iv = Integer.valueOf( Integer.parseInt( aText ) );
           value = AvUtils.avFromObj( iv );
           break;
         case STRING:
@@ -259,7 +259,7 @@ public class SkActorInputField
       }
       DtoObject dto = new DtoObject( skObj.skid() );
       dto.attrs().setValue( gwid.propId(), value );
-      skVedEnv().skConn().coreApi().objService().defineObject( dto );
+      coreApi().objService().defineObject( dto );
     }
 
   }
