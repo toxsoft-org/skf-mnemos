@@ -105,7 +105,7 @@ public class SkActorAttrText
           IDtoAttrInfo attrInfo = classInfo.attrs().list().findByKey( gwid.propId() );
           if( attrInfo != null ) {
             IAtomicValue avFmtStr = SkHelperUtils.getConstraint( attrInfo, TSID_FORMAT_STRING );
-            if( avFmtStr != null ) {
+            if( avFmtStr != null && avFmtStr.isAssigned() ) {
               fmtStr = avFmtStr.asString();
             }
           }
