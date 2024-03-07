@@ -51,7 +51,7 @@ public class RuntimeMnemoPanel
   public RuntimeMnemoPanel( Composite aParent, ITsGuiContext aContext ) {
     super( aParent, aContext );
     setLayout( new BorderLayout() );
-    theCanvas = new Canvas( this, SWT.BORDER );
+    theCanvas = new Canvas( this, SWT.BORDER  | SWT.DOUBLE_BUFFERED );
     theCanvas.setLayoutData( BorderLayout.CENTER );
     ITsGuiContext ctx = new TsGuiContext( tsContext() );
     vedScreen = new VedScreen( ctx );
