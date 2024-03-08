@@ -307,7 +307,7 @@ public class SkMnemosService
     return Gwid.createClob( CLSID_MNEMO_CFG, aMnemoId, CLBID_MNEMO_CFG_DATA );
   }
 
-  private void whenClobChanged( ISkCoreApi aCoreApi, Gwid aClobGwid ) {
+  private void whenClobChanged( @SuppressWarnings( "unused" ) ISkCoreApi aCoreApi, Gwid aClobGwid ) {
     if( aClobGwid.classId().equals( CLSID_MNEMO_CFG ) ) {
       eventer.fireConfigChanged( ECrudOp.EDIT, aClobGwid.strid() );
     }

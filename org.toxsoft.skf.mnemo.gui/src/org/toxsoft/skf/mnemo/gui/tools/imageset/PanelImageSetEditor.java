@@ -15,7 +15,7 @@ import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.graphics.image.*;
 import org.toxsoft.core.tsgui.rcp.graphics.images.*;
-import org.toxsoft.core.tsgui.utils.layout.*;
+import org.toxsoft.core.tsgui.utils.layout.BorderLayout;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.idgen.*;
