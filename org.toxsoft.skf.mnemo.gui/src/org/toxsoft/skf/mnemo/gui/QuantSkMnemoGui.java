@@ -36,6 +36,10 @@ public class QuantSkMnemoGui
     TsValobjUtils.registerKeeperIfNone( ImageEntryInfo.KEEPER_ID, ImageEntryInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( MnemoImageSetInfo.KEEPER_ID, MnemoImageSetInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( RriId.KEEPER_ID, RriId.KEEPER );
+
+    // IVedViselFactoriesRegistry visFact = aAppContext.get( IVedViselFactoriesRegistry.class );
+    // visFact.register( ViselPanel.FACTORY );
+
     IVedActorFactoriesRegistry actFact = aAppContext.get( IVedActorFactoriesRegistry.class );
     actFact.register( SkActorAttrText.FACTORY );
     actFact.register( SkActorRtdataText.FACTORY );

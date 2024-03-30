@@ -35,4 +35,9 @@ Export-Package: org.toxsoft.skf.mnemo.gui,
  org.toxsoft.skf.mnemo.gui.skved,
  org.toxsoft.skf.mnemo.gui.tools,
  org.toxsoft.skf.mnemo.gui.tools.imageset,
- org.toxsoft.skf.mnemo.gui.tools.rgbaset
+ org.toxsoft.skf.mnemo.gui.tools.rgbaset,
+ org.toxsoft.skf.mnemo.gui.tsgui,
+ org.toxsoft.skf.mnemo.gui.tsgui.asp,
+ org.toxsoft.skf.mnemo.gui.tsgui.comps,
+ org.toxsoft.skf.mnemo.gui.tsgui.layout,
+ org.toxsoft.skf.mnemo.gui.tsgui.layout.line

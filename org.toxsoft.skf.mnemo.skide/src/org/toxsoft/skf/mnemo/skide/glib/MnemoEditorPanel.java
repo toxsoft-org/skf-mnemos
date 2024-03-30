@@ -27,6 +27,8 @@ import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
+import org.toxsoft.skf.mnemo.gui.tsgui.*;
+import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
@@ -88,8 +90,8 @@ public class MnemoEditorPanel
       // TODO when actors enabled, turn off SAVE, etc.
 
       vedScreen.model().screenHandlersBefore().remove( vertexSetManager );
-      vedScreen.model().screenHandlersBefore().remove( multiSelectionManager );
-      vedScreen.model().screenHandlersBefore().remove( viselPositionManager );
+      vedScreen.model().screenHandlersBefore().remove( multiSelectionHandler );
+      vedScreen.model().screenHandlersBefore().remove( viselsPositionHandler );
       vedScreen.model().screenHandlersBefore().remove( viselCtxMenuManager );
       vedScreen.model().screenHandlersBefore().remove( paletteSelectionManager );
 
@@ -99,8 +101,8 @@ public class MnemoEditorPanel
     @Override
     protected void doBeforeActorsStop() {
       vedScreen.model().screenHandlersBefore().add( vertexSetManager );
-      vedScreen.model().screenHandlersBefore().add( multiSelectionManager );
-      vedScreen.model().screenHandlersBefore().add( viselPositionManager );
+      vedScreen.model().screenHandlersBefore().add( multiSelectionHandler );
+      vedScreen.model().screenHandlersBefore().add( viselsPositionHandler );
       vedScreen.model().screenHandlersBefore().add( viselCtxMenuManager );
       vedScreen.model().screenHandlersBefore().add( paletteSelectionManager );
       skVedEnvironment.restart();
@@ -123,12 +125,31 @@ public class MnemoEditorPanel
   private final VedScreenItemInspector viselInspector;
   private final VedScreenItemInspector actorInspector;
 
-  private final IVedViselSelectionManager     selectionManager;
-  private final VedViselVertexSetManager      vertexSetManager;
-  private final VedViselPositionManager       viselPositionManager;
-  private final VedViselMultiselectionManager multiSelectionManager;
-  private final VedViselContextMenuManager    viselCtxMenuManager;
-  private final PaletteSelectionManager       paletteSelectionManager;
+  // ------------------------------------------------------------------------------------
+  // Handlers - обработчики пользовательского ввода
+  //
+
+  private final VedViselPositionHandler       viselsPositionHandler;
+  private final VedViselMultiselectionHandler multiSelectionHandler;
+  private final VedViselsCopyPasteHandler     copyPasteHandler;
+  private final VedViselsDeleteHandler        deleteHandler;
+
+  // ------------------------------------------------------------------------------------
+  // Managers
+  //
+
+  private final IVedViselSelectionManager             selectionManager;
+  private final IVedViselsMasterSlaveRelationsManager masterSlaveManager;
+  private final VedViselVertexSetManager              vertexSetManager;
+  private final VedViselContextMenuManager            viselCtxMenuManager;
+  private final PaletteSelectionManager               paletteSelectionManager;
+  private final VedViselsCopyPasteManager             copyPasteManager;
+  private final VedViselsLayoutManager                layoutManager;
+  private final VedViselsDeleteManager                deleteManager;
+  private final IVedViselsPositionManager             positionManager;
+
+  private final MultiSelectionDecorator selectionDecorator;
+  // private final MultiSelectionAndGroupsDecorator selectionDecorator;
 
   private final SkVedEnvironment skVedEnvironment;
 
@@ -154,6 +175,8 @@ public class MnemoEditorPanel
   @SuppressWarnings( "unused" )
   private final MnemoScrollManager scrollManager;
 
+  // private final IVedViselGroupsManager groupsManager;
+
   /**
    * Constructor.
    * <p>
@@ -172,17 +195,52 @@ public class MnemoEditorPanel
     SashForm sfMain = new SashForm( this, SWT.HORIZONTAL );
     sfMain.setLayoutData( BorderLayout.CENTER );
     //
-    vedScreen = new VedScreen( new TsGuiContext( tsContext() ) );
+    // vedScreen = new VedScreen( new TsGuiContext( tsContext() ) );
+    vedScreen = new VedScreen( aContext );
     ISkConnectionSupplier skConnSupp = tsContext().get( ISkConnectionSupplier.class );
     skVedEnvironment = new SkVedEnvironment( skConnSupp.defConn() );
     vedScreen.tsContext().put( ISkVedEnvironment.class, skVedEnvironment );
-    selectionManager = new VedViselSelectionManager( vedScreen );
-    vertexSetManager = new VedViselVertexSetManager( vedScreen, selectionManager );
-    viselPositionManager = new VedViselPositionManager( vedScreen, selectionManager );
-    multiSelectionManager = new VedViselMultiselectionManager( vedScreen, selectionManager );
-    viselCtxMenuManager = new VedViselContextMenuManager( vedScreen, selectionManager );
+
+    copyPasteManager = new VedViselsCopyPasteManager( vedScreen );
+    deleteManager = new VedViselsDeleteManager( vedScreen );
+    positionManager = new VedViselsPositionManager();
 
     undoManager = new VedUndoManager( vedScreen );
+    // groupsManager = new VedViselGroupsManager( vedScreen.model() );
+    // selectionManager = new VedViselSelectionGroupManager( vedScreen, groupsManager );
+    selectionManager = new VedViselSelectionManager( vedScreen );
+    copyPasteManager.addProcessor( new SelectionCopyPasteProcessor( vedScreen, selectionManager ) );
+
+    masterSlaveManager = new VedViselsMasterSlaveRelationsManager( vedScreen );
+    layoutManager = new VedViselsLayoutManager( vedScreen, IVedLayoutFactoriesProvider.DEFAULT, selectionManager,
+        masterSlaveManager );
+    copyPasteManager.addProcessor( new MasterSlaveCopyPasteProcessor( vedScreen, masterSlaveManager ) );
+
+    deleteManager.addProcessor( new SelectionDeleteProcessor( vedScreen, selectionManager ) );
+    deleteManager.addProcessor( new MasterSlaveDeleteProcessor( vedScreen, masterSlaveManager ) );
+
+    positionManager.addProcessor( new SelectedViselsPositionManager( selectionManager ) );
+    positionManager.addProcessor( new MasterSlavePositionProcessor( masterSlaveManager ) );
+
+    // selectionManager = new VedViselSelectionManager( vedScreen );
+    vertexSetManager = new VedViselVertexSetManager( vedScreen, selectionManager );
+    viselsPositionHandler = new VedViselPositionHandler( vedScreen, positionManager );
+
+    copyPasteHandler = new VedViselsCopyPasteHandler( vedScreen, copyPasteManager );
+    deleteHandler = new VedViselsDeleteHandler( vedScreen, deleteManager );
+
+    multiSelectionHandler = new VedViselMultiselectionHandler( vedScreen, selectionManager );
+    selectionDecorator = new MultiSelectionDecorator( vedScreen, selectionManager );
+    // selectionDecorator =
+    // new MultiSelectionAndGroupsDecorator( vedScreen, (VedViselSelectionGroupManager)selectionManager );
+    vedScreen.model().screenDecoratorsAfter().add( selectionDecorator );
+
+    viselCtxMenuManager = new VedViselContextMenuManager( vedScreen, selectionManager );
+    viselCtxMenuManager.addCustomMenuCreator( copyPasteManager );
+    viselCtxMenuManager.addCustomMenuCreator( masterSlaveManager );
+    viselCtxMenuManager.addCustomMenuCreator( layoutManager );
+    viselCtxMenuManager.addCustomMenuCreator( deleteManager );
+    // viselCtxMenuManager.addCustomMenuCreator( new VedAspGroupUngroup( vedScreen, selectionManager, groupsManager ) );
 
     actionsProvider.addHandler( new AspSaveMnemo() );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
@@ -244,8 +302,10 @@ public class MnemoEditorPanel
 
     // add VED snippets: user input handler for editing needs
     vedScreen.model().screenHandlersBefore().add( vertexSetManager );
-    vedScreen.model().screenHandlersBefore().add( multiSelectionManager );
-    vedScreen.model().screenHandlersBefore().add( viselPositionManager );
+    vedScreen.model().screenHandlersBefore().add( multiSelectionHandler );
+    vedScreen.model().screenHandlersBefore().add( viselsPositionHandler );
+    vedScreen.model().screenHandlersBefore().add( copyPasteHandler );
+    vedScreen.model().screenHandlersBefore().add( deleteHandler );
     vedScreen.model().screenHandlersBefore().add( viselCtxMenuManager );
     vedScreen.model().screenHandlersBefore().add( paletteSelectionManager );
 
