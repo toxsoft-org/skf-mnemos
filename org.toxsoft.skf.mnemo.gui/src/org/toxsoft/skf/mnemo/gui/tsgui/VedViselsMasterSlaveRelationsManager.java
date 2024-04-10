@@ -12,6 +12,7 @@ import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.helpers.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
+import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.bricks.geometry.*;
@@ -123,7 +124,13 @@ public class VedViselsMasterSlaveRelationsManager
   public String viselMasterId( String aViselId ) {
     VedAbstractVisel visel = vedScreen.model().visels().list().getByKey( aViselId );
     if( visel.params().hasKey( PARAMID_MASTER_ID ) ) {
-      return visel.params().getStr( PARAMID_MASTER_ID );
+      IAtomicValue value = visel.params().getValue( PARAMID_MASTER_ID );
+      if( value != IAtomicValue.NULL ) {
+        String masterId = value.asString();
+        if( !masterId.isBlank() ) {
+          return masterId;
+        }
+      }
     }
     return null;
   }
@@ -140,7 +147,8 @@ public class VedViselsMasterSlaveRelationsManager
   public IStringList listSlaveViselIds( String aMasterId ) {
     VedAbstractVisel visel = vedScreen.model().visels().list().getByKey( aMasterId );
     if( visel.params().hasKey( PARAMID_SLAVE_IDS ) ) {
-      return visel.params().getValobj( PARAMID_SLAVE_IDS );
+      // return visel.params().getValobj( PARAMID_SLAVE_IDS );
+      return _listSlaveIds( visel.params() );
     }
     return IStringList.EMPTY;
   }
@@ -149,9 +157,19 @@ public class VedViselsMasterSlaveRelationsManager
   public IStringList listViselSlaveIds( IVedItemCfg aCfg ) {
     IStringList slaveIds = IStringList.EMPTY;
     if( aCfg.params().hasKey( PARAMID_SLAVE_IDS ) ) {
-      return aCfg.params().getValobj( PARAMID_SLAVE_IDS );
+      // return aCfg.params().getValobj( PARAMID_SLAVE_IDS );
+      return _listSlaveIds( aCfg.params() );
     }
     return slaveIds;
+  }
+
+  private IStringList _listSlaveIds( IOptionSet aOptions ) {
+    IStringListEdit result = new StringArrayList();
+    if( aOptions.hasKey( PARAMID_SLAVE_IDS ) ) {
+      IStringList ids = aOptions.getValobj( PARAMID_SLAVE_IDS );
+      return VedScreenUtils.sortViselIdsByZorder( ids, vedScreen );
+    }
+    return result;
   }
 
   @Override
@@ -190,6 +208,8 @@ public class VedViselsMasterSlaveRelationsManager
     if( visel != null ) {
       visel.params().setStr( PARAMID_MASTER_ID, TsLibUtils.EMPTY_STRING );
     }
+    VedAbstractVisel subVisel = VedScreenUtils.findVisel( aSubId, vedScreen );
+    subVisel.params().setValue( PARAMID_MASTER_ID, IAtomicValue.NULL );
   }
 
   @Override

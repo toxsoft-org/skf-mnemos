@@ -12,24 +12,25 @@ import org.toxsoft.core.tsgui.valed.controls.enums.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
+import org.toxsoft.skf.mnemo.gui.tsgui.layout.column.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.table.*;
 
 /**
- * Панель редактирования конфигурации табличного контроллера размещения.
+ * Панель редактирования конфигурации контроллера размещения "по столбцам".
  *
  * @author vs
  */
-public class TableLayoutDataPanel
+public class ColumnLayoutDataPanel
     extends AbstractTsDialogPanel<IVedLayoutControllerConfig, IVedScreen> {
 
-  VedTableLayoutControllerConfig controllerConfig;
+  VedColumnLayoutControllerConfig controllerConfig;
 
-  protected TableLayoutDataPanel( Composite aParent, TsDialog<IVedLayoutControllerConfig, IVedScreen> aOwnerDialog ) {
+  protected ColumnLayoutDataPanel( Composite aParent, TsDialog<IVedLayoutControllerConfig, IVedScreen> aOwnerDialog ) {
     super( aParent, aOwnerDialog );
     init();
   }
 
-  protected TableLayoutDataPanel( Composite aParent, ITsGuiContext aContext, IVedLayoutControllerConfig aData,
+  protected ColumnLayoutDataPanel( Composite aParent, ITsGuiContext aContext, IVedLayoutControllerConfig aData,
       IVedScreen aEnviron, int aFlags ) {
     super( aParent, aContext, aData, aEnviron, aFlags );
     init();
@@ -42,20 +43,22 @@ public class TableLayoutDataPanel
   @Override
   protected void doSetDataRecord( IVedLayoutControllerConfig aData ) {
     if( aData != null ) {
-      controllerConfig = new VedTableLayoutControllerConfig( aData );
+      controllerConfig = new VedColumnLayoutControllerConfig( aData );
     }
     else {
-      controllerConfig = new VedTableLayoutControllerConfig();
+      controllerConfig = new VedColumnLayoutControllerConfig();
     }
+    marginsPanel.setDataRecord( controllerConfig.margins() );
     previewPanel.setLayoutConfig( controllerConfig );
     colCount = controllerConfig.columnCount();
-    rowCount = controllerConfig.rowCount();
     colSpin.setValue( Integer.valueOf( colCount ) );
-    rowSpin.setValue( Integer.valueOf( rowCount ) );
+    hGapSpin.setValue( Integer.valueOf( (int)controllerConfig.horizontalGap() ) );
+    vGapSpin.setValue( Integer.valueOf( (int)controllerConfig.verticalGap() ) );
   }
 
   @Override
   protected IVedLayoutControllerConfig doGetDataRecord() {
+    controllerConfig.setMargins( marginsPanel.getDataRecord() );
     return controllerConfig.config();
   }
 
@@ -70,20 +73,25 @@ public class TableLayoutDataPanel
   ValedBooleanCheck             vertFillCheck;
 
   ValedIntegerSpinner colSpin;
-  ValedIntegerSpinner rowSpin;
+  ValedIntegerSpinner hGapSpin;
+  ValedIntegerSpinner vGapSpin;
 
-  TableLayoutPreviewPanel previewPanel;
+  ColumnLayoutPreviewPanel previewPanel;
 
   int colCount = 1;
-  int rowCount = 1;
 
   void init() {
     setLayout( new GridLayout( 1, false ) );
-    Composite topComp = new Composite( this, SWT.NONE );
-    topComp.setLayout( new GridLayout( 4, false ) );
+
+    Composite headerComp = new Composite( this, SWT.NONE );
+    headerComp.setLayout( new GridLayout( 2, false ) );
+
+    Composite topComp = new Composite( headerComp, SWT.NONE );
+    topComp.setLayout( new GridLayout( 2, false ) );
+    topComp.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
 
     CLabel l = new CLabel( topComp, SWT.NONE );
-    l.setText( "Столбцов: " );
+    l.setText( "Количество столбцов: " );
     colSpin = new ValedIntegerSpinner( environ().tsContext() );
     colSpin.setLimits( 1, 1, 1, 1000 );
     colSpin.setValue( 2 );
@@ -91,24 +99,37 @@ public class TableLayoutDataPanel
     colSpin.eventer().addListener( ( aSource, aEditFinished ) -> {
       if( aEditFinished ) {
         onColumnCountChanged( (Integer)aSource.getValue() );
+        layout();
       }
     } );
 
     l = new CLabel( topComp, SWT.NONE );
-    l.setText( "Строк: " );
-    rowSpin = new ValedIntegerSpinner( environ().tsContext() );
-    rowSpin.setValue( 1 );
-    rowSpin.setLimits( 1, 1, 1, 1000 );
-    rowSpin.createControl( topComp );
-    rowSpin.eventer().addListener( ( aSource, aEditFinished ) -> {
-      if( aEditFinished ) {
-        onRowCountChanged( (Integer)aSource.getValue() );
-      }
-    } );
+    l.setText( "Зазор по горизонтали: " );
+    hGapSpin = new ValedIntegerSpinner( environ().tsContext() );
+    hGapSpin.setLimits( 1, 1, 0, 1000 );
+    hGapSpin.setValue( 5 );
+    hGapSpin.createControl( topComp );
+    hGapSpin.eventer().addListener( ( aSource, aEditFinished ) -> onHorGapChanged() );
 
-    Composite previewComp = new Composite( topComp, SWT.NONE );
-    previewComp.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 4, 1 ) );
-    previewPanel = new TableLayoutPreviewPanel( previewComp );
+    l = new CLabel( topComp, SWT.NONE );
+    l.setText( "Зазор по вертикали: " );
+    vGapSpin = new ValedIntegerSpinner( environ().tsContext() );
+    vGapSpin.setLimits( 1, 1, 0, 1000 );
+    vGapSpin.setValue( 5 );
+    vGapSpin.createControl( topComp );
+    vGapSpin.eventer().addListener( ( aSource, aEditFinished ) -> onVerGapChanged() );
+
+    Composite marginsComp = new Composite( headerComp, SWT.NONE );
+    marginsComp.setLayout( new FillLayout() );
+    marginsComp.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
+    Group marginsGroup = new Group( marginsComp, SWT.NONE );
+    marginsGroup.setLayout( new FillLayout() );
+    marginsGroup.setText( "Поля" );
+    marginsPanel = new D2MarginsPanel( marginsGroup, new D2Margins(), environ().tsContext(), SWT.HORIZONTAL );
+
+    Composite previewComp = new Composite( this, SWT.NONE );
+    previewComp.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
+    previewPanel = new ColumnLayoutPreviewPanel( previewComp, tsContext() );
   }
 
   void onColumnCountChanged( Integer aValue ) {
@@ -123,15 +144,13 @@ public class TableLayoutDataPanel
     previewPanel.setLayoutConfig( controllerConfig );
   }
 
-  void onRowCountChanged( Integer aValue ) {
-    int delta = aValue.intValue() - rowCount;
-    if( delta > 0 ) {
-      controllerConfig.addRows( delta );
-    }
-    else {
-      controllerConfig.removeRows( -delta );
-    }
-    rowCount = aValue.intValue();
+  void onHorGapChanged() {
+    controllerConfig.setHorizontalGap( hGapSpin.getValue().doubleValue() );
+    previewPanel.setLayoutConfig( controllerConfig );
+  }
+
+  void onVerGapChanged() {
+    controllerConfig.setVerticalGap( vGapSpin.getValue().doubleValue() );
     previewPanel.setLayoutConfig( controllerConfig );
   }
 
@@ -148,7 +167,7 @@ public class TableLayoutDataPanel
    */
   public static final IVedLayoutControllerConfig edit( IVedLayoutControllerConfig aCfg, IVedScreen aVedScreen ) {
     TsNullArgumentRtException.checkNull( aVedScreen );
-    IDialogPanelCreator<IVedLayoutControllerConfig, IVedScreen> creator = TableLayoutDataPanel::new;
+    IDialogPanelCreator<IVedLayoutControllerConfig, IVedScreen> creator = ColumnLayoutDataPanel::new;
     ITsDialogInfo dlgInfo = new TsDialogInfo( aVedScreen.tsContext(), "DLG_T_CANVAS_CFG", "STR_MSG_CANVAS_CFG" );
     TsDialog<IVedLayoutControllerConfig, IVedScreen> d = new TsDialog<>( dlgInfo, aCfg, aVedScreen, creator );
     return d.execData();

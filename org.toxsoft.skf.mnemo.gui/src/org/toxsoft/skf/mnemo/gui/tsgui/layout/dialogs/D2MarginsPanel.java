@@ -1,12 +1,16 @@
 package org.toxsoft.skf.mnemo.gui.tsgui.layout.dialogs;
 
+import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
+
 import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
+import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.valed.controls.basic.*;
+import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 
 /**
@@ -15,16 +19,15 @@ import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
  * @author vs
  */
 public class D2MarginsPanel
-    extends AbstractTsDialogPanel<D2Margins, ITsGuiContext> {
+    extends AbstractTsDialogPanel<ID2Margins, ITsGuiContext> {
 
-  protected D2MarginsPanel( Composite aParent, TsDialog<D2Margins, ITsGuiContext> aOwnerDialog ) {
+  protected D2MarginsPanel( Composite aParent, TsDialog<ID2Margins, ITsGuiContext> aOwnerDialog ) {
     super( aParent, aOwnerDialog );
     init();
   }
 
-  protected D2MarginsPanel( Composite aParent, ITsGuiContext aContext, D2Margins aData, ITsGuiContext aEnviron,
-      int aFlags ) {
-    super( aParent, aContext, aData, aEnviron, aFlags );
+  protected D2MarginsPanel( Composite aParent, ID2Margins aData, ITsGuiContext aEnviron, int aFlags ) {
+    super( aParent, aEnviron, aData, aEnviron, aFlags );
     init();
   }
 
@@ -33,7 +36,7 @@ public class D2MarginsPanel
   //
 
   @Override
-  protected void doSetDataRecord( D2Margins aData ) {
+  protected void doSetDataRecord( ID2Margins aData ) {
     if( aData != null ) {
       leftSpiner.setValue( Double.valueOf( aData.left() ) );
       topSpiner.setValue( Double.valueOf( aData.top() ) );
@@ -61,27 +64,37 @@ public class D2MarginsPanel
   ValedDoubleSpinner bottomSpiner;
 
   void init() {
-    setLayout( new GridLayout( 2, false ) );
+    int columnCount = 2;
+    if( (panelFlags() & SWT.HORIZONTAL) != 0 ) {
+      columnCount = 4;
+    }
+    setLayout( new GridLayout( columnCount, false ) );
     CLabel l;
 
     l = new CLabel( this, SWT.NONE );
     l.setText( "Лево: " );
-    leftSpiner = new ValedDoubleSpinner( environ() );
+    TsGuiContext valedContext = new TsGuiContext( environ() );
+    valedContext.params().setValue( TSID_MIN_INCLUSIVE, IAtomicValue.NULL );
+    valedContext.params().setDouble( TSID_MIN_INCLUSIVE, 0. );
+    valedContext.params().setValue( TSID_MAX_INCLUSIVE, IAtomicValue.NULL );
+    valedContext.params().setDouble( TSID_MAX_INCLUSIVE, 1000. );
+
+    leftSpiner = new ValedDoubleSpinner( valedContext );
     leftSpiner.createControl( this );
 
     l = new CLabel( this, SWT.NONE );
     l.setText( "Верх: " );
-    topSpiner = new ValedDoubleSpinner( environ() );
+    topSpiner = new ValedDoubleSpinner( valedContext );
     topSpiner.createControl( this );
 
     l = new CLabel( this, SWT.NONE );
     l.setText( "Право: " );
-    rightSpiner = new ValedDoubleSpinner( environ() );
+    rightSpiner = new ValedDoubleSpinner( valedContext );
     rightSpiner.createControl( this );
 
     l = new CLabel( this, SWT.NONE );
     l.setText( "Низ: " );
-    bottomSpiner = new ValedDoubleSpinner( environ() );
+    bottomSpiner = new ValedDoubleSpinner( valedContext );
     bottomSpiner.createControl( this );
   }
 

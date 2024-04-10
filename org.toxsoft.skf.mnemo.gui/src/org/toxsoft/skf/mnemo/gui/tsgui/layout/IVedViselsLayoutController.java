@@ -1,5 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.tsgui.layout;
 
+import org.toxsoft.core.tslib.bricks.d2.*;
+import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 
 /**
@@ -32,6 +34,15 @@ public interface IVedViselsLayoutController {
    * @param aSlaveIds {@link IStringList} - список ИДов размещаемых элементов
    */
   void doLayout( String aMasterId, IStringList aSlaveIds );
+
+  /**
+   * Вычисляет набор прямоугольников, описывающих ячейки размещения.
+   *
+   * @param aMasterId String - ИД визуального элемента на котором осуществляется размещение
+   * @param aSlaveIds {@link IStringList} - список ИДов размещаемых элементов
+   * @return IList&lt;ID2Rectangle> - набор прямоугольников, описывающих ячейки размещения
+   */
+  IList<ID2Rectangle> calcCellRects( String aMasterId, IStringList aSlaveIds );
 
   // /**
   // * Возвращает ИД визуального элемента, на котором осуществляется размещение подконтрольных элементов.

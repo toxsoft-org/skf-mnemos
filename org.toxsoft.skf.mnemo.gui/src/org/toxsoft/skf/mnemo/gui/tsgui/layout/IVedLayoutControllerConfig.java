@@ -1,7 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.tsgui.layout;
 
 import org.toxsoft.core.tslib.av.opset.*;
-import org.toxsoft.core.tslib.bricks.strid.*;
+import org.toxsoft.core.tslib.av.utils.*;
 
 /**
  * Конфигурация контроллера размещения.
@@ -9,7 +9,7 @@ import org.toxsoft.core.tslib.bricks.strid.*;
  * @author vs
  */
 public sealed interface IVedLayoutControllerConfig
-    extends IStridableParameterized permits VedLayoutControllerConfig {
+    extends IParameterized permits VedLayoutControllerConfig {
 
   /**
    * Идентификатор типа контроллера размещения.

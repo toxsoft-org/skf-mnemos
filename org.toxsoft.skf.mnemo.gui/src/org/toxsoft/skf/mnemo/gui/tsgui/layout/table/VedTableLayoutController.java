@@ -4,6 +4,8 @@ import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
+import org.toxsoft.core.tslib.bricks.d2.*;
+import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
@@ -105,6 +107,12 @@ public class VedTableLayoutController
     return mw + visel.bounds().width();
     // }
     // return mw;
+  }
+
+  @Override
+  public IList<ID2Rectangle> calcCellRects( String aMasterId, IStringList aSlaveIds ) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
 }

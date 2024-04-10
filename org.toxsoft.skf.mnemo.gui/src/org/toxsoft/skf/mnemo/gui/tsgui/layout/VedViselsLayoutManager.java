@@ -13,8 +13,10 @@ import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.ved.editor.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
+import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.bricks.geometry.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
+import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.*;
 
@@ -49,6 +51,11 @@ public class VedViselsLayoutManager
     public static final String ACTID_LAYOUT_SETTINGS = "ved.layout.settings"; //$NON-NLS-1$
 
     /**
+     * ID of action {@link #ACDEF_SHOW_GRID}.
+     */
+    public static final String ACTID_SHOW_GRID = "ved.layout.showGrid";
+
+    /**
      * Action: copy selected visels and associated actors to the internal buffer.
      */
     public static final ITsActionDef ACDEF_XY_LAYOUT = ofRadio2( ACTID_XY_LAYOUT, //
@@ -67,17 +74,33 @@ public class VedViselsLayoutManager
         "Настроить...", "Вызывает диалог настройки параметров текущего контроллера размещений",
         ICONID_DOCUMENT_PROPERTIES );
 
+    /**
+     * Action: copy selected visels and associated actors to the internal buffer.
+     */
+    public static final ITsActionDef ACDEF_SHOW_GRID = ofCheck2( ACTID_SHOW_GRID, //
+        "Сетка", "Прячет или показывает сетку размщения", null );
+
     LayoutActionsProvider() {
       defineAction( ACDEF_XY_LAYOUT, VedViselsLayoutManager.this::removeLayoutController );
       defineSeparator();
       defineAction( ACDEF_LAYOUT_SETTINGS, VedViselsLayoutManager.this::tune );
       defineAction( ACDEF_DO_LAYOUT, VedViselsLayoutManager.this::layout );
+      defineAction( ACDEF_SHOW_GRID, VedViselsLayoutManager.this::showGrid );
     }
 
     @Override
     public boolean isActionChecked( String aActionId ) {
       if( aActionId.equals( ACTID_XY_LAYOUT ) ) {
         return layoutKindId.isBlank();
+      }
+      if( aActionId.equals( ACTID_SHOW_GRID ) ) {
+        if( gridIds.keys().hasElem( targetVisel.id() ) ) {
+          System.out.println( "TRUE Grid action checked" );
+          return true;
+        }
+        else {
+          System.out.println( "     FALSE Grid action unchecked" );
+        }
       }
       return false;
     }
@@ -110,6 +133,8 @@ public class VedViselsLayoutManager
 
   private String layoutKindId = TsLibUtils.EMPTY_STRING;
 
+  private final IStringMapEdit<LayoutGridDecorator> gridIds = new StringMap<>();
+
   public VedViselsLayoutManager( IVedScreen aVedScreen, IVedLayoutFactoriesProvider aFactProvider,
       IVedViselSelectionManager aSelManager, IVedViselsMasterSlaveRelationsManager aMsManager ) {
     vedScreen = aVedScreen;
@@ -141,6 +166,24 @@ public class VedViselsLayoutManager
   public void setLayoutController( String aViselId, IVedViselsLayoutController aLayoutController ) {
     // TODO Auto-generated method stub
 
+  }
+
+  @Override
+  public IVedViselsLayoutController layoutController( String aViselId ) {
+    IVedVisel visel = VedScreenUtils.findVisel( aViselId, vedScreen );
+    if( visel != null && visel.params().hasKey( PARAMID_LAYOUT_KIND ) ) {
+      String lkId = visel.params().getStr( PARAMID_LAYOUT_KIND );
+      if( factProvider.factories().hasKey( lkId ) ) {
+        IVedLayoutControllerFactory f = factProvider.factories().getByKey( lkId );
+        IVedLayoutControllerConfig cfg = null;
+        if( visel.params().hasKey( PARAMID_LAYOUT_CONFIG ) ) {
+          cfg = visel.params().getValobj( PARAMID_LAYOUT_CONFIG );
+        }
+        IVedViselsLayoutController lc = f.create( cfg, vedScreen );
+        return lc;
+      }
+    }
+    return null;
   }
 
   // ------------------------------------------------------------------------------------
@@ -199,7 +242,6 @@ public class VedViselsLayoutManager
       public void widgetSelected( SelectionEvent aE ) {
         MenuItem m = (MenuItem)aE.widget;
         if( m.getSelection() ) {
-          System.out.println( "Layout Selected: " + m.getData() );
           selectLayout( (String)m.getData() );
         }
       }
@@ -226,11 +268,23 @@ public class VedViselsLayoutManager
   }
 
   void layout() {
-    if( targetVisel != null && targetVisel.params().hasKey( PARAMID_LAYOUT_KIND ) ) {
-      layoutKindId = targetVisel.params().getStr( PARAMID_LAYOUT_KIND );
-      if( factProvider.factories().hasKey( layoutKindId ) ) {
-        IVedLayoutControllerFactory f = factProvider.factories().getByKey( layoutKindId );
-        IVedViselsLayoutController lc = f.create( null, vedScreen );
+    // if( targetVisel != null && targetVisel.params().hasKey( PARAMID_LAYOUT_KIND ) ) {
+    // layoutKindId = targetVisel.params().getStr( PARAMID_LAYOUT_KIND );
+    // if( factProvider.factories().hasKey( layoutKindId ) ) {
+    // IVedLayoutControllerFactory f = factProvider.factories().getByKey( layoutKindId );
+    // IVedLayoutControllerConfig cfg = null;
+    // if( targetVisel.params().hasKey( PARAMID_LAYOUT_CONFIG ) ) {
+    // cfg = targetVisel.params().getValobj( PARAMID_LAYOUT_CONFIG );
+    // }
+    // IVedViselsLayoutController lc = f.create( cfg, vedScreen );
+    // lc.doLayout( targetVisel.id(), msManager.listSlaveViselIds( targetVisel.id() ) );
+    // }
+    // }
+
+    if( targetVisel != null ) {
+      IVedViselsLayoutController lc = layoutController( targetVisel.id() );
+      if( lc != null ) {
+        layoutKindId = lc.kindId();
         lc.doLayout( targetVisel.id(), msManager.listSlaveViselIds( targetVisel.id() ) );
       }
     }
@@ -241,9 +295,30 @@ public class VedViselsLayoutManager
     if( !lkid.isBlank() ) {
       if( factProvider.factories().hasKey( layoutKindId ) ) {
         IVedLayoutControllerFactory f = factProvider.factories().getByKey( layoutKindId );
-        f.editConfig( getLayoutConfig( targetVisel ), vedScreen );
+        IVedLayoutControllerConfig newCfg = f.editConfig( getLayoutConfig( targetVisel ), vedScreen );
+        if( newCfg != null ) { // конфигурация была изменена
+          targetVisel.params().setValobj( PARAMID_LAYOUT_CONFIG, newCfg );
+          layout();
+        }
       }
     }
+  }
+
+  void showGrid() {
+    System.out.println( "show grid" ); //$NON-NLS-1$
+    if( actionsProvider.isActionChecked( LayoutActionsProvider.ACTID_SHOW_GRID ) ) {
+      LayoutGridDecorator decorator = gridIds.removeByKey( targetVisel.id() );
+      vedScreen.model().viselDecoratorsBefore( targetVisel.id() ).remove( decorator );
+    }
+    else {
+      if( !gridIds.keys().hasElem( targetVisel.id() ) ) {
+        LayoutGridDecorator lgd = new LayoutGridDecorator( targetVisel.id(), this, msManager, vedScreen );
+        gridIds.put( targetVisel.id(), lgd );
+        vedScreen.model().viselDecoratorsBefore( targetVisel.id() ).add( lgd );
+      }
+    }
+    actionsProvider.actionsStateEventer().fireChangeEvent();
+    vedScreen.view().redraw();
   }
 
   void removeLayoutController() {
@@ -254,11 +329,18 @@ public class VedViselsLayoutManager
   }
 
   private void selectLayout( String aKindId ) {
-    layoutKindId = aKindId;
     if( targetVisel != null ) {
-      targetVisel.params().setStr( PARAMID_LAYOUT_KIND, layoutKindId );
+      if( factProvider.factories().hasKey( aKindId ) ) {
+        IVedLayoutControllerFactory f = factProvider.factories().getByKey( aKindId );
+        IVedLayoutControllerConfig newCfg = f.editConfig( getLayoutConfig( targetVisel ), vedScreen );
+        if( newCfg != null ) { // конфигурация была изменена
+          layoutKindId = aKindId;
+          targetVisel.params().setStr( PARAMID_LAYOUT_KIND, layoutKindId );
+          targetVisel.params().setValobj( PARAMID_LAYOUT_CONFIG, newCfg );
+          actionsProvider.actionsStateEventer().fireChangeEvent();
+        }
+      }
     }
-    actionsProvider.actionsStateEventer().fireChangeEvent();
   }
 
   private VedAbstractVisel selectedVisel() {

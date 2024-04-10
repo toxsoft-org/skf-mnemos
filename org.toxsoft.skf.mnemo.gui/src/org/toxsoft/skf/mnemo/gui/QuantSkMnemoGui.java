@@ -9,6 +9,7 @@ import org.toxsoft.skf.mnemo.gui.km5.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.tools.imageset.*;
 import org.toxsoft.skf.mnemo.gui.tools.rgbaset.*;
+import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 import org.toxsoft.skf.mnemo.lib.impl.*;
 import org.toxsoft.uskat.core.gui.km5.*;
 import org.toxsoft.uskat.core.impl.*;
@@ -36,6 +37,9 @@ public class QuantSkMnemoGui
     TsValobjUtils.registerKeeperIfNone( ImageEntryInfo.KEEPER_ID, ImageEntryInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( MnemoImageSetInfo.KEEPER_ID, MnemoImageSetInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( RriId.KEEPER_ID, RriId.KEEPER );
+    TsValobjUtils.registerKeeperIfNone( RriId.KEEPER_ID, RriId.KEEPER );
+    TsValobjUtils.registerKeeperIfNone( D2Margins.KEEPER_ID, D2Margins.KEEPER );
+    TsValobjUtils.registerKeeperIfNone( VedLayoutControllerConfig.KEEPER_ID, VedLayoutControllerConfig.KEEPER );
 
     // IVedViselFactoriesRegistry visFact = aAppContext.get( IVedViselFactoriesRegistry.class );
     // visFact.register( ViselPanel.FACTORY );

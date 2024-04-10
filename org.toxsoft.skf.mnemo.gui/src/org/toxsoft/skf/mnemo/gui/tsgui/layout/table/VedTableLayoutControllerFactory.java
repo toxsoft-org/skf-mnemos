@@ -1,9 +1,9 @@
 package org.toxsoft.skf.mnemo.gui.tsgui.layout.table;
 
-import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
+import org.toxsoft.skf.mnemo.gui.tsgui.layout.dialogs.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.line.*;
 
 /**
@@ -53,8 +53,7 @@ public class VedTableLayoutControllerFactory
 
   @Override
   public IVedLayoutControllerConfig editConfig( IVedLayoutControllerConfig aCfg, IVedScreen aVedScreen ) {
-    TsDialogUtils.info( aVedScreen.getShell(), "Row layout diaog" );
-    return null;
+    return TableLayoutDataPanel.edit( aCfg, aVedScreen );
   }
 
 }

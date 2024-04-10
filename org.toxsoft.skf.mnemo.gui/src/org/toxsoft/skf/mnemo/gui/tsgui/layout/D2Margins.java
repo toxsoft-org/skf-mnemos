@@ -45,7 +45,7 @@ public sealed class D2Margins
           aSr.ensureSeparatorChar();
           double bottom = aSr.readDouble();
           aSr.ensureSeparatorChar();
-          return new D2Margins( left, top, right, bottom );
+          return new D2Margins( left, right, top, bottom );
         }
 
       };

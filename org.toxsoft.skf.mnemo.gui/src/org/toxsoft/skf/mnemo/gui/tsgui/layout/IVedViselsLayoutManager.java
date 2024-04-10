@@ -19,4 +19,11 @@ public interface IVedViselsLayoutManager
    */
   void setLayoutController( String aViselId, IVedViselsLayoutController aLayoutController );
 
+  /**
+   * Возвращает контроллер размещения для указанного визуального элемента.
+   *
+   * @param aViselId String - ИД визуального элемента
+   * @return IVedViselsLayoutController - контроллер размещения или <code>null</code> в случае отсутствия
+   */
+  IVedViselsLayoutController layoutController( String aViselId );
 }

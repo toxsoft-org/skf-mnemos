@@ -32,7 +32,7 @@ public class TableColumnLayoutData {
           aSw.writeSeparatorChar();
           aSw.writeBoolean( aEntity.grabExcessSpace() );
           aSw.writeSeparatorChar();
-          aSw.writeInt( aEntity.span() );
+          CellLayoutData.KEEPER.write( aSw, aEntity.cellData );
         }
 
         @Override
@@ -43,8 +43,8 @@ public class TableColumnLayoutData {
           aSr.ensureSeparatorChar();
           boolean grabSpace = aSr.readBoolean();
           aSr.ensureSeparatorChar();
-          int span = aSr.readInt();
-          return new TableColumnLayoutData( new Pair<>( left, right ), grabSpace, span );
+          CellLayoutData cld = CellLayoutData.KEEPER.read( aSr );
+          return new TableColumnLayoutData( new Pair<>( left, right ), grabSpace, cld );
         }
 
       };
@@ -53,7 +53,7 @@ public class TableColumnLayoutData {
 
   private final boolean grabExcessSpace;
 
-  private final int span;
+  private final CellLayoutData cellData;
 
   /**
    * Конструктор
@@ -61,7 +61,7 @@ public class TableColumnLayoutData {
   public TableColumnLayoutData() {
     minMaxWidth = new Pair<>( Double.valueOf( -1. ), Double.valueOf( -1. ) );
     grabExcessSpace = false;
-    span = 1;
+    cellData = new CellLayoutData();
   }
 
   /**
@@ -69,13 +69,14 @@ public class TableColumnLayoutData {
    *
    * @param aMinMaxWidth Pair&lt;Double, Double> - диапазон допустимых значений ширины колонки не <code>null</code>
    * @param aGrabExcessSpace boolean - признак того, нужно ли захватывать избыточную ширину
-   * @param aSpan int - количество перекрытых строк
+   * @param aCellData CellLayoutData - параметры размещения ячеек столбца
    */
-  public TableColumnLayoutData( Pair<Double, Double> aMinMaxWidth, boolean aGrabExcessSpace, int aSpan ) {
+  public TableColumnLayoutData( Pair<Double, Double> aMinMaxWidth, boolean aGrabExcessSpace,
+      CellLayoutData aCellData ) {
     TsNullArgumentRtException.checkNull( aMinMaxWidth );
     minMaxWidth = aMinMaxWidth;
     grabExcessSpace = aGrabExcessSpace;
-    span = aSpan;
+    cellData = aCellData;
   }
 
   /**
@@ -100,12 +101,11 @@ public class TableColumnLayoutData {
   }
 
   /**
-   * Количество перекрытых колонок.
+   * Возвращает информацию о размещении ячеек столбца.
    *
-   * @return int - количество перекрытых колонок
+   * @return {@link CellLayoutData} - информация о размещении ячеек столбца
    */
-  int span() {
-    return span;
+  public CellLayoutData cellData() {
+    return cellData;
   }
-
 }
