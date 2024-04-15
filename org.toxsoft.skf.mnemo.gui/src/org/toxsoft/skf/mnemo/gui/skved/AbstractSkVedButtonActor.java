@@ -28,7 +28,7 @@ public abstract class AbstractSkVedButtonActor
    *
    * @author vs
    */
-  interface IButtonClickHandler {
+  public interface IButtonClickHandler {
 
     /**
      * Вызывается в момент, когда произошло нажатие кнопки (not Down, but Click) и необходимо произвести соответствующие

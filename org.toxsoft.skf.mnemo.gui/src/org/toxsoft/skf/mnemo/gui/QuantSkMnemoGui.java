@@ -7,6 +7,8 @@ import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.utils.valobj.*;
 import org.toxsoft.skf.mnemo.gui.km5.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
+import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
+import org.toxsoft.skf.mnemo.gui.skved.rt_action.valed.*;
 import org.toxsoft.skf.mnemo.gui.tools.imageset.*;
 import org.toxsoft.skf.mnemo.gui.tools.rgbaset.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
@@ -17,7 +19,7 @@ import org.toxsoft.uskat.core.impl.*;
 /**
  * The library quant.
  *
- * @author hazard157, vs
+ * @author hazard157, vs, dima
  */
 public class QuantSkMnemoGui
     extends AbstractQuant {
@@ -40,6 +42,8 @@ public class QuantSkMnemoGui
     TsValobjUtils.registerKeeperIfNone( RriId.KEEPER_ID, RriId.KEEPER );
     TsValobjUtils.registerKeeperIfNone( D2Margins.KEEPER_ID, D2Margins.KEEPER );
     TsValobjUtils.registerKeeperIfNone( VedLayoutControllerConfig.KEEPER_ID, VedLayoutControllerConfig.KEEPER );
+    TsValobjUtils.registerKeeperIfNone( PopupMnemoInfo.KEEPER_ID, PopupMnemoInfo.KEEPER );
+    TsValobjUtils.registerKeeperIfNone( SwitchPerspInfo.KEEPER_ID, SwitchPerspInfo.KEEPER );
 
     // IVedViselFactoriesRegistry visFact = aAppContext.get( IVedViselFactoriesRegistry.class );
     // visFact.register( ViselPanel.FACTORY );
@@ -54,6 +58,8 @@ public class QuantSkMnemoGui
     actFact.register( SkActorRtdataImage.FACTORY );
     actFact.register( SkActorInputField.FACTORY );
     actFact.register( SkActorRriInputField.FACTORY );
+    actFact.register( SkActorRunTimeAction.FACTORY );
+
   }
 
   @Override
@@ -68,6 +74,8 @@ public class QuantSkMnemoGui
     vcfRegistry.registerFactory( ValedAvValobjAnyGwidEditor.FACTORY );
     vcfRegistry.registerFactory( ValedRriIdEditor.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjRriIdEditor.FACTORY );
+    vcfRegistry.registerFactory( ValedAvValobjPopupMnemoInfo.FACTORY );
+    vcfRegistry.registerFactory( ValedAvValobjSwitchPerspInfo.FACTORY );
   }
 
 }
