@@ -9,7 +9,6 @@ import org.toxsoft.core.tslib.bricks.keeper.std.*;
 import org.toxsoft.core.tslib.bricks.strid.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
-import org.toxsoft.core.tslib.math.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 
 /**
@@ -26,21 +25,22 @@ public enum EVpBoundingStrategy1
   NONE( "none", "STR_BS_NONE", "STR_BS_NONE_D", false ) { //$NON-NLS-1$
 
     @Override
-    protected ID2Point doCalcOrigin( ID2Point aOrigin, ITsRectangle aVpRect, ITsPoint aContentSize,
+    protected ID2Point doCalcOrigin( ID2Point aOrigin, ITsRectangle aVpRect, ITsRectangle aContentRect,
         ITsPoint aMargins ) {
       return aOrigin;
     }
 
     @Override
-    protected ITsPoint doCalcUnderlayingSize( ITsRectangle aVpRect, ITsPoint aContentSize, ITsPoint aMargins ) {
-      // TODO Auto-generated method stub
-      return null;
+    protected ITsPoint doCalcUnderlayingSize( ITsRectangle aVpRect, ITsRectangle aContentRect, ITsPoint aMargins ) {
+      TsRectangle r =
+          new TsRectangle( -aContentRect.x1(), -aContentRect.y1(), aContentRect.width(), aContentRect.height() );
+      return TsGeometryUtils.union( aVpRect, r ).size();
     }
 
     @Override
-    protected ITsPoint doCalcContentShift( ITsRectangle aVpRect, ITsPoint aContentSize, ITsPoint aMargins ) {
-      // TODO Auto-generated method stub
-      return null;
+    protected ITsPoint doCalcContentShift( ITsRectangle aVpRect, ITsRectangle aContentRect, ITsPoint aMargins ) {
+      ITsRectangle r = TsGeometryUtils.union( aVpRect, aContentRect );
+      return new TsPoint( aContentRect.x1() - r.x1(), aContentRect.y1() - r.y1() );
     }
   },
 
@@ -50,11 +50,11 @@ public enum EVpBoundingStrategy1
   VIEWPORT( "none", "STR_BS_VIEWPORT", "STR_BS_VIEWPORT_D", true ) { //$NON-NLS-1$
 
     @Override
-    protected ID2Point doCalcOrigin( ID2Point aOrigin, ITsRectangle aVpRect, ITsPoint aContentSize,
+    protected ID2Point doCalcOrigin( ID2Point aOrigin, ITsRectangle aVpRect, ITsRectangle aContentRect,
         ITsPoint aMargins ) {
       // adjust X
-      ITsPoint us = calcUnderLayingSize( aVpRect, aContentSize, aMargins );
-      ITsPoint shift = calcContentShift( aVpRect, aContentSize, aMargins );
+      ITsPoint us = calcUnderLayingSize( aVpRect, aContentRect, aMargins );
+      ITsPoint shift = calcContentShift( aVpRect, aContentRect, aMargins );
 
       int x = (int)aOrigin.x();
       int y = (int)aOrigin.y();
@@ -74,54 +74,33 @@ public enum EVpBoundingStrategy1
       if( y + shift.y() > maxY ) {
         y = maxY - shift.y();
       }
-      //
-      //
-      // int x = (int)aOrigin.x();
-      // IntRange horRange;
-      // if( aContentSize.x() > aVpRect.width() ) {
-      // horRange = new IntRange( aVpRect.x2() - aContentSize.x(), aVpRect.x1() );
-      // }
-      // else {
-      // horRange = new IntRange( aVpRect.x1(), aVpRect.x1() + aVpRect.x2() - aContentSize.x() );
-      // }
-      // x = adaptToRange( x, horRange );
-      //
-      // int y = (int)aOrigin.y();
-      // IntRange verRange;
-      // if( aContentSize.y() > aVpRect.height() ) {
-      // verRange = new IntRange( aVpRect.y2() - aContentSize.y(), aVpRect.y1() );
-      // }
-      // else {
-      // verRange = new IntRange( aVpRect.y1(), aVpRect.y1() + aVpRect.y2() - aContentSize.y() );
-      // }
-      // y = adaptToRange( y, verRange );
       return new D2Point( x, y );
     }
 
     @Override
-    protected ITsPoint doCalcUnderlayingSize( ITsRectangle aVpRect, ITsPoint aContentSize, ITsPoint aMargins ) {
-      int width = aContentSize.x();
-      if( aContentSize.x() < aVpRect.width() ) { // содержимое меньше окна просмотра по ширине
-        int dx = aVpRect.width() - aContentSize.x();
+    protected ITsPoint doCalcUnderlayingSize( ITsRectangle aVpRect, ITsRectangle aContentRect, ITsPoint aMargins ) {
+      int width = aContentRect.width();
+      if( aContentRect.width() < aVpRect.width() ) { // содержимое меньше окна просмотра по ширине
+        int dx = aVpRect.width() - aContentRect.width();
         width = aVpRect.width() + dx;
       }
-      int height = aContentSize.y();
-      if( aContentSize.y() < aVpRect.height() ) { // содержимое меньше окна просмотра по высоте
-        int dy = aVpRect.height() - aContentSize.y();
+      int height = aContentRect.height();
+      if( aContentRect.height() < aVpRect.height() ) { // содержимое меньше окна просмотра по высоте
+        int dy = aVpRect.height() - aContentRect.height();
         height = aVpRect.height() + dy;
       }
       return new TsPoint( width, height );
     }
 
     @Override
-    protected ITsPoint doCalcContentShift( ITsRectangle aVpRect, ITsPoint aContentSize, ITsPoint aMargins ) {
+    protected ITsPoint doCalcContentShift( ITsRectangle aVpRect, ITsRectangle aContentRect, ITsPoint aMargins ) {
       int dx = 0;
       int dy = 0;
-      if( aContentSize.x() < aVpRect.width() ) { // содержимое меньше окна просмотра по ширине
-        dx = aVpRect.width() - aContentSize.x() - aMargins.x();
+      if( aContentRect.width() < aVpRect.width() ) { // содержимое меньше окна просмотра по ширине
+        dx = aVpRect.width() - aContentRect.width() - aMargins.x();
       }
-      if( aContentSize.y() < aVpRect.height() ) { // содержимое меньше окна просмотра по высоте
-        dy = aVpRect.height() - aContentSize.y() - aMargins.y();
+      if( aContentRect.height() < aVpRect.height() ) { // содержимое меньше окна просмотра по высоте
+        dy = aVpRect.height() - aContentRect.height() - aMargins.y();
       }
       return new TsPoint( dx, dy );
     }
@@ -133,10 +112,10 @@ public enum EVpBoundingStrategy1
   CONTENT( "none", "STR_BS_CONTENT", "STR_BS_CONTENT_D", true ) { //$NON-NLS-1$
 
     @Override
-    protected ID2Point doCalcOrigin( ID2Point aOrigin, ITsRectangle aVpRect, ITsPoint aContentSize,
+    protected ID2Point doCalcOrigin( ID2Point aOrigin, ITsRectangle aVpRect, ITsRectangle aContentRect,
         ITsPoint aMargins ) {
-      ITsPoint us = calcUnderLayingSize( aVpRect, aContentSize, aMargins );
-      ITsPoint shift = calcContentShift( aVpRect, aContentSize, aMargins );
+      ITsPoint us = calcUnderLayingSize( aVpRect, aContentRect, aMargins );
+      ITsPoint shift = calcContentShift( aVpRect, aContentRect, aMargins );
 
       int x = (int)aOrigin.x();
       int y = (int)aOrigin.y();
@@ -156,56 +135,30 @@ public enum EVpBoundingStrategy1
       if( y + shift.y() > maxY ) {
         y = maxY - shift.y();
       }
-
-      // int x = (int)aOrigin.x();
-      // // IntRange horRange = getVerRange( aVpRect, aMargins );
-      // IntRange horRange = getHorRange( aVpRect, aMargins );
-      // if( horRange.isLeft( x + aContentSize.x() ) ) {
-      // x = horRange.minValue() - aContentSize.x();
-      // }
-      // else {
-      // if( horRange.isRight( x ) ) {
-      // x = horRange.maxValue();
-      // }
-      // }
-      // // check Y
-      // int y = (int)aOrigin.y();
-      // IntRange verRange = getVerRange( aVpRect, aMargins );
-      // if( verRange.isLeft( y + aContentSize.y() ) ) {
-      // y = verRange.minValue() - aContentSize.y();
-      // }
-      // else {
-      // if( verRange.isRight( y ) ) {
-      // y = verRange.maxValue();
-      // }
-      // }
-      // if( x == aOrigin.x() && y == aOrigin.y() ) {
-      // return aOrigin;
-      // }
       return new D2Point( x, y );
     }
 
     @Override
-    protected ITsPoint doCalcUnderlayingSize( ITsRectangle aVpRect, ITsPoint aContentSize, ITsPoint aMargins ) {
-      int width = aContentSize.x();
-      if( aContentSize.x() < aVpRect.width() ) { // содержимое меньше окна просмотра по ширине
-        width = 2 * aVpRect.width() + aContentSize.x() - 32;
+    protected ITsPoint doCalcUnderlayingSize( ITsRectangle aVpRect, ITsRectangle aContentRect, ITsPoint aMargins ) {
+      int width = aContentRect.width();
+      if( aContentRect.width() < aVpRect.width() ) { // содержимое меньше окна просмотра по ширине
+        width = 2 * aVpRect.width() + aContentRect.width() - 32;
       }
-      int height = aContentSize.y();
-      if( aContentSize.y() < aVpRect.height() ) { // содержимое меньше окна просмотра по высоте
-        height = 2 * aVpRect.height() + aContentSize.y() - 32;
+      int height = aContentRect.height();
+      if( aContentRect.height() < aVpRect.height() ) { // содержимое меньше окна просмотра по высоте
+        height = 2 * aVpRect.height() + aContentRect.height() - 32;
       }
       return new TsPoint( width, height );
     }
 
     @Override
-    protected ITsPoint doCalcContentShift( ITsRectangle aVpRect, ITsPoint aContentSize, ITsPoint aMargins ) {
+    protected ITsPoint doCalcContentShift( ITsRectangle aVpRect, ITsRectangle aContentRect, ITsPoint aMargins ) {
       int dx = 0;
-      if( aContentSize.x() < aVpRect.width() ) { // содержимое меньше окна просмотра по ширине
+      if( aContentRect.width() < aVpRect.width() ) { // содержимое меньше окна просмотра по ширине
         dx = aVpRect.width() - aMargins.x() - 16;
       }
       int dy = 0;
-      if( aContentSize.y() < aVpRect.height() ) { // содержимое меньше окна просмотра по высоте
+      if( aContentRect.height() < aVpRect.height() ) { // содержимое меньше окна просмотра по высоте
         dy = aVpRect.height() - aMargins.y() - 16;
       }
       return new TsPoint( dx, dy );
@@ -257,34 +210,6 @@ public enum EVpBoundingStrategy1
     return description;
   }
 
-  // ------------------------------------------------------------------------------------
-  // implementation
-  //
-
-  private static IntRange getHorRange( ITsRectangle aVpRect, ITsPoint aMargins ) {
-    if( aMargins.x() >= aVpRect.width() / 2 ) { // for small viewport do NOT apply margins
-      return new IntRange( aVpRect.x1(), aVpRect.x2() );
-    }
-    return new IntRange( aVpRect.x1() + aMargins.x(), aVpRect.x2() - aMargins.y() );
-  }
-
-  private static IntRange getVerRange( ITsRectangle aVpRect, ITsPoint aMargins ) {
-    if( aMargins.y() >= aVpRect.height() / 2 ) { // for small viewport do NOT apply margins
-      return new IntRange( aVpRect.y1(), aVpRect.y2() );
-    }
-    return new IntRange( aVpRect.y1() + aMargins.y(), aVpRect.y2() - aMargins.y() );
-  }
-
-  private static int adaptToRange( int aValue, IntRange aRange ) {
-    if( aValue < aRange.minValue() ) {
-      return aRange.minValue();
-    }
-    if( aValue > aRange.maxValue() ) {
-      return aRange.maxValue();
-    }
-    return aValue;
-  }
-
   // ----------------------------------------------------------------------------------
   // API
   //
@@ -303,45 +228,46 @@ public enum EVpBoundingStrategy1
    *
    * @param aOrigin {@link ID2Point} - the requested origin
    * @param aVpRect {@link ITsRectangle} - the viewport
-   * @param aContentSize {@link ITsPoint} - the content bounding rectangle size
+   * @param aContentRect {@link ITsRectangle} - the content bounding rectangle size
    * @param aMargins {@link ITsPoint} - margins to apply when limiting content
    * @return {@link ID2Point} - calculated origin to be applied
    */
-  public ID2Point calcOrigin( ID2Point aOrigin, ITsRectangle aVpRect, ITsPoint aContentSize, ITsPoint aMargins ) {
-    TsNullArgumentRtException.checkNulls( aOrigin, aVpRect, aContentSize, aMargins );
-    return doCalcOrigin( aOrigin, aVpRect, aContentSize, aMargins );
+  public ID2Point calcOrigin( ID2Point aOrigin, ITsRectangle aVpRect, ITsRectangle aContentRect, ITsPoint aMargins ) {
+    TsNullArgumentRtException.checkNulls( aOrigin, aVpRect, aContentRect, aMargins );
+    return doCalcOrigin( aOrigin, aVpRect, aContentRect, aMargins );
   }
 
   /**
    * Вычисляет размеры прокручиваемой подложки.
    *
    * @param aVpRect {@link ITsRectangle} - the viewport
-   * @param aContentSize {@link ITsPoint} - the content bounding rectangle size
+   * @param aContentRect {@link ITsRectangle} - the content bounding rectangle size
    * @param aMargins {@link ITsPoint} - margins to apply when limiting content
    * @return {@link ID2Point} - calculated size
    */
-  public ITsPoint calcUnderLayingSize( ITsRectangle aVpRect, ITsPoint aContentSize, ITsPoint aMargins ) {
-    return doCalcUnderlayingSize( aVpRect, aContentSize, aMargins );
+  public ITsPoint calcUnderLayingSize( ITsRectangle aVpRect, ITsRectangle aContentRect, ITsPoint aMargins ) {
+    return doCalcUnderlayingSize( aVpRect, aContentRect, aMargins );
   }
 
   /**
    * Вычисляет размеры прокручиваемой подложки.
    *
    * @param aVpRect {@link ITsRectangle} - the viewport
-   * @param aContentSize {@link ITsPoint} - the content bounding rectangle size
+   * @param aContentRect {@link ITsRectangle} - the content bounding rectangle size
    * @param aMargins {@link ITsPoint} - margins to apply when limiting content
    * @return {@link ID2Point} - calculated size
    */
-  public ITsPoint calcContentShift( ITsRectangle aVpRect, ITsPoint aContentSize, ITsPoint aMargins ) {
-    return doCalcContentShift( aVpRect, aContentSize, aMargins );
+  public ITsPoint calcContentShift( ITsRectangle aVpRect, ITsRectangle aContentRect, ITsPoint aMargins ) {
+    return doCalcContentShift( aVpRect, aContentRect, aMargins );
   }
 
-  protected abstract ID2Point doCalcOrigin( ID2Point aOrigin, ITsRectangle aVpRect, ITsPoint aContentSize,
+  protected abstract ID2Point doCalcOrigin( ID2Point aOrigin, ITsRectangle aVpRect, ITsRectangle aContentRect,
       ITsPoint aMargins );
 
-  protected abstract ITsPoint doCalcUnderlayingSize( ITsRectangle aVpRect, ITsPoint aContentSize, ITsPoint aMargins );
+  protected abstract ITsPoint doCalcUnderlayingSize( ITsRectangle aVpRect, ITsRectangle aContentSize,
+      ITsPoint aMargins );
 
-  protected abstract ITsPoint doCalcContentShift( ITsRectangle aVpRect, ITsPoint aContentSize, ITsPoint aMargins );
+  protected abstract ITsPoint doCalcContentShift( ITsRectangle aVpRect, ITsRectangle aContentSize, ITsPoint aMargins );
 
   /**
    * Returns all constants in single list.

@@ -21,8 +21,9 @@ public class MnemoScrollManager {
   private final IViewportCalculator1 vpCalc = new ViewportCalculator1( new CalculationStrategySettings1( //
       ETsFulcrum.LEFT_TOP, //
       EVpFulcrumUsageStartegy.INSIDE, //
-      EVpBoundingStrategy1.CONTENT, //
-      // EVpBoundingStrategy1.VIEWPORT, //
+      // EVpBoundingStrategy1.NONE, //
+      // EVpBoundingStrategy1.CONTENT, //
+      EVpBoundingStrategy1.VIEWPORT, //
       // new TsPoint( 10, 10 ), //
       new TsPoint( 0, 0 ), //
       false //
@@ -65,8 +66,7 @@ public class MnemoScrollManager {
 
       @Override
       public void widgetSelected( SelectionEvent aE ) {
-        ITsPoint p = vpCalc.underlay2Viewport( new TsPoint( hBar.getSelection(), vBar.getSelection() ) );
-        vpCalc.queryToChangeOrigin( p.x(), p.y() );
+        vpCalc.queryToChangeOriginByScrollBars( hBar.getSelection(), vBar.getSelection() );
       }
 
     } );
@@ -76,8 +76,7 @@ public class MnemoScrollManager {
 
       @Override
       public void widgetSelected( SelectionEvent aE ) {
-        ITsPoint p = vpCalc.underlay2Viewport( new TsPoint( hBar.getSelection(), vBar.getSelection() ) );
-        vpCalc.queryToChangeOrigin( p.x(), p.y() );
+        vpCalc.queryToChangeOriginByScrollBars( hBar.getSelection(), vBar.getSelection() );
       }
 
     } );

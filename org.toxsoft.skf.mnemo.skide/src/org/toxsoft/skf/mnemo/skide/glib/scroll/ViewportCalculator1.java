@@ -250,8 +250,18 @@ public class ViewportCalculator1
     viewportX = aX;
     viewportY = aY;
     ITsPoint p = viewport2Underlay( new TsPoint( aX, aY ) );
+    // ITsPoint up = underlay2Viewport( p );
+    // viewportX = up.x();
+    // viewportY = up.y();
+    // contentRect = new TsRectangle( new TsPoint( viewportX, viewportY ), contentRect.size() );
     setOrigin( p.x(), p.y() );
     return (p.x() != originX) || (p.y() != originY);
+  }
+
+  @Override
+  public boolean queryToChangeOriginByScrollBars( int aHorScrollBarPos, int aVerScrollBarPos ) {
+    ITsPoint p = underlay2Viewport( new TsPoint( aHorScrollBarPos, aVerScrollBarPos ) );
+    return queryToChangeOrigin( p.x(), p.y() );
   }
 
   private void updateOutput() {
@@ -270,7 +280,6 @@ public class ViewportCalculator1
     conv.setZoomFactor( zoomFactor );
     int marginX = settings.boundingMargins().x();
     int marginY = settings.boundingMargins().x();
-    // conv.origin().setPoint( -hBar.selection() + contentDx + marginX, -vBar.selection() + contentDy + marginY );
     conv.origin().setPoint( -originX + contentDx + marginX, -originY + contentDy + marginY );
     output.setParams( conv, vpRect, hBar, vBar );
   }
@@ -339,13 +348,11 @@ public class ViewportCalculator1
     return output;
   }
 
-  @Override
-  public ITsPoint underlay2Viewport( ITsPoint aUnderlayPoint ) {
+  private ITsPoint underlay2Viewport( ITsPoint aUnderlayPoint ) {
     return new TsPoint( aUnderlayPoint.x() - contentDx, aUnderlayPoint.y() - contentDy );
   }
 
-  @Override
-  public ITsPoint viewport2Underlay( ITsPoint aViewportPoint ) {
+  private ITsPoint viewport2Underlay( ITsPoint aViewportPoint ) {
     return new TsPoint( aViewportPoint.x() + contentDx, aViewportPoint.y() + contentDy );
   }
 
@@ -353,17 +360,11 @@ public class ViewportCalculator1
   // Sol++ Implementation
   //
 
-  // private ITsPoint adjustOrigin( int aX, int aY, EVpBoundingStrategy1 aRestrictions, ITsPoint aMargins ) {
-  // ID2Point d2p = new D2Point( aX, aY );
-  // ID2Point newOrigin = aRestrictions.calcOrigin( d2p, vpRect, contentRect.size(), aMargins );
-  // return new TsPoint( (int)newOrigin.x(), (int)newOrigin.y() );
-  // }
-
   boolean conformRects( boolean aResult, EVpBoundingStrategy1 aRestrictions, ITsPoint aMargins ) {
     boolean result = aResult;
 
-    ITsPoint ulSize = aRestrictions.calcUnderLayingSize( vpRect, contentRect.size(), aMargins );
-    ITsPoint contentShift = aRestrictions.calcContentShift( vpRect, contentRect.size(), aMargins );
+    ITsPoint ulSize = aRestrictions.calcUnderLayingSize( vpRect, contentRect, aMargins );
+    ITsPoint contentShift = aRestrictions.calcContentShift( vpRect, contentRect, aMargins );
     contentDx = contentShift.x();
     contentDy = contentShift.y();
     underlayerRect = new TsRectangle( 0, 0, ulSize.x(), ulSize.y() );
@@ -371,12 +372,14 @@ public class ViewportCalculator1
   }
 
   private void setOrigin( int aX, int aY ) {
+    // conformRects( true, settings.boundingStrategy(), settings.boundingMargins() );
     originX = aX;
     originY = aY;
     ID2Point d2p = new D2Point( aX, aY );
-    d2p = settings().boundingStrategy().calcOrigin( d2p, vpRect, underlayerRect.size(), settings.boundingMargins() );
+    d2p = settings().boundingStrategy().calcOrigin( d2p, vpRect, underlayerRect, settings.boundingMargins() );
     originX = (int)d2p.x();
     originY = (int)d2p.y();
+    // contentRect = new TsRectangle( viewportX, viewportY, contentRect.width(), contentRect.height() );
     updateOutput();
   }
 

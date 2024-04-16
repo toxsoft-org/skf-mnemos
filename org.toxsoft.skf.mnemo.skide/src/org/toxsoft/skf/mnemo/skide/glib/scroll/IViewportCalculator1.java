@@ -92,6 +92,17 @@ public interface IViewportCalculator1 {
   /**
    * Query to re-locate the content in the viewport.
    * <p>
+   * Request is done to place the content so scroll bars will have the requested positions.
+   *
+   * @param aHorScrollBarPos int - requested horizontal scroll bar position
+   * @param aVerScrollBarPos int - requested vertical scroll bar position
+   * @return boolean - <code>true</code> if {@link #output()} has been changed
+   */
+  boolean queryToChangeOriginByScrollBars( int aHorScrollBarPos, int aVerScrollBarPos );
+
+  /**
+   * Query to re-locate the content in the viewport.
+   * <p>
    * Request is done to shift the content drawing top-left point at the specified screen (canvas) coordinates on the
    * specified amount of pixels.
    *
@@ -133,7 +144,7 @@ public interface IViewportCalculator1 {
    */
   IViewportOutput output();
 
-  ITsPoint underlay2Viewport( ITsPoint aUnderlayPoint );
-
-  ITsPoint viewport2Underlay( ITsPoint aViewportPoint );
+  // ITsPoint underlay2Viewport( ITsPoint aUnderlayPoint );
+  //
+  // ITsPoint viewport2Underlay( ITsPoint aViewportPoint );
 }

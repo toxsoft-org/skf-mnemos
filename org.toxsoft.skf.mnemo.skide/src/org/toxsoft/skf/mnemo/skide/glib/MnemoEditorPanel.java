@@ -428,7 +428,7 @@ public class MnemoEditorPanel
     VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
     undoManager.reset();
     setChanged( false );
-    scrollManager.setOrigin( 0, 0 );
+    scrollManager.setOrigin( 300, 300 );
   }
 
   @Override
