@@ -2,6 +2,7 @@ package org.toxsoft.skf.mnemo.gui;
 
 import org.eclipse.e4.core.contexts.*;
 import org.toxsoft.core.tsgui.bricks.quant.*;
+import org.toxsoft.core.tsgui.graphics.patterns.*;
 import org.toxsoft.core.tsgui.valed.api.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.utils.valobj.*;
@@ -35,6 +36,7 @@ public class QuantSkMnemoGui
 
   @Override
   protected void doInitApp( IEclipseContext aAppContext ) {
+    TsValobjUtils.registerKeeperIfNone( ETsFillKind.KEEPER_ID, ETsFillKind.KEEPER );
     TsValobjUtils.registerKeeperIfNone( RgbaSet.KEEPER_ID, RgbaSet.KEEPER );
     TsValobjUtils.registerKeeperIfNone( ImageEntryInfo.KEEPER_ID, ImageEntryInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( MnemoImageSetInfo.KEEPER_ID, MnemoImageSetInfo.KEEPER );
@@ -42,6 +44,7 @@ public class QuantSkMnemoGui
     TsValobjUtils.registerKeeperIfNone( D2Margins.KEEPER_ID, D2Margins.KEEPER );
     TsValobjUtils.registerKeeperIfNone( VedLayoutControllerConfig.KEEPER_ID, VedLayoutControllerConfig.KEEPER );
     TsValobjUtils.registerKeeperIfNone( ERtActionKind.KEEPER_ID, ERtActionKind.KEEPER );
+    TsValobjUtils.registerKeeperIfNone( RunTimeUserActionInfo.KEEPER_ID, RunTimeUserActionInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( PopupMnemoInfo.KEEPER_ID, PopupMnemoInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( SwitchPerspInfo.KEEPER_ID, SwitchPerspInfo.KEEPER );
 
