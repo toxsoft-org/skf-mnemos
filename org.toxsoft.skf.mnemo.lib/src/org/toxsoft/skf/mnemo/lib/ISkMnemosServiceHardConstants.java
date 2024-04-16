@@ -32,4 +32,14 @@ public interface ISkMnemosServiceHardConstants {
       TSID_DESCRIPTION, STR_CLB_MNEMO_CFG_DATA_D //
   );
 
+  /**
+   * Popup mnemos information class ID.
+   */
+  String CLSID_POPUP_MNEMO_INFO = ISkHardConstants.SK_ID + ".PopupMnemoInfo"; //$NON-NLS-1$ ;
+
+  /**
+   * Switch perspective information class ID.
+   */
+  String CLSID_SWITCH_PERSP_INFO = ISkHardConstants.SK_ID + ".SwitchPerspInfo"; //$NON-NLS-1$ ;
+
 }

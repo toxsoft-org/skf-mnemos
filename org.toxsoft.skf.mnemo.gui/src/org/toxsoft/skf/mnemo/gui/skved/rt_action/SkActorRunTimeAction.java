@@ -19,6 +19,7 @@ import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
+import org.toxsoft.skf.mnemo.gui.skved.rt_action.tti.*;
 import org.toxsoft.uskat.core.api.cmdserv.*;
 
 /**
@@ -55,7 +56,7 @@ public class SkActorRunTimeAction
       fields.add( TFI_NAME );
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
-      fields.add( TFI_BK_FILL ); // type of action: popup mnemo, switch persp, etc
+      fields.add( TtiRtActionInfo.TFI_RT_ACTION_TYPE ); // type of action: popup mnemo, switch persp, etc
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRunTimeAction.class );
     }
 

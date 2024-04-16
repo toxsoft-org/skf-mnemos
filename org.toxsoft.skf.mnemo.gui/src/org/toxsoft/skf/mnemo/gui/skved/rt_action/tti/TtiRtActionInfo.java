@@ -28,7 +28,7 @@ public class TtiRtActionInfo
   private static final String FID_POPUP_MNEMO    = "popupMnemo";  //$NON-NLS-1$
   private static final String FID_SWITCH_PERSP   = "switchPersp"; //$NON-NLS-1$
 
-  private static final ITinFieldInfo TFI_RT_ACTION_TYPE = new TinFieldInfo( FID_RT_ACTION_TYPE, TtiAvEnum.INSTANCE, //
+  public static final ITinFieldInfo TFI_RT_ACTION_TYPE = new TinFieldInfo( FID_RT_ACTION_TYPE, TtiAvEnum.INSTANCE, //
       TSID_NAME, STR_RT_ACTION_TYPE, //
       TSID_DESCRIPTION, STR_RT_ACTION_TYPE_D, //
       TSID_KEEPER_ID, ERtActionKind.KEEPER_ID //

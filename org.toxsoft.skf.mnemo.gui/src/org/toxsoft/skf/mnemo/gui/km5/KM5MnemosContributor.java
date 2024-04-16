@@ -4,6 +4,7 @@ import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.gui.km5.*;
@@ -22,6 +23,8 @@ public class KM5MnemosContributor
   public static final IKM5ContributorCreator CREATOR = KM5MnemosContributor::new;
 
   private static final IStringList CONRTIBUTED_MODEL_IDS = new StringArrayList( //
+      PopupMnemoInfo.CLASS_ID, //
+      SwitchPerspInfo.CLASS_ID, //
       ISkMnemoCfg.CLASS_ID //
   );
 
@@ -39,6 +42,8 @@ public class KM5MnemosContributor
   @Override
   protected IStringList papiCreateModels() {
     m5().addModel( new SkMnemoCfgM5Model( skConn() ) );
+    m5().addModel( new PopupMnemoInfoM5Model() );
+    m5().addModel( new SwitchPerspInfoM5Model() );
     return CONRTIBUTED_MODEL_IDS;
   }
 }

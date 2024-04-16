@@ -26,7 +26,7 @@ public class SwitchPerspInfoM5Model
   public static final String MODEL_ID = "SwitchPerspInfoM5Model"; //$NON-NLS-1$
 
   /**
-   * Skid field of mnemo
+   * id of perspective
    */
   public static final String FID_PERSP_ID = "perspId"; //$NON-NLS-1$
 

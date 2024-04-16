@@ -5,6 +5,7 @@ import org.toxsoft.core.tslib.bricks.keeper.AbstractEntityKeeper.*;
 import org.toxsoft.core.tslib.bricks.strio.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.valobj.*;
+import org.toxsoft.skf.mnemo.lib.*;
 
 /**
  * Parameters for switch persp action.
@@ -13,6 +14,11 @@ import org.toxsoft.core.tslib.utils.valobj.*;
  * @author dima
  */
 public class SwitchPerspInfo {
+
+  /**
+   * The class ID.
+   */
+  public static String CLASS_ID = ISkMnemosServiceHardConstants.CLSID_SWITCH_PERSP_INFO;
 
   /**
    * Empty info.
