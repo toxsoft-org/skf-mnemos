@@ -5,6 +5,7 @@ import static org.toxsoft.core.tslib.av.EAtomicType.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 
+import org.toxsoft.core.tsgui.graphics.patterns.*;
 import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
@@ -17,6 +18,17 @@ import org.toxsoft.skf.mnemo.gui.skved.rt_action.valed.*;
  */
 @SuppressWarnings( "javadoc" )
 public interface IRtActionConstants {
+
+  /**
+   * Data type: {@link TsFillInfo} as {@link EAtomicType#VALOBJ VALOBJ}.
+   */
+  IDataType DT_RT_USER_ACTION_INFO = DataType.create( VALOBJ, //
+      TSID_NAME, "run-time user action", //
+      TSID_DESCRIPTION, "run-time user action", //
+      TSID_KEEPER_ID, RunTimeUserActionInfo.KEEPER_ID, //
+      OPID_EDITOR_FACTORY_NAME, ValedAvValobjRtUserActionInfo.FACTORY.factoryName(), //
+      TSID_DEFAULT_VALUE, avValobj( RunTimeUserActionInfo.NONE ) //
+  );
 
   /**
    * Data type: {@link PopupMnemoInfo} as {@link EAtomicType#VALOBJ}.

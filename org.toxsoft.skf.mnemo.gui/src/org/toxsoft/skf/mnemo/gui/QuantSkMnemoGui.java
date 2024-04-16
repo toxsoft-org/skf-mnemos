@@ -39,9 +39,9 @@ public class QuantSkMnemoGui
     TsValobjUtils.registerKeeperIfNone( ImageEntryInfo.KEEPER_ID, ImageEntryInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( MnemoImageSetInfo.KEEPER_ID, MnemoImageSetInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( RriId.KEEPER_ID, RriId.KEEPER );
-    TsValobjUtils.registerKeeperIfNone( RriId.KEEPER_ID, RriId.KEEPER );
     TsValobjUtils.registerKeeperIfNone( D2Margins.KEEPER_ID, D2Margins.KEEPER );
     TsValobjUtils.registerKeeperIfNone( VedLayoutControllerConfig.KEEPER_ID, VedLayoutControllerConfig.KEEPER );
+    TsValobjUtils.registerKeeperIfNone( ERtActionKind.KEEPER_ID, ERtActionKind.KEEPER );
     TsValobjUtils.registerKeeperIfNone( PopupMnemoInfo.KEEPER_ID, PopupMnemoInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( SwitchPerspInfo.KEEPER_ID, SwitchPerspInfo.KEEPER );
 
@@ -74,7 +74,11 @@ public class QuantSkMnemoGui
     vcfRegistry.registerFactory( ValedAvValobjAnyGwidEditor.FACTORY );
     vcfRegistry.registerFactory( ValedRriIdEditor.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjRriIdEditor.FACTORY );
+    vcfRegistry.registerFactory( ValedRtUserActionInfo.FACTORY );
+    vcfRegistry.registerFactory( ValedAvValobjRtUserActionInfo.FACTORY );
+    vcfRegistry.registerFactory( ValedPopupMnemoInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjPopupMnemoInfo.FACTORY );
+    vcfRegistry.registerFactory( ValedSwitchPerspInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjSwitchPerspInfo.FACTORY );
   }
 

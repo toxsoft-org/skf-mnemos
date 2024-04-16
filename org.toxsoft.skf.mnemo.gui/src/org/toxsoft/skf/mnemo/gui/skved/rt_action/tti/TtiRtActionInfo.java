@@ -1,6 +1,5 @@
 package org.toxsoft.skf.mnemo.gui.skved.rt_action.tti;
 
-import static org.toxsoft.core.tsgui.graphics.ITsGraphicsConstants.*;
 import static org.toxsoft.core.tsgui.valed.api.IValedControlConstants.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
@@ -28,6 +27,9 @@ public class TtiRtActionInfo
   private static final String FID_POPUP_MNEMO    = "popupMnemo";  //$NON-NLS-1$
   private static final String FID_SWITCH_PERSP   = "switchPersp"; //$NON-NLS-1$
 
+  /**
+   * Select user action type
+   */
   public static final ITinFieldInfo TFI_RT_ACTION_TYPE = new TinFieldInfo( FID_RT_ACTION_TYPE, TtiAvEnum.INSTANCE, //
       TSID_NAME, STR_RT_ACTION_TYPE, //
       TSID_DESCRIPTION, STR_RT_ACTION_TYPE_D, //
@@ -54,7 +56,7 @@ public class TtiRtActionInfo
   public static final TtiRtActionInfo INSTANCE = new TtiRtActionInfo();
 
   private TtiRtActionInfo() {
-    super( ETinTypeKind.FULL, DT_TS_FILL_INFO, RunTimeUserActionInfo.class );
+    super( ETinTypeKind.FULL, IRtActionConstants.DT_RT_USER_ACTION_INFO, RunTimeUserActionInfo.class );
     fieldInfos().add( TFI_RT_ACTION_TYPE );
     fieldInfos().add( TFI_POPUP_MNEMO );
     fieldInfos().add( TFI_SWITCH_PERSP );

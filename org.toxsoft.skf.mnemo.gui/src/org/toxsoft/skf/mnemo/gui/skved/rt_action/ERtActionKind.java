@@ -25,7 +25,7 @@ public enum ERtActionKind
   /**
    * The registered keeper ID.
    */
-  public static final String KEEPER_ID = "ETsFillKind"; //$NON-NLS-1$
+  public static final String KEEPER_ID = "ERtActionKind"; //$NON-NLS-1$
 
   /**
    * The keeper singleton.
