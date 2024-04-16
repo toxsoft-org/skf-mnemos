@@ -16,7 +16,6 @@ import org.toxsoft.skf.mnemo.gui.skved.rt_action.valed.*;
  *
  * @author dima
  */
-@SuppressWarnings( "javadoc" )
 public interface IRtActionConstants {
 
   /**
