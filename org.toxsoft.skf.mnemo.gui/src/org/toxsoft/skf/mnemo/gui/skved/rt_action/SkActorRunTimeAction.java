@@ -2,6 +2,7 @@ package org.toxsoft.skf.mnemo.gui.skved.rt_action;
 
 import static org.toxsoft.core.tsgui.ved.ITsguiVedConstants.*;
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
+import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.rt_action.ISkResources.*;
@@ -40,6 +41,12 @@ public class SkActorRunTimeAction
    */
   public static final String FACTORY_ID = SKVED_ID + ".actor.RunTimeAction"; //$NON-NLS-1$
 
+  private static final TinFieldInfo TFI_RT_USER_ACTION = new TinFieldInfo( "rtUserAction", TtiRtActionInfo.INSTANCE, //
+      TSID_NAME, "Действие", //
+      TSID_DESCRIPTION, "Действие, которое может выполнить пользователь на этапе исполнени", //
+      TSID_KEEPER_ID, RunTimeUserActionInfo.KEEPER_ID, //
+      TSID_DEFAULT_VALUE, avValobj( RunTimeUserActionInfo.NONE ) );
+
   /**
    * The VISEL factory singleton.
    */
@@ -56,7 +63,8 @@ public class SkActorRunTimeAction
       fields.add( TFI_NAME );
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
-      fields.add( TtiRtActionInfo.TFI_RT_ACTION_TYPE ); // type of action: popup mnemo, switch persp, etc
+      fields.add( TFI_RT_USER_ACTION ); // type of action: popup mnemo, switch persp, etc
+      // fields.add( TtiRtActionInfo.TFI_RT_ACTION_TYPE ); // type of action: popup mnemo, switch persp, etc
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRunTimeAction.class );
     }
 
