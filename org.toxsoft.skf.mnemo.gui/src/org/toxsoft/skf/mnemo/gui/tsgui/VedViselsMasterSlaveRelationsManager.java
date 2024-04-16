@@ -227,12 +227,31 @@ public class VedViselsMasterSlaveRelationsManager
   }
 
   @Override
+  public void addSlaveId( VedItemCfg aMasterCfg, String aSlaveId ) {
+    IStringListEdit slaveIds = new StringArrayList();
+    if( aMasterCfg.params().hasKey( PARAMID_SLAVE_IDS ) ) {
+      slaveIds.addAll( (IStringList)aMasterCfg.params().getValobj( PARAMID_SLAVE_IDS ) );
+    }
+    slaveIds.add( aSlaveId );
+    aMasterCfg.params().setValobj( PARAMID_SLAVE_IDS, slaveIds );
+  }
+
+  @Override
+  public void addSlaveId( String aMasterId, String aSlaveId ) {
+    IStringListEdit slaveIds = new StringArrayList();
+    VedAbstractVisel master = VedScreenUtils.findVisel( aMasterId, vedScreen );
+    if( master.params().hasKey( PARAMID_SLAVE_IDS ) ) {
+      slaveIds.addAll( (IStringList)master.params().getValobj( PARAMID_SLAVE_IDS ) );
+    }
+    slaveIds.add( aSlaveId );
+    master.params().setValobj( PARAMID_SLAVE_IDS, slaveIds );
+  }
+
+  @Override
   public void setSlaveIds( VedItemCfg aCfg, IStringList aSlaveIds ) {
-    // String idsStr = TsLibUtils.EMPTY_STRING;
-    // if( !aSlaveIds.isEmpty() ) {
-    // idsStr = StridUtils.makeIdPath( aSlaveIds );
-    // }
-    // aCfg.params().setStr( PARAMID_SLAVE_IDS, idsStr );
+    if( !aCfg.params().hasKey( PARAMID_SLAVE_IDS ) && aSlaveIds == IStringList.EMPTY ) {
+      return; // если подчиненных не было и новый список пуст, то ничего не делаем
+    }
     aCfg.params().setValobj( PARAMID_SLAVE_IDS, aSlaveIds );
   }
 

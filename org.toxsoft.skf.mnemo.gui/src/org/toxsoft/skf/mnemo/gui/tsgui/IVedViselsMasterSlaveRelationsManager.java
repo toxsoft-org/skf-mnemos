@@ -87,6 +87,22 @@ public interface IVedViselsMasterSlaveRelationsManager
   void setMasterId( VedItemCfg aCfg, String aMasterId );
 
   /**
+   * Добавляет к мастеру еще один подчиненный элемент.
+   *
+   * @param aMasterCfg {@link VedItemCfg} - конфигурация мастера
+   * @param aSlaveId String - ИД подчиненного элемента
+   */
+  void addSlaveId( VedItemCfg aMasterCfg, String aSlaveId );
+
+  /**
+   * Добавляет к мастеру еще один подчиненный элемент.
+   *
+   * @param aMasterId String - ИД мастера
+   * @param aSlaveId String - ИД подчиненного элемента
+   */
+  void addSlaveId( String aMasterId, String aSlaveId );
+
+  /**
    * Задает новый набор ИДов подчиненных элементов.
    *
    * @param aCfg {@link VedItemCfg} - конфигурация визуального элемента

@@ -62,17 +62,23 @@ public class MasterSlaveCopyPasteProcessor
   public void editConfigsForPaste( IListEdit<VedItemCfg> aVisConfs, IListEdit<VedItemCfg> aActConfs,
       IStringMap<String> aViselsMap, IStringMap<String> aActorsMap, IOptionSet aParams ) {
     for( VedItemCfg cfg : aVisConfs ) {
+      msManager.setSlaveIds( cfg, IStringList.EMPTY ); // очистим список подчиненных элементов
       String mId = msManager.viselMasterId( cfg );
       if( mId != null ) {
-        msManager.setMasterId( cfg, aViselsMap.getByKey( mId ) );
-      }
-      IStringList slaveIds = msManager.listViselSlaveIds( cfg );
-      IStringListEdit newSlaveIds = new StringArrayList();
-      for( String id : slaveIds ) {
-        newSlaveIds.add( aViselsMap.getByKey( id ) );
-      }
-      if( !newSlaveIds.isEmpty() ) {
-        msManager.setSlaveIds( cfg, newSlaveIds );
+        if( !aViselsMap.hasKey( mId ) ) { // если мастер визел не был скопирован
+          msManager.setMasterId( cfg, mId ); // если у визеля был мастер, то у копии установим такой же
+          msManager.addSlaveId( mId, cfg.id() ); // добавим этот визель к мастеру
+        }
+        else {
+          String masterCopyId = aViselsMap.getByKey( mId );
+          msManager.setMasterId( cfg, masterCopyId ); // если у визеля был мастер, то у копии установим такой же
+          for( VedItemCfg masterCfg : aVisConfs ) {
+            if( masterCfg.id().equals( masterCopyId ) ) {
+              msManager.addSlaveId( masterCfg, cfg.id() ); // добавим этот визель к мастеру
+              break;
+            }
+          }
+        }
       }
     }
   }
