@@ -7,6 +7,10 @@ import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.rt_action.ISkResources.*;
 
+import org.eclipse.swt.*;
+import org.eclipse.swt.layout.*;
+import org.eclipse.swt.widgets.*;
+import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
 import org.toxsoft.core.tsgui.dialogs.*;
@@ -14,9 +18,11 @@ import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.bricks.geometry.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.skf.mnemo.gui.glib.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.tti.*;
 import org.toxsoft.skf.mnemo.lib.*;
@@ -88,15 +94,29 @@ public class SkActorRunTimeAction
       ISkMnemosService mnemoService = connSupplier.defConn().coreApi().getService( ISkMnemosService.SERVICE_ID );
       ISkMnemoCfg mnemoCfg = mnemoService.getMnemo( rtUserAction.popupMnemoInfo().mnemoSkid().strid() );
       // пробуем открыть мнемосхему
-      PopupMnemoDialog dialog = new PopupMnemoDialog( getShell(), tsContext(), mnemoCfg );
-      dialog.open();
-      // IRuntimeMnemoPanel panel = new RuntimeMnemoPanel( aParent, new TsGuiContext( tsContext() ) );
-      // panel.setMnemoConfig( mnemoCfg );
-      // if( aCfg != null ) {
-      // panel.resume();
-      // }
+      // PopupMnemoDialog dialog = new PopupMnemoDialog( getShell(), tsContext(), mnemoCfg );
+      // dialog.open();
+      Shell wnd = new Shell( getShell(), SWT.BORDER | SWT.CLOSE );
+      FillLayout layout = new FillLayout();
+      wnd.setLayout( layout );
+      Composite bkPanel = new Composite( wnd, SWT.NONE );
+      bkPanel.setLayout( layout );
+      IRuntimeMnemoPanel panel = new RuntimeMnemoPanel( bkPanel, new TsGuiContext( tsContext() ) );
+      panel.setMnemoConfig( mnemoCfg );
+      panel.resume();
+      TsPoint p = computeSize( mnemoCfg );
+      wnd.setSize( p.x(), p.y() );
+      // setLocation( 100, 100 );
+      wnd.open();
+
     };
     setButtonClickHandler( buttonHandler );
+  }
+
+  private static TsPoint computeSize( ISkMnemoCfg aMnemoCfg ) {
+    IVedScreenCfg vedCfg = VedScreenCfg.KEEPER.str2ent( aMnemoCfg.cfgData() );
+    IVedCanvasCfg canvasCfg = vedCfg.canvasCfg();
+    return new TsPoint( (int)(canvasCfg.size().x()) + 10, (int)(canvasCfg.size().y()) + 30 );
   }
 
   @Override

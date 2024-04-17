@@ -3,13 +3,13 @@
  */
 package org.toxsoft.skf.mnemo.gui.skved.rt_action;
 
-import org.eclipse.jface.dialogs.*;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
+import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.skf.mnemo.gui.glib.*;
 import org.toxsoft.skf.mnemo.lib.*;
 
@@ -21,6 +21,7 @@ public class PopupMnemoDialog
 
   private final ITsGuiContext context;
   private final ISkMnemoCfg   mnemoCfg;
+  private IRuntimeMnemoPanel  mnemoPanel;
 
   /**
    * @param aParentShell parent Shell
@@ -37,12 +38,10 @@ public class PopupMnemoDialog
   protected Control createDialogArea( final Composite parent ) {
     final Composite container = (Composite)super.createDialogArea( parent );
     container.setLayout( new BorderLayout() );
-    // пробуем открыть мнемосхему
-    IRuntimeMnemoPanel panel = new RuntimeMnemoPanel( container, new TsGuiContext( context ) );
-    panel.setMnemoConfig( mnemoCfg );
-    if( mnemoCfg != null ) {
-      panel.resume();
-    }
+    // открываем мнемосхему
+    mnemoPanel = new RuntimeMnemoPanel( container, new TsGuiContext( context ) );
+    mnemoPanel.setMnemoConfig( mnemoCfg );
+    mnemoPanel.resume();
 
     return container;
   }
@@ -54,8 +53,8 @@ public class PopupMnemoDialog
    */
   @Override
   protected void createButtonsForButtonBar( final Composite aParent ) {
-    createButton( aParent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true );
-    createButton( aParent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false );
+    // createButton( aParent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true );
+    // createButton( aParent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false );
   }
 
   /**
@@ -63,7 +62,12 @@ public class PopupMnemoDialog
    */
   @Override
   protected Point getInitialSize() {
-    return new Point( 450, 300 );
+
+    IVedScreenCfg vedCfg = VedScreenCfg.KEEPER.str2ent( mnemoCfg.cfgData() );
+    IVedCanvasCfg canvasCfg = vedCfg.canvasCfg();
+    return new Point( (int)(canvasCfg.size().x()) + 10, (int)(canvasCfg.size().y()) + 10 );
+
+    // return new Point( 745, 550 );
   }
 
 }
