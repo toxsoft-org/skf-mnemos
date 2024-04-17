@@ -1,7 +1,9 @@
 package org.toxsoft.skf.mnemo.gui.km5;
 
+import static org.toxsoft.core.tsgui.m5.IM5Constants.*;
 import static org.toxsoft.core.tsgui.valed.api.IValedControlConstants.*;
 import static org.toxsoft.core.tslib.av.EAtomicType.*;
+import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 
 import org.toxsoft.core.tsgui.m5.*;
@@ -37,6 +39,11 @@ public class PopupMnemoInfoM5Model
   public static final String FID_MASTER_SKID = "masterSkid"; //$NON-NLS-1$
 
   /**
+   * Sensitive mouse button
+   */
+  public static final String FID_MOUSE_BTTN = "mouseButton"; //$NON-NLS-1$
+
+  /**
    * Attribute {@link PopupMnemoInfo#masterObj() } master
    */
   public M5AttributeFieldDef<PopupMnemoInfo> MNEMO_SKID = new M5AttributeFieldDef<>( FID_MNEMO_SKID, VALOBJ, //
@@ -69,12 +76,31 @@ public class PopupMnemoInfoM5Model
   };
 
   /**
+   * Attribute {@link PopupMnemoInfo#mouseButton() } sensitive mouse button
+   */
+  public M5AttributeFieldDef<PopupMnemoInfo> MOUSE_BTTN = new M5AttributeFieldDef<>( FID_MOUSE_BTTN, VALOBJ, //
+      TSID_NAME, "mouse button", //
+      TSID_DESCRIPTION, "sensitive mouse button", //
+      TSID_KEEPER_ID, ETmpMouseButton.KEEPER_ID, //
+      TSID_DEFAULT_VALUE, avValobj( ETmpMouseButton.LEFT ) ) {
+
+    @Override
+    protected void doInit() {
+      setFlags( M5FF_COLUMN );
+    }
+
+    protected IAtomicValue doGetFieldValue( PopupMnemoInfo aEntity ) {
+      return avValobj( aEntity.mouseButton() );
+    }
+  };
+
+  /**
    * Constructor.
    */
   public PopupMnemoInfoM5Model() {
     super( MODEL_ID, PopupMnemoInfo.class );
 
-    addFieldDefs( MNEMO_SKID, MASTER_SKID );
+    addFieldDefs( MOUSE_BTTN, MNEMO_SKID, MASTER_SKID );
   }
 
   @Override
@@ -102,8 +128,9 @@ public class PopupMnemoInfoM5Model
     private static PopupMnemoInfo makePopupMnemoInfo( IM5Bunch<PopupMnemoInfo> aValues ) {
       Skid mnemoSkid = aValues.getAsAv( FID_MNEMO_SKID ).asValobj();
       Skid masterSkid = aValues.getAsAv( FID_MASTER_SKID ).asValobj();
+      ETmpMouseButton mouseBttn = aValues.getAsAv( FID_MOUSE_BTTN ).asValobj();
 
-      return new PopupMnemoInfo( mnemoSkid, masterSkid );
+      return new PopupMnemoInfo( mnemoSkid, masterSkid, mouseBttn );
     }
 
     @Override

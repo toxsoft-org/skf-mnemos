@@ -10,7 +10,6 @@ import static org.toxsoft.skf.mnemo.gui.skved.rt_action.ISkResources.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
 import org.toxsoft.core.tsgui.dialogs.*;
-import org.toxsoft.core.tsgui.ved.comps.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
@@ -18,10 +17,10 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
-import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.tti.*;
-import org.toxsoft.uskat.core.api.cmdserv.*;
+import org.toxsoft.skf.mnemo.lib.*;
+import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
  * Actor: process user action on run time. Samples of actions <br>
@@ -75,63 +74,34 @@ public class SkActorRunTimeAction
 
   };
 
-  private ISkCommand currCommand = null;
-
   protected SkActorRunTimeAction( IVedItemCfg aCfg, IStridablesList<IDataDef> aDataDefs, VedScreen aVedScreen ) {
     super( aCfg, aDataDefs, aVedScreen );
     IButtonClickHandler buttonHandler = aVisel -> {
-      //
-      // VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
-      // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
-      // ISkVedEnvironment vedEnv = aVedScreen.tsContext().get( ISkVedEnvironment.class );
-      //
-      // ISkConnectionSupplier conn = aVedScreen.tsContext().get( ISkConnectionSupplier.class );
-      // ISkUser user = conn.defConn().coreApi().userService().findUser( "root" );
-      //
-      // Gwid cmdGwid = props().getValobj( PROP_CMD_GWID );
-      // currCommand = vedEnv.sendCommand( cmdGwid, user.skid(), IOptionSet.NULL );
-      // if( currCommand == null ) {
-      //
+      // for debug печатаем нашу metainfo
+      RunTimeUserActionInfo rtUserAction = props().getValobj( TFI_RT_USER_ACTION.id() );
+
+      TsDialogUtils.info( getShell(), "Mouse button: %s,\nMnemo Skid: %s,\nmaster object: %s", //$NON-NLS-1$
+          rtUserAction.popupMnemoInfo().mouseButton(), rtUserAction.popupMnemoInfo().mnemoSkid(),
+          rtUserAction.popupMnemoInfo().masterObj() );
+
+      ISkConnectionSupplier connSupplier = aVedScreen.tsContext().get( ISkConnectionSupplier.class );
+      ISkMnemosService mnemoService = connSupplier.defConn().coreApi().getService( ISkMnemosService.SERVICE_ID );
+      ISkMnemoCfg mnemoCfg = mnemoService.getMnemo( rtUserAction.popupMnemoInfo().mnemoSkid().strid() );
+      // пробуем открыть мнемосхему
+      PopupMnemoDialog dialog = new PopupMnemoDialog( getShell(), tsContext(), mnemoCfg );
+      dialog.open();
+      // IRuntimeMnemoPanel panel = new RuntimeMnemoPanel( aParent, new TsGuiContext( tsContext() ) );
+      // panel.setMnemoConfig( mnemoCfg );
+      // if( aCfg != null ) {
+      // panel.resume();
       // }
-      TsDialogUtils.underDevelopment( getShell() );
     };
     setButtonClickHandler( buttonHandler );
-
-    guiTimersService().quickTimers().addListener( aRtTime -> {
-      if( currCommand != null ) {
-        SkCommandState cmdState = currCommand.state();
-        VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
-        switch( cmdState.state() ) {
-          case SENDING:
-            return;
-          case EXECUTING:
-            return;
-          case SUCCESS:
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            currCommand = null;
-            break;
-          case FAILED:
-          case TIMEOUTED:
-          case UNHANDLED:
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            currCommand = null;
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
-            TsDialogUtils.error( getShell(), cmdState.toString() );
-            break;
-          default:
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            currCommand = null;
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
-            throw new TsNotAllEnumsUsedRtException();
-        }
-      }
-    } );
   }
 
   @Override
   protected IGwidList doListUsedGwids() {
-    Gwid cmdGwid = props().getValobj( PROP_CMD_GWID );
-    return new GwidList( cmdGwid );
+    return IGwidList.EMPTY;
   }
 
 }

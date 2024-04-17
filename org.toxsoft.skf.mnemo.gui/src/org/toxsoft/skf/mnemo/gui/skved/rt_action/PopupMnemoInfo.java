@@ -1,5 +1,6 @@
 package org.toxsoft.skf.mnemo.gui.skved.rt_action;
 
+import org.toxsoft.core.tsgui.bricks.uievents.*;
 import org.toxsoft.core.tslib.bricks.keeper.*;
 import org.toxsoft.core.tslib.bricks.keeper.AbstractEntityKeeper.*;
 import org.toxsoft.core.tslib.bricks.strio.*;
@@ -18,7 +19,7 @@ public class PopupMnemoInfo {
   /**
    * Empty info.
    */
-  public static final PopupMnemoInfo EMPTY = new PopupMnemoInfo( Skid.NONE, Skid.NONE );
+  public static final PopupMnemoInfo EMPTY = new PopupMnemoInfo( Skid.NONE, Skid.NONE, ETmpMouseButton.LEFT );
 
   /**
    * Value-object registration identifier for {@link TsValobjUtils}.
@@ -36,7 +37,11 @@ public class PopupMnemoInfo {
           // Skid of mnemo
           Skid.KEEPER.write( aSw, aEntity.mnemoSkid() );
           aSw.writeSeparatorChar();
+          // Skid of master object
           Skid.KEEPER.write( aSw, aEntity.masterObj() );
+          aSw.writeSeparatorChar();
+          // selected mouse button
+          ETmpMouseButton.KEEPER.write( aSw, aEntity.mouseButton() );
         }
 
         @Override
@@ -44,7 +49,9 @@ public class PopupMnemoInfo {
           Skid mnemoSkid = Skid.KEEPER.read( aSr );
           aSr.ensureSeparatorChar();
           Skid masterObj = Skid.KEEPER.read( aSr );
-          return new PopupMnemoInfo( mnemoSkid, masterObj );
+          aSr.ensureSeparatorChar();
+          ETmpMouseButton mouseButton = ETmpMouseButton.KEEPER.read( aSr );
+          return new PopupMnemoInfo( mnemoSkid, masterObj, mouseButton );
         }
 
       };
@@ -65,14 +72,21 @@ public class PopupMnemoInfo {
   private final Skid masterObj;
 
   /**
+   * sensitive mouse buttone {@link ETsMouseButton} to activate action.
+   */
+  private final ETmpMouseButton mouseButton;
+
+  /**
    * Конструктор.<br>
    *
-   * @param aMnemoSkid - mnemo Skid
+   * @param aMnemoSkid {@link Skid} - mnemo Skid
    * @param aMasterObj {@link Skid} - master object
+   * @param aMouseButton {@link ETmpMouseButton}
    */
-  public PopupMnemoInfo( Skid aMnemoSkid, Skid aMasterObj ) {
+  public PopupMnemoInfo( Skid aMnemoSkid, Skid aMasterObj, ETmpMouseButton aMouseButton ) {
     mnemoSkid = aMnemoSkid;
     masterObj = aMasterObj;
+    mouseButton = aMouseButton;
   }
 
   // ------------------------------------------------------------------------------------
@@ -87,10 +101,17 @@ public class PopupMnemoInfo {
   }
 
   /**
-   * @return configuration of mnemo
+   * @return Skid of mnemo
    */
   public Skid mnemoSkid() {
     return mnemoSkid;
+  }
+
+  /**
+   * @return sensitive mouse button
+   */
+  public ETmpMouseButton mouseButton() {
+    return mouseButton;
   }
 
 }

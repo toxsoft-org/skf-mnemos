@@ -1,6 +1,5 @@
 package org.toxsoft.skf.mnemo.gui.skved.rt_action;
 
-import org.toxsoft.core.tsgui.bricks.tin.tti.*;
 import org.toxsoft.core.tslib.bricks.keeper.*;
 import org.toxsoft.core.tslib.bricks.keeper.AbstractEntityKeeper.*;
 import org.toxsoft.core.tslib.bricks.strio.*;

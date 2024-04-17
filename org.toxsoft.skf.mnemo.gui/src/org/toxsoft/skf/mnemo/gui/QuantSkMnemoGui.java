@@ -45,6 +45,7 @@ public class QuantSkMnemoGui
     TsValobjUtils.registerKeeperIfNone( VedLayoutControllerConfig.KEEPER_ID, VedLayoutControllerConfig.KEEPER );
     TsValobjUtils.registerKeeperIfNone( ERtActionKind.KEEPER_ID, ERtActionKind.KEEPER );
     TsValobjUtils.registerKeeperIfNone( RunTimeUserActionInfo.KEEPER_ID, RunTimeUserActionInfo.KEEPER );
+    TsValobjUtils.registerKeeperIfNone( ETmpMouseButton.KEEPER_ID, ETmpMouseButton.KEEPER );
     TsValobjUtils.registerKeeperIfNone( PopupMnemoInfo.KEEPER_ID, PopupMnemoInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( SwitchPerspInfo.KEEPER_ID, SwitchPerspInfo.KEEPER );
 
