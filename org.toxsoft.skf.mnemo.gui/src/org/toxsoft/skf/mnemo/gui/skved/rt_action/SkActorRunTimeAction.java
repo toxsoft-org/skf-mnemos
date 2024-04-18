@@ -8,16 +8,19 @@ import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.rt_action.ISkResources.*;
 
 import org.eclipse.swt.*;
+import org.eclipse.swt.events.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
+import org.toxsoft.core.tsgui.bricks.uievents.*;
 import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.bricks.geometry.*;
 import org.toxsoft.core.tslib.bricks.geometry.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
@@ -26,7 +29,6 @@ import org.toxsoft.skf.mnemo.gui.glib.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.tti.*;
 import org.toxsoft.skf.mnemo.lib.*;
-import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
  * Actor: process user action on run time. Samples of actions <br>
@@ -68,7 +70,14 @@ public class SkActorRunTimeAction
       fields.add( TFI_NAME );
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
-      fields.add( TFI_RT_USER_ACTION ); // type of action: popup mnemo, switch persp, etc
+      fields.add( TFI_RT_USER_ACTION ); // type
+                                        // of
+                                        // action:
+                                        // popup
+                                        // mnemo,
+                                        // switch
+                                        // persp,
+                                        // etc
       // fields.add( TtiRtActionInfo.TFI_RT_ACTION_TYPE ); // type of action: popup mnemo, switch persp, etc
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRunTimeAction.class );
     }
@@ -90,8 +99,7 @@ public class SkActorRunTimeAction
           rtUserAction.popupMnemoInfo().mouseButton(), rtUserAction.popupMnemoInfo().mnemoSkid(),
           rtUserAction.popupMnemoInfo().masterObj() );
 
-      ISkConnectionSupplier connSupplier = aVedScreen.tsContext().get( ISkConnectionSupplier.class );
-      ISkMnemosService mnemoService = connSupplier.defConn().coreApi().getService( ISkMnemosService.SERVICE_ID );
+      ISkMnemosService mnemoService = skConn().coreApi().getService( ISkMnemosService.SERVICE_ID );
       ISkMnemoCfg mnemoCfg = mnemoService.getMnemo( rtUserAction.popupMnemoInfo().mnemoSkid().strid() );
       // пробуем открыть мнемосхему
       // PopupMnemoDialog dialog = new PopupMnemoDialog( getShell(), tsContext(), mnemoCfg );
@@ -110,7 +118,7 @@ public class SkActorRunTimeAction
       wnd.open();
 
     };
-    setButtonClickHandler( buttonHandler );
+    // setButtonClickHandler( buttonHandler );
   }
 
   private static TsPoint computeSize( ISkMnemoCfg aMnemoCfg ) {
@@ -122,6 +130,50 @@ public class SkActorRunTimeAction
   @Override
   protected IGwidList doListUsedGwids() {
     return IGwidList.EMPTY;
+  }
+
+  /**
+   * Called when there was mouse button single click.
+   *
+   * @param aSource Object - the event source
+   * @param aButton {@link ETsMouseButton} - the clicked button
+   * @param aState int - the state of the keyboard modifier keys and mouse buttons mask as in {@link KeyEvent#stateMask}
+   * @param aCoors {@link ITsPoint} - mouse coordinates relative to <code>aWidget</code>
+   * @param aWidget {@link Control} - the control that issued the event
+   * @return boolean - event processing flag
+   */
+  // @Override
+  // public boolean onMouseClick( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors, Control aWidget )
+  // {
+  // RunTimeUserActionInfo rtUserAction = props().getValobj( TFI_RT_USER_ACTION.id() );
+  //
+  // TsDialogUtils.info( getShell(), "Mouse button: %s,\nMnemo Skid: %s,\nmaster object: %s", //$NON-NLS-1$
+  // rtUserAction.popupMnemoInfo().mouseButton(), rtUserAction.popupMnemoInfo().mnemoSkid(),
+  // rtUserAction.popupMnemoInfo().masterObj() );
+  //
+  // return true;
+  // }
+
+  /**
+   * Called when there was mouse button double click.
+   *
+   * @param aSource Object - the event source
+   * @param aButton {@link ETsMouseButton} - the clicked button
+   * @param aState int - the state of the keyboard modifier keys and mouse buttons mask as in {@link KeyEvent#stateMask}
+   * @param aCoors {@link ITsPoint} - mouse coordinates relative to <code>aWidget</code>
+   * @param aWidget {@link Control} - the control that issued the event
+   * @return boolean - event processing flag
+   */
+  @Override
+  public boolean onMouseDoubleClick( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors,
+      Control aWidget ) {
+    RunTimeUserActionInfo rtUserAction = props().getValobj( TFI_RT_USER_ACTION.id() );
+
+    TsDialogUtils.info( getShell(), "Mouse button: %s,\nMnemo Skid: %s,\nmaster object: %s", //$NON-NLS-1$
+        rtUserAction.popupMnemoInfo().mouseButton(), rtUserAction.popupMnemoInfo().mnemoSkid(),
+        rtUserAction.popupMnemoInfo().masterObj() );
+
+    return true;
   }
 
 }
