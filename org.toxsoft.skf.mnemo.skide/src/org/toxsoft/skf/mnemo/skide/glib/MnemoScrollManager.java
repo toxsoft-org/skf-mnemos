@@ -1,6 +1,7 @@
 package org.toxsoft.skf.mnemo.skide.glib;
 
 import org.eclipse.swt.events.*;
+import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.graphics.*;
 import org.toxsoft.core.tsgui.graphics.vpcalc.*;
@@ -8,6 +9,7 @@ import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.bricks.geometry.*;
 import org.toxsoft.core.tslib.bricks.geometry.impl.*;
+import org.toxsoft.skf.mnemo.skide.glib.scroll.*;
 
 /**
  * Вспомогательный класс для реализации скроллинга мнемосхем.
@@ -16,11 +18,14 @@ import org.toxsoft.core.tslib.bricks.geometry.impl.*;
  */
 public class MnemoScrollManager {
 
-  private final IViewportCalculator vpCalc = new ViewportCalculator( new CalculationStrategySettings( //
+  private final IViewportCalculator1 vpCalc = new ViewportCalculator1( new CalculationStrategySettings1( //
       ETsFulcrum.LEFT_TOP, //
       EVpFulcrumUsageStartegy.INSIDE, //
-      EVpBoundingStrategy.CONTENT, //
-      new TsPoint( 10, 10 ), //
+      // EVpBoundingStrategy1.NONE, //
+      // EVpBoundingStrategy1.CONTENT, //
+      EVpBoundingStrategy1.VIEWPORT, //
+      // new TsPoint( 10, 10 ), //
+      new TsPoint( 0, 0 ), //
       false //
   ) );
 
@@ -34,27 +39,34 @@ public class MnemoScrollManager {
 
   private final IVedScreenView vedView;
 
+  boolean horPositive = true;
+  boolean verPositive = true;
+
   MnemoScrollManager( IVedScreen aVedScreen ) {
     vedScreen = aVedScreen;
     vedView = vedScreen.view();
+    canvas = (Canvas)vedView.getControl();
 
     vedView.configChangeEventer().addListener( aSource -> {
       ID2Point size = vedView.canvasConfig().size();
+      ID2Conversion d2conv = vedView.getConversion();
       vpCalc.setContentSize( new D2Size( size.x(), size.y() ) );
-      vpCalc.queryConversionChange( vedView.getConversion() );
+      Rectangle r = canvas.getClientArea();
+      if( r.width > 0 && r.height > 0 ) {
+        vpCalc.setViewportBounds( new TsRectangle( r.x, r.y, r.width, r.height ) );
+      }
+      vpCalc.queryConversionChange( d2conv );
+      vpCalc.queryToChangeOrigin( 0, 0 );
     } );
 
-    canvas = (Canvas)vedView.getControl();
-
     hBar = canvas.getHorizontalBar();
+    hBar.setMinimum( 0 );
+    hBar.setMinimum( 100 );
     hBar.addSelectionListener( new SelectionAdapter() {
 
       @Override
       public void widgetSelected( SelectionEvent aE ) {
-        ScrollBarSettings sbs1 = vpCalc.output().horBarSettings();
-        ScrollBarSettings sbs2 = ScrollBarSettings.of( hBar );
-        int queryDelta = sbs2.selection() - sbs1.selection();
-        vpCalc.queryToShift( queryDelta, 0 );
+        vpCalc.queryToChangeOriginByScrollBars( hBar.getSelection(), vBar.getSelection() );
       }
 
     } );
@@ -64,10 +76,7 @@ public class MnemoScrollManager {
 
       @Override
       public void widgetSelected( SelectionEvent aE ) {
-        ScrollBarSettings sbs1 = vpCalc.output().verBarSettings();
-        ScrollBarSettings sbs2 = ScrollBarSettings.of( vBar );
-        int queryDelta = sbs2.selection() - sbs1.selection();
-        vpCalc.queryToShift( 0, queryDelta );
+        vpCalc.queryToChangeOriginByScrollBars( hBar.getSelection(), vBar.getSelection() );
       }
 
     } );
@@ -77,6 +86,7 @@ public class MnemoScrollManager {
       @Override
       public void controlResized( ControlEvent aE ) {
         ITsRectangle vpBounds = TsGraphicsUtils.tsFromRect( canvas.getClientArea() );
+        // onViewportSizeChanged( vpBounds ); // Sol++
         if( vpCalc.setViewportBounds( vpBounds ) ) {
           vedScreen.view().redraw();
         }
@@ -94,13 +104,27 @@ public class MnemoScrollManager {
     vpCalc.output().genericChangeEventer().addListener( s -> whenCalculatorOutputChanges() );
   }
 
+  public void setOrigin( int aX, int aY ) {
+    vpCalc.queryToChangeOrigin( aX, aY );
+  }
+
   private void whenCalculatorOutputChanges() {
     vpCalc.output().horBarSettings().applyTo( hBar );
+    hBar.setSelection( vpCalc.output().horBarSettings().selection() );
     vpCalc.output().verBarSettings().applyTo( vBar );
     vedView.configChangeEventer().pauseFiring();
     vedView.setConversion( vpCalc.output().conversion() );
+
     vedView.redraw();
     vedView.configChangeEventer().resumeFiring( false );
+  }
+
+  // ------------------------------------------------------------------------------------
+  // Sol++ Implementation
+  //
+
+  void onViewportSizeChanged( ITsRectangle aVpBounds ) {
+    vpCalc.setViewportBounds( aVpBounds );
   }
 
 }
