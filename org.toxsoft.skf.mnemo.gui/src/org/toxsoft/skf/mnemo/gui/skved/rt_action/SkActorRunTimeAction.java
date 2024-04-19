@@ -8,7 +8,6 @@ import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.rt_action.ISkResources.*;
 
 import org.eclipse.swt.*;
-import org.eclipse.swt.events.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
@@ -16,17 +15,18 @@ import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
 import org.toxsoft.core.tsgui.bricks.uievents.*;
 import org.toxsoft.core.tsgui.dialogs.*;
+import org.toxsoft.core.tsgui.mws.services.e4helper.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
-import org.toxsoft.core.tslib.bricks.geometry.*;
 import org.toxsoft.core.tslib.bricks.geometry.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.skf.mnemo.gui.glib.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
+import org.toxsoft.skf.mnemo.gui.skved.AbstractSkVedButtonActor.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.tti.*;
 import org.toxsoft.skf.mnemo.lib.*;
 
@@ -41,7 +41,7 @@ import org.toxsoft.skf.mnemo.lib.*;
  * @author dima
  */
 public class SkActorRunTimeAction
-    extends AbstractSkVedButtonActor {
+    extends AbstractSkVedClickableActor {
 
   /**
    * The actor factor ID.
@@ -118,7 +118,70 @@ public class SkActorRunTimeAction
       wnd.open();
 
     };
-    // setButtonClickHandler( buttonHandler );
+    setMouseClickHandler( new IMouseClickHandler() {
+
+      @Override
+      public void onDoubleClick( VedAbstractVisel aVisel ) {
+        RunTimeUserActionInfo rtUserAction = props().getValobj( TFI_RT_USER_ACTION.id() );
+        ERtActionKind actionKind = rtUserAction.kind();
+        switch( actionKind ) {
+          case NONE: {
+            break;
+          }
+          case POPUP_MNEMO: {
+            PopupMnemoInfo popupMnemoInfo = rtUserAction.popupMnemoInfo();
+            ERtActionMouseButton button = popupMnemoInfo.mouseButton();
+            if( button.equals( ERtActionMouseButton.DOUBLE_CLICK ) ) {
+              // open popum mnemo
+              openPopupMnemo( popupMnemoInfo );
+            }
+            break;
+          }
+          case SWITCH_PERSP: {
+            SwitchPerspInfo switchPerspInfo = rtUserAction.switchPerspInfo();
+            ERtActionMouseButton button = switchPerspInfo.mouseButton();
+            if( button.equals( ERtActionMouseButton.DOUBLE_CLICK ) ) {
+              // switch Eclipse perspective and, optionally, activate view in it
+              switchPersp( switchPerspInfo );
+            }
+            break;
+          }
+          default:
+            break;
+        }
+      }
+
+      @Override
+      public void onClick( VedAbstractVisel aVisel, ETsMouseButton aMouseButton ) {
+        RunTimeUserActionInfo rtUserAction = props().getValobj( TFI_RT_USER_ACTION.id() );
+        ERtActionKind actionKind = rtUserAction.kind();
+        switch( actionKind ) {
+          case NONE: {
+            break;
+          }
+          case POPUP_MNEMO: {
+            PopupMnemoInfo popupMnemoInfo = rtUserAction.popupMnemoInfo();
+            ERtActionMouseButton actionButton = popupMnemoInfo.mouseButton();
+            if( isMyMouseButton( actionButton, aMouseButton ) ) {
+              // open popum mnemo
+              openPopupMnemo( popupMnemoInfo );
+            }
+            break;
+          }
+          case SWITCH_PERSP: {
+            SwitchPerspInfo switchPerspInfo = rtUserAction.switchPerspInfo();
+            ERtActionMouseButton actionButton = switchPerspInfo.mouseButton();
+            if( isMyMouseButton( actionButton, aMouseButton ) ) {
+              // switch Eclipse perspective and, optionally, activate view in it
+              switchPersp( switchPerspInfo );
+            }
+            break;
+          }
+          default:
+            break;
+        }
+      }
+    } );
   }
 
   private static TsPoint computeSize( ISkMnemoCfg aMnemoCfg ) {
@@ -133,47 +196,71 @@ public class SkActorRunTimeAction
   }
 
   /**
-   * Called when there was mouse button single click.
+   * Create popup window with mnemo inside
    *
-   * @param aSource Object - the event source
-   * @param aButton {@link ETsMouseButton} - the clicked button
-   * @param aState int - the state of the keyboard modifier keys and mouse buttons mask as in {@link KeyEvent#stateMask}
-   * @param aCoors {@link ITsPoint} - mouse coordinates relative to <code>aWidget</code>
-   * @param aWidget {@link Control} - the control that issued the event
-   * @return boolean - event processing flag
+   * @param aPopupMnemoInfo {@link PopupMnemoInfo} popum mnemo info
    */
-  // @Override
-  // public boolean onMouseClick( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors, Control aWidget )
-  // {
-  // RunTimeUserActionInfo rtUserAction = props().getValobj( TFI_RT_USER_ACTION.id() );
-  //
-  // TsDialogUtils.info( getShell(), "Mouse button: %s,\nMnemo Skid: %s,\nmaster object: %s", //$NON-NLS-1$
-  // rtUserAction.popupMnemoInfo().mouseButton(), rtUserAction.popupMnemoInfo().mnemoSkid(),
-  // rtUserAction.popupMnemoInfo().masterObj() );
-  //
-  // return true;
-  // }
+  private void openPopupMnemo( PopupMnemoInfo aPopupMnemoInfo ) {
+    ISkMnemosService mnemoService = skConn().coreApi().getService( ISkMnemosService.SERVICE_ID );
+    ISkMnemoCfg mnemoCfg = mnemoService.getMnemo( aPopupMnemoInfo.mnemoSkid().strid() );
+
+    Shell wnd = new Shell( getShell(), SWT.BORDER | SWT.CLOSE );
+    FillLayout layout = new FillLayout();
+    wnd.setLayout( layout );
+    Composite bkPanel = new Composite( wnd, SWT.NONE );
+    bkPanel.setLayout( layout );
+    IRuntimeMnemoPanel panel = new RuntimeMnemoPanel( bkPanel, new TsGuiContext( tsContext() ) );
+    panel.setMnemoConfig( mnemoCfg );
+    panel.resume();
+    TsPoint p = computeSize( mnemoCfg );
+    wnd.setSize( p.x(), p.y() );
+    // setLocation( 100, 100 );
+    wnd.open();
+  }
 
   /**
-   * Called when there was mouse button double click.
+   * Switch current Eclipse pespecitve
    *
-   * @param aSource Object - the event source
-   * @param aButton {@link ETsMouseButton} - the clicked button
-   * @param aState int - the state of the keyboard modifier keys and mouse buttons mask as in {@link KeyEvent#stateMask}
-   * @param aCoors {@link ITsPoint} - mouse coordinates relative to <code>aWidget</code>
-   * @param aWidget {@link Control} - the control that issued the event
-   * @return boolean - event processing flag
+   * @param aSwitchPerspInfo {@link SwitchPerspInfo} action info
    */
-  @Override
-  public boolean onMouseDoubleClick( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors,
-      Control aWidget ) {
-    RunTimeUserActionInfo rtUserAction = props().getValobj( TFI_RT_USER_ACTION.id() );
+  protected void switchPersp( SwitchPerspInfo aSwitchPerspInfo ) {
+    TsE4Helper e4Helper = new TsE4Helper( tsContext().eclipseContext() );
+    String viewId = aSwitchPerspInfo.viewId();
+    viewId = viewId.trim().length() > 0 ? viewId.trim() : null;
+    e4Helper.switchToPerspective( aSwitchPerspInfo.perspId(), viewId );
+  }
 
-    TsDialogUtils.info( getShell(), "Mouse button: %s,\nMnemo Skid: %s,\nmaster object: %s", //$NON-NLS-1$
-        rtUserAction.popupMnemoInfo().mouseButton(), rtUserAction.popupMnemoInfo().mnemoSkid(),
-        rtUserAction.popupMnemoInfo().masterObj() );
+  /**
+   * Test if user click on proper mouse button
+   *
+   * @param aActionButton - designed mouse button
+   * @param aMouseButton - real user selected mouse button
+   * @return true if click on proper mouse button
+   */
+  protected boolean isMyMouseButton( ERtActionMouseButton aActionButton, ETsMouseButton aMouseButton ) {
+    boolean retVal = false;
+    switch( aActionButton ) {
+      case LEFT:
+        if( aMouseButton.equals( ETsMouseButton.LEFT ) ) {
+          retVal = true;
+        }
+        break;
+      case MIDDLE:
+        if( aMouseButton.equals( ETsMouseButton.MIDDLE ) ) {
+          retVal = true;
+        }
+        break;
+      case RIGHT:
+        if( aMouseButton.equals( ETsMouseButton.RIGHT ) ) {
+          retVal = true;
+        }
+        break;
+      // $CASES-OMITTED$
+      default:
+        break;
 
-    return true;
+    }
+    return retVal;
   }
 
 }

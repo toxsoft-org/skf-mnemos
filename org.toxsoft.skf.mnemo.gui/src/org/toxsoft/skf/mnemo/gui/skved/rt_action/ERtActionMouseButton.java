@@ -9,18 +9,22 @@ import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 
 /**
- * The enumeration of mouse buttons. <br>
- * FIXME use ETsMouseButton when it will be in proper state (has keeper)
+ * The enumeration of mouse buttons for run-time user action. <br>
  *
  * @author dima
  */
-public enum ETmpMouseButton
+public enum ERtActionMouseButton
     implements IStridable {
 
   /**
    * Left button {@link SWT#BUTTON1}.
    */
   LEFT( "LEFT", "Left button", "SWT#BUTTON1" ), //$NON-NLS-1$
+
+  /**
+   * Double click left button {@link SWT#BUTTON3}.
+   */
+  DOUBLE_CLICK( "DOUBLE_CLICK", "Double click left button", "SWT#BUTTON1" ), //$NON-NLS-1$
 
   /**
    * Middle button {@link SWT#BUTTON2}.
@@ -40,15 +44,16 @@ public enum ETmpMouseButton
   /**
    * Keeper singleton.
    */
-  public static final IEntityKeeper<ETmpMouseButton> KEEPER = new StridableEnumKeeper<>( ETmpMouseButton.class );
+  public static final IEntityKeeper<ERtActionMouseButton> KEEPER =
+      new StridableEnumKeeper<>( ERtActionMouseButton.class );
 
-  private static IStridablesListEdit<ETmpMouseButton> list = null;
+  private static IStridablesListEdit<ERtActionMouseButton> list = null;
 
   private final String id;
   private final String name;
   private final String description;
 
-  ETmpMouseButton( String aId, String aName, String aDescription ) {
+  ERtActionMouseButton( String aId, String aName, String aDescription ) {
     id = aId;
     name = aName;
     description = aDescription;
@@ -80,9 +85,9 @@ public enum ETmpMouseButton
   /**
    * Returns all constants in single list.
    *
-   * @return {@link IStridablesList}&lt; {@link ETmpMouseButton} &gt; - list of constants in order of declaraion
+   * @return {@link IStridablesList}&lt; {@link ERtActionMouseButton} &gt; - list of constants in order of declaraion
    */
-  public static IStridablesList<ETmpMouseButton> asList() {
+  public static IStridablesList<ERtActionMouseButton> asList() {
     if( list == null ) {
       list = new StridablesList<>( values() );
     }
@@ -93,11 +98,11 @@ public enum ETmpMouseButton
    * Returns the constant by the ID.
    *
    * @param aId String - the ID
-   * @return {@link ETmpMouseButton} - found constant
+   * @return {@link ERtActionMouseButton} - found constant
    * @throws TsNullArgumentRtException any argument = <code>null</code>
    * @throws TsItemNotFoundRtException no constant found by specified ID
    */
-  public static ETmpMouseButton getById( String aId ) {
+  public static ERtActionMouseButton getById( String aId ) {
     return asList().getByKey( aId );
   }
 
@@ -105,12 +110,12 @@ public enum ETmpMouseButton
    * Finds the constant by the name.
    *
    * @param aName String - the name
-   * @return {@link ETmpMouseButton} - found constant or <code>null</code>
+   * @return {@link ERtActionMouseButton} - found constant or <code>null</code>
    * @throws TsNullArgumentRtException any argument = <code>null</code>
    */
-  public static ETmpMouseButton findByName( String aName ) {
+  public static ERtActionMouseButton findByName( String aName ) {
     TsNullArgumentRtException.checkNull( aName );
-    for( ETmpMouseButton item : values() ) {
+    for( ERtActionMouseButton item : values() ) {
       if( item.name.equals( aName ) ) {
         return item;
       }
@@ -122,11 +127,11 @@ public enum ETmpMouseButton
    * Returns the constant by the name.
    *
    * @param aName String - the name
-   * @return {@link ETmpMouseButton} - found constant
+   * @return {@link ERtActionMouseButton} - found constant
    * @throws TsNullArgumentRtException any argument = <code>null</code>
    * @throws TsItemNotFoundRtException no constant found by specified name
    */
-  public static ETmpMouseButton getByName( String aName ) {
+  public static ERtActionMouseButton getByName( String aName ) {
     return TsItemNotFoundRtException.checkNull( findByName( aName ) );
   }
 

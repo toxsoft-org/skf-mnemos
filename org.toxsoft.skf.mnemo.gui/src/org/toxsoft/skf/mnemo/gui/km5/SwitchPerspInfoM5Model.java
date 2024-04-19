@@ -3,8 +3,7 @@ package org.toxsoft.skf.mnemo.gui.km5;
 import static org.toxsoft.core.tsgui.m5.IM5Constants.*;
 import static org.toxsoft.core.tslib.av.EAtomicType.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
-
-import java.io.*;
+import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 
 import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.m5.model.*;
@@ -31,7 +30,17 @@ public class SwitchPerspInfoM5Model
   public static final String FID_PERSP_ID = "perspId"; //$NON-NLS-1$
 
   /**
-   * Attribute {@link File#getName()}.
+   * id of view in perspective
+   */
+  public static final String FID_VIEW_ID = "viewId"; //$NON-NLS-1$
+
+  /**
+   * Sensitive mouse button
+   */
+  public static final String FID_MOUSE_BTTN = "mouseButton"; //$NON-NLS-1$
+
+  /**
+   * Attribute {@link SwitchPerspInfo#perspId()}.
    */
   public final M5AttributeFieldDef<SwitchPerspInfo> PERSP_ID = new M5AttributeFieldDef<>( FID_PERSP_ID, STRING ) {
 
@@ -49,12 +58,49 @@ public class SwitchPerspInfoM5Model
   };
 
   /**
+   * Attribute {@link SwitchPerspInfo#viewId()}.
+   */
+  public final M5AttributeFieldDef<SwitchPerspInfo> VIEW_ID = new M5AttributeFieldDef<>( FID_VIEW_ID, STRING ) {
+
+    @Override
+    protected void doInit() {
+      setNameAndDescription( "view id", "Eclipse view id" );
+      setDefaultValue( AV_STR_EMPTY );
+      setFlags( M5FF_COLUMN );
+    }
+
+    protected IAtomicValue doGetFieldValue( SwitchPerspInfo aEntity ) {
+      return avStr( aEntity.viewId() );
+    }
+
+  };
+
+  /**
+   * Attribute {@link SwitchPerspInfo#mouseButton() } hot mouse button
+   */
+  public M5AttributeFieldDef<SwitchPerspInfo> MOUSE_BTTN = new M5AttributeFieldDef<>( FID_MOUSE_BTTN, VALOBJ, //
+      TSID_NAME, "mouse button", //
+      TSID_DESCRIPTION, "hot mouse button", //
+      TSID_KEEPER_ID, ERtActionMouseButton.KEEPER_ID, //
+      TSID_DEFAULT_VALUE, avValobj( ERtActionMouseButton.LEFT ) ) {
+
+    @Override
+    protected void doInit() {
+      setFlags( M5FF_COLUMN );
+    }
+
+    protected IAtomicValue doGetFieldValue( SwitchPerspInfo aEntity ) {
+      return avValobj( aEntity.mouseButton() );
+    }
+  };
+
+  /**
    * Constructor.
    */
   public SwitchPerspInfoM5Model() {
     super( MODEL_ID, SwitchPerspInfo.class );
 
-    addFieldDefs( PERSP_ID );
+    addFieldDefs( PERSP_ID, VIEW_ID, MOUSE_BTTN );
   }
 
   @Override
@@ -81,8 +127,10 @@ public class SwitchPerspInfoM5Model
 
     private static SwitchPerspInfo makePopupMnemoInfo( IM5Bunch<SwitchPerspInfo> aValues ) {
       String perspId = aValues.getAsAv( FID_PERSP_ID ).asString();
+      String viewId = aValues.getAsAv( FID_VIEW_ID ).asString();
+      ERtActionMouseButton mouseBttn = aValues.getAsAv( FID_MOUSE_BTTN ).asValobj();
 
-      return new SwitchPerspInfo( perspId );
+      return new SwitchPerspInfo( perspId, viewId, mouseBttn );
     }
 
     @Override

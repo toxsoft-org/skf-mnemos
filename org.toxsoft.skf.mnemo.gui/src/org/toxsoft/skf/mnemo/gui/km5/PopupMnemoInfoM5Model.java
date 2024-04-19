@@ -81,8 +81,8 @@ public class PopupMnemoInfoM5Model
   public M5AttributeFieldDef<PopupMnemoInfo> MOUSE_BTTN = new M5AttributeFieldDef<>( FID_MOUSE_BTTN, VALOBJ, //
       TSID_NAME, "mouse button", //
       TSID_DESCRIPTION, "sensitive mouse button", //
-      TSID_KEEPER_ID, ETmpMouseButton.KEEPER_ID, //
-      TSID_DEFAULT_VALUE, avValobj( ETmpMouseButton.LEFT ) ) {
+      TSID_KEEPER_ID, ERtActionMouseButton.KEEPER_ID, //
+      TSID_DEFAULT_VALUE, avValobj( ERtActionMouseButton.LEFT ) ) {
 
     @Override
     protected void doInit() {
@@ -128,7 +128,7 @@ public class PopupMnemoInfoM5Model
     private static PopupMnemoInfo makePopupMnemoInfo( IM5Bunch<PopupMnemoInfo> aValues ) {
       Skid mnemoSkid = aValues.getAsAv( FID_MNEMO_SKID ).asValobj();
       Skid masterSkid = aValues.getAsAv( FID_MASTER_SKID ).asValobj();
-      ETmpMouseButton mouseBttn = aValues.getAsAv( FID_MOUSE_BTTN ).asValobj();
+      ERtActionMouseButton mouseBttn = aValues.getAsAv( FID_MOUSE_BTTN ).asValobj();
 
       return new PopupMnemoInfo( mnemoSkid, masterSkid, mouseBttn );
     }

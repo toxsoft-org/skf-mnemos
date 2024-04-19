@@ -23,7 +23,8 @@ public class SwitchPerspInfo {
   /**
    * Empty info.
    */
-  public static final SwitchPerspInfo EMPTY = new SwitchPerspInfo( TsLibUtils.EMPTY_STRING );
+  public static final SwitchPerspInfo EMPTY =
+      new SwitchPerspInfo( TsLibUtils.EMPTY_STRING, TsLibUtils.EMPTY_STRING, ERtActionMouseButton.LEFT );
 
   /**
    * Value-object registration identifier for {@link TsValobjUtils}.
@@ -40,12 +41,22 @@ public class SwitchPerspInfo {
         protected void doWrite( IStrioWriter aSw, SwitchPerspInfo aEntity ) {
           // id of persp
           aSw.writeAsIs( aEntity.perspId() );
+          aSw.writeSeparatorChar();
+          // id of view
+          aSw.writeAsIs( aEntity.viewId() );
+          aSw.writeSeparatorChar();
+          // selected mouse button
+          ERtActionMouseButton.KEEPER.write( aSw, aEntity.mouseButton() );
         }
 
         @Override
         protected SwitchPerspInfo doRead( IStrioReader aSr ) {
           String perspId = aSr.readIdName();
-          return new SwitchPerspInfo( perspId );
+          aSr.ensureSeparatorChar();
+          String viewId = aSr.readIdName();
+          aSr.ensureSeparatorChar();
+          ERtActionMouseButton mouseButton = ERtActionMouseButton.KEEPER.read( aSr );
+          return new SwitchPerspInfo( perspId, viewId, mouseButton );
         }
 
       };
@@ -56,12 +67,26 @@ public class SwitchPerspInfo {
   private final String perspId;
 
   /**
+   * id of view in persp
+   */
+  private final String viewId;
+
+  /**
+   * sensitive mouse button {@link ERtActionMouseButton} to run action.
+   */
+  private final ERtActionMouseButton mouseButton;
+
+  /**
    * Конструктор.<br>
    *
    * @param aPerspId - id of persp
+   * @param aViewId - id of view in perspective
+   * @param aMouseButton {@link ERtActionMouseButton} - mouse hot bttn
    */
-  public SwitchPerspInfo( String aPerspId ) {
+  public SwitchPerspInfo( String aPerspId, String aViewId, ERtActionMouseButton aMouseButton ) {
     perspId = aPerspId;
+    viewId = aViewId;
+    mouseButton = aMouseButton;
   }
 
   // ------------------------------------------------------------------------------------
@@ -73,6 +98,20 @@ public class SwitchPerspInfo {
    */
   public String perspId() {
     return perspId;
+  }
+
+  /**
+   * @return id of view in persp
+   */
+  public String viewId() {
+    return viewId;
+  }
+
+  /**
+   * @return sensitive mouse button
+   */
+  public ERtActionMouseButton mouseButton() {
+    return mouseButton;
   }
 
 }
