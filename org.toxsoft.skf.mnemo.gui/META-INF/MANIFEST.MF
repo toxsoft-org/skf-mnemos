@@ -40,4 +40,8 @@ Export-Package: org.toxsoft.skf.mnemo.gui,
  org.toxsoft.skf.mnemo.gui.tsgui.asp,
  org.toxsoft.skf.mnemo.gui.tsgui.comps,
  org.toxsoft.skf.mnemo.gui.tsgui.layout,
- org.toxsoft.skf.mnemo.gui.tsgui.layout.line
+ org.toxsoft.skf.mnemo.gui.tsgui.layout.column,
+ org.toxsoft.skf.mnemo.gui.tsgui.layout.dialogs,
+ org.toxsoft.skf.mnemo.gui.tsgui.layout.line,
+ org.toxsoft.skf.mnemo.gui.tsgui.layout.table,
+ org.toxsoft.skf.mnemo.gui.tsgui.tools

@@ -94,13 +94,13 @@ public class VedViselsLayoutManager
         return layoutKindId.isBlank();
       }
       if( aActionId.equals( ACTID_SHOW_GRID ) ) {
-        if( gridIds.keys().hasElem( targetVisel.id() ) ) {
-          System.out.println( "TRUE Grid action checked" );
+        if( targetVisel != null && gridIds.keys().hasElem( targetVisel.id() ) ) {
+          // System.out.println( "TRUE Grid action checked" );
           return true;
         }
-        else {
-          System.out.println( "     FALSE Grid action unchecked" );
-        }
+        // else {
+        // System.out.println( " FALSE Grid action unchecked" );
+        // }
       }
       return false;
     }

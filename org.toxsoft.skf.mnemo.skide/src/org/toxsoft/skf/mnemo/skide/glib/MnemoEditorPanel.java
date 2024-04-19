@@ -29,6 +29,7 @@ import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
+import org.toxsoft.skf.mnemo.gui.tsgui.tools.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
@@ -138,6 +139,8 @@ public class MnemoEditorPanel
   // Managers
   //
 
+  private final VedToolsManager                       toolsManager;
+  private final VedHotKeysManager                     hotKeysManager;
   private final IVedViselSelectionManager             selectionManager;
   private final IVedViselsMasterSlaveRelationsManager masterSlaveManager;
   private final VedViselVertexSetManager              vertexSetManager;
@@ -201,6 +204,9 @@ public class MnemoEditorPanel
     skVedEnvironment = new SkVedEnvironment( skConnSupp.defConn() );
     vedScreen.tsContext().put( ISkVedEnvironment.class, skVedEnvironment );
 
+    hotKeysManager = new VedHotKeysManager( vedScreen );
+    toolsManager = new VedToolsManager( hotKeysManager, vedScreen );
+
     copyPasteManager = new VedViselsCopyPasteManager( vedScreen );
     deleteManager = new VedViselsDeleteManager( vedScreen );
     positionManager = new VedViselsPositionManager();
@@ -209,9 +215,12 @@ public class MnemoEditorPanel
     // groupsManager = new VedViselGroupsManager( vedScreen.model() );
     // selectionManager = new VedViselSelectionGroupManager( vedScreen, groupsManager );
     selectionManager = new VedViselSelectionManager( vedScreen );
+
+    toolsManager.addTool( new ZOrdererTool( selectionManager, vedScreen ) );
+
     copyPasteManager.addProcessor( new SelectionCopyPasteProcessor( vedScreen, selectionManager ) );
 
-    masterSlaveManager = new VedViselsMasterSlaveRelationsManager( vedScreen );
+    masterSlaveManager = new VedViselsMasterSlaveRelationsManager( vedScreen, selectionManager );
     layoutManager = new VedViselsLayoutManager( vedScreen, IVedLayoutFactoriesProvider.DEFAULT, selectionManager,
         masterSlaveManager );
     copyPasteManager.addProcessor( new MasterSlaveCopyPasteProcessor( vedScreen, masterSlaveManager ) );
@@ -301,6 +310,7 @@ public class MnemoEditorPanel
     guiTimersService().slowTimers().addListener( vedScreen );
 
     // add VED snippets: user input handler for editing needs
+    vedScreen.model().screenHandlersBefore().add( hotKeysManager.inputHandler() );
     vedScreen.model().screenHandlersBefore().add( vertexSetManager );
     vedScreen.model().screenHandlersBefore().add( multiSelectionHandler );
     vedScreen.model().screenHandlersBefore().add( viselsPositionHandler );
