@@ -14,7 +14,6 @@ import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
 import org.toxsoft.core.tsgui.bricks.uievents.*;
-import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.mws.services.e4helper.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
@@ -26,7 +25,6 @@ import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.skf.mnemo.gui.glib.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
-import org.toxsoft.skf.mnemo.gui.skved.AbstractSkVedButtonActor.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.tti.*;
 import org.toxsoft.skf.mnemo.lib.*;
 
@@ -48,9 +46,11 @@ public class SkActorRunTimeAction
    */
   public static final String FACTORY_ID = SKVED_ID + ".actor.RunTimeAction"; //$NON-NLS-1$
 
-  private static final TinFieldInfo TFI_RT_USER_ACTION = new TinFieldInfo( "rtUserAction", TtiRtActionInfo.INSTANCE, //
-      TSID_NAME, "Действие", //
-      TSID_DESCRIPTION, "Действие, которое может выполнить пользователь на этапе исполнени", //
+  private static final String FID_RT_USER_ACTION = "rtUserAction"; //$NON-NLS-1$
+
+  private static final TinFieldInfo TFI_RT_USER_ACTION = new TinFieldInfo( FID_RT_USER_ACTION, TtiRtActionInfo.INSTANCE, //
+      TSID_NAME, STR_N_RUNTIME_USER_ACTION, //
+      TSID_DESCRIPTION, STR_D_RUNTIME_USER_ACTION, //
       TSID_KEEPER_ID, RunTimeUserActionInfo.KEEPER_ID, //
       TSID_DEFAULT_VALUE, avValobj( RunTimeUserActionInfo.NONE ) );
 
@@ -91,33 +91,33 @@ public class SkActorRunTimeAction
 
   protected SkActorRunTimeAction( IVedItemCfg aCfg, IStridablesList<IDataDef> aDataDefs, VedScreen aVedScreen ) {
     super( aCfg, aDataDefs, aVedScreen );
-    IButtonClickHandler buttonHandler = aVisel -> {
-      // for debug печатаем нашу metainfo
-      RunTimeUserActionInfo rtUserAction = props().getValobj( TFI_RT_USER_ACTION.id() );
+    // IButtonClickHandler buttonHandler = aVisel -> {
+    // // for debug печатаем нашу metainfo
+    // RunTimeUserActionInfo rtUserAction = props().getValobj( TFI_RT_USER_ACTION.id() );
+    //
+    // TsDialogUtils.info( getShell(), "Mouse button: %s,\nMnemo Skid: %s,\nmaster object: %s", //$NON-NLS-1$
+    // rtUserAction.popupMnemoInfo().mouseButton(), rtUserAction.popupMnemoInfo().mnemoSkid(),
+    // rtUserAction.popupMnemoInfo().masterObj() );
+    //
+    // ISkMnemosService mnemoService = skConn().coreApi().getService( ISkMnemosService.SERVICE_ID );
+    // ISkMnemoCfg mnemoCfg = mnemoService.getMnemo( rtUserAction.popupMnemoInfo().mnemoSkid().strid() );
+    // // пробуем открыть мнемосхему
+    // // PopupMnemoDialog dialog = new PopupMnemoDialog( getShell(), tsContext(), mnemoCfg );
+    // // dialog.open();
+    // Shell wnd = new Shell( getShell(), SWT.BORDER | SWT.CLOSE );
+    // FillLayout layout = new FillLayout();
+    // wnd.setLayout( layout );
+    // Composite bkPanel = new Composite( wnd, SWT.NONE );
+    // bkPanel.setLayout( layout );
+    // IRuntimeMnemoPanel panel = new RuntimeMnemoPanel( bkPanel, new TsGuiContext( tsContext() ) );
+    // panel.setMnemoConfig( mnemoCfg );
+    // panel.resume();
+    // TsPoint p = computeSize( mnemoCfg );
+    // wnd.setSize( p.x(), p.y() );
+    // // setLocation( 100, 100 );
+    // wnd.open();
+    // };
 
-      TsDialogUtils.info( getShell(), "Mouse button: %s,\nMnemo Skid: %s,\nmaster object: %s", //$NON-NLS-1$
-          rtUserAction.popupMnemoInfo().mouseButton(), rtUserAction.popupMnemoInfo().mnemoSkid(),
-          rtUserAction.popupMnemoInfo().masterObj() );
-
-      ISkMnemosService mnemoService = skConn().coreApi().getService( ISkMnemosService.SERVICE_ID );
-      ISkMnemoCfg mnemoCfg = mnemoService.getMnemo( rtUserAction.popupMnemoInfo().mnemoSkid().strid() );
-      // пробуем открыть мнемосхему
-      // PopupMnemoDialog dialog = new PopupMnemoDialog( getShell(), tsContext(), mnemoCfg );
-      // dialog.open();
-      Shell wnd = new Shell( getShell(), SWT.BORDER | SWT.CLOSE );
-      FillLayout layout = new FillLayout();
-      wnd.setLayout( layout );
-      Composite bkPanel = new Composite( wnd, SWT.NONE );
-      bkPanel.setLayout( layout );
-      IRuntimeMnemoPanel panel = new RuntimeMnemoPanel( bkPanel, new TsGuiContext( tsContext() ) );
-      panel.setMnemoConfig( mnemoCfg );
-      panel.resume();
-      TsPoint p = computeSize( mnemoCfg );
-      wnd.setSize( p.x(), p.y() );
-      // setLocation( 100, 100 );
-      wnd.open();
-
-    };
     setMouseClickHandler( new IMouseClickHandler() {
 
       @Override

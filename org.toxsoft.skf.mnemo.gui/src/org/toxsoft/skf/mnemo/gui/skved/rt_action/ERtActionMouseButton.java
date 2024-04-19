@@ -1,5 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.skved.rt_action;
 
+import static org.toxsoft.skf.mnemo.gui.skved.rt_action.ISkResources.*;
+
 import org.eclipse.swt.*;
 import org.toxsoft.core.tslib.bricks.keeper.*;
 import org.toxsoft.core.tslib.bricks.keeper.std.*;
@@ -19,27 +21,27 @@ public enum ERtActionMouseButton
   /**
    * Left button {@link SWT#BUTTON1}.
    */
-  LEFT( "LEFT", "Left button", "SWT#BUTTON1" ), //$NON-NLS-1$
+  LEFT( "LEFT", STR_N_LEFT_BTTN, STR_D_LEFT_BTTN ), //$NON-NLS-1$
 
   /**
    * Double click left button {@link SWT#BUTTON3}.
    */
-  DOUBLE_CLICK( "DOUBLE_CLICK", "Double click left button", "SWT#BUTTON1" ), //$NON-NLS-1$
+  DOUBLE_CLICK( "DOUBLE_CLICK", STR_N_DOUBLE_CLICK, STR_D_DOUBLE_CLICK ), //$NON-NLS-1$
 
   /**
    * Middle button {@link SWT#BUTTON2}.
    */
-  MIDDLE( "MIDDLE", "Middle button", "SWT#BUTTON2" ), //$NON-NLS-1$
+  MIDDLE( "MIDDLE", STR_N_MIDDLE_BTTN, STR_D_MIDDLE_BTTN ), //$NON-NLS-1$
 
   /**
    * Right button {@link SWT#BUTTON3}.
    */
-  RIGHT( "RIGHT", "Right button", "SWT#BUTTON3" ); //$NON-NLS-1$
+  RIGHT( "RIGHT", STR_N_RIGHT_BTTN, STR_D_RIGHT_BTTN ); //$NON-NLS-1$
 
   /**
    * The keeper ID.
    */
-  public static final String KEEPER_ID = "ETmpMouseButton"; //$NON-NLS-1$
+  public static final String KEEPER_ID = "ERtActionMouseButton"; //$NON-NLS-1$
 
   /**
    * Keeper singleton.

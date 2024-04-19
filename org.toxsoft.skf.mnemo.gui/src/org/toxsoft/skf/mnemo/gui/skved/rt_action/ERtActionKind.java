@@ -1,5 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.skved.rt_action;
 
+import static org.toxsoft.skf.mnemo.gui.skved.rt_action.ISkResources.*;
+
 import org.toxsoft.core.tslib.bricks.keeper.*;
 import org.toxsoft.core.tslib.bricks.keeper.std.*;
 import org.toxsoft.core.tslib.bricks.strid.*;
@@ -16,11 +18,11 @@ import org.toxsoft.core.tslib.utils.errors.*;
 public enum ERtActionKind
     implements IStridable {
 
-  NONE( "none", "пустое действие", "пустое действие" ), //$NON-NLS-1$
+  NONE( "none", STR_N_EMPTY_ACTION, STR_D_EMPTY_ACTION ), //$NON-NLS-1$
 
-  POPUP_MNEMO( "popup_mnemo", "всплывающий диалог", "открыть окно с заданной мнемосхемой" ), //$NON-NLS-1$
+  POPUP_MNEMO( "popup_mnemo", STR_N_POPUP_MNEMO, STR_D_POPUP_MNEMO ), //$NON-NLS-1$
 
-  SWITCH_PERSP( "switch_persp", "перейти в перспективу", "переключится в заданную перспективу" ); //$NON-NLS-1$
+  SWITCH_PERSP( "switch_persp", STR_N_SWITCH_PERSP, STR_D_SWITCH_PERSP ); //$NON-NLS-1$
 
   /**
    * The registered keeper ID.
