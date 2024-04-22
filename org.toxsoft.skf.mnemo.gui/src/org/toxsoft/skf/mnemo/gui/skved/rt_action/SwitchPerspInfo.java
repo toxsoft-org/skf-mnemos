@@ -40,10 +40,10 @@ public class SwitchPerspInfo {
         @Override
         protected void doWrite( IStrioWriter aSw, SwitchPerspInfo aEntity ) {
           // id of persp
-          aSw.writeAsIs( aEntity.perspId() );
+          aSw.writeQuotedString( aEntity.perspId() );
           aSw.writeSeparatorChar();
           // id of view
-          aSw.writeAsIs( aEntity.viewId() );
+          aSw.writeQuotedString( aEntity.viewId() );
           aSw.writeSeparatorChar();
           // selected mouse button
           ERtActionMouseButton.KEEPER.write( aSw, aEntity.mouseButton() );
@@ -51,9 +51,9 @@ public class SwitchPerspInfo {
 
         @Override
         protected SwitchPerspInfo doRead( IStrioReader aSr ) {
-          String perspId = aSr.readIdName();
+          String perspId = aSr.readQuotedString();
           aSr.ensureSeparatorChar();
-          String viewId = aSr.readIdName();
+          String viewId = aSr.readQuotedString();
           aSr.ensureSeparatorChar();
           ERtActionMouseButton mouseButton = ERtActionMouseButton.KEEPER.read( aSr );
           return new SwitchPerspInfo( perspId, viewId, mouseButton );
