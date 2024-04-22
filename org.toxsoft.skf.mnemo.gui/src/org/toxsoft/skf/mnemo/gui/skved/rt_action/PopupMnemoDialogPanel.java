@@ -54,7 +54,8 @@ public class PopupMnemoDialogPanel
   protected static TsPoint getInitialSize( ISkMnemoCfg aMnemoCfg ) {
     IVedScreenCfg vedCfg = VedScreenCfg.KEEPER.str2ent( aMnemoCfg.cfgData() );
     IVedCanvasCfg canvasCfg = vedCfg.canvasCfg();
-    return new TsPoint( (int)(canvasCfg.size().x()) + 10, (int)(canvasCfg.size().y()) + 10 );
+    // TODO как учесть высоту зоны кнопок
+    return new TsPoint( (int)(canvasCfg.size().x()) + 10, (int)(canvasCfg.size().y()) + 50 );
   }
 
   /**

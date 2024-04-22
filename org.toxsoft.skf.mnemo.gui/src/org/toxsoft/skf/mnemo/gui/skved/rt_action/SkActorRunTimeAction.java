@@ -203,18 +203,31 @@ public class SkActorRunTimeAction
   private void openPopupMnemo( PopupMnemoInfo aPopupMnemoInfo ) {
     ISkMnemosService mnemoService = skConn().coreApi().getService( ISkMnemosService.SERVICE_ID );
     ISkMnemoCfg mnemoCfg = mnemoService.getMnemo( aPopupMnemoInfo.mnemoSkid().strid() );
+    // open in Dialog
+    PopupMnemoDialogPanel.showPopMnemo( tsContext().eclipseContext(), mnemoCfg );
 
+    // open in Shell
+    // openPopupMnemoShell( mnemoCfg );
+  }
+
+  /**
+   * Open mnemo in new Shell
+   *
+   * @param aMnemoCfg - mnemo config
+   */
+  @SuppressWarnings( "unused" )
+  private void openPopupMnemoShell( ISkMnemoCfg aMnemoCfg ) {
     Shell wnd = new Shell( getShell(), SWT.BORDER | SWT.CLOSE );
     FillLayout layout = new FillLayout();
     wnd.setLayout( layout );
     Composite bkPanel = new Composite( wnd, SWT.NONE );
     bkPanel.setLayout( layout );
     IRuntimeMnemoPanel panel = new RuntimeMnemoPanel( bkPanel, new TsGuiContext( tsContext() ) );
-    panel.setMnemoConfig( mnemoCfg );
+    panel.setMnemoConfig( aMnemoCfg );
     panel.resume();
-    TsPoint p = computeSize( mnemoCfg );
+    TsPoint p = computeSize( aMnemoCfg );
     wnd.setSize( p.x(), p.y() );
-    // setLocation( 100, 100 );
+    wnd.setLocation( 100, 100 );
     wnd.open();
   }
 

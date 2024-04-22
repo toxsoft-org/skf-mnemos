@@ -2,6 +2,7 @@ package org.toxsoft.skf.mnemo.gui.skved.rt_action.valed;
 
 import static org.toxsoft.core.tsgui.valed.api.IValedControlConstants.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
+import static org.toxsoft.skf.mnemo.gui.skved.rt_action.valed.ISkResources.*;
 
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
@@ -78,15 +79,13 @@ public class ValedPopupMnemoInfo
 
   @Override
   protected boolean doProcessButtonPress() {
-    // PopupMnemoInfo gradInfo = PanelGradientFillInfoEditor.editGradientInfo( popupMnemoInfo, tsContext() );
     // use m5 technology to edit PopupMnemoInfo entity
     ISkConnectionSupplier connSup = tsContext().get( ISkConnectionSupplier.class );
     ISkConnection conn = connSup.defConn();
 
     IM5Model<PopupMnemoInfo> model =
         conn.scope().get( IM5Domain.class ).getModel( PopupMnemoInfoM5Model.MODEL_ID, PopupMnemoInfo.class );
-    TsDialogInfo cdi =
-        new TsDialogInfo( tsContext(), null, "Popup Mnemo Info", "Edit infor to run-time popup mnemo ", 0 );
+    TsDialogInfo cdi = new TsDialogInfo( tsContext(), null, STR_N_POPUP_MNEMO_INFO, STR_D_POPUP_MNEMO_INFO, 0 );
 
     // редактируем
     PopupMnemoInfo tmpPopupMnemoInfo =

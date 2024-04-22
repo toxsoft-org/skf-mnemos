@@ -47,4 +47,8 @@ interface ISkResources {
   String STR_N_MIDDLE_BTTN  = "средняя кнопка";
   String STR_D_MIDDLE_BTTN  = "средняя кнопка мыши";
 
+  /**
+   * {@link IRtActionConstants}
+   */
+
 }

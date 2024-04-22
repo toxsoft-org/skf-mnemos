@@ -109,18 +109,28 @@ public abstract class AbstractSkVedClickableActor
 
   @Override
   public boolean onMouseDown( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors, Control aWidget ) {
+    // dima 22.04.24 не понимаю что делает этот кусок кода
     VedAbstractVisel visel = vedScreen().model().visels().list().findByKey( props().getStr( PROPID_VISEL_ID ) );
     if( isViselBttn( visel ) && visel.props().getValobj( ViselButton.PROPID_STATE ) == EButtonViselState.DISABLED ) {
       return false;
     }
-    if( aButton == ETsMouseButton.LEFT && aState == 0 ) {
-      visel = findMyVisel( aCoors );
-      if( visel == null || (isViselBttn( visel )
-          && visel.props().getValobj( ViselButton.PROPID_STATE ) == EButtonViselState.DISABLED) ) {
-        setActivated( false );
-        return false;
+    // для кнопки и для не кнопки отдельные ветки алгоритма
+    visel = findMyVisel( aCoors );
+    if( visel == null ) {
+      return false;
+    }
+    if( isViselBttn( visel ) ) {
+      if( aButton == ETsMouseButton.LEFT && aState == 0 ) {
+        if( visel.props().getValobj( ViselButton.PROPID_STATE ) == EButtonViselState.DISABLED ) {
+          setActivated( false );
+          return false;
+        }
+        visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.PRESSED );
+        setActivated( true );
+        return true;
       }
-      visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.PRESSED );
+    }
+    else {
       setActivated( true );
       return true;
     }

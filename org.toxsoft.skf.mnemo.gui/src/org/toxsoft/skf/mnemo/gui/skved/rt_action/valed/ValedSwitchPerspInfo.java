@@ -2,6 +2,7 @@ package org.toxsoft.skf.mnemo.gui.skved.rt_action.valed;
 
 import static org.toxsoft.core.tsgui.valed.api.IValedControlConstants.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
+import static org.toxsoft.skf.mnemo.gui.skved.rt_action.valed.ISkResources.*;
 
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
@@ -84,8 +85,7 @@ public class ValedSwitchPerspInfo
 
     IM5Model<SwitchPerspInfo> model =
         conn.scope().get( IM5Domain.class ).getModel( SwitchPerspInfoM5Model.MODEL_ID, SwitchPerspInfo.class );
-    TsDialogInfo cdi =
-        new TsDialogInfo( tsContext(), null, "Switch persp info", "Edit info to switch Eclipse perspective", 0 );
+    TsDialogInfo cdi = new TsDialogInfo( tsContext(), null, SWITCH_N_MNEMO_INFO, SWITCH_D_MNEMO_INFO, 0 );
 
     // редактируем
     SwitchPerspInfo tmpSwitchPerspInfo =
