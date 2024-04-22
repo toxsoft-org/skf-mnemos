@@ -9,7 +9,6 @@ import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.bricks.geometry.*;
 import org.toxsoft.core.tslib.bricks.geometry.impl.*;
-import org.toxsoft.skf.mnemo.skide.glib.scroll.*;
 
 /**
  * Вспомогательный класс для реализации скроллинга мнемосхем.
@@ -18,12 +17,12 @@ import org.toxsoft.skf.mnemo.skide.glib.scroll.*;
  */
 public class MnemoScrollManager {
 
-  private final IViewportCalculator1 vpCalc = new ViewportCalculator1( new CalculationStrategySettings1( //
+  private final IViewportCalculator vpCalc = new ViewportCalculator( new CalculationStrategySettings( //
       ETsFulcrum.LEFT_TOP, //
       EVpFulcrumUsageStartegy.INSIDE, //
-      // EVpBoundingStrategy1.NONE, //
-      // EVpBoundingStrategy1.CONTENT, //
-      EVpBoundingStrategy1.VIEWPORT, //
+      // EVpBoundingStrategy.NONE, //
+      // EVpBoundingStrategy.CONTENT, //
+      EVpBoundingStrategy.VIEWPORT, //
       // new TsPoint( 10, 10 ), //
       new TsPoint( 0, 0 ), //
       false //

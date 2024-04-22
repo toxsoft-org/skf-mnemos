@@ -38,6 +38,12 @@ public class VedViselsCopyPasteHandler
       if( aCode == 118 ) { // key code for symbol "V"
         cpManager.paste();
       }
+      if( aCode == 122 ) { // key code for symbol "Z"
+        cpManager.copy();
+      }
+      if( aCode == 111 ) { // key code for symbol "O"
+        cpManager.copy();
+      }
     }
     return false;
   }

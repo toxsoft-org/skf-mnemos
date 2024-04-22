@@ -8,6 +8,7 @@ import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.bricks.actions.asp.*;
+import org.toxsoft.core.tsgui.ved.editor.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.helpers.*;
@@ -61,6 +62,9 @@ public class VedViselsMasterSlaveRelationsManager
 
     @Override
     protected boolean doIsActionEnabled( ITsActionDef aActionDef ) {
+      if( selectionManager.selectedViselIds().size() > 1 ) {
+        return true;
+      }
       if( clickedVisel != null ) {
         if( aActionDef.id().equals( ACTID_ENSLAVE ) ) {
           if( clickedVisel.params().hasKey( PARAMID_MASTER_ID ) ) {
@@ -101,13 +105,17 @@ public class VedViselsMasterSlaveRelationsManager
 
   private final MenuCreatorFromAsp menuCreator;
 
+  private final IVedViselSelectionManager selectionManager;
+
   /**
    * Конструктор.
    *
    * @param aVedScreen {@link IVedScreen} - эккран редактирования
+   * @param aSelectionManager {@link IVedViselSelectionManager} - менеджер выделения
    */
-  public VedViselsMasterSlaveRelationsManager( IVedScreen aVedScreen ) {
+  public VedViselsMasterSlaveRelationsManager( IVedScreen aVedScreen, IVedViselSelectionManager aSelectionManager ) {
     vedScreen = aVedScreen;
+    selectionManager = aSelectionManager;
     actionsProvider = new MasterSlaveActionsProvider();
     menuCreator = new MenuCreatorFromAsp( actionsProvider, vedScreen.tsContext() );
 
@@ -306,6 +314,14 @@ public class VedViselsMasterSlaveRelationsManager
   // Implementation
   //
 
+  VedAbstractVisel findOwner( String aViselId ) {
+    VedAbstractVisel visel = VedScreenUtils.findVisel( aViselId, vedScreen );
+    if( visel != null ) {
+      return findOwner( visel );
+    }
+    return null;
+  }
+
   VedAbstractVisel findOwner( VedAbstractVisel aVisel ) {
     IVedCoorsConverter converter = vedScreen.view().coorsConverter();
     IStridablesList<VedAbstractVisel> visels = vedScreen.model().visels().list();
@@ -356,25 +372,38 @@ public class VedViselsMasterSlaveRelationsManager
   }
 
   void enslave() {
-    if( clickedVisel != null ) {
-      String masterId = TsLibUtils.EMPTY_STRING;
-      if( clickedVisel.params().hasKey( PARAMID_MASTER_ID ) ) {
-        masterId = clickedVisel.params().getStr( PARAMID_MASTER_ID );
+    IStringListEdit ids = new StringArrayList();
+    IStringList selIds = selectionManager.selectedViselIds();
+    if( selIds.size() > 0 ) {
+      ids.addAll( selIds );
+      clickedVisel = null;
+    }
+    else {
+      if( clickedVisel != null ) {
+        ids.add( clickedVisel.id() );
       }
-      if( !masterId.isBlank() ) {
-        return;
-      }
-      // созданный визель не slave
-      VedAbstractVisel owner = findOwner( clickedVisel );
+    }
+    for( String id : ids ) {
+      VedAbstractVisel owner = findOwner( id );
       if( owner != null && owner != clickedVisel ) {
-        enslaveVisel( clickedVisel.id(), owner.id() );
+        enslaveVisel( id, owner.id() );
       }
     }
   }
 
   void freeSlave() {
-    if( clickedVisel != null ) {
-      freeVisel( clickedVisel.id() );
+    IStringListEdit ids = new StringArrayList();
+    IStringList selIds = selectionManager.selectedViselIds();
+    if( selIds.size() > 0 ) {
+      ids.addAll( selIds );
+    }
+    else {
+      if( clickedVisel != null ) {
+        ids.add( clickedVisel.id() );
+      }
+    }
+    for( String id : ids ) {
+      freeVisel( id );
     }
   }
 

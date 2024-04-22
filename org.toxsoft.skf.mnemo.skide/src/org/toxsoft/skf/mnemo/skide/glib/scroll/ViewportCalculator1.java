@@ -348,14 +348,6 @@ public class ViewportCalculator1
     return output;
   }
 
-  private ITsPoint underlay2Viewport( ITsPoint aUnderlayPoint ) {
-    return new TsPoint( aUnderlayPoint.x() - contentDx, aUnderlayPoint.y() - contentDy );
-  }
-
-  private ITsPoint viewport2Underlay( ITsPoint aViewportPoint ) {
-    return new TsPoint( aViewportPoint.x() + contentDx, aViewportPoint.y() + contentDy );
-  }
-
   // ------------------------------------------------------------------------------------
   // Sol++ Implementation
   //
@@ -381,6 +373,14 @@ public class ViewportCalculator1
     originY = (int)d2p.y();
     // contentRect = new TsRectangle( viewportX, viewportY, contentRect.width(), contentRect.height() );
     updateOutput();
+  }
+
+  private ITsPoint underlay2Viewport( ITsPoint aUnderlayPoint ) {
+    return new TsPoint( aUnderlayPoint.x() - contentDx, aUnderlayPoint.y() - contentDy );
+  }
+
+  private ITsPoint viewport2Underlay( ITsPoint aViewportPoint ) {
+    return new TsPoint( aViewportPoint.x() + contentDx, aViewportPoint.y() + contentDy );
   }
 
 }
