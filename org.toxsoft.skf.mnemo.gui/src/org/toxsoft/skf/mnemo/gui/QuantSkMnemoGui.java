@@ -69,6 +69,7 @@ public class QuantSkMnemoGui
   @Override
   protected void doInitWin( IEclipseContext aWinContext ) {
     ISkMnemoGuiConstants.init( aWinContext );
+
     IValedControlFactoriesRegistry vcfRegistry = aWinContext.get( IValedControlFactoriesRegistry.class );
     vcfRegistry.registerFactory( ValedRgbaSet.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjRgbaSet.FACTORY );

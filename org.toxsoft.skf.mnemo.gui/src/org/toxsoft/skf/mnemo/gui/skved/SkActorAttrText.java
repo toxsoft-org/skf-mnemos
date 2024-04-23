@@ -43,7 +43,7 @@ public class SkActorAttrText
   public static final IVedActorFactory FACTORY = new VedAbstractActorFactory( FACTORY_ID, //
       TSID_NAME, STR_ACTOR_ATTR_TEXT, //
       TSID_DESCRIPTION, STR_ACTOR_ATTR_TEXT_D, //
-      TSID_ICON_ID, ICONID_VED_ACTOR //
+      TSID_ICON_ID, ICONID_VED_ATR_EDIT_ACTOR //
   ) {
 
     @Override
