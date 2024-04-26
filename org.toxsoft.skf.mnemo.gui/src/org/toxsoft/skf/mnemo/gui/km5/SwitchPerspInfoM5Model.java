@@ -1,6 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.km5;
 
 import static org.toxsoft.core.tsgui.m5.IM5Constants.*;
+import static org.toxsoft.core.tsgui.valed.api.IValedControlConstants.*;
 import static org.toxsoft.core.tslib.av.EAtomicType.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
@@ -9,6 +10,7 @@ import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.m5.model.*;
 import org.toxsoft.core.tsgui.m5.model.impl.*;
 import org.toxsoft.core.tslib.av.*;
+import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
 
 /**
@@ -42,7 +44,9 @@ public class SwitchPerspInfoM5Model
   /**
    * Attribute {@link SwitchPerspInfo#perspId()}.
    */
-  public final M5AttributeFieldDef<SwitchPerspInfo> PERSP_ID = new M5AttributeFieldDef<>( FID_PERSP_ID, STRING ) {
+  public final M5AttributeFieldDef<SwitchPerspInfo> PERSP_ID = new M5AttributeFieldDef<>( FID_PERSP_ID, VALOBJ, //
+      TSID_KEEPER_ID, MPerspId.KEEPER_ID, //
+      OPID_EDITOR_FACTORY_NAME, ValedAvValobjMPerspIdEditor.FACTORY_NAME ) {
 
     @Override
     protected void doInit() {
@@ -52,7 +56,7 @@ public class SwitchPerspInfoM5Model
     }
 
     protected IAtomicValue doGetFieldValue( SwitchPerspInfo aEntity ) {
-      return avStr( aEntity.perspId() );
+      return avValobj( aEntity.perspId() );
     }
 
   };
@@ -125,8 +129,8 @@ public class SwitchPerspInfoM5Model
       super( aModel, false, true, false, false, null );
     }
 
-    private static SwitchPerspInfo makePopupMnemoInfo( IM5Bunch<SwitchPerspInfo> aValues ) {
-      String perspId = aValues.getAsAv( FID_PERSP_ID ).asString();
+    private static SwitchPerspInfo makeSwitchPerspInfo( IM5Bunch<SwitchPerspInfo> aValues ) {
+      MPerspId perspId = aValues.getAsAv( FID_PERSP_ID ).asValobj();
       String viewId = aValues.getAsAv( FID_VIEW_ID ).asString();
       ERtActionMouseButton mouseBttn = aValues.getAsAv( FID_MOUSE_BTTN ).asValobj();
 
@@ -135,12 +139,12 @@ public class SwitchPerspInfoM5Model
 
     @Override
     protected SwitchPerspInfo doCreate( IM5Bunch<SwitchPerspInfo> aValues ) {
-      return makePopupMnemoInfo( aValues );
+      return makeSwitchPerspInfo( aValues );
     }
 
     @Override
     protected SwitchPerspInfo doEdit( IM5Bunch<SwitchPerspInfo> aValues ) {
-      return makePopupMnemoInfo( aValues );
+      return makeSwitchPerspInfo( aValues );
     }
 
     @Override

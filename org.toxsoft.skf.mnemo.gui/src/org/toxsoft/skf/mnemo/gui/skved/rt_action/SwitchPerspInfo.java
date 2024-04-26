@@ -5,6 +5,7 @@ import org.toxsoft.core.tslib.bricks.keeper.AbstractEntityKeeper.*;
 import org.toxsoft.core.tslib.bricks.strio.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.valobj.*;
+import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.lib.*;
 
 /**
@@ -24,7 +25,7 @@ public class SwitchPerspInfo {
    * Empty info.
    */
   public static final SwitchPerspInfo EMPTY =
-      new SwitchPerspInfo( TsLibUtils.EMPTY_STRING, TsLibUtils.EMPTY_STRING, ERtActionMouseButton.LEFT );
+      new SwitchPerspInfo( MPerspId.NONE, TsLibUtils.EMPTY_STRING, ERtActionMouseButton.LEFT );
 
   /**
    * Value-object registration identifier for {@link TsValobjUtils}.
@@ -40,7 +41,7 @@ public class SwitchPerspInfo {
         @Override
         protected void doWrite( IStrioWriter aSw, SwitchPerspInfo aEntity ) {
           // id of persp
-          aSw.writeQuotedString( aEntity.perspId() );
+          MPerspId.KEEPER.write( aSw, aEntity.perspId() );
           aSw.writeSeparatorChar();
           // id of view
           aSw.writeQuotedString( aEntity.viewId() );
@@ -51,7 +52,7 @@ public class SwitchPerspInfo {
 
         @Override
         protected SwitchPerspInfo doRead( IStrioReader aSr ) {
-          String perspId = aSr.readQuotedString();
+          MPerspId perspId = MPerspId.KEEPER.read( aSr );
           aSr.ensureSeparatorChar();
           String viewId = aSr.readQuotedString();
           aSr.ensureSeparatorChar();
@@ -64,7 +65,7 @@ public class SwitchPerspInfo {
   /**
    * id of persp
    */
-  private final String perspId;
+  private final MPerspId perspId;
 
   /**
    * id of view in persp
@@ -83,7 +84,7 @@ public class SwitchPerspInfo {
    * @param aViewId - id of view in perspective
    * @param aMouseButton {@link ERtActionMouseButton} - mouse hot bttn
    */
-  public SwitchPerspInfo( String aPerspId, String aViewId, ERtActionMouseButton aMouseButton ) {
+  public SwitchPerspInfo( MPerspId aPerspId, String aViewId, ERtActionMouseButton aMouseButton ) {
     perspId = aPerspId;
     viewId = aViewId;
     mouseButton = aMouseButton;
@@ -96,7 +97,7 @@ public class SwitchPerspInfo {
   /**
    * @return id of persp
    */
-  public String perspId() {
+  public MPerspId perspId() {
     return perspId;
   }
 

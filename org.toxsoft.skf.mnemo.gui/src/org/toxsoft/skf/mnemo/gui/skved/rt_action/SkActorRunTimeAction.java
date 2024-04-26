@@ -214,7 +214,7 @@ public class SkActorRunTimeAction
     TsE4Helper e4Helper = new TsE4Helper( tsContext().eclipseContext() );
     String viewId = aSwitchPerspInfo.viewId();
     viewId = viewId.trim().length() > 0 ? viewId.trim() : null;
-    e4Helper.switchToPerspective( aSwitchPerspInfo.perspId(), viewId );
+    e4Helper.switchToPerspective( aSwitchPerspInfo.perspId().perspId(), viewId );
   }
 
   /**

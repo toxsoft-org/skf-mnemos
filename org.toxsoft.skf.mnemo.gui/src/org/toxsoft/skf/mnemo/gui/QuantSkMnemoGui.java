@@ -48,6 +48,7 @@ public class QuantSkMnemoGui
     TsValobjUtils.registerKeeperIfNone( ERtActionMouseButton.KEEPER_ID, ERtActionMouseButton.KEEPER );
     TsValobjUtils.registerKeeperIfNone( PopupMnemoInfo.KEEPER_ID, PopupMnemoInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( SwitchPerspInfo.KEEPER_ID, SwitchPerspInfo.KEEPER );
+    TsValobjUtils.registerKeeperIfNone( MPerspId.KEEPER_ID, MPerspId.KEEPER );
 
     // IVedViselFactoriesRegistry visFact = aAppContext.get( IVedViselFactoriesRegistry.class );
     // visFact.register( ViselPanel.FACTORY );
@@ -85,6 +86,8 @@ public class QuantSkMnemoGui
     vcfRegistry.registerFactory( ValedAvValobjPopupMnemoInfo.FACTORY );
     vcfRegistry.registerFactory( ValedSwitchPerspInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjSwitchPerspInfo.FACTORY );
+    vcfRegistry.registerFactory( ValedAvValobjMPerspIdEditor.FACTORY );
+
   }
 
 }
