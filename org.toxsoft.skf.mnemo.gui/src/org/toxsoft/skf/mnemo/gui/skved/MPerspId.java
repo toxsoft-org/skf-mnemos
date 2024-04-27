@@ -26,6 +26,9 @@ public class MPerspId
    */
   public static final String KEEPER_ID = "MPerspId"; //$NON-NLS-1$
 
+  /**
+   * Empty entity
+   */
   public static final MPerspId NONE = new MPerspId( IStridable.NONE_ID, TsLibUtils.EMPTY_STRING );
 
   /**

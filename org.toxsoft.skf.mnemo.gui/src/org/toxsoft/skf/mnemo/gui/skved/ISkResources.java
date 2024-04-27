@@ -86,7 +86,12 @@ interface ISkResources {
   String STR_ACTOR_RRI_INPUT_FIELD_D = Messages.getString( "STR_ACTOR_RRI_INPUT_FIELD_D" ); //$NON-NLS-1$
 
   /**
-   * {@link PanelRriSectionIdSelector}
+   * {@link PanelE4PerspIdSelector}
    */
+  String STR_CLMN_NAME_PERSP_ID       = "E4 perspective id";
+  String STR_CLMN_NAME_PERSP_LABEL    = "Название";
+  String STR_SELECT_PERSP             = "Необходимо выбрать перспективу";
+  String STR_SELECT_PERSP_DLG_CAPTION = "Выбор E4 перспективы";
+  String STR_SELECT_PERSP_DLG_TITLE   = "Выберите перспективу и нажмите Ok";
 
 }

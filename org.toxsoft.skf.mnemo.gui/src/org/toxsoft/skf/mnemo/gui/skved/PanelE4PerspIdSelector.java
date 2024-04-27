@@ -1,5 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.skved;
 
+import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
+
 import java.util.*;
 import java.util.List;
 
@@ -40,7 +42,7 @@ public class PanelE4PerspIdSelector
 
       TableViewerColumn columnId = new TableViewerColumn( viewer, SWT.NONE );
       columnId.getColumn().setWidth( aIdWidth );
-      columnId.getColumn().setText( "E4 perspective id" );
+      columnId.getColumn().setText( STR_CLMN_NAME_PERSP_ID );
       columnId.setLabelProvider( new ColumnLabelProvider() {
 
         @Override
@@ -53,7 +55,7 @@ public class PanelE4PerspIdSelector
 
       TableViewerColumn columnName = new TableViewerColumn( viewer, SWT.NONE );
       columnName.getColumn().setWidth( aNameWidth );
-      columnName.getColumn().setText( "Название" );
+      columnName.getColumn().setText( STR_CLMN_NAME_PERSP_LABEL );
       columnName.setLabelProvider( new CellLabelProvider() {
 
         @Override
@@ -89,7 +91,7 @@ public class PanelE4PerspIdSelector
 
   void init( Composite aParent ) {
     int style = SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.H_SCROLL;
-    tv = new MPerspectiveTableViewer( aParent, style, 80, 200 );
+    tv = new MPerspectiveTableViewer( aParent, style, 200, 100 );
     List<MPerspective> perspectives = listMPerspectives();
     List<MPerspId> mpIdList = new ArrayList<>();
     for( MPerspective mp : perspectives ) {
@@ -131,7 +133,7 @@ public class PanelE4PerspIdSelector
   protected ValidationResult doValidate() {
     // check selected perspective
     if( tv.viewer().getSelection().isEmpty() ) {
-      return ValidationResult.error( "Необходимо выбрать перспективу" );
+      return ValidationResult.error( STR_SELECT_PERSP );
     }
     return ValidationResult.SUCCESS;
   }
@@ -147,7 +149,7 @@ public class PanelE4PerspIdSelector
   public static final MPerspId selectE4PerspId( MPerspId aInitPerspId, ITsGuiContext aContext ) {
     TsNullArgumentRtException.checkNull( aContext );
     IDialogPanelCreator<MPerspId, ITsGuiContext> creator = PanelE4PerspIdSelector::new;
-    ITsDialogInfo dlgInfo = new TsDialogInfo( aContext, "Выбор E4 перспективы", "Выберите перспективу и нажмите Ok" );
+    ITsDialogInfo dlgInfo = new TsDialogInfo( aContext, STR_SELECT_PERSP_DLG_CAPTION, STR_SELECT_PERSP_DLG_TITLE );
     TsDialog<MPerspId, ITsGuiContext> d = new TsDialog<>( dlgInfo, aInitPerspId, aContext, creator );
     return d.execData();
   }
