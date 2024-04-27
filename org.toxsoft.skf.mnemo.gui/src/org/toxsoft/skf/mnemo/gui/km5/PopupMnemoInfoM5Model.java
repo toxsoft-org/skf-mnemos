@@ -5,6 +5,7 @@ import static org.toxsoft.core.tsgui.valed.api.IValedControlConstants.*;
 import static org.toxsoft.core.tslib.av.EAtomicType.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
+import static org.toxsoft.skf.mnemo.gui.km5.ISkResources.*;
 
 import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.m5.model.*;
@@ -47,8 +48,8 @@ public class PopupMnemoInfoM5Model
    * Attribute {@link PopupMnemoInfo#masterObj() } master
    */
   public M5AttributeFieldDef<PopupMnemoInfo> MNEMO_SKID = new M5AttributeFieldDef<>( FID_MNEMO_SKID, VALOBJ, //
-      TSID_NAME, "Skid мнемосхемы", //
-      TSID_DESCRIPTION, "Skid мнемосхемы", //
+      TSID_NAME, STR_N_MNEMO_SKID, //
+      TSID_DESCRIPTION, STR_D_MNEMO_SKID, //
       TSID_KEEPER_ID, Skid.KEEPER_ID, //
       OPID_EDITOR_FACTORY_NAME, ValedAvValobjSkidEditor.FACTORY_NAME //
   ) {
@@ -63,8 +64,8 @@ public class PopupMnemoInfoM5Model
    * Attribute {@link PopupMnemoInfo#masterObj() } master
    */
   public M5AttributeFieldDef<PopupMnemoInfo> MASTER_SKID = new M5AttributeFieldDef<>( FID_MASTER_SKID, VALOBJ, //
-      TSID_NAME, "Skid мастер объекта", //
-      TSID_DESCRIPTION, "Skid мастер объекта", //
+      TSID_NAME, STR_N_MASTER_OBJ_SKID, //
+      TSID_DESCRIPTION, STR_D_MASTER_OBJ_SKID, //
       TSID_KEEPER_ID, Skid.KEEPER_ID, //
       OPID_EDITOR_FACTORY_NAME, ValedAvValobjSkidEditor.FACTORY_NAME //
   ) {
@@ -79,8 +80,8 @@ public class PopupMnemoInfoM5Model
    * Attribute {@link PopupMnemoInfo#mouseButton() } sensitive mouse button
    */
   public M5AttributeFieldDef<PopupMnemoInfo> MOUSE_BTTN = new M5AttributeFieldDef<>( FID_MOUSE_BTTN, VALOBJ, //
-      TSID_NAME, "mouse button", //
-      TSID_DESCRIPTION, "sensitive mouse button", //
+      TSID_NAME, STR_N_HOT_MOUSE_SKID, //
+      TSID_DESCRIPTION, STR_D_HOT_MOUSE_SKID, //
       TSID_KEEPER_ID, ERtActionMouseButton.KEEPER_ID, //
       TSID_DEFAULT_VALUE, avValobj( ERtActionMouseButton.LEFT ) ) {
 

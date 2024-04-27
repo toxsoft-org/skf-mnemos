@@ -5,6 +5,7 @@ import static org.toxsoft.core.tsgui.valed.api.IValedControlConstants.*;
 import static org.toxsoft.core.tslib.av.EAtomicType.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
+import static org.toxsoft.skf.mnemo.gui.km5.ISkResources.*;
 
 import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.m5.model.*;
@@ -50,7 +51,7 @@ public class SwitchPerspInfoM5Model
 
     @Override
     protected void doInit() {
-      setNameAndDescription( "persp id", "Eclipse perspective id" );
+      setNameAndDescription( STR_N_PERSP_ID, STR_D_PERSP_ID );
       setDefaultValue( AV_STR_EMPTY );
       setFlags( M5FF_COLUMN );
     }
@@ -68,7 +69,7 @@ public class SwitchPerspInfoM5Model
 
     @Override
     protected void doInit() {
-      setNameAndDescription( "view id", "Eclipse view id" );
+      setNameAndDescription( STR_N_VIEW_ID, STR_D_VIEW_ID );
       setDefaultValue( AV_STR_EMPTY );
       setFlags( M5FF_COLUMN );
     }
@@ -83,8 +84,8 @@ public class SwitchPerspInfoM5Model
    * Attribute {@link SwitchPerspInfo#mouseButton() } hot mouse button
    */
   public M5AttributeFieldDef<SwitchPerspInfo> MOUSE_BTTN = new M5AttributeFieldDef<>( FID_MOUSE_BTTN, VALOBJ, //
-      TSID_NAME, "mouse button", //
-      TSID_DESCRIPTION, "hot mouse button", //
+      TSID_NAME, STR_N_MOUSE_BTTN, //
+      TSID_DESCRIPTION, STR_D_MOUSE_BTTN, //
       TSID_KEEPER_ID, ERtActionMouseButton.KEEPER_ID, //
       TSID_DEFAULT_VALUE, avValobj( ERtActionMouseButton.LEFT ) ) {
 
