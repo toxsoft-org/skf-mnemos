@@ -51,7 +51,7 @@ public class SkActorRtBooleanValue
   public static final IVedActorFactory FACTORY = new VedAbstractActorFactory( FACTORY_ID, //
       TSID_NAME, STR_ACTOR_RTBOOLEAN_VALUE, //
       TSID_DESCRIPTION, STR_ACTOR_RTBOOLEAN_VALUE_D, //
-      TSID_ICON_ID, ICONID_VED_RT_EDIT_ACTOR //
+      TSID_ICON_ID, ICONID_VED_RT_BOOL_EDIT_ACTOR //
   ) {
 
     @Override

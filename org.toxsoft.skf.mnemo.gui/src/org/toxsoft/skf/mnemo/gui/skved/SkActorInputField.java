@@ -57,7 +57,7 @@ public class SkActorInputField
   public static final IVedActorFactory FACTORY = new VedAbstractActorFactory( FACTORY_ID, //
       TSID_NAME, STR_ACTOR_INPUT_FIELD, //
       TSID_DESCRIPTION, STR_ACTOR_INPUT_FIELD_D, //
-      TSID_ICON_ID, ICONID_VED_ACTOR //
+      TSID_ICON_ID, ICONID_VED_INPUT_FIELD_ACTOR //
   ) {
 
     @Override
