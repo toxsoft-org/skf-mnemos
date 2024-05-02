@@ -250,7 +250,7 @@ public class VedColumnLayoutController
 
   double calcCellHeight( IVedVisel aVisel, CellLayoutData aCellData ) {
     ID2Rectangle r = aVisel.bounds();
-    return r.height() + aCellData.margins().left() + aCellData.margins().right();
+    return r.height() + aCellData.margins().top() + aCellData.margins().bottom();
   }
 
   int calcExpandedColumnsCount() {

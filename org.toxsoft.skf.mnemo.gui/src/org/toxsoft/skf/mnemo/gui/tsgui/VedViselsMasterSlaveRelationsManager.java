@@ -153,10 +153,12 @@ public class VedViselsMasterSlaveRelationsManager
 
   @Override
   public IStringList listSlaveViselIds( String aMasterId ) {
-    VedAbstractVisel visel = vedScreen.model().visels().list().getByKey( aMasterId );
-    if( visel.params().hasKey( PARAMID_SLAVE_IDS ) ) {
-      // return visel.params().getValobj( PARAMID_SLAVE_IDS );
-      return _listSlaveIds( visel.params() );
+    if( vedScreen.model().visels().list().hasKey( aMasterId ) ) {
+      VedAbstractVisel visel = vedScreen.model().visels().list().getByKey( aMasterId );
+      if( visel.params().hasKey( PARAMID_SLAVE_IDS ) ) {
+        // return visel.params().getValobj( PARAMID_SLAVE_IDS );
+        return _listSlaveIds( visel.params() );
+      }
     }
     return IStringList.EMPTY;
   }
@@ -224,8 +226,11 @@ public class VedViselsMasterSlaveRelationsManager
   public void freeVisel( String aSlaveId ) {
     VedAbstractVisel visel = vedScreen.model().visels().list().findByKey( aSlaveId );
     if( visel != null && visel.params().hasKey( PARAMID_MASTER_ID ) ) {
-      String masterId = visel.params().getStr( PARAMID_MASTER_ID );
-      freeVisel( aSlaveId, masterId );
+      IAtomicValue av = visel.params().getValue( PARAMID_MASTER_ID );
+      if( av != IAtomicValue.NULL ) {
+        String masterId = visel.params().getStr( PARAMID_MASTER_ID );
+        freeVisel( aSlaveId, masterId );
+      }
     }
   }
 
@@ -286,7 +291,9 @@ public class VedViselsMasterSlaveRelationsManager
         IStringList slaveIds = aSource.params().getValobj( PARAMID_SLAVE_IDS );
         for( String slaveId : slaveIds ) {
           VedAbstractVisel visel = VedScreenUtils.findVisel( slaveId, vedScreen );
-          moveVisel( visel, newX - oldX, newY - oldY );
+          if( visel != null ) {
+            moveVisel( visel, newX - oldX, newY - oldY );
+          }
         }
       }
       if( aNewValues.hasKey( PROPID_ANGLE ) ) {

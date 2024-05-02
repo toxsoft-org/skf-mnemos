@@ -18,9 +18,14 @@ public interface ISkMnemoGuiConstants {
   String ICONID_MNEMO              = "mnemo";         //$NON-NLS-1$
   String ICONID_MNEMOS_LIST        = "mnemos-list";   //$NON-NLS-1$
   String ICONID_MNEMO_EDIT         = "mnemo-edit";    //$NON-NLS-1$
-  String ICONID_ENSLAVE            = "link";          //$NON-NLS-1$
+  String ICONID_ENSLAVE            = "enslave";       //$NON-NLS-1$
   String ICONID_FREE               = "unlink";        //$NON-NLS-1$
   String ICONID_RT_ACTION_ACTOR    = "actors-dialog"; //$NON-NLS-1$
+
+  String ICONID_OBJECT  = "box";
+  String ICONID_RIVET   = "clip";
+  String ICONID_LINK    = "link";
+  String ICONID_OBJECTS = "objects";
 
   String ICONID_VED_ACTOR_COLOR_DECORATOR = "ved-actor-color-decorator"; //$NON-NLS-1$
 

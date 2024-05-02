@@ -1,10 +1,13 @@
 package org.toxsoft.skf.mnemo.skide.glib;
 
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
+import static org.toxsoft.core.tsgui.graphics.icons.ITsStdIconIds.*;
 import static org.toxsoft.skf.mnemo.skide.glib.ISkResources.*;
 
 import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
+import org.eclipse.swt.events.*;
+import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.bricks.actions.asp.*;
@@ -27,10 +30,13 @@ import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.tools.*;
+import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
 import org.toxsoft.skf.mnemo.lib.*;
+import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
@@ -178,6 +184,8 @@ public class MnemoEditorPanel
   @SuppressWarnings( "unused" )
   private final MnemoScrollManager scrollManager;
 
+  private CLabel labelMasterClass;
+
   // private final IVedViselGroupsManager groupsManager;
 
   /**
@@ -288,19 +296,66 @@ public class MnemoEditorPanel
 
     vedScreen.attachTo( theCanvas );
     // EAST
-    eastFolder = new TabFolder( sfMain, SWT.BORDER );
+    Composite eastPanel = new Composite( sfMain, SWT.NONE );
+    eastPanel.setLayout( new BorderLayout() );
+    Composite eastTopPanel = new Composite( eastPanel, SWT.NONE );
+    eastTopPanel.setLayoutData( BorderLayout.NORTH );
+    eastTopPanel.setLayout( new GridLayout( 2, false ) );
+    CLabel l = new CLabel( eastTopPanel, SWT.NONE );
+    l.setText( "Класс мастер-объекта: " );
+    l.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 2, 1 ) );
+    labelMasterClass = new CLabel( eastTopPanel, SWT.BORDER );
+    labelMasterClass.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
+    Button btnSelectMaster = new Button( eastTopPanel, SWT.PUSH );
+    btnSelectMaster.setImage( iconManager().loadStdIcon( ICONID_DOCUMENT_EDIT, EIconSize.IS_16X16 ) );
+    btnSelectMaster.addSelectionListener( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( SelectionEvent aEvent ) {
+        ISkClassInfo clsInfo = SkGuiUtils.selectClass( null, vedScreen.tsContext() );
+        if( clsInfo != null ) {
+          labelMasterClass.setText( clsInfo.nmName() );
+        }
+      }
+    } );
+
+    // eastFolder = new TabFolder( eastPanel, SWT.BORDER );
+    eastFolder = new TabFolder( eastPanel, SWT.NONE );
+    eastFolder.setLayoutData( BorderLayout.CENTER );
+    // eastFolder = new TabFolder( sfMain, SWT.BORDER );
     tiViselInsp = new TabItem( eastFolder, SWT.NONE );
     tiViselInsp.setText( STR_TAB_VISEL_INSP );
     tiViselInsp.setToolTipText( STR_TAB_VISEL_INSP_D );
     tiViselInsp.setImage( iconManager().loadStdIcon( EVedItemKind.VISEL.iconId(), EIconSize.IS_16X16 ) );
     viselInspector = new VedScreenItemInspector( eastFolder, vedScreen );
     tiViselInsp.setControl( viselInspector );
+
     tiActorInsp = new TabItem( eastFolder, SWT.NONE );
     tiActorInsp.setText( STR_TAB_ACTOR_INSP );
     tiActorInsp.setToolTipText( STR_TAB_ACTOR_INSP_D );
     tiActorInsp.setImage( iconManager().loadStdIcon( EVedItemKind.ACTOR.iconId(), EIconSize.IS_16X16 ) );
-    actorInspector = new VedScreenItemInspector( eastFolder, vedScreen );
-    tiActorInsp.setControl( actorInspector );
+    Composite actMasterComp = new Composite( eastFolder, SWT.NONE );
+    actMasterComp.setLayout( new BorderLayout() );
+    tiActorInsp.setControl( actMasterComp );
+    actorInspector = new VedScreenItemInspector( actMasterComp, vedScreen );
+    actorInspector.setLayoutData( BorderLayout.CENTER );
+
+    Composite bkComp = new Composite( actMasterComp, SWT.NONE );
+    bkComp.setLayout( new GridLayout( 2, false ) );
+    bkComp.setLayoutData( BorderLayout.NORTH );
+    Button btn = new Button( bkComp, SWT.PUSH );
+    btn.setText( "Мастера..." );
+    btn.addSelectionListener( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( SelectionEvent aEvent ) {
+        // nop
+        SelectMasterPathPanel.edit( null, vedScreen.tsContext() );
+      }
+    } );
+
+    // actorInspector = new VedScreenItemInspector( eastFolder, vedScreen );
+    // tiActorInsp.setControl( actorInspector );
     // setup
     initPalette();
     sfMain.setWeights( 2000, 6000, 2000 );

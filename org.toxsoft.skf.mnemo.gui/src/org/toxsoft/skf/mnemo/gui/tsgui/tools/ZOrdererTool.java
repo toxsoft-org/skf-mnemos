@@ -150,6 +150,10 @@ public class ZOrdererTool
       // Cursor cursor = TsSingleFiltersourcingUtils.Cursor_Cursor( display, cursorImage.getImageData(), 0, 0 );
       cursor = new Cursor( getDisplay(), cursorImage.getImageData(), 0, 0 );
       cursorManager.putCursor( CURSOR_NAME, cursor );
+      cursorImage.dispose();
+    }
+    else {
+      cursor = cursorManager.findCursor( CURSOR_NAME );
     }
   }
 

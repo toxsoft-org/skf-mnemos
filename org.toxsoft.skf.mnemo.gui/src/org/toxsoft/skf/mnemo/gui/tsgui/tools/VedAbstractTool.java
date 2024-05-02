@@ -46,6 +46,10 @@ public abstract class VedAbstractTool
       // Cursor cursor = TsSingleFiltersourcingUtils.Cursor_Cursor( display, cursorImage.getImageData(), 0, 0 );
       stopCursor = new Cursor( getDisplay(), cursorImage.getImageData(), 0, 0 );
       cursorManager().putCursor( STOP_CURSOR_NAME, stopCursor );
+      cursorImage.dispose();
+    }
+    else {
+      stopCursor = cursorManager().findCursor( STOP_CURSOR_NAME );
     }
   }
 
