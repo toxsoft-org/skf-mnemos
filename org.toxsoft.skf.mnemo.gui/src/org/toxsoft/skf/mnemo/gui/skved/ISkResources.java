@@ -94,4 +94,11 @@ interface ISkResources {
   String STR_SELECT_PERSP_DLG_CAPTION = "Выбор E4 перспективы";
   String STR_SELECT_PERSP_DLG_TITLE   = "Выберите перспективу и нажмите Ok";
 
+  /**
+   * {@link StridableTableViewer}
+   */
+  String STR_CLMN_ID    = "ИД";
+  String STR_CLMN_NAME  = "Наименование";
+  String STR_CLMN_DESCR = "Описание";
+
 }

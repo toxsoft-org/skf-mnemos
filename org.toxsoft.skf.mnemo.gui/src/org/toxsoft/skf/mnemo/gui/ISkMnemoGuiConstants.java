@@ -25,7 +25,9 @@ public interface ISkMnemoGuiConstants {
   String ICONID_OBJECT  = "box";
   String ICONID_RIVET   = "clip";
   String ICONID_LINK    = "link";
-  String ICONID_OBJECTS = "objects";
+  String ICONID_OBJECTS = "dialog-error";
+
+  String ICONID_RESOLVED_OBJECT = "opened-box";
 
   String ICONID_VED_ACTOR_COLOR_DECORATOR = "ved-actor-color-decorator"; //$NON-NLS-1$
 

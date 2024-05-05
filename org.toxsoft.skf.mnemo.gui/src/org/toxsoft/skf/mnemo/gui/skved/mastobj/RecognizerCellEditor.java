@@ -4,24 +4,24 @@ import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
-import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.ConfigRecognizerPanel.*;
 
 public class RecognizerCellEditor
     extends DialogCellEditor {
 
-  ITsGuiContext tsContext;
+  PanelCtx context;
 
-  ISkObjectRecognizer recognizer = null;
+  ISkoRecognizerCfg recognizerCfg = null;
 
   /**
    * The label widget showing the command to execute.
    */
   private Label cmdGwidLabel;
 
-  RecognizerCellEditor( Composite aParent, ITsGuiContext aTsContext ) {
+  RecognizerCellEditor( Composite aParent, PanelCtx aContext ) {
     super( aParent, SWT.NONE );
-    tsContext = aTsContext;
+    context = aContext;
   }
 
   @Override
@@ -40,7 +40,7 @@ public class RecognizerCellEditor
 
   @Override
   protected Object openDialogBox( Control aCellEditorWindow ) {
-    return ConfigRecognizerPanel.edit( recognizer, tsContext );
+    return ConfigRecognizerPanel.edit( recognizerCfg, context );
   }
 
 }
