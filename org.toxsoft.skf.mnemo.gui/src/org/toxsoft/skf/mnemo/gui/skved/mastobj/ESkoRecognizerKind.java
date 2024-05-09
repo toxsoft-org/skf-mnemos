@@ -12,26 +12,26 @@ import org.toxsoft.core.tslib.utils.errors.*;
  *
  * @author vs
  */
-public enum ESkObjRecognizerKind
+public enum ESkoRecognizerKind
     implements IStridable {
 
   /**
-   * No border will be drawn.
+   * По значению атрибута.
    */
-  ATTR( "attr", "Значение атрибута", "По значению атрибута" ), //$NON-NLS-1$
+  ATTR( "attr", "По значению атрибута", "По значению атрибута" ), //$NON-NLS-1$
 
   /**
-   * Single line border.
+   * По связи.
    */
   LINK( "link", "По связи", "По наличию связанного объекта" ), //$NON-NLS-1$
 
   /**
-   * No border will be drawn.
+   * По значению НСИ атрибута.
    */
-  RRI_ATTR( "rriAttr", "Значение НСИ атрибута", "По значению НСИ атрибута" ), //$NON-NLS-1$
+  RRI_ATTR( "rriAttr", "По значению НСИ атрибута", "По значению НСИ атрибута" ), //$NON-NLS-1$
 
   /**
-   * Single line border.
+   * По НСИ связи.
    */
   RRI_LINK( "rriLink", "По НСИ связи", "По наличию связанного объекта НСИ" ), //$NON-NLS-1$
 
@@ -40,21 +40,21 @@ public enum ESkObjRecognizerKind
   /**
    * The keeper ID.
    */
-  public static final String KEEPER_ID = "ESkObjRecognizerKind"; //$NON-NLS-1$
+  public static final String KEEPER_ID = "ESkoRecognizerKind"; //$NON-NLS-1$
 
   /**
    * Keeper singleton.
    */
-  public static final IEntityKeeper<ESkObjRecognizerKind> KEEPER =
-      new StridableEnumKeeper<>( ESkObjRecognizerKind.class );
+  public static final IEntityKeeper<ESkoRecognizerKind> KEEPER =
+      new StridableEnumKeeper<>( ESkoRecognizerKind.class );
 
-  private static IStridablesListEdit<ESkObjRecognizerKind> list = null;
+  private static IStridablesListEdit<ESkoRecognizerKind> list = null;
 
   private final String id;
   private final String name;
   private final String description;
 
-  ESkObjRecognizerKind( String aId, String aName, String aDescription ) {
+  ESkoRecognizerKind( String aId, String aName, String aDescription ) {
     id = aId;
     name = aName;
     description = aDescription;
@@ -86,9 +86,9 @@ public enum ESkObjRecognizerKind
   /**
    * Returns all constants in single list.
    *
-   * @return {@link IStridablesList}&lt; {@link ESkObjRecognizerKind} &gt; - list of constants in order of declaraion
+   * @return {@link IStridablesList}&lt; {@link ESkoRecognizerKind} &gt; - list of constants in order of declaraion
    */
-  public static IStridablesList<ESkObjRecognizerKind> asList() {
+  public static IStridablesList<ESkoRecognizerKind> asList() {
     if( list == null ) {
       list = new StridablesList<>( values() );
     }
@@ -99,11 +99,11 @@ public enum ESkObjRecognizerKind
    * Returns the constant by the ID.
    *
    * @param aId String - the ID
-   * @return {@link ESkObjRecognizerKind} - found constant
+   * @return {@link ESkoRecognizerKind} - found constant
    * @throws TsNullArgumentRtException any argument = <code>null</code>
    * @throws TsItemNotFoundRtException no constant found by specified ID
    */
-  public static ESkObjRecognizerKind getById( String aId ) {
+  public static ESkoRecognizerKind getById( String aId ) {
     return asList().getByKey( aId );
   }
 
@@ -111,12 +111,12 @@ public enum ESkObjRecognizerKind
    * Finds the constant by the name.
    *
    * @param aName String - the name
-   * @return {@link ESkObjRecognizerKind} - found constant or <code>null</code>
+   * @return {@link ESkoRecognizerKind} - found constant or <code>null</code>
    * @throws TsNullArgumentRtException any argument = <code>null</code>
    */
-  public static ESkObjRecognizerKind findByName( String aName ) {
+  public static ESkoRecognizerKind findByName( String aName ) {
     TsNullArgumentRtException.checkNull( aName );
-    for( ESkObjRecognizerKind item : values() ) {
+    for( ESkoRecognizerKind item : values() ) {
       if( item.name.equals( aName ) ) {
         return item;
       }
@@ -128,11 +128,11 @@ public enum ESkObjRecognizerKind
    * Returns the constant by the name.
    *
    * @param aName String - the name
-   * @return {@link ESkObjRecognizerKind} - found constant
+   * @return {@link ESkoRecognizerKind} - found constant
    * @throws TsNullArgumentRtException any argument = <code>null</code>
    * @throws TsItemNotFoundRtException no constant found by specified name
    */
-  public static ESkObjRecognizerKind getByName( String aName ) {
+  public static ESkoRecognizerKind getByName( String aName ) {
     return TsItemNotFoundRtException.checkNull( findByName( aName ) );
   }
 

@@ -7,20 +7,39 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
+import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.valed.controls.enums.*;
 import org.toxsoft.core.tslib.bricks.strid.*;
+import org.toxsoft.core.tslib.bricks.validator.*;
+import org.toxsoft.core.tslib.coll.*;
+import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.ConfigRecognizerPanel.*;
+import org.toxsoft.uskat.core.*;
+import org.toxsoft.uskat.core.gui.conn.*;
 
 public class ConfigRecognizerPanel
-    extends AbstractTsDialogPanel<ISkObjectRecognizer, ITsGuiContext> {
+    extends AbstractTsDialogPanel<ISkoRecognizerCfg, PanelCtx> {
 
-  protected ConfigRecognizerPanel( Composite aParent, TsDialog<ISkObjectRecognizer, ITsGuiContext> aOwnerDialog ) {
+  static class PanelCtx {
+
+    ITsGuiContext tsContext;
+    Skid          objSkid;
+
+    PanelCtx( Skid aObjSkid, ITsGuiContext aTsContext ) {
+      objSkid = aObjSkid;
+      tsContext = aTsContext;
+    }
+  }
+
+  protected ConfigRecognizerPanel( Composite aParent, TsDialog<ISkoRecognizerCfg, PanelCtx> aOwnerDialog ) {
     super( aParent, aOwnerDialog );
     init();
   }
 
-  protected ConfigRecognizerPanel( Composite aParent, ISkObjectRecognizer aData, ITsGuiContext aEnviron, int aFlags ) {
-    super( aParent, aEnviron, aData, aEnviron, aFlags );
+  protected ConfigRecognizerPanel( Composite aParent, ISkoRecognizerCfg aData, PanelCtx aEnviron, int aFlags ) {
+    super( aParent, aEnviron.tsContext, aData, aEnviron, aFlags );
     init();
   }
 
@@ -29,14 +48,20 @@ public class ConfigRecognizerPanel
   //
 
   @Override
-  protected void doSetDataRecord( ISkObjectRecognizer aData ) {
+  protected void doSetDataRecord( ISkoRecognizerCfg aData ) {
     // TODO Auto-generated method stub
 
   }
 
   @Override
-  protected ISkObjectRecognizer doGetDataRecord() {
-    // TODO Auto-generated method stub
+  protected ISkoRecognizerCfg doGetDataRecord() {
+    if( stackLayout.topControl != null ) {
+      ISkoRecognizerCfgPanel panel = findRecognizerPanel( stackLayout.topControl );
+      if( panel != null ) {
+        ISkoRecognizerCfg cfg = panel.config();
+        return cfg;
+      }
+    }
     return null;
   }
 
@@ -44,24 +69,74 @@ public class ConfigRecognizerPanel
   // Implementation
   //
 
-  private ValedEnumCombo<ESkObjRecognizerKind> kindCombo;
+  private ValedEnumCombo<ESkoRecognizerKind> kindCombo;
+
+  Composite stackPanel;
+
+  StackLayout stackLayout;
+
+  ISkCoreApi coreApi;
+
+  private final IMapEdit<String, ISkoRecognizerCfgPanel> panels = new ElemMap<>();
 
   void init() {
-    setLayout( new GridLayout( 2, false ) );
+    coreApi = environ().tsContext.get( ISkConnectionSupplier.class ).defConn().coreApi();
+    setLayout( new BorderLayout() );
+
+    Composite topPanel = new Composite( this, SWT.NONE );
+    topPanel.setLayout( new GridLayout( 2, false ) );
 
     CLabel l;
 
-    l = new CLabel( this, SWT.NONE );
+    l = new CLabel( topPanel, SWT.NONE );
     l.setText( "Тип распознавателя: " );
-    kindCombo = new ValedEnumCombo<>( environ(), ESkObjRecognizerKind.class, IStridable::nmName );
-    kindCombo.createControl( this );
+    kindCombo = new ValedEnumCombo<>( environ().tsContext, ESkoRecognizerKind.class, IStridable::nmName );
+    kindCombo.createControl( topPanel );
     kindCombo.getControl().addSelectionListener( new SelectionAdapter() {
 
       @Override
       public void widgetSelected( SelectionEvent aE ) {
-        // TODO Auto-generated method stub
+        if( kindCombo.canGetValue() == ValidationResult.SUCCESS ) {
+          ESkoRecognizerKind kind = kindCombo.getValue();
+          switch( kind ) {
+            case ATTR:
+              ISkoRecognizerCfgPanel cfgP;
+              if( !panels.hasKey( kind.id() ) ) {
+                cfgP = ByAttrValueRecognizer.FACTORY.createCfgEditPanel( stackPanel, environ().objSkid, coreApi );
+                panels.put( kind.id(), cfgP );
+              }
+              cfgP = panels.getByKey( kind.id() );
+              stackLayout.topControl = cfgP.getControl();
+              stackPanel.layout();
+              break;
+            case LINK:
+              break;
+            case RRI_ATTR:
+              break;
+            case RRI_LINK:
+              break;
+            default:
+              throw new IllegalArgumentException( "Unexpected value: " + kind );
+          }
+        }
       }
     } );
+    topPanel.setLayoutData( BorderLayout.NORTH );
+
+    stackPanel = new Composite( this, SWT.NONE );
+    stackLayout = new StackLayout();
+    stackPanel.setLayout( stackLayout );
+    stackPanel.setLayoutData( BorderLayout.CENTER );
+
+  }
+
+  ISkoRecognizerCfgPanel findRecognizerPanel( Control aControl ) {
+    for( ISkoRecognizerCfgPanel panel : panels.values() ) {
+      if( panel.getControl() == aControl ) {
+        return panel;
+      }
+    }
+    return null;
   }
 
   // ------------------------------------------------------------------------------------
@@ -71,15 +146,15 @@ public class ConfigRecognizerPanel
   /**
    * Статический метод вызова диалога редактирования параметров выравнивания содержимого ячейки.
    *
-   * @param aData ISkObjectRecognizer - параметры выравнивания содержимого ячейки
-   * @param aTsContext ITsGuiContext - соответствующий контекст
-   * @return {@link ISkObjectRecognizer} - новая отредактированнная конфигурация или <b>null</br>
+   * @param aData ISkoRecognizerCfg - параметры "распознавателя"
+   * @param aContext PanelCtx - соответствующий контекст панели
+   * @return {@link ISkoRecognizerCfg} - новая отредактированнная конфигурация или <b>null</br>
    */
-  public static final ISkObjectRecognizer edit( ISkObjectRecognizer aData, ITsGuiContext aTsContext ) {
-    TsNullArgumentRtException.checkNull( aTsContext );
-    IDialogPanelCreator<ISkObjectRecognizer, ITsGuiContext> creator = ConfigRecognizerPanel::new;
-    ITsDialogInfo dlgInfo = new TsDialogInfo( aTsContext, "\"Распознаватель\" объектов", "STR_MSG_CANVAS_CFG" );
-    TsDialog<ISkObjectRecognizer, ITsGuiContext> d = new TsDialog<>( dlgInfo, aData, aTsContext, creator );
+  public static final ISkoRecognizerCfg edit( ISkoRecognizerCfg aData, PanelCtx aContext ) {
+    TsNullArgumentRtException.checkNull( aContext );
+    IDialogPanelCreator<ISkoRecognizerCfg, PanelCtx> creator = ConfigRecognizerPanel::new;
+    ITsDialogInfo dlgInfo = new TsDialogInfo( aContext.tsContext, "\"Распознаватель\" объектов", "STR_MSG_CANVAS_CFG" );
+    TsDialog<ISkoRecognizerCfg, PanelCtx> d = new TsDialog<>( dlgInfo, aData, aContext, creator );
     return d.execData();
   }
 

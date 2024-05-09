@@ -1,15 +1,36 @@
 package org.toxsoft.skf.mnemo.gui.skved;
 
+import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
+
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tslib.bricks.strid.*;
 
+/**
+ * Вспомогательный просмотрщик {@link IStridable} сущностей в таблице с тремя колонками:
+ * <ul>
+ * <li>ИД</li>
+ * <li>Наименование</li>
+ * <li>Описание</li>
+ * </ul>
+ *
+ * @author vs
+ */
 public class StridableTableViewer {
 
   private final TableViewer viewer;
 
-  protected StridableTableViewer( Composite aParent, int aStyle, int aIdWidth, int aNameWidth, int aDescrWidth ) {
+  /**
+   * Конструктор.
+   *
+   * @param aParent {@link Composite} - родительская панель
+   * @param aStyle int - SWT стиль
+   * @param aIdWidth - ширина колонки "ИД"
+   * @param aNameWidth - ширина колонки "Наименование"
+   * @param aDescrWidth - ширина колонки "Описание"
+   */
+  public StridableTableViewer( Composite aParent, int aStyle, int aIdWidth, int aNameWidth, int aDescrWidth ) {
     viewer = new TableViewer( aParent, aStyle );
 
     viewer.getTable().setHeaderVisible( true );
@@ -17,7 +38,7 @@ public class StridableTableViewer {
 
     TableViewerColumn columnId = new TableViewerColumn( viewer, SWT.NONE );
     columnId.getColumn().setWidth( aIdWidth );
-    columnId.getColumn().setText( "ИД" );
+    columnId.getColumn().setText( STR_CLMN_ID );
     columnId.setLabelProvider( new ColumnLabelProvider() {
 
       @Override
@@ -35,7 +56,7 @@ public class StridableTableViewer {
 
     TableViewerColumn columnName = new TableViewerColumn( viewer, SWT.NONE );
     columnName.getColumn().setWidth( aNameWidth );
-    columnName.getColumn().setText( "Наименование" );
+    columnName.getColumn().setText( STR_CLMN_NAME );
     columnName.setLabelProvider( new CellLabelProvider() {
 
       @Override
@@ -54,7 +75,7 @@ public class StridableTableViewer {
     if( aDescrWidth > 0 ) {
       TableViewerColumn columnDescr = new TableViewerColumn( viewer, SWT.NONE );
       columnDescr.getColumn().setWidth( aDescrWidth );
-      columnDescr.getColumn().setText( "Описание" );
+      columnDescr.getColumn().setText( STR_CLMN_DESCR );
       columnDescr.setLabelProvider( new CellLabelProvider() {
 
         @Override
@@ -70,7 +91,7 @@ public class StridableTableViewer {
     viewer.setContentProvider( new ArrayContentProvider() );
   }
 
-  TableViewer viewer() {
+  public TableViewer viewer() {
     return viewer;
   }
 

@@ -14,6 +14,8 @@ import org.toxsoft.core.tslib.bricks.strid.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.core.tslib.gw.skid.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.ConfigRecognizerPanel.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
@@ -116,15 +118,17 @@ public class MasterPathViewer
       extends BaseNode {
 
     private final Image imgObjects;
+    private final Image imgResolvedObject;
 
     private final ISkClassInfo classInfo;
 
-    private ISkObjectRecognizer recognizer = null;
+    private ISkoRecognizerCfg recognizerCfg = null;
 
     MultiObjectsNode( ISkClassInfo aClassInfo, BaseNode aParent ) {
       super( aParent, aClassInfo.id(), aClassInfo.nmName(), aClassInfo.description() );
       classInfo = aClassInfo;
       imgObjects = iconManager().loadStdIcon( ICONID_OBJECTS, EIconSize.IS_16X16 );
+      imgResolvedObject = iconManager().loadStdIcon( ICONID_RESOLVED_OBJECT, EIconSize.IS_16X16 );
     }
 
     @Override
@@ -145,6 +149,9 @@ public class MasterPathViewer
 
     @Override
     protected Image image() {
+      if( recognizerCfg != null ) {
+        return imgResolvedObject;
+      }
       return imgObjects;
     }
 
@@ -153,12 +160,15 @@ public class MasterPathViewer
       return true;
     }
 
-    ISkObjectRecognizer recognizer() {
-      return recognizer;
+    ISkoRecognizerCfg recognizerCfg() {
+      return recognizerCfg;
     }
 
-    public void setRecognizer( ISkObjectRecognizer aRecognizer ) {
-      recognizer = aRecognizer;
+    public void setRecognizerCfg( ISkoRecognizerCfg aRecognizerCfg ) {
+      recognizerCfg = aRecognizerCfg;
+      if( aRecognizerCfg == null ) {
+        children.clear();
+      }
     }
   }
 
@@ -257,7 +267,11 @@ public class MasterPathViewer
 
     @Override
     protected CellEditor getCellEditor( Object aElement ) {
-      return new RecognizerCellEditor( viewer.getTree(), MasterPathViewer.this.tsContext() );
+      MultiObjectsNode node = (MultiObjectsNode)aElement;
+
+      Skid objSkid = coreApi.objService().listObjs( node.classInfo.id(), true ).first().skid();
+      PanelCtx ctx = new PanelCtx( objSkid, MasterPathViewer.this.tsContext() );
+      return new RecognizerCellEditor( viewer.getTree(), ctx );
     }
 
     @Override
@@ -268,22 +282,27 @@ public class MasterPathViewer
     @Override
     protected Object getValue( Object aElement ) {
       MultiObjectsNode node = (MultiObjectsNode)aElement;
-      return node.recognizer;
+      return node.recognizerCfg();
     }
 
     @Override
     protected void setValue( Object aElement, Object aValue ) {
       MultiObjectsNode node = (MultiObjectsNode)aElement;
-      node.setRecognizer( (ISkObjectRecognizer)aValue );
+      node.setRecognizerCfg( (ISkoRecognizerCfg)aValue );
+      viewer.update( node, null );
     }
 
   }
 
   TreeViewer viewer;
 
+  ISkCoreApi coreApi;
+
   public MasterPathViewer( Composite aParent, ITsGuiContext aContext ) {
     super( aParent, aContext );
     setLayout( new FillLayout() );
+
+    coreApi = aContext.get( ISkConnectionSupplier.class ).defConn().coreApi();
 
     viewer = new TreeViewer( this, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL );
     viewer.getTree().setHeaderVisible( true );

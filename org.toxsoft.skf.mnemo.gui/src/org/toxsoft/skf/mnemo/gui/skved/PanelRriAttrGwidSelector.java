@@ -77,7 +77,7 @@ public class PanelRriAttrGwidSelector
       ISkRegRefInfoService rriServ = coreApi.getService( ISkRegRefInfoService.SERVICE_ID );
       // ISkRriSection section = rriServ.listSections().findByKey( aString );
       // if( section != null ) {
-      // viewer.setSelection( new StructuredSelection( section ) );
+      // attrsViewer.setSelection( new StructuredSelection( section ) );
       // }
     }
   }
