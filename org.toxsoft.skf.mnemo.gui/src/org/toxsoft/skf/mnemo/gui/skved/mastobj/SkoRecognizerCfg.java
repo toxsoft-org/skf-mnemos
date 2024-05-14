@@ -16,6 +16,11 @@ public final class SkoRecognizerCfg
     implements ISkoRecognizerCfg {
 
   /**
+   * Keeper Id
+   */
+  public static final String KEEPER_ID = "SkoRecognizerCfgKeeper"; //$NON-NLS-1$
+
+  /**
    * The keeper singleton.
    */
   public static final IEntityKeeper<ISkoRecognizerCfg> KEEPER =

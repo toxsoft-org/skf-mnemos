@@ -14,7 +14,7 @@ import org.toxsoft.uskat.core.utils.ugwi.*;
  *
  * @author hazard157
  */
-public abstract class AbstrctSimpleResolver
+public abstract class AbstractSimpleResolver
     implements IUgwiResolver, ISkGuiContextable {
 
   private final IOptionSet    resolverConfig;
@@ -26,7 +26,7 @@ public abstract class AbstrctSimpleResolver
    * @param aResolverConfig {@link IOptionSet} - resolver configuration, never is <code>null</code>
    * @param aSkConn {@link ISkConnection} - SK-connection, never is <code>null</code>
    */
-  public AbstrctSimpleResolver( IOptionSet aResolverConfig, ISkConnection aSkConn ) {
+  public AbstractSimpleResolver( IOptionSet aResolverConfig, ISkConnection aSkConn ) {
     resolverConfig = aResolverConfig;
     skConn = aSkConn;
   }

@@ -296,9 +296,11 @@ public class MnemoEditorPanel
 
     vedScreen.attachTo( theCanvas );
     // EAST
-    Composite eastPanel = new Composite( sfMain, SWT.NONE );
+    // Composite eastPanel = new Composite( sfMain, SWT.NONE );
+    SashForm eastPanel = new SashForm( sfMain, SWT.VERTICAL );
+
     eastPanel.setLayout( new BorderLayout() );
-    Composite eastTopPanel = new Composite( eastPanel, SWT.NONE );
+    Composite eastTopPanel = new Composite( eastPanel, SWT.BORDER );
     eastTopPanel.setLayoutData( BorderLayout.NORTH );
     eastTopPanel.setLayout( new GridLayout( 2, false ) );
     CLabel l = new CLabel( eastTopPanel, SWT.NONE );
@@ -318,6 +320,9 @@ public class MnemoEditorPanel
         }
       }
     } );
+
+    PanelSubmastersList submastersPanel = new PanelSubmastersList( eastTopPanel, vedScreen.tsContext() );
+    submastersPanel.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
 
     // eastFolder = new TabFolder( eastPanel, SWT.BORDER );
     eastFolder = new TabFolder( eastPanel, SWT.NONE );
@@ -353,6 +358,7 @@ public class MnemoEditorPanel
         SelectMasterPathPanel.edit( null, vedScreen.tsContext() );
       }
     } );
+    eastPanel.setWeights( 2, 10 );
 
     // actorInspector = new VedScreenItemInspector( eastFolder, vedScreen );
     // tiActorInsp.setControl( actorInspector );
