@@ -16,7 +16,7 @@ import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.graphics.icons.*;
 import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tsgui.panels.toolbar.*;
-import org.toxsoft.core.tsgui.utils.layout.*;
+import org.toxsoft.core.tsgui.utils.layout.BorderLayout;
 import org.toxsoft.core.tsgui.ved.editor.*;
 import org.toxsoft.core.tsgui.ved.editor.IVedViselSelectionManager.*;
 import org.toxsoft.core.tsgui.ved.editor.palette.*;
@@ -386,6 +386,11 @@ public class MnemoEditorPanel
 
     vedScreen.setActorsEnabled( false );
     updateActionsState();
+  }
+
+  @Override
+  protected void doDispose() {
+    skVedEnvironment.close();
   }
 
   // ------------------------------------------------------------------------------------
