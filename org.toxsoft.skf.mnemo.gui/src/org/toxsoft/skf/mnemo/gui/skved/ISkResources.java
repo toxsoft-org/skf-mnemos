@@ -12,6 +12,8 @@ interface ISkResources {
    */
   String STR_PROP_GWID            = Messages.getString( "STR_PROP_GWID" );            //$NON-NLS-1$
   String STR_PROP_GWID_D          = Messages.getString( "STR_PROP_GWID_D" );          //$NON-NLS-1$
+  String STR_PROP_SKID            = Messages.getString( "STR_PROP_SKID" );            //$NON-NLS-1$
+  String STR_PROP_SKID_D          = Messages.getString( "STR_PROP_SKID_D" );          //$NON-NLS-1$
   String STR_PROP_ATTR_GWID       = Messages.getString( "STR_PROP_ATTR_GWID" );       //$NON-NLS-1$
   String STR_PROP_ATTR_GWID_D     = Messages.getString( "STR_PROP_ATTR_GWID_D" );     //$NON-NLS-1$
   String STR_PROP_RTD_GWID        = Messages.getString( "STR_PROP_RTD_GWID" );        //$NON-NLS-1$

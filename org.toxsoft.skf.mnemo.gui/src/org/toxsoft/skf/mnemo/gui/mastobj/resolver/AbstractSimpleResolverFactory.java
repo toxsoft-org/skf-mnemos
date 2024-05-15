@@ -84,9 +84,9 @@ public abstract class AbstractSimpleResolverFactory
    *
    * @param aResolverConfig {@link IOptionSet} - resolver configuration, never is <code>null</code>
    * @param aSkConn {@link ISkConnection} - SK-connection, never is <code>null</code>
-   * @return {@link AbstrctSimpleResolver} - created instance
+   * @return {@link AbstractSimpleResolver} - created instance
    */
-  protected abstract AbstrctSimpleResolver doCreateResolver( IOptionSet aResolverConfig, ISkConnection aSkConn );
+  protected abstract AbstractSimpleResolver doCreateResolver( IOptionSet aResolverConfig, ISkConnection aSkConn );
 
   /**
    * Subclass may perform additional check of the configuration options.
