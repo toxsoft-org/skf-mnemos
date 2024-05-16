@@ -32,4 +32,8 @@ public interface IMnemoMasterObjectConstants {
    */
   String VED_ITEM_EXTRA_DATA_ID_PROPERTIES_RESOLVERS = USKAT_FULL_ID + ".UgwiPropertiesResolversMap"; //$NON-NLS-1$
 
+  /**
+   * ИД "разрешителя" для главного мастер-объекта мнемосхемы.
+   */
+  String VED_SCREEN_MAIN_MNEMO_RESOLVER_ID = "ved.screen.main.mnemo.resolver.id"; //$NON-NLS-1$
 }

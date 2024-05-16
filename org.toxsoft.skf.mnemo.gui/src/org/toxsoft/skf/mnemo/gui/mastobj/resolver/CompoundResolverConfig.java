@@ -49,7 +49,7 @@ public final class CompoundResolverConfig
    */
   public CompoundResolverConfig( IList<SimpleResolverCfg> aSimpleConfigs ) {
     TsNullArgumentRtException.checkNull( aSimpleConfigs );
-    TsIllegalArgumentRtException.checkTrue( aSimpleConfigs.isEmpty() );
+    // TsIllegalArgumentRtException.checkTrue( aSimpleConfigs.isEmpty() ); Sol-- иначе NONE дает ошибку
     cfgsList = new ElemArrayList<>( aSimpleConfigs );
   }
 

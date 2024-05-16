@@ -7,6 +7,8 @@ import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
+import org.toxsoft.core.tslib.coll.*;
+import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
@@ -46,8 +48,6 @@ public class DirectGwidResolver
     }
   };
 
-  // private final Gwid abstractGwid;
-
   /**
    * Конструктор.
    *
@@ -75,6 +75,35 @@ public class DirectGwidResolver
     Gwid gwid = Gwid.of( essence );
     gwid = resolve( gwid.skid() );
     return Ugwi.of( UgwiKindGwid.KIND_ID, gwid.canonicalString() );
+  }
+
+  // ------------------------------------------------------------------------------------
+  // Static methods
+  //
+
+  /**
+   * Возвращает конфигурацию для {@link DirectGwidResolver}.
+   *
+   * @param aGwid Gwid - Gwid объекта м.б. абстрактным
+   * @return {@link ICompoundResolverConfig} - конфигурацию для {@link DirectGwidResolver}
+   */
+  public static ICompoundResolverConfig createResolverConfig( Gwid aGwid ) {
+    IOptionSetEdit opSet = new OptionSet();
+    opSet.setValobj( PROPID_GWID, aGwid );
+    SimpleResolverCfg simpleCfg = new SimpleResolverCfg( FACTORY_ID, opSet );
+    IList<SimpleResolverCfg> simpleConfigs = new ElemArrayList<>( simpleCfg );
+    CompoundResolverConfig cfg = new CompoundResolverConfig( simpleConfigs );
+    return cfg;
+  }
+
+  /**
+   * Возвращает {@link Gwid} - мастер объекта, который м.б. разрешен с помощью Strid'a
+   *
+   * @param aCfg {@link SimpleResolverCfg} - конфигурация "разрешителя"
+   * @return Gwid - gwid мастер-объекта
+   */
+  public static Gwid gwid( SimpleResolverCfg aCfg ) {
+    return aCfg.params().getValobj( PROPID_GWID );
   }
 
   // ------------------------------------------------------------------------------------

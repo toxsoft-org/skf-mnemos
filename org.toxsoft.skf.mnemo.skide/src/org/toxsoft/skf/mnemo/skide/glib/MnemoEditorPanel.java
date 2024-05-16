@@ -2,6 +2,7 @@ package org.toxsoft.skf.mnemo.skide.glib;
 
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
 import static org.toxsoft.core.tsgui.graphics.icons.ITsStdIconIds.*;
+import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
 import static org.toxsoft.skf.mnemo.skide.glib.ISkResources.*;
 
 import org.eclipse.swt.*;
@@ -16,7 +17,7 @@ import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.graphics.icons.*;
 import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tsgui.panels.toolbar.*;
-import org.toxsoft.core.tsgui.utils.layout.BorderLayout;
+import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.ved.editor.*;
 import org.toxsoft.core.tsgui.ved.editor.IVedViselSelectionManager.*;
 import org.toxsoft.core.tsgui.ved.editor.palette.*;
@@ -27,8 +28,13 @@ import org.toxsoft.core.tsgui.ved.screen.asp.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
+import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
+import org.toxsoft.core.tslib.bricks.keeper.*;
+import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.skf.mnemo.gui.mastobj.*;
+import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.skved.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.*;
@@ -186,7 +192,7 @@ public class MnemoEditorPanel
 
   private CLabel labelMasterClass;
 
-  // private final IVedViselGroupsManager groupsManager;
+  private MnemoResolverConfig resolverConfig = new MnemoResolverConfig();
 
   /**
    * Constructor.
@@ -304,6 +310,8 @@ public class MnemoEditorPanel
     eastTopPanel.setLayoutData( BorderLayout.NORTH );
     eastTopPanel.setLayout( new GridLayout( 2, false ) );
     CLabel l = new CLabel( eastTopPanel, SWT.NONE );
+    // фыв
+
     l.setText( "Класс мастер-объекта: " );
     l.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 2, 1 ) );
     labelMasterClass = new CLabel( eastTopPanel, SWT.BORDER );
@@ -317,6 +325,10 @@ public class MnemoEditorPanel
         ISkClassInfo clsInfo = SkGuiUtils.selectClass( null, vedScreen.tsContext() );
         if( clsInfo != null ) {
           labelMasterClass.setText( clsInfo.nmName() );
+          Gwid gwid = Gwid.createClass( clsInfo.id() );
+          ICompoundResolverConfig resCfg = DirectGwidResolver.createResolverConfig( gwid );
+          SubmasterConfig smCfg = SubmasterConfig.create( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID, new OptionSet(), resCfg );
+          resolverConfig.subMasters().add( smCfg );
         }
       }
     } );
@@ -496,12 +508,29 @@ public class MnemoEditorPanel
 
   @Override
   public IVedScreenCfg getCurrentConfig() {
-    return VedScreenUtils.getVedScreenConfig( vedScreen );
+    VedScreenCfg scrCfg = VedScreenUtils.getVedScreenConfig( vedScreen );
+    String itemId = VED_ITEM_EXTRA_DATA_ID_PROPERTIES_RESOLVERS;
+    scrCfg.extraData().writeItem( itemId, resolverConfig, MnemoResolverConfig.KEEPER );
+    return scrCfg;
   }
 
   @Override
   public void setCurrentConfig( IVedScreenCfg aCfg ) {
     VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
+
+    String sectionId = VED_SCREEN_EXTRA_DATA_ID_MNEMO_RESOLVER_CONGIF;
+    // if( aCfg.extraData().hasSection( sectionId ) ) {
+    resolverConfig.subMasters().clear();
+    resolverConfig.clearActorSubmasterIds();
+    IEntityKeeper<IMnemoResolverConfig> keeper = MnemoResolverConfig.KEEPER;
+    resolverConfig = (MnemoResolverConfig)aCfg.extraData().readItem( sectionId, keeper, resolverConfig );
+    if( resolverConfig.subMasters().hasKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ) ) {
+      SubmasterConfig smCfg = resolverConfig.subMasters().getByKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID );
+      Gwid gwid = DirectGwidResolver.gwid( smCfg.resolverCfg().cfgs().first() );
+      labelMasterClass.setText( gwid.classId() );
+    }
+    // }
+
     undoManager.reset();
     setChanged( false );
     scrollManager.setOrigin( 300, 300 );
