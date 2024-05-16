@@ -1,7 +1,6 @@
 package org.toxsoft.skf.mnemo.skide.glib;
 
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
-import static org.toxsoft.core.tsgui.graphics.icons.ITsStdIconIds.*;
 import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
 import static org.toxsoft.skf.mnemo.skide.glib.ISkResources.*;
 
@@ -28,21 +27,17 @@ import org.toxsoft.core.tsgui.ved.screen.asp.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
-import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
 import org.toxsoft.core.tslib.bricks.keeper.*;
-import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.core.txtproj.lib.storage.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
-import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.skved.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.tools.*;
-import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
 import org.toxsoft.skf.mnemo.lib.*;
-import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
@@ -164,7 +159,6 @@ public class MnemoEditorPanel
   private final IVedViselsPositionManager             positionManager;
 
   private final MultiSelectionDecorator selectionDecorator;
-  // private final MultiSelectionAndGroupsDecorator selectionDecorator;
 
   private final SkVedEnvironment skVedEnvironment;
 
@@ -187,12 +181,13 @@ public class MnemoEditorPanel
 
   private final VedUndoManager undoManager;
 
-  @SuppressWarnings( "unused" )
   private final MnemoScrollManager scrollManager;
 
-  private CLabel labelMasterClass;
+  // private CLabel labelMasterClass;
 
   private MnemoResolverConfig resolverConfig = new MnemoResolverConfig();
+
+  private MnemoSubmastersPanel submastersPanel;
 
   /**
    * Constructor.
@@ -212,7 +207,6 @@ public class MnemoEditorPanel
     SashForm sfMain = new SashForm( this, SWT.HORIZONTAL );
     sfMain.setLayoutData( BorderLayout.CENTER );
     //
-    // vedScreen = new VedScreen( new TsGuiContext( tsContext() ) );
     vedScreen = new VedScreen( aContext );
     ISkConnectionSupplier skConnSupp = tsContext().get( ISkConnectionSupplier.class );
     skVedEnvironment = new SkVedEnvironment( skConnSupp.defConn() );
@@ -226,8 +220,6 @@ public class MnemoEditorPanel
     positionManager = new VedViselsPositionManager();
 
     undoManager = new VedUndoManager( vedScreen );
-    // groupsManager = new VedViselGroupsManager( vedScreen.model() );
-    // selectionManager = new VedViselSelectionGroupManager( vedScreen, groupsManager );
     selectionManager = new VedViselSelectionManager( vedScreen );
 
     toolsManager.addTool( new ZOrdererTool( selectionManager, vedScreen ) );
@@ -245,7 +237,6 @@ public class MnemoEditorPanel
     positionManager.addProcessor( new SelectedViselsPositionManager( selectionManager ) );
     positionManager.addProcessor( new MasterSlavePositionProcessor( masterSlaveManager ) );
 
-    // selectionManager = new VedViselSelectionManager( vedScreen );
     vertexSetManager = new VedViselVertexSetManager( vedScreen, selectionManager );
     viselsPositionHandler = new VedViselPositionHandler( vedScreen, positionManager );
 
@@ -254,8 +245,6 @@ public class MnemoEditorPanel
 
     multiSelectionHandler = new VedViselMultiselectionHandler( vedScreen, selectionManager );
     selectionDecorator = new MultiSelectionDecorator( vedScreen, selectionManager );
-    // selectionDecorator =
-    // new MultiSelectionAndGroupsDecorator( vedScreen, (VedViselSelectionGroupManager)selectionManager );
     vedScreen.model().screenDecoratorsAfter().add( selectionDecorator );
 
     viselCtxMenuManager = new VedViselContextMenuManager( vedScreen, selectionManager );
@@ -263,7 +252,6 @@ public class MnemoEditorPanel
     viselCtxMenuManager.addCustomMenuCreator( masterSlaveManager );
     viselCtxMenuManager.addCustomMenuCreator( layoutManager );
     viselCtxMenuManager.addCustomMenuCreator( deleteManager );
-    // viselCtxMenuManager.addCustomMenuCreator( new VedAspGroupUngroup( vedScreen, selectionManager, groupsManager ) );
 
     actionsProvider.addHandler( new AspSaveMnemo() );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
@@ -273,7 +261,6 @@ public class MnemoEditorPanel
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
     actionsProvider.addHandler( new VedAspCanvasActions( vedScreen ) );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
-    // actionsProvider.addHandler( new AspActorsRunner( vedScreen ) );
     actionsProvider.addHandler( new AspRunActors( vedScreen ) );
     // WEST
     westFolder = new TabFolder( sfMain, SWT.TOP | SWT.BORDER );
@@ -302,44 +289,14 @@ public class MnemoEditorPanel
 
     vedScreen.attachTo( theCanvas );
     // EAST
-    // Composite eastPanel = new Composite( sfMain, SWT.NONE );
     SashForm eastPanel = new SashForm( sfMain, SWT.VERTICAL );
 
     eastPanel.setLayout( new BorderLayout() );
-    Composite eastTopPanel = new Composite( eastPanel, SWT.BORDER );
-    eastTopPanel.setLayoutData( BorderLayout.NORTH );
-    eastTopPanel.setLayout( new GridLayout( 2, false ) );
-    CLabel l = new CLabel( eastTopPanel, SWT.NONE );
-    // фыв
+    submastersPanel = new MnemoSubmastersPanel( eastPanel, vedScreen, SWT.BORDER );
 
-    l.setText( "Класс мастер-объекта: " );
-    l.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 2, 1 ) );
-    labelMasterClass = new CLabel( eastTopPanel, SWT.BORDER );
-    labelMasterClass.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false ) );
-    Button btnSelectMaster = new Button( eastTopPanel, SWT.PUSH );
-    btnSelectMaster.setImage( iconManager().loadStdIcon( ICONID_DOCUMENT_EDIT, EIconSize.IS_16X16 ) );
-    btnSelectMaster.addSelectionListener( new SelectionAdapter() {
-
-      @Override
-      public void widgetSelected( SelectionEvent aEvent ) {
-        ISkClassInfo clsInfo = SkGuiUtils.selectClass( null, vedScreen.tsContext() );
-        if( clsInfo != null ) {
-          labelMasterClass.setText( clsInfo.nmName() );
-          Gwid gwid = Gwid.createClass( clsInfo.id() );
-          ICompoundResolverConfig resCfg = DirectGwidResolver.createResolverConfig( gwid );
-          SubmasterConfig smCfg = SubmasterConfig.create( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID, new OptionSet(), resCfg );
-          resolverConfig.subMasters().add( smCfg );
-        }
-      }
-    } );
-
-    PanelSubmastersList submastersPanel = new PanelSubmastersList( eastTopPanel, vedScreen.tsContext() );
-    submastersPanel.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
-
-    // eastFolder = new TabFolder( eastPanel, SWT.BORDER );
     eastFolder = new TabFolder( eastPanel, SWT.NONE );
     eastFolder.setLayoutData( BorderLayout.CENTER );
-    // eastFolder = new TabFolder( sfMain, SWT.BORDER );
+
     tiViselInsp = new TabItem( eastFolder, SWT.NONE );
     tiViselInsp.setText( STR_TAB_VISEL_INSP );
     tiViselInsp.setToolTipText( STR_TAB_VISEL_INSP_D );
@@ -370,7 +327,7 @@ public class MnemoEditorPanel
         SelectMasterPathPanel.edit( null, vedScreen.tsContext() );
       }
     } );
-    eastPanel.setWeights( 2, 10 );
+    eastPanel.setWeights( 3, 10 );
 
     // actorInspector = new VedScreenItemInspector( eastFolder, vedScreen );
     // tiActorInsp.setControl( actorInspector );
@@ -509,8 +466,6 @@ public class MnemoEditorPanel
   @Override
   public IVedScreenCfg getCurrentConfig() {
     VedScreenCfg scrCfg = VedScreenUtils.getVedScreenConfig( vedScreen );
-    String itemId = VED_ITEM_EXTRA_DATA_ID_PROPERTIES_RESOLVERS;
-    scrCfg.extraData().writeItem( itemId, resolverConfig, MnemoResolverConfig.KEEPER );
     return scrCfg;
   }
 
@@ -519,17 +474,14 @@ public class MnemoEditorPanel
     VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
 
     String sectionId = VED_SCREEN_EXTRA_DATA_ID_MNEMO_RESOLVER_CONGIF;
-    // if( aCfg.extraData().hasSection( sectionId ) ) {
-    resolverConfig.subMasters().clear();
-    resolverConfig.clearActorSubmasterIds();
-    IEntityKeeper<IMnemoResolverConfig> keeper = MnemoResolverConfig.KEEPER;
-    resolverConfig = (MnemoResolverConfig)aCfg.extraData().readItem( sectionId, keeper, resolverConfig );
-    if( resolverConfig.subMasters().hasKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ) ) {
-      SubmasterConfig smCfg = resolverConfig.subMasters().getByKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID );
-      Gwid gwid = DirectGwidResolver.gwid( smCfg.resolverCfg().cfgs().first() );
-      labelMasterClass.setText( gwid.classId() );
+    if( aCfg.extraData().hasSection( sectionId ) ) {
+      resolverConfig.subMasters().clear();
+      resolverConfig.clearActorSubmasterIds();
+      IEntityKeeper<IMnemoResolverConfig> keeper = MnemoResolverConfig.KEEPER;
+      IKeepablesStorageRo ks = aCfg.extraData();
+      resolverConfig = (MnemoResolverConfig)ks.readItem( sectionId, keeper, resolverConfig );
+      submastersPanel.setMnemoResolverConfig( resolverConfig );
     }
-    // }
 
     undoManager.reset();
     setChanged( false );
