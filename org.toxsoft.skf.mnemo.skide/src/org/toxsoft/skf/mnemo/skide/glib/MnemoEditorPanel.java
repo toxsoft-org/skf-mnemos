@@ -324,7 +324,7 @@ public class MnemoEditorPanel
       @Override
       public void widgetSelected( SelectionEvent aEvent ) {
         // nop
-        SelectMasterPathPanel.edit( null, vedScreen.tsContext() );
+        PanelCompoundResolverConfig.edit( null, vedScreen.tsContext() );
       }
     } );
     eastPanel.setWeights( 3, 10 );
