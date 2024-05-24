@@ -321,11 +321,12 @@ public class VedViselsCopyPasteManager
     double dy = 16.;
 
     if( pastePoint != null ) {
-      IStringListEdit ids = new StringArrayList();
-      for( IVedItemCfg cfg : visels2paste ) {
-        ids.add( cfg.id() );
-      }
-      ID2Rectangle r = VedScreenUtils.calcGroupScreenRect( ids, vedScreen );
+      // IStringListEdit ids = new StringArrayList();
+      // for( IVedItemCfg cfg : visels2paste ) {
+      // ids.add( cfg.id() );
+      // }
+      // ID2Rectangle r = VedScreenUtils.calcGroupScreenRect( ids, vedScreen );
+      ID2Rectangle r = VedScreenUtils.calcGroupScreenRect( visels2paste, vedScreen );
       ID2Point sp = vedScreen.view().coorsConverter().swt2Screen( pastePoint );
       dx = sp.x() - r.x1();
       dy = sp.y() - r.y1();

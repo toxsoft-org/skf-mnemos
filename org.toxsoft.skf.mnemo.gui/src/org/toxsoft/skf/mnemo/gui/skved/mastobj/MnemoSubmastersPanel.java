@@ -18,7 +18,9 @@ import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
+import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
+import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
  * Панель для редактирования класса главного мастер-объекта
@@ -35,6 +37,8 @@ public class MnemoSubmastersPanel
   private MnemoResolverConfig resolverConfig = null;
 
   private final PanelSubmastersList submastersPanel;
+
+  private String masterClassId = TsLibUtils.EMPTY_STRING;
 
   /**
    * Конструктор.
@@ -85,7 +89,11 @@ public class MnemoSubmastersPanel
       if( resolverConfig.subMasters().hasKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ) ) {
         SubmasterConfig smCfg = resolverConfig.subMasters().getByKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID );
         Gwid gwid = DirectGwidResolver.gwid( smCfg.resolverCfg().cfgs().first() );
-        labelMasterClass.setText( gwid.classId() );
+        ISkCoreApi coreApi = vedScreen.tsContext().get( ISkConnectionSupplier.class ).defConn().coreApi();
+        ISkClassInfo clsInfo = coreApi.sysdescr().findClassInfo( gwid.classId() );
+        labelMasterClass.setText( clsInfo.nmName() );
+        masterClassId = gwid.classId();
+        submastersPanel.setMasterClassId( masterClassId );
       }
     }
   }

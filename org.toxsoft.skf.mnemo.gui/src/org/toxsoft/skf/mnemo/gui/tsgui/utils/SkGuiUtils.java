@@ -4,6 +4,7 @@ import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.m5.gui.*;
+import org.toxsoft.core.tsgui.m5.gui.panels.*;
 import org.toxsoft.core.tsgui.m5.model.*;
 import org.toxsoft.core.tslib.bricks.strid.more.*;
 import org.toxsoft.skf.reports.gui.panels.*;
@@ -34,6 +35,9 @@ public class SkGuiUtils {
     IM5Domain m5 = conn.scope().get( IM5Domain.class );
     IM5Model<ISkClassInfo> model = m5.getModel( ISgwM5Constants.MID_SGW_CLASS_INFO, ISkClassInfo.class );
     IM5LifecycleManager<ISkClassInfo> lm = model.getLifecycleManager( conn );
+
+    IM5CollectionPanel<ISkClassInfo> panel =
+        model.panelCreator().createCollViewerPanel( aTsContext, lm.itemsProvider() );
 
     ITsDialogInfo dlgInfo;
     dlgInfo = new TsDialogInfo( aTsContext, "Выбор класса", "Выберите соответствующий класс и нажмите \"ОК\"" );

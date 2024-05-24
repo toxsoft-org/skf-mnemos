@@ -56,7 +56,6 @@ public class DirectGwidResolver
    */
   public DirectGwidResolver( IOptionSet aResolverConfig, ISkConnection aSkConn ) {
     super( new OptionSet(), aSkConn );
-    // abstractGwid = aGwid;
   }
 
   // ------------------------------------------------------------------------------------
@@ -94,6 +93,17 @@ public class DirectGwidResolver
     IList<SimpleResolverCfg> simpleConfigs = new ElemArrayList<>( simpleCfg );
     CompoundResolverConfig cfg = new CompoundResolverConfig( simpleConfigs );
     return cfg;
+  }
+
+  /**
+   * Возвращает признак того, есть ли в парметрах {@link Gwid}.
+   *
+   * @param aCfg {@link SimpleResolverCfg} - конфигурация "разрешителя"
+   * @return <b>true</b> - Gwid есть<br>
+   *         <b>false</b> - Gwid'a нет
+   */
+  public static boolean hasGwid( SimpleResolverCfg aCfg ) {
+    return aCfg.params().hasKey( PROPID_GWID );
   }
 
   /**

@@ -11,12 +11,13 @@ import org.toxsoft.core.tsgui.graphics.icons.*;
 import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tsgui.panels.toolbar.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
-import org.toxsoft.core.tslib.bricks.strid.coll.*;
-import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
+import org.toxsoft.core.tslib.coll.*;
+import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
-import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
-import org.toxsoft.uskat.core.api.sysdescr.*;
 
 /**
  * Панель с редактируемым списком sub-мастеров.
@@ -32,7 +33,10 @@ public class PanelSubmastersList
 
   StridableTableViewer viewer;
 
-  final IStridablesListEdit<ISkClassInfo> submasters = new StridablesList<>();
+  // final IStridablesListEdit<ISkClassInfo> submasters = new StridablesList<>();
+  final IListEdit<ICompoundResolverConfig> resolverConfigs = new ElemArrayList<>();
+
+  private String masterClassId = TsLibUtils.EMPTY_STRING;
 
   /**
    * Конструктор.
@@ -66,23 +70,38 @@ public class PanelSubmastersList
   public void handleAction( String aActionId ) {
     switch( aActionId ) {
       case ACTID_ADD: {
-        ISkClassInfo clsInfo = SkGuiUtils.selectClass( null, tsContext() );
-        if( clsInfo != null ) {
-          submasters.add( clsInfo );
-          viewer.viewer().setInput( submasters.toArray() );
-        }
+        Gwid gwid = Gwid.createClass( masterClassId );
+        ICompoundResolverConfig resCfg = DirectGwidResolver.createResolverConfig( gwid );
+        PanelCompoundResolverConfig.edit( resCfg, tsContext() );
+
+        // ISkClassInfo clsInfo = SkGuiUtils.selectClass( null, tsContext() );
+        // if( clsInfo != null ) {
+        // submasters.add( clsInfo );
+        // viewer.viewer().setInput( submasters.toArray() );
+        // }
       }
         break;
       case ACTID_REMOVE: {
-        IStructuredSelection selection = (IStructuredSelection)viewer.viewer().getSelection();
-        ISkClassInfo clsInfo = (ISkClassInfo)selection.getFirstElement();
-        submasters.remove( clsInfo );
-        viewer.viewer().setInput( submasters.toArray() );
+        // IStructuredSelection selection = (IStructuredSelection)viewer.viewer().getSelection();
+        // ISkClassInfo clsInfo = (ISkClassInfo)selection.getFirstElement();
+        // submasters.remove( clsInfo );
+        // viewer.viewer().setInput( submasters.toArray() );
       }
         break;
       default:
         throw new TsNotAllEnumsUsedRtException( "%s", aActionId ); //$NON-NLS-1$
     }
+  }
+
+  // ------------------------------------------------------------------------------------
+  // API
+  //
+
+  /**
+   * @param aMasterClassId String - ИД класса мастер-объекта мнемосхемы
+   */
+  public void setMasterClassId( String aMasterClassId ) {
+    masterClassId = aMasterClassId;
   }
 
 }

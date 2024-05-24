@@ -10,22 +10,29 @@ import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.graphics.icons.*;
 import org.toxsoft.core.tsgui.panels.*;
-import org.toxsoft.core.tslib.bricks.strid.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
+import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.mastobj.ConfigRecognizerPanel.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
+/**
+ * Контроль в виде дерева для выбора пути к мастер-объекту.
+ *
+ * @author vs
+ */
 public class MasterPathViewer
     extends TsPanel {
 
   abstract static class BaseNode
-      implements IStridable {
+      implements IMasterPathNode {
 
     private final BaseNode parent;
     private final String   id;
@@ -43,10 +50,6 @@ public class MasterPathViewer
       description = aDescription;
     }
 
-    BaseNode parent() {
-      return parent;
-    }
-
     @Override
     public String id() {
       return id;
@@ -62,7 +65,13 @@ public class MasterPathViewer
       return description;
     }
 
-    IList<? extends BaseNode> children() {
+    @Override
+    public BaseNode parent() {
+      return parent;
+    }
+
+    @Override
+    public IList<? extends BaseNode> children() {
       if( !asked ) {
         asked = true;
         fillChildren();
@@ -74,9 +83,14 @@ public class MasterPathViewer
       return false;
     }
 
+    boolean isObject() {
+      return false;
+    }
+
     protected abstract Image image();
 
     protected abstract void fillChildren();
+
   }
 
   class ObjectNode
@@ -111,6 +125,17 @@ public class MasterPathViewer
     @Override
     protected Image image() {
       return imgBox;
+    }
+
+    @Override
+    public ICompoundResolverConfig resolverConfig() {
+      Gwid gwid = Gwid.createClass( classInfo.id() );
+      return DirectGwidResolver.createResolverConfig( gwid );
+    }
+
+    @Override
+    boolean isObject() {
+      return true;
     }
   }
 
@@ -170,6 +195,11 @@ public class MasterPathViewer
         children.clear();
       }
     }
+
+    @Override
+    public ICompoundResolverConfig resolverConfig() {
+      throw new TsUnsupportedFeatureRtException();
+    }
   }
 
   class RivetNode
@@ -187,8 +217,6 @@ public class MasterPathViewer
 
     @Override
     protected void fillChildren() {
-      ISkConnectionSupplier conSup = tsContext().get( ISkConnectionSupplier.class );
-      ISkCoreApi coreApi = conSup.defConn().coreApi();
       ISkClassInfo classInfo = coreApi.sysdescr().findClassInfo( rivetInfo.rightClassId() );
       ObjectNode objNode = new ObjectNode( classInfo, this );
       children.add( objNode );
@@ -197,6 +225,11 @@ public class MasterPathViewer
     @Override
     protected Image image() {
       return imgRivet;
+    }
+
+    @Override
+    public ICompoundResolverConfig resolverConfig() {
+      throw new TsUnsupportedFeatureRtException(); // нельзя вызывать этот метод для данного узла
     }
   }
 
@@ -215,8 +248,6 @@ public class MasterPathViewer
 
     @Override
     protected void fillChildren() {
-      ISkConnectionSupplier conSup = tsContext().get( ISkConnectionSupplier.class );
-      ISkCoreApi coreApi = conSup.defConn().coreApi();
       ISkClassInfo classInfo = coreApi.sysdescr().findClassInfo( linkInfo.rightClassIds().first() );
       if( linkInfo.linkConstraint().isSingle() ) {
         ObjectNode objNode = new ObjectNode( classInfo, this );
@@ -231,6 +262,11 @@ public class MasterPathViewer
     @Override
     protected Image image() {
       return imgLink;
+    }
+
+    @Override
+    public ICompoundResolverConfig resolverConfig() {
+      throw new TsUnsupportedFeatureRtException(); // нельзя вызывать этот метод для данного узла
     }
   }
 
@@ -298,8 +334,19 @@ public class MasterPathViewer
 
   ISkCoreApi coreApi;
 
-  public MasterPathViewer( Composite aParent, ITsGuiContext aContext ) {
+  private final String masterClassId;
+
+  /**
+   * Конструктор.
+   *
+   * @param aParent {@link Composite} - родительская панель
+   * @param aMasterClassId String - ИД класса мастер-объекта
+   * @param aContext {@link ITsGuiContext} - соответствующий контекст
+   */
+  public MasterPathViewer( Composite aParent, String aMasterClassId, ITsGuiContext aContext ) {
     super( aParent, aContext );
+
+    masterClassId = aMasterClassId;
     setLayout( new FillLayout() );
 
     coreApi = aContext.get( ISkConnectionSupplier.class ).defConn().coreApi();
@@ -340,13 +387,49 @@ public class MasterPathViewer
 
     viewer.setContentProvider( contentProvider );
 
-    ISkConnectionSupplier conSup = tsContext().get( ISkConnectionSupplier.class );
-    ISkCoreApi coreApi = conSup.defConn().coreApi();
-    ISkClassInfo classInfo = coreApi.sysdescr().findClassInfo( "gbh.TurboCompressor" );
+    ISkClassInfo classInfo = coreApi.sysdescr().findClassInfo( masterClassId );
     BaseNode node = new ObjectNode( classInfo, null );
     Object[] input = new Object[1];
     input[0] = node;
     viewer.setInput( input );
+  }
+
+  // ------------------------------------------------------------------------------------
+  // API
+  //
+
+  /**
+   * Возвращает выделенный узел дерева или <code>null</code>.
+   *
+   * @return {@link IMasterPathNode} - выделенный узел дерева или <code>null</code>
+   */
+  public IMasterPathNode selectedNode() {
+    return selectedBaseNode();
+  }
+
+  /**
+   * Возвращает выделенный узел дерева сооответствующий объекту или <code>null</code>.
+   *
+   * @return {@link IMasterPathNode} - выделенный узел дерева сооответствующий объекту или <code>null</code>
+   */
+  public IMasterPathNode selectedObjectNode() {
+    BaseNode bn = selectedBaseNode();
+    if( bn != null && bn.isObject() ) {
+      return bn;
+    }
+    return null;
+  }
+
+  // ------------------------------------------------------------------------------------
+  // Implementation
+  //
+
+  BaseNode selectedBaseNode() {
+    IStructuredSelection sel = (IStructuredSelection)viewer.getSelection();
+    if( !sel.isEmpty() ) {
+      return (BaseNode)sel.getFirstElement();
+    }
+    return null;
   }
 
 }
