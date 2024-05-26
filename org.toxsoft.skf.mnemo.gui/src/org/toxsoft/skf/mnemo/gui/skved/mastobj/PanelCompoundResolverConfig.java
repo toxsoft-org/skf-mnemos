@@ -5,10 +5,10 @@ import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.table.*;
-import org.toxsoft.uskat.core.utils.ugwi.*;
 
 /**
  * Панель создания/редактирования конфигурации составного "разрешителя" {@link Ugwi}.

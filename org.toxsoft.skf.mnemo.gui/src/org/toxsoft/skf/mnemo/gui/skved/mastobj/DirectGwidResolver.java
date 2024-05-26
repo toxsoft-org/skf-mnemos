@@ -11,10 +11,9 @@ import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.uskat.core.connection.*;
-import org.toxsoft.uskat.core.utils.ugwi.*;
-import org.toxsoft.uskat.core.utils.ugwi.kind.*;
 
 /**
  * Класс, который разрешает Gwid с помощью мастер-мастер объекта непосредственно в требуемый Gwid.
@@ -73,7 +72,8 @@ public class DirectGwidResolver
     String essence = aMaster.essence();
     Gwid gwid = Gwid.of( essence );
     gwid = resolve( gwid.skid() );
-    return Ugwi.of( UgwiKindGwid.KIND_ID, gwid.canonicalString() );
+    // FIXME return Ugwi.of( UgwiKindGwid.KIND_ID, gwid.canonicalString() );
+    return Ugwi.of( "gwid", gwid.canonicalString() );
   }
 
   // ------------------------------------------------------------------------------------

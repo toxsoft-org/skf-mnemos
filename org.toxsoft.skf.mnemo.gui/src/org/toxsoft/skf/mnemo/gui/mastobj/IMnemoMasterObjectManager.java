@@ -1,8 +1,8 @@
 package org.toxsoft.skf.mnemo.gui.mastobj;
 
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.uskat.core.connection.*;
-import org.toxsoft.uskat.core.utils.ugwi.*;
 
 /**
  * The service to resolve VED item's resolvable properties.

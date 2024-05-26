@@ -11,13 +11,12 @@ import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.linkserv.*;
 import org.toxsoft.uskat.core.api.objserv.*;
-import org.toxsoft.uskat.core.utils.ugwi.*;
-import org.toxsoft.uskat.core.utils.ugwi.kind.*;
 
 // 5341/3
 // 5341/
@@ -107,7 +106,8 @@ public class ReferencedObjectResolver
     Gwid gwid = Gwid.of( essence );
     Skid skid = resolve( gwid.skid() );
     gwid = makeConcreteGwid( skid, gwid );
-    return Ugwi.of( UgwiKindGwid.KIND_ID, gwid.canonicalString() );
+    // FIXME return Ugwi.of( UgwiKindGwid.KIND_ID, gwid.canonicalString() );
+    return Ugwi.of( "gwid", gwid.canonicalString() );
   }
 
   // ------------------------------------------------------------------------------------

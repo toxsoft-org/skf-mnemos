@@ -5,11 +5,11 @@ import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.utils.*;
-import org.toxsoft.uskat.core.utils.ugwi.*;
 
 /**
  * {@link IMnemoMasterObjectManager} implementation.

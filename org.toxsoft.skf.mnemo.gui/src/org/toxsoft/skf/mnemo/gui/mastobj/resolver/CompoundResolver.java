@@ -2,10 +2,10 @@ package org.toxsoft.skf.mnemo.gui.mastobj.resolver;
 
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.uskat.core.connection.*;
-import org.toxsoft.uskat.core.utils.ugwi.*;
 
 /**
  * {@link ICompoundResolver} implementation.

@@ -3,9 +3,9 @@ package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.uskat.core.connection.*;
-import org.toxsoft.uskat.core.utils.ugwi.*;
 
 /**
  * "Разрешитель" в один объект из множества, посредством сравнения со значением конкретного атрибута.

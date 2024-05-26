@@ -2,12 +2,12 @@ package org.toxsoft.skf.mnemo.gui.mastobj.resolver;
 
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.gui.utils.*;
 import org.toxsoft.uskat.core.utils.*;
-import org.toxsoft.uskat.core.utils.ugwi.*;
 
 /**
  * Base implementation of the simple UGWI resolver created by {@link ISimpleResolverFactory}.

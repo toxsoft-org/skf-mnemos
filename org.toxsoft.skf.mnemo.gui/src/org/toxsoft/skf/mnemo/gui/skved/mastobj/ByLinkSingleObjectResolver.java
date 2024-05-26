@@ -9,11 +9,10 @@ import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.uskat.core.connection.*;
-import org.toxsoft.uskat.core.utils.ugwi.*;
-import org.toxsoft.uskat.core.utils.ugwi.kind.*;
 
 /**
  * "Разрешитель" единственного sk-объекта по связи.
@@ -67,7 +66,8 @@ public class ByLinkSingleObjectResolver
 
   @Override
   protected Ugwi doResolve( Ugwi aMaster ) {
-    TsIllegalArgumentRtException.checkFalse( aMaster.kindId().equals( UgwiKindGwid.KIND_ID ) );
+    // FIXME TsIllegalArgumentRtException.checkFalse( aMaster.kindId().equals( UgwiKindGwid.KIND_ID ) );
+    TsIllegalArgumentRtException.checkFalse( aMaster.kindId().equals( "gwid" ) );
     Gwid gwid = Gwid.of( aMaster.essence() );
     return null;
   }
