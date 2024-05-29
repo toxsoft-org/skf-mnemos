@@ -77,6 +77,7 @@ class Mpc
 
         ISkMnemoCfg item = M5GuiUtils.askCreate( tsContext(), model(), initVals, cdi, lifecycleManager() );
         if( item != null ) {
+          item.setCfgData( selected.cfgData() );
           fillViewer( item );
         }
         break;
