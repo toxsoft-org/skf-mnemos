@@ -1,17 +1,22 @@
 package org.toxsoft.skf.mnemo.gui.km5;
 
+import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
 import static org.toxsoft.skf.mnemo.gui.km5.ISkResources.*;
+import static org.toxsoft.uskat.core.ISkHardConstants.*;
 
 import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
+import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.graphics.icons.*;
 import org.toxsoft.core.tsgui.m5.*;
+import org.toxsoft.core.tsgui.m5.gui.*;
 import org.toxsoft.core.tsgui.m5.gui.mpc.*;
 import org.toxsoft.core.tsgui.m5.gui.mpc.impl.*;
 import org.toxsoft.core.tsgui.m5.model.*;
+import org.toxsoft.core.tsgui.m5.model.impl.*;
 import org.toxsoft.core.tsgui.panels.toolbar.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.utils.errors.*;
@@ -43,6 +48,9 @@ class Mpc
   @Override
   protected ITsToolbar doCreateToolbar( ITsGuiContext aContext, String aName, EIconSize aIconSize,
       IListEdit<ITsActionDef> aActs ) {
+    // add func create copy
+    int index = 1 + aActs.indexOf( ACDEF_ADD );
+    aActs.insert( index, ACDEF_ADD_COPY );
     aActs.add( ACDEF_EDIT_MNEMO );
     return super.doCreateToolbar( aContext, aName, aIconSize, aActs );
   }
@@ -58,6 +66,22 @@ class Mpc
         }
         break;
       }
+      case ACTID_ADD_COPY: {
+        ISkMnemoCfg selected = tree().selectedItem();
+        ITsDialogInfo cdi = doCreateDialogInfoToAddItem();
+        IM5BunchEdit<ISkMnemoCfg> initVals = new M5BunchEdit<>( model() );
+        initVals.fillFrom( selected, false );
+        String itemId = initVals.getAsAv( AID_STRID ).asString();
+        itemId = itemId + "_copy"; //$NON-NLS-1$
+        initVals.set( AID_STRID, avStr( itemId ) );
+
+        ISkMnemoCfg item = M5GuiUtils.askCreate( tsContext(), model(), initVals, cdi, lifecycleManager() );
+        if( item != null ) {
+          fillViewer( item );
+        }
+        break;
+      }
+
       default:
         throw new TsNotAllEnumsUsedRtException( aActionId );
     }
