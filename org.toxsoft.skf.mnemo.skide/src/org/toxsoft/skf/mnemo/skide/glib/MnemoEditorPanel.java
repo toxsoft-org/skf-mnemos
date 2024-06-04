@@ -38,6 +38,7 @@ import org.toxsoft.skf.mnemo.gui.tsgui.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.tools.*;
 import org.toxsoft.skf.mnemo.lib.*;
+import org.toxsoft.uskat.core.gui.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
@@ -211,6 +212,7 @@ public class MnemoEditorPanel
     ISkConnectionSupplier skConnSupp = tsContext().get( ISkConnectionSupplier.class );
     skVedEnvironment = new SkVedEnvironment( skConnSupp.defConn() );
     vedScreen.tsContext().put( ISkVedEnvironment.class, skVedEnvironment );
+    ISkCoreGuiConstants.REFDEF_SK_VALED_CORE_API.setRef( vedScreen.tsContext(), skVedEnvironment.coreApi() );
 
     hotKeysManager = new VedHotKeysManager( vedScreen );
     toolsManager = new VedToolsManager( hotKeysManager, vedScreen );
