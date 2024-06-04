@@ -10,12 +10,16 @@ import static org.toxsoft.uskat.core.ISkHardConstants.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
 import org.toxsoft.core.tsgui.bricks.tin.tti.*;
+import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.bricks.strid.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.skf.reports.gui.panels.valed.*;
+import org.toxsoft.uskat.core.api.ugwis.kinds.*;
+import org.toxsoft.uskat.core.gui.ugwi.valed.*;
 
 /**
  * The package constants.
@@ -107,5 +111,25 @@ public interface ISkVedConstants {
   ITinFieldInfo TFI_CMD_GWID      = new TinFieldInfo( PROP_CMD_GWID, TTI_CMD_GWID );
   ITinFieldInfo TFI_FORMAT_STRING = new TinFieldInfo( PROP_FORMAT_STRING, TTI_FORMAT_STRING );
   ITinFieldInfo TFI_RRI_ID        = new TinFieldInfo( PROP_RRI_ID, TTI_RRI_ID );
+
+  // ------------------------------------------------------------------------------------
+  // UGWI support
+  //
+
+  String PROPID_ATTR_UGWI = SKVED_ID + ".prop.AttrUgwi"; //$NON-NLS-1$
+
+  IDataDef PROP_ATTR_UGWI = DataDef.create( PROPID_ATTR_UGWI, VALOBJ, //
+      TSID_NAME, STR_PROP_ATTR_UGWI, //
+      TSID_DESCRIPTION, STR_PROP_ATTR_UGWI_D, //
+      TSID_KEEPER_ID, Ugwi.KEEPER_ID, //
+      OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjUgwiSelectorTextAndButton.FACTORY_NAME, //
+      ValedUgwiSelectorFactory.OPDEF_SINGLE_UGWI_KIND_ID, avStr( UgwiKindSkAttr.KIND_ID ), //
+      // TSID_DEFAULT_VALUE, avValobj( UgwiKindSkAttr.makeUgwi( "foo", "foo", "foo" ) ) //
+      TSID_DEFAULT_VALUE, IAtomicValue.NULL //
+  );
+
+  ITinTypeInfo TTI_ATTR_UGWI = new TinAtomicTypeInfo.TtiValobj<>( PROP_ATTR_UGWI, Ugwi.class );
+
+  ITinFieldInfo TFI_ATTR_UGWI = new TinFieldInfo( PROP_ATTR_UGWI, TTI_ATTR_UGWI );
 
 }

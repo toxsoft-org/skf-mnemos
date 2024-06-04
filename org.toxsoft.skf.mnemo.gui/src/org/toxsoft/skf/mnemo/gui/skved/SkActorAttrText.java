@@ -56,6 +56,7 @@ public class SkActorAttrText
       fields.add( TFI_VISEL_PROP_ID );
       fields.add( TFI_ATTR_GWID );
       fields.add( TFI_FORMAT_STRING );
+      fields.add( TFI_ATTR_UGWI );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorAttrText.class );
     }
 

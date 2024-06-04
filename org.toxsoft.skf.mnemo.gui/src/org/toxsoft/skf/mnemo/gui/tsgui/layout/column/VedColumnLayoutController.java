@@ -202,10 +202,12 @@ public class VedColumnLayoutController
     }
 
     double columnWidth = 0.;
-    for( IVedVisel visel : aVisels ) {
-      double width = calcCellWidth( visel, cld.cellData() );
-      if( width > columnWidth ) {
-        columnWidth = width;
+    if( !cld.cellData().fillCellWidth() ) {
+      for( IVedVisel visel : aVisels ) {
+        double width = calcCellWidth( visel, cld.cellData() );
+        if( width > columnWidth ) {
+          columnWidth = width;
+        }
       }
     }
 
@@ -266,10 +268,10 @@ public class VedColumnLayoutController
   void layoutCellContent( ID2Rectangle aCellBounds, CellLayoutData aLayoutData, IVedVisel aVisel ) {
     ID2Rectangle clientRect = calcClientRect( aCellBounds, aLayoutData.margins() );
     if( aLayoutData.fillCellWidth() ) {
-
+      aVisel.setSize( clientRect.width(), aVisel.height() );
     }
     if( aLayoutData.fillCellHeight() ) {
-
+      aVisel.setSize( aVisel.width(), clientRect.height() );
     }
 
     double viselX;
@@ -280,7 +282,7 @@ public class VedColumnLayoutController
       case LEFT -> clientRect.x1();
       case RIGHT -> clientRect.x1() + clientRect.width() - aVisel.bounds().width();
       case FILL -> throw new IllegalArgumentException(
-          "Unexpected value: " + aLayoutData.cellAlignment().horAlignment() );
+          "Unexpected value: " + aLayoutData.cellAlignment().horAlignment() ); //$NON-NLS-1$
     };
 
     viselY = switch( aLayoutData.cellAlignment().verAlignment() ) {
@@ -288,7 +290,7 @@ public class VedColumnLayoutController
       case TOP -> clientRect.y1();
       case BOTTOM -> clientRect.y1() + clientRect.height() - aVisel.bounds().height();
       case FILL -> throw new IllegalArgumentException(
-          "Unexpected value: " + aLayoutData.cellAlignment().horAlignment() );
+          "Unexpected value: " + aLayoutData.cellAlignment().horAlignment() ); //$NON-NLS-1$
     };
     aVisel.setLocation( viselX, viselY );
   }
