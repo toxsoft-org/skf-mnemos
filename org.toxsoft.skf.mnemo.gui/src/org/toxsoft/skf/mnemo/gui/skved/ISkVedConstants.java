@@ -117,6 +117,7 @@ public interface ISkVedConstants {
   //
 
   String PROPID_ATTR_UGWI = SKVED_ID + ".prop.AttrUgwi"; //$NON-NLS-1$
+  String PROPID_CMD_UGWI  = SKVED_ID + ".prop.CmdUgwi";  //$NON-NLS-1$
 
   IDataDef PROP_ATTR_UGWI = DataDef.create( PROPID_ATTR_UGWI, VALOBJ, //
       TSID_NAME, STR_PROP_ATTR_UGWI, //
@@ -124,12 +125,22 @@ public interface ISkVedConstants {
       TSID_KEEPER_ID, Ugwi.KEEPER_ID, //
       OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjUgwiSelectorTextAndButton.FACTORY_NAME, //
       ValedUgwiSelectorFactory.OPDEF_SINGLE_UGWI_KIND_ID, avStr( UgwiKindSkAttr.KIND_ID ), //
-      // TSID_DEFAULT_VALUE, avValobj( UgwiKindSkAttr.makeUgwi( "foo", "foo", "foo" ) ) //
+      TSID_DEFAULT_VALUE, IAtomicValue.NULL //
+  );
+
+  IDataDef PROP_CMD_UGWI = DataDef.create( PROPID_CMD_UGWI, VALOBJ, //
+      TSID_NAME, STR_PROP_CMD_UGWI, //
+      TSID_DESCRIPTION, STR_PROP_CMD_UGWI_D, //
+      TSID_KEEPER_ID, Ugwi.KEEPER_ID, //
+      OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjUgwiSelectorTextAndButton.FACTORY_NAME, //
+      ValedUgwiSelectorFactory.OPDEF_SINGLE_UGWI_KIND_ID, avStr( UgwiKindSkCmd.KIND_ID ), //
       TSID_DEFAULT_VALUE, IAtomicValue.NULL //
   );
 
   ITinTypeInfo TTI_ATTR_UGWI = new TinAtomicTypeInfo.TtiValobj<>( PROP_ATTR_UGWI, Ugwi.class );
+  ITinTypeInfo TTI_CMD_UGWI  = new TinAtomicTypeInfo.TtiValobj<>( PROP_CMD_UGWI, Ugwi.class );
 
   ITinFieldInfo TFI_ATTR_UGWI = new TinFieldInfo( PROP_ATTR_UGWI, TTI_ATTR_UGWI );
+  ITinFieldInfo TFI_CMD_UGWI  = new TinFieldInfo( PROP_CMD_UGWI, TTI_CMD_UGWI );
 
 }
