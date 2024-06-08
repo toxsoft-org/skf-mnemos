@@ -3,6 +3,7 @@ package org.toxsoft.skf.mnemo.skide.glib;
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
 import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
 import static org.toxsoft.skf.mnemo.skide.glib.ISkResources.*;
+import static org.toxsoft.uskat.core.gui.ISkCoreGuiConstants.*;
 
 import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
@@ -29,6 +30,7 @@ import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
 import org.toxsoft.core.tslib.bricks.keeper.*;
+import org.toxsoft.core.tslib.bricks.strid.more.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.txtproj.lib.storage.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
@@ -38,7 +40,7 @@ import org.toxsoft.skf.mnemo.gui.tsgui.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.tools.*;
 import org.toxsoft.skf.mnemo.lib.*;
-import org.toxsoft.uskat.core.gui.*;
+import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
@@ -128,6 +130,8 @@ public class MnemoEditorPanel
 
   private final GenericChangeEventer mnemoChangedEventer;
 
+  private final IdChain suppliedConnectionId;
+
   private final IVedScreen             vedScreen;
   private final VedPanelViselsList     panelVisels;
   private final VedPanelActorsList     panelActors;
@@ -197,10 +201,13 @@ public class MnemoEditorPanel
    *
    * @param aParent {@link Composite} - parent component
    * @param aContext {@link ITsGuiContext} - the context
+   * @param aSuppliedConnectionId {@link IdChain} - connection ID or <code>null</code> for default
    * @throws TsNullArgumentRtException any argument = <code>null</code>
    */
-  public MnemoEditorPanel( Composite aParent, ITsGuiContext aContext ) {
+  public MnemoEditorPanel( Composite aParent, ITsGuiContext aContext, IdChain aSuppliedConnectionId ) {
     super( aParent, aContext );
+    TsNullArgumentRtException.checkNull( aSuppliedConnectionId );
+    suppliedConnectionId = aSuppliedConnectionId;
     actionsProvider = new CompoundTsActionSetProvider();
     actionsProvider.actionsStateEventer().addListener( s -> updateActionsState() );
     mnemoChangedEventer = new GenericChangeEventer( this );
@@ -210,9 +217,10 @@ public class MnemoEditorPanel
     //
     vedScreen = new VedScreen( aContext );
     ISkConnectionSupplier skConnSupp = tsContext().get( ISkConnectionSupplier.class );
-    skVedEnvironment = new SkVedEnvironment( skConnSupp.defConn() );
+    ISkConnection skConn = skConnSupp.getConn( suppliedConnectionId );
+    skVedEnvironment = new SkVedEnvironment( skConn );
     vedScreen.tsContext().put( ISkVedEnvironment.class, skVedEnvironment );
-    ISkCoreGuiConstants.REFDEF_SK_VALED_CORE_API.setRef( vedScreen.tsContext(), skVedEnvironment.coreApi() );
+    setCtxSkConnKey( tsContext(), aSuppliedConnectionId );
 
     hotKeysManager = new VedHotKeysManager( vedScreen );
     toolsManager = new VedToolsManager( hotKeysManager, vedScreen );

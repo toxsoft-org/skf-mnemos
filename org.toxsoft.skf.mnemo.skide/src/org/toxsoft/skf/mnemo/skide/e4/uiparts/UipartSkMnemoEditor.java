@@ -10,6 +10,7 @@ import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.mws.bases.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
+import org.toxsoft.core.tslib.bricks.strid.more.*;
 import org.toxsoft.core.tslib.bricks.validator.*;
 import org.toxsoft.core.tslib.bricks.validator.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
@@ -18,6 +19,7 @@ import org.toxsoft.skf.mnemo.gui.e4.services.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.skf.mnemo.skide.e4.services.*;
 import org.toxsoft.skf.mnemo.skide.glib.*;
+import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
  * Mnemoscheme editor UIpart.
@@ -41,7 +43,8 @@ public class UipartSkMnemoEditor
 
   @Override
   protected void doInit( Composite aParent ) {
-    panel = new MnemoEditorPanel( aParent, tsContext() );
+    IdChain skConnId = ISkConnectionSupplier.DEF_CONN_ID; // default connection is used is SkIDE
+    panel = new MnemoEditorPanel( aParent, tsContext(), skConnId );
     panel.setExternelHandler( this::processEditorPanelExternalAction );
     panel.mnemoChangedEventer().addListener( s -> whenEditorDirtyStateChanges() );
   }
