@@ -279,7 +279,7 @@ public class MnemoEditorPanel
     tiObjTree.setToolTipText( STR_TAB_OBJ_TREE_D );
     SashForm sfObjTree = new SashForm( westFolder, SWT.VERTICAL );
     panelVisels = new VedPanelViselsList( sfObjTree, new TsGuiContext( tsContext() ), vedScreen );
-    panelActors = new VedPanelActorsList( sfObjTree, new TsGuiContext( tsContext() ), vedScreen );
+    panelActors = new VedPanelActorsList( sfObjTree, new TsGuiContext( tsContext() ), vedScreen, selectionManager );
     sfObjTree.setWeights( 5500, 4500 );
     tiObjTree.setControl( sfObjTree );
     // CENTER
