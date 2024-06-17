@@ -19,7 +19,7 @@ import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.skf.reports.gui.panels.valed.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
-import org.toxsoft.uskat.core.gui.ugwi.valed.*;
+import org.toxsoft.uskat.core.gui.valed.ugwi.*;
 
 /**
  * The package constants.
@@ -123,8 +123,8 @@ public interface ISkVedConstants {
       TSID_NAME, STR_PROP_ATTR_UGWI, //
       TSID_DESCRIPTION, STR_PROP_ATTR_UGWI_D, //
       TSID_KEEPER_ID, Ugwi.KEEPER_ID, //
-      OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjUgwiSelectorTextAndButton.FACTORY_NAME, //
-      ValedUgwiSelectorFactory.OPDEF_SINGLE_UGWI_KIND_ID, avStr( UgwiKindSkAttr.KIND_ID ), //
+      OPDEF_EDITOR_FACTORY_NAME, ValedAvUgwiSelector.FACTORY_NAME, //
+      ValedUgwiSelector.OPDEF_SINGLE_UGWI_KIND_ID, avStr( UgwiKindSkAttr.KIND_ID ), //
       TSID_DEFAULT_VALUE, IAtomicValue.NULL //
   );
 
@@ -132,8 +132,8 @@ public interface ISkVedConstants {
       TSID_NAME, STR_PROP_CMD_UGWI, //
       TSID_DESCRIPTION, STR_PROP_CMD_UGWI_D, //
       TSID_KEEPER_ID, Ugwi.KEEPER_ID, //
-      OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjUgwiSelectorTextAndButton.FACTORY_NAME, //
-      ValedUgwiSelectorFactory.OPDEF_SINGLE_UGWI_KIND_ID, avStr( UgwiKindSkCmd.KIND_ID ), //
+      OPDEF_EDITOR_FACTORY_NAME, ValedAvUgwiSelector.FACTORY_NAME, //
+      ValedUgwiSelector.OPDEF_SINGLE_UGWI_KIND_ID, avStr( UgwiKindSkCmd.KIND_ID ), //
       TSID_DEFAULT_VALUE, IAtomicValue.NULL //
   );
 
