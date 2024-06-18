@@ -55,6 +55,7 @@ public class SkActorRtdataText
       fields.add( TFI_VISEL_PROP_ID );
       fields.add( TFI_RTD_GWID );
       fields.add( TFI_FORMAT_STRING );
+      fields.add( TFI_RTD_UGWI );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRtdataText.class );
     }
 

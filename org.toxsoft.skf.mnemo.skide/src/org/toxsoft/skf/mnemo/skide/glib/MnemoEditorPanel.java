@@ -318,11 +318,13 @@ public class MnemoEditorPanel
     tiActorInsp.setText( STR_TAB_ACTOR_INSP );
     tiActorInsp.setToolTipText( STR_TAB_ACTOR_INSP_D );
     tiActorInsp.setImage( iconManager().loadStdIcon( EVedItemKind.ACTOR.iconId(), EIconSize.IS_16X16 ) );
-    Composite actMasterComp = new Composite( eastFolder, SWT.NONE );
+
+    // Composite actMasterComp = new Composite( eastFolder, SWT.NONE );
+    Composite actMasterComp = new SashForm( eastFolder, SWT.VERTICAL );
     actMasterComp.setLayout( new BorderLayout() );
     tiActorInsp.setControl( actMasterComp );
     actorInspector = new VedScreenItemInspector( actMasterComp, vedScreen );
-    actorInspector.setLayoutData( BorderLayout.CENTER );
+    // actorInspector.setLayoutData( BorderLayout.CENTER );
 
     Composite bkComp = new Composite( actMasterComp, SWT.NONE );
     bkComp.setLayout( new GridLayout( 2, false ) );

@@ -49,6 +49,7 @@ public class SkActorRtdataValue
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_VISEL_PROP_ID );
       fields.add( TFI_RTD_GWID );
+      fields.add( TFI_RTD_UGWI );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRtdataValue.class );
     }
 
