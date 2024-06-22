@@ -1,10 +1,11 @@
 package org.toxsoft.skf.mnemo.mws.simple.e4.handlers;
 
-import javax.inject.*;
+import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.core.di.annotations.Optional;
+import org.toxsoft.skf.mnemo.mws.simple.IMnemoMwsSimpleConstants;
+import org.toxsoft.skf.mnemo.mws.simple.e4.main.IMnemoschemesPerspectiveController;
 
-import org.eclipse.e4.core.di.annotations.*;
-import org.toxsoft.skf.mnemo.mws.simple.*;
-import org.toxsoft.skf.mnemo.mws.simple.e4.main.*;
+import jakarta.inject.Named;
 
 /**
  * Command: open mnemoscheme by specified ID.

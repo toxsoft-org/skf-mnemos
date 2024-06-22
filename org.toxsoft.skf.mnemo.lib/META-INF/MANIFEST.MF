@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.toxsoft.skf.mnemo.lib
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: toxsoft.org
 Automatic-Module-Name: org.toxsoft.skf.mnemo.lib
-Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-RequiredExecutionEnvironment: JavaSE-21
 Require-Bundle: org.toxsoft.core.tslib,
  org.toxsoft.core.txtproj.lib,
  org.toxsoft.uskat.core
