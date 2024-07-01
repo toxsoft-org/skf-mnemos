@@ -5,7 +5,8 @@ import org.eclipse.swt.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.ConfigRecognizerPanel.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers.ConfigRecognizerPanel.*;
 
 public class RecognizerCellEditor
     extends DialogCellEditor {

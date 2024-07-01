@@ -5,53 +5,41 @@ import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
 import static org.toxsoft.skf.mnemo.skide.glib.ISkResources.*;
 import static org.toxsoft.uskat.core.gui.ISkCoreGuiConstants.*;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.*;
+import org.eclipse.swt.custom.*;
 import org.eclipse.swt.widgets.*;
-import org.toxsoft.core.tsgui.bricks.actions.ITsActionDef;
-import org.toxsoft.core.tsgui.bricks.actions.ITsActionHandler;
+import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.bricks.actions.asp.*;
-import org.toxsoft.core.tsgui.bricks.ctx.ITsGuiContext;
-import org.toxsoft.core.tsgui.bricks.ctx.impl.TsGuiContext;
-import org.toxsoft.core.tsgui.graphics.icons.EIconSize;
-import org.toxsoft.core.tsgui.panels.TsPanel;
-import org.toxsoft.core.tsgui.panels.toolbar.TsToolbar;
-import org.toxsoft.core.tsgui.utils.layout.BorderLayout;
+import org.toxsoft.core.tsgui.bricks.ctx.*;
+import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
+import org.toxsoft.core.tsgui.graphics.icons.*;
+import org.toxsoft.core.tsgui.panels.*;
+import org.toxsoft.core.tsgui.panels.toolbar.*;
+import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.ved.editor.*;
-import org.toxsoft.core.tsgui.ved.editor.IVedViselSelectionManager.ESelectionKind;
-import org.toxsoft.core.tsgui.ved.editor.palette.IVedItemsPaletteEntry;
-import org.toxsoft.core.tsgui.ved.editor.palette.VedItemsPaletteBar;
-import org.toxsoft.core.tsgui.ved.incub.undoman.VedUndoManager;
-import org.toxsoft.core.tsgui.ved.incub.undoman.tsgui.AspUndoManager;
-import org.toxsoft.core.tsgui.ved.screen.IVedScreen;
+import org.toxsoft.core.tsgui.ved.editor.IVedViselSelectionManager.*;
+import org.toxsoft.core.tsgui.ved.editor.palette.*;
+import org.toxsoft.core.tsgui.ved.incub.undoman.*;
+import org.toxsoft.core.tsgui.ved.incub.undoman.tsgui.*;
+import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.asp.*;
-import org.toxsoft.core.tsgui.ved.screen.cfg.IVedScreenCfg;
-import org.toxsoft.core.tsgui.ved.screen.cfg.VedScreenCfg;
+import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
-import org.toxsoft.core.tslib.bricks.events.change.GenericChangeEventer;
-import org.toxsoft.core.tslib.bricks.events.change.IGenericChangeEventer;
-import org.toxsoft.core.tslib.bricks.keeper.IEntityKeeper;
-import org.toxsoft.core.tslib.bricks.strid.more.IdChain;
-import org.toxsoft.core.tslib.utils.errors.TsNullArgumentRtException;
-import org.toxsoft.core.txtproj.lib.storage.IKeepablesStorageRo;
-import org.toxsoft.skf.mnemo.gui.mastobj.IMnemoResolverConfig;
-import org.toxsoft.skf.mnemo.gui.mastobj.MnemoResolverConfig;
-import org.toxsoft.skf.mnemo.gui.skved.ISkVedEnvironment;
-import org.toxsoft.skf.mnemo.gui.skved.SkVedEnvironment;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.MnemoSubmastersPanel;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.PanelCompoundResolverConfig;
+import org.toxsoft.core.tslib.bricks.events.change.*;
+import org.toxsoft.core.tslib.bricks.keeper.*;
+import org.toxsoft.core.tslib.bricks.strid.more.*;
+import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.core.txtproj.lib.storage.*;
+import org.toxsoft.skf.mnemo.gui.mastobj.*;
+import org.toxsoft.skf.mnemo.gui.skved.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.*;
-import org.toxsoft.skf.mnemo.gui.tsgui.layout.IVedLayoutFactoriesProvider;
-import org.toxsoft.skf.mnemo.gui.tsgui.layout.VedViselsLayoutManager;
-import org.toxsoft.skf.mnemo.gui.tsgui.tools.VedToolsManager;
-import org.toxsoft.skf.mnemo.gui.tsgui.tools.ZOrdererTool;
-import org.toxsoft.skf.mnemo.lib.ISkMnemosService;
-import org.toxsoft.uskat.core.connection.ISkConnection;
-import org.toxsoft.uskat.core.gui.conn.ISkConnectionSupplier;
+import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
+import org.toxsoft.skf.mnemo.gui.tsgui.tools.*;
+import org.toxsoft.skf.mnemo.lib.*;
+import org.toxsoft.uskat.core.connection.*;
+import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
  * The mnemoscheme editor panel.
@@ -204,6 +192,8 @@ public class MnemoEditorPanel
 
   private MnemoSubmastersPanel submastersPanel;
 
+  private ActorSubmastersPanel actorSubmasters;
+
   /**
    * Constructor.
    * <p>
@@ -330,26 +320,31 @@ public class MnemoEditorPanel
     tiActorInsp.setImage( iconManager().loadStdIcon( EVedItemKind.ACTOR.iconId(), EIconSize.IS_16X16 ) );
 
     // Composite actMasterComp = new Composite( eastFolder, SWT.NONE );
-    Composite actMasterComp = new SashForm( eastFolder, SWT.VERTICAL );
-    actMasterComp.setLayout( new BorderLayout() );
+    SashForm actMasterComp = new SashForm( eastFolder, SWT.VERTICAL );
+    // actMasterComp.setLayout( new BorderLayout() );
+
+    actorSubmasters = new ActorSubmastersPanel( actMasterComp, vedScreen, SWT.BORDER );
+    eastPanel.setWeights( 3, 10 );
+
     tiActorInsp.setControl( actMasterComp );
     actorInspector = new VedScreenItemInspector( actMasterComp, vedScreen );
+    actMasterComp.setWeights( 3, 10 );
+
     // actorInspector.setLayoutData( BorderLayout.CENTER );
 
-    Composite bkComp = new Composite( actMasterComp, SWT.NONE );
-    bkComp.setLayout( new GridLayout( 2, false ) );
-    bkComp.setLayoutData( BorderLayout.NORTH );
-    Button btn = new Button( bkComp, SWT.PUSH );
-    btn.setText( "Мастера..." );
-    btn.addSelectionListener( new SelectionAdapter() {
-
-      @Override
-      public void widgetSelected( SelectionEvent aEvent ) {
-        // nop
-        PanelCompoundResolverConfig.edit( null, vedScreen.tsContext() );
-      }
-    } );
-    eastPanel.setWeights( 3, 10 );
+    // Composite bkComp = new Composite( actMasterComp, SWT.NONE );
+    // bkComp.setLayout( new GridLayout( 2, false ) );
+    // bkComp.setLayoutData( BorderLayout.NORTH );
+    // Button btn = new Button( bkComp, SWT.PUSH );
+    // btn.setText( "Мастера..." );
+    // btn.addSelectionListener( new SelectionAdapter() {
+    //
+    // @Override
+    // public void widgetSelected( SelectionEvent aEvent ) {
+    // // nop
+    // PanelCompoundResolverConfig.edit( null, vedScreen.tsContext() );
+    // }
+    // } );
 
     // actorInspector = new VedScreenItemInspector( eastFolder, vedScreen );
     // tiActorInsp.setControl( actorInspector );
@@ -461,6 +456,7 @@ public class MnemoEditorPanel
    */
   private void whenPanelActorsSelectionChanges( IVedActor aActor ) {
     actorInspector.setVedItem( aActor );
+    actorSubmasters.setActor( aActor );
     if( aActor != null ) {
       eastFolder.setSelection( tiActorInsp );
     }

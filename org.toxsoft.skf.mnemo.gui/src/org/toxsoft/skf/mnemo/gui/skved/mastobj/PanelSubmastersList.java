@@ -72,8 +72,8 @@ public class PanelSubmastersList
       case ACTID_ADD: {
         Gwid gwid = Gwid.createClass( masterClassId );
         ICompoundResolverConfig resCfg = DirectGwidResolver.createResolverConfig( gwid );
-        PanelCompoundResolverConfig.edit( resCfg, tsContext() );
-
+        resCfg = PanelCompoundResolverConfig.edit( resCfg, tsContext() );
+        System.out.println( resCfg.toString() );
         // ISkClassInfo clsInfo = SkGuiUtils.selectClass( null, tsContext() );
         // if( clsInfo != null ) {
         // submasters.add( clsInfo );

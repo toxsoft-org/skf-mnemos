@@ -22,7 +22,7 @@ public final class SimpleResolverCfg
   /**
    * The registered keeper ID.
    */
-  public static final String KEEPER_ID = "File"; //$NON-NLS-1$
+  public static final String KEEPER_ID = "SimpleResolverCfg"; //$NON-NLS-1$
 
   /**
    * The keeper singleton.

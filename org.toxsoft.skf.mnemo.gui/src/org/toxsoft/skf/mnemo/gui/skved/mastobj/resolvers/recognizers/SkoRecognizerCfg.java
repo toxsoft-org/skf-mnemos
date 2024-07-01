@@ -1,4 +1,4 @@
-package org.toxsoft.skf.mnemo.gui.skved.mastobj;
+package org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers;
 
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;

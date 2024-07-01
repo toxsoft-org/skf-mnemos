@@ -1,7 +1,8 @@
-package org.toxsoft.skf.mnemo.gui.skved.mastobj;
+package org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers;
 
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.*;
 
 /**
  * Конфигурационная информация "распознавателя" sk-объектов.

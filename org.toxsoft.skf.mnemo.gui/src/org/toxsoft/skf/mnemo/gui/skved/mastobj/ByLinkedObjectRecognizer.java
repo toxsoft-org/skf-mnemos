@@ -1,6 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 
 import org.toxsoft.core.tslib.gw.skid.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.linkserv.*;
 

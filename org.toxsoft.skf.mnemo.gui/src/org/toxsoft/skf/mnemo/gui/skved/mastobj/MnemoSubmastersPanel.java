@@ -2,6 +2,7 @@ package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 
 import static org.toxsoft.core.tsgui.graphics.icons.ITsStdIconIds.*;
 import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
+import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.mastobj.ISkResources.*;
 
 import org.eclipse.swt.*;
@@ -88,11 +89,13 @@ public class MnemoSubmastersPanel
     if( aCfg != null ) {
       if( resolverConfig.subMasters().hasKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ) ) {
         SubmasterConfig smCfg = resolverConfig.subMasters().getByKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID );
-        Gwid gwid = DirectGwidResolver.gwid( smCfg.resolverCfg().cfgs().first() );
-        ISkCoreApi coreApi = vedScreen.tsContext().get( ISkConnectionSupplier.class ).defConn().coreApi();
-        ISkClassInfo clsInfo = coreApi.sysdescr().findClassInfo( gwid.classId() );
-        labelMasterClass.setText( clsInfo.nmName() );
-        masterClassId = gwid.classId();
+        if( smCfg.resolverCfg().cfgs().first().params().hasKey( PROPID_GWID ) ) {
+          Gwid gwid = DirectGwidResolver.gwid( smCfg.resolverCfg().cfgs().first() );
+          ISkCoreApi coreApi = vedScreen.tsContext().get( ISkConnectionSupplier.class ).defConn().coreApi();
+          ISkClassInfo clsInfo = coreApi.sysdescr().findClassInfo( gwid.classId() );
+          labelMasterClass.setText( clsInfo.nmName() );
+          masterClassId = gwid.classId();
+        }
         submastersPanel.setMasterClassId( masterClassId );
       }
     }

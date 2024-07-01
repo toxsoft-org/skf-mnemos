@@ -27,10 +27,25 @@ public interface IMasterPathNode
   IList<? extends IMasterPathNode> children();
 
   /**
+   * Возвращает признак того является ли данный узел sk-объектом.<br>
+   *
+   * @return <b>true</b> - узел является объектом<br>
+   *         <b>false</b> - узел не является объектом
+   */
+  boolean isObject();
+
+  /**
    * Возвращает кофигурацию "разрешителя" для данного узла.
    *
    * @return {@link ICompoundResolverConfig} - кофигурация "разрешителя" для данного узла
    */
-  ICompoundResolverConfig resolverConfig();
+  SimpleResolverCfg resolverConfig();
+
+  // /**
+  // * Возвращает кофигурацию "разрешителя" для данного узла.
+  // *
+  // * @return {@link ICompoundResolverConfig} - кофигурация "разрешителя" для данного узла
+  // */
+  // ICompoundResolverConfig resolverConfig();
 
 }

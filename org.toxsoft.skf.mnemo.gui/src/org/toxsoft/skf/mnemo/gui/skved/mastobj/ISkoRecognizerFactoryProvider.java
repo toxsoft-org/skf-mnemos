@@ -2,6 +2,7 @@ package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers.*;
 
 /**
  * Поставщик фабрик "распознавателей" sk-объектов.
@@ -31,7 +32,7 @@ class InternalProvider
   private final static IMapEdit<ESkoRecognizerKind, ISkoRecognizerFactory> factoriesMap = new ElemMap<>();
 
   InternalProvider() {
-    factoriesMap.put( ESkoRecognizerKind.ATTR, ByAttrValueRecognizer.FACTORY );
+    // factoriesMap.put( ESkoRecognizerKind.ATTR, ByAttrValueRecognizer.FACTORY );
   }
 
   @Override

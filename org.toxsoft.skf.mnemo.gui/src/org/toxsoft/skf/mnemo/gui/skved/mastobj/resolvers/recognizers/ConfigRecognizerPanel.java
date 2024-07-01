@@ -1,36 +1,34 @@
-package org.toxsoft.skf.mnemo.gui.skved.mastobj;
+package org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.toxsoft.core.tsgui.bricks.ctx.ITsGuiContext;
+import org.eclipse.swt.*;
+import org.eclipse.swt.custom.*;
+import org.eclipse.swt.events.*;
+import org.eclipse.swt.layout.*;
+import org.eclipse.swt.widgets.*;
+import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.utils.layout.BorderLayout;
-import org.toxsoft.core.tsgui.valed.controls.enums.ValedEnumCombo;
-import org.toxsoft.core.tslib.bricks.strid.IStridable;
-import org.toxsoft.core.tslib.bricks.validator.ValidationResult;
-import org.toxsoft.core.tslib.coll.IMapEdit;
-import org.toxsoft.core.tslib.coll.impl.ElemMap;
-import org.toxsoft.core.tslib.gw.skid.Skid;
-import org.toxsoft.core.tslib.utils.errors.TsNullArgumentRtException;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.ConfigRecognizerPanel.PanelCtx;
-import org.toxsoft.uskat.core.ISkCoreApi;
-import org.toxsoft.uskat.core.gui.conn.ISkConnectionSupplier;
+import org.toxsoft.core.tsgui.valed.controls.enums.*;
+import org.toxsoft.core.tslib.bricks.events.change.*;
+import org.toxsoft.core.tslib.bricks.strid.*;
+import org.toxsoft.core.tslib.bricks.validator.*;
+import org.toxsoft.core.tslib.coll.*;
+import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.core.tslib.gw.skid.*;
+import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers.ConfigRecognizerPanel.*;
+import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
+import org.toxsoft.uskat.core.*;
 
 public class ConfigRecognizerPanel
     extends AbstractTsDialogPanel<ISkoRecognizerCfg, PanelCtx> {
 
-  static class PanelCtx {
+  public static class PanelCtx {
 
     ITsGuiContext tsContext;
     Skid          objSkid;
 
-    PanelCtx( Skid aObjSkid, ITsGuiContext aTsContext ) {
+    public PanelCtx( Skid aObjSkid, ITsGuiContext aTsContext ) {
       objSkid = aObjSkid;
       tsContext = aTsContext;
     }
@@ -61,12 +59,27 @@ public class ConfigRecognizerPanel
     if( stackLayout.topControl != null ) {
       ISkoRecognizerCfgPanel panel = findRecognizerPanel( stackLayout.topControl );
       if( panel != null ) {
-        ISkoRecognizerCfg cfg = panel.config();
+        ISkoRecognizerCfg cfg = panel.getEntity();
         return cfg;
       }
     }
     return null;
   }
+
+  @Override
+  protected ValidationResult validateData() {
+    if( stackLayout.topControl != null ) {
+      ISkoRecognizerCfgPanel panel = findRecognizerPanel( stackLayout.topControl );
+      if( panel != null ) {
+        return panel.canGetEntity();
+      }
+    }
+    return ValidationResult.create( EValidationResultType.ERROR, "Выберите требуемые параметры" );
+  }
+
+  IGenericChangeListener panelListener = aSource -> {
+    fireContentChangeEvent();
+  };
 
   // ------------------------------------------------------------------------------------
   // Implementation
@@ -83,7 +96,7 @@ public class ConfigRecognizerPanel
   private final IMapEdit<String, ISkoRecognizerCfgPanel> panels = new ElemMap<>();
 
   void init() {
-    coreApi = environ().tsContext.get( ISkConnectionSupplier.class ).defConn().coreApi();
+    coreApi = SkGuiUtils.getCoreApi( environ().tsContext );
     setLayout( new BorderLayout() );
 
     Composite topPanel = new Composite( this, SWT.NONE );
@@ -101,26 +114,19 @@ public class ConfigRecognizerPanel
       public void widgetSelected( SelectionEvent aE ) {
         if( kindCombo.canGetValue() == ValidationResult.SUCCESS ) {
           ESkoRecognizerKind kind = kindCombo.getValue();
-          switch( kind ) {
-            case ATTR:
-              ISkoRecognizerCfgPanel cfgP;
-              if( !panels.hasKey( kind.id() ) ) {
-                cfgP = ByAttrValueRecognizer.FACTORY.createCfgEditPanel( stackPanel, environ().objSkid, coreApi );
-                panels.put( kind.id(), cfgP );
-              }
-              cfgP = panels.getByKey( kind.id() );
-              stackLayout.topControl = cfgP.getControl();
-              stackPanel.layout();
-              break;
-            case LINK:
-              break;
-            case RRI_ATTR:
-              break;
-            case RRI_LINK:
-              break;
-            default:
-              throw new IllegalArgumentException( "Unexpected value: " + kind );
+          ISkoRecognizerCfgPanel cfgP;
+          if( !panels.hasKey( kind.id() ) ) {
+            cfgP = kind.getCfgEditPanel( environ().objSkid, tsContext() );
+            panels.put( kind.id(), cfgP );
+            cfgP.genericChangeEventer().addListener( panelListener );
           }
+          cfgP = panels.getByKey( kind.id() );
+          Control ctrl = cfgP.getControl();
+          if( ctrl == null ) {
+            ctrl = cfgP.createControl( stackPanel );
+          }
+          stackLayout.topControl = cfgP.getControl();
+          stackPanel.layout();
         }
       }
     } );

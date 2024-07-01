@@ -14,6 +14,7 @@ import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.linkserv.*;
 import org.toxsoft.uskat.core.api.objserv.*;

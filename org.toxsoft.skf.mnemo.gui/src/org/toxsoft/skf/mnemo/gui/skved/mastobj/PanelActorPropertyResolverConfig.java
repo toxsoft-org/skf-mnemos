@@ -1,13 +1,17 @@
 package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 
+import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
+import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
+
 import org.eclipse.swt.widgets.*;
-import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
+import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tslib.bricks.validator.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.table.*;
 
@@ -17,18 +21,18 @@ import org.toxsoft.skf.mnemo.gui.tsgui.layout.table.*;
  *
  * @author vs
  */
-public class PanelCompoundResolverConfig
-    extends AbstractTsDialogPanel<ICompoundResolverConfig, ITsGuiContext> {
+public class PanelActorPropertyResolverConfig
+    extends AbstractTsDialogPanel<ICompoundResolverConfig, IVedScreen> {
 
-  protected PanelCompoundResolverConfig( Composite aParent,
-      TsDialog<ICompoundResolverConfig, ITsGuiContext> aOwnerDialog ) {
+  protected PanelActorPropertyResolverConfig( Composite aParent,
+      TsDialog<ICompoundResolverConfig, IVedScreen> aOwnerDialog ) {
     super( aParent, aOwnerDialog );
     init();
   }
 
-  protected PanelCompoundResolverConfig( Composite aParent, ICompoundResolverConfig aData, ITsGuiContext aEnviron,
+  protected PanelActorPropertyResolverConfig( Composite aParent, ICompoundResolverConfig aData, IVedScreen aVedScreen,
       int aFlags ) {
-    super( aParent, aEnviron, aData, aEnviron, aFlags );
+    super( aParent, aVedScreen.tsContext(), aData, aVedScreen, aFlags );
     init();
   }
 
@@ -75,8 +79,20 @@ public class PanelCompoundResolverConfig
         moClsId = gwid.classId();
       }
     }
+    else {
+      String sectionId = VED_SCREEN_EXTRA_DATA_ID_MNEMO_RESOLVER_CONGIF;
+      if( environ().model().extraData().hasSection( sectionId ) ) {
+        IMnemoResolverConfig resCfg;
+        resCfg = environ().model().extraData().readItem( sectionId, MnemoResolverConfig.KEEPER, null );
+        if( resCfg.subMasters().hasKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ) ) {
+          SubmasterConfig smCfg = resCfg.subMasters().getByKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID );
+          Ugwi ugwi = smCfg.resolverCfg().cfgs().first().params().getValobj( PROPID_UGWI );
+          System.out.println( ugwi.toString() );
+        }
+      }
+    }
 
-    viewer = new MasterPathViewer( this, moClsId, environ() );
+    viewer = new MasterPathViewer( this, moClsId, tsContext() );
     viewer.setLayoutData( BorderLayout.CENTER );
     viewer.viewer.addSelectionChangedListener( aEvent -> {
       IMasterPathNode node = viewer.selectedNode();
@@ -95,14 +111,15 @@ public class PanelCompoundResolverConfig
    * Статический метод вызова диалога редактирования параметров выравнивания содержимого ячейки.
    *
    * @param aData ICompoundResolverConfig - параметры выравнивания содержимого ячейки
-   * @param aTsContext ITsGuiContext - соответствующий контекст
+   * @param aVedScreen IVedScreen - соответствующий контекст
    * @return {@link VedTableLayoutControllerConfig} - новая отредактированнная конфигурация или <b>null</br>
    */
-  public static final ICompoundResolverConfig edit( ICompoundResolverConfig aData, ITsGuiContext aTsContext ) {
-    TsNullArgumentRtException.checkNull( aTsContext );
-    IDialogPanelCreator<ICompoundResolverConfig, ITsGuiContext> creator = PanelCompoundResolverConfig::new;
-    ITsDialogInfo dlgInfo = new TsDialogInfo( aTsContext, "DLG_T_SELECT_MASTER_PATH", "STR_MSG_SELECT_MASTER_PATH" );
-    TsDialog<ICompoundResolverConfig, ITsGuiContext> d = new TsDialog<>( dlgInfo, aData, aTsContext, creator );
+  public static final ICompoundResolverConfig edit( ICompoundResolverConfig aData, IVedScreen aVedScreen ) {
+    TsNullArgumentRtException.checkNull( aVedScreen );
+    IDialogPanelCreator<ICompoundResolverConfig, IVedScreen> creator = PanelActorPropertyResolverConfig::new;
+    ITsDialogInfo dlgInfo;
+    dlgInfo = new TsDialogInfo( aVedScreen.tsContext(), "DLG_T_SELECT_MASTER_PATH", "STR_MSG_SELECT_MASTER_PATH" );
+    TsDialog<ICompoundResolverConfig, IVedScreen> d = new TsDialog<>( dlgInfo, aData, aVedScreen, creator );
     return d.execData();
   }
 

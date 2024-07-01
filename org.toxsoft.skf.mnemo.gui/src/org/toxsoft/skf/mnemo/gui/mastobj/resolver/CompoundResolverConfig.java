@@ -62,4 +62,26 @@ public final class CompoundResolverConfig
     return cfgsList;
   }
 
+  // ------------------------------------------------------------------------------------
+  // Object
+  //
+
+  private final static char CH_SEPARATOR = '/';
+
+  @Override
+  public String toString() {
+    if( cfgsList.isEmpty() ) {
+      return super.toString();
+    }
+    StringBuilder sb = new StringBuilder();
+    for( int i = 0; i < cfgsList.size(); i++ ) {
+      SimpleResolverCfg cfg = cfgsList.get( i );
+      sb.append( cfg.toString() );
+      if( i < cfgsList.size() - 1 ) {
+        sb.append( CH_SEPARATOR );
+      }
+    }
+    return sb.toString();
+  }
+
 }

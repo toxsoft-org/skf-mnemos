@@ -7,7 +7,9 @@ import org.toxsoft.core.tsgui.valed.api.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.utils.valobj.*;
 import org.toxsoft.skf.mnemo.gui.km5.*;
+import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.valed.*;
 import org.toxsoft.skf.mnemo.gui.tools.imageset.*;
@@ -88,6 +90,20 @@ public class QuantSkMnemoGui
     vcfRegistry.registerFactory( ValedAvValobjSwitchPerspInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjMPerspIdEditor.FACTORY );
 
+    // ------------------------------------------------------------------------------------
+    // Регистрация резолверов
+    //
+
+    ISimpleResolverFactoriesRegistry resolversRegistry = aWinContext.get( ISimpleResolverFactoriesRegistry.class );
+    if( resolversRegistry == null ) {
+      resolversRegistry = new SimpleResolverFactoriesRegistry();
+      aWinContext.set( ISimpleResolverFactoriesRegistry.class, resolversRegistry );
+    }
+    resolversRegistry.register( DirectAttrResolver.FACTORY );
+    resolversRegistry.register( DirectRriAttrResolver.FACTORY );
+    resolversRegistry.register( DirectRtDataResolver.FACTORY );
+    resolversRegistry.register( LinkInfoResolver.FACTORY );
+    resolversRegistry.register( RivetInfoResolver.FACTORY );
   }
 
 }

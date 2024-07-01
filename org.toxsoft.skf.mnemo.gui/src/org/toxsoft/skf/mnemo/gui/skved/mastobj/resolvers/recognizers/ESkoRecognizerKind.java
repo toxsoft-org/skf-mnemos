@@ -1,10 +1,13 @@
-package org.toxsoft.skf.mnemo.gui.skved.mastobj;
+package org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers;
 
+import org.toxsoft.core.tsgui.bricks.ctx.*;
+import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.bricks.keeper.*;
 import org.toxsoft.core.tslib.bricks.keeper.std.*;
 import org.toxsoft.core.tslib.bricks.strid.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
+import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 
 /**
@@ -45,8 +48,7 @@ public enum ESkoRecognizerKind
   /**
    * Keeper singleton.
    */
-  public static final IEntityKeeper<ESkoRecognizerKind> KEEPER =
-      new StridableEnumKeeper<>( ESkoRecognizerKind.class );
+  public static final IEntityKeeper<ESkoRecognizerKind> KEEPER = new StridableEnumKeeper<>( ESkoRecognizerKind.class );
 
   private static IStridablesListEdit<ESkoRecognizerKind> list = null;
 
@@ -82,6 +84,44 @@ public enum ESkoRecognizerKind
   // ----------------------------------------------------------------------------------
   // API
   //
+
+  /**
+   * Создает и возвращает "распознаватель" объекта для данного типа.
+   *
+   * @param aCfg ISkObjectRecognizer - конфигурация "распознавателя"
+   * @return ISkObjectRecognizer - "распознаватель" объекта для данного типа
+   */
+  ISkObjectRecognizer recognizer( ISkoRecognizerCfg aCfg ) {
+    switch( this ) {
+      case ATTR:
+        String attrId = aCfg.propValues().getStr( ByAttrValueRecognizer.PROPID_ATTRID );
+        IAtomicValue attrValue = aCfg.propValues().getValue( ByAttrValueRecognizer.PROPID_ATTR_VALUE );
+        return new ByAttrValueRecognizer( attrId, attrValue );
+      case RRI_ATTR:
+        throw new TsUnderDevelopmentRtException();
+      case LINK:
+        throw new TsUnderDevelopmentRtException();
+      case RRI_LINK:
+        throw new TsUnderDevelopmentRtException();
+      default:
+        throw new TsNotAllEnumsUsedRtException( this.id );
+    }
+  }
+
+  ISkoRecognizerCfgPanel getCfgEditPanel( Skid aObjSkid, ITsGuiContext aContext ) {
+    switch( this ) {
+      case ATTR:
+        return new ByAttrValueRecognizerCfgPanel( aObjSkid, aContext );
+      case RRI_ATTR:
+        throw new TsUnderDevelopmentRtException();
+      case LINK:
+        throw new TsUnderDevelopmentRtException();
+      case RRI_LINK:
+        throw new TsUnderDevelopmentRtException();
+      default:
+        throw new TsNotAllEnumsUsedRtException( this.id );
+    }
+  }
 
   /**
    * Returns all constants in single list.

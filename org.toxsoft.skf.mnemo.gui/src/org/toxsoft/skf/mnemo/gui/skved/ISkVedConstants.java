@@ -116,9 +116,14 @@ public interface ISkVedConstants {
   // UGWI support
   //
 
+  String PROPID_UGWI      = SKVED_ID + ".prop.Ugwi";     //$NON-NLS-1$
   String PROPID_ATTR_UGWI = SKVED_ID + ".prop.AttrUgwi"; //$NON-NLS-1$
   String PROPID_RTD_UGWI  = SKVED_ID + ".prop.RtdUgwi";  //$NON-NLS-1$
   String PROPID_CMD_UGWI  = SKVED_ID + ".prop.CmdUgwi";  //$NON-NLS-1$
+
+  IDataDef PROP_UGWI = DataDef.create( PROPID_UGWI, VALOBJ, //
+      TSID_KEEPER_ID, Ugwi.KEEPER_ID //
+  );
 
   IDataDef PROP_ATTR_UGWI = DataDef.create( PROPID_ATTR_UGWI, VALOBJ, //
       TSID_NAME, STR_PROP_ATTR_UGWI, //

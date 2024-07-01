@@ -1,6 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 
 import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
+import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.*;
@@ -10,17 +11,22 @@ import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.graphics.icons.*;
 import org.toxsoft.core.tsgui.panels.*;
+import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
-import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.ConfigRecognizerPanel.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers.ConfigRecognizerPanel.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
+import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
@@ -30,6 +36,13 @@ import org.toxsoft.uskat.core.gui.conn.*;
  */
 public class MasterPathViewer
     extends TsPanel {
+
+  enum EMpvNodeKind {
+    RIVET,
+    LINK,
+    MULTI,
+    OBJECT,
+  }
 
   abstract static class BaseNode
       implements IMasterPathNode {
@@ -43,7 +56,10 @@ public class MasterPathViewer
 
     protected IListEdit<BaseNode> children = new ElemArrayList<>();
 
-    BaseNode( BaseNode aParent, String aId, String aName, String aDescription ) {
+    private final EMpvNodeKind kind;
+
+    BaseNode( EMpvNodeKind aKind, BaseNode aParent, String aId, String aName, String aDescription ) {
+      kind = aKind;
       parent = aParent;
       id = aId;
       name = aName;
@@ -65,6 +81,10 @@ public class MasterPathViewer
       return description;
     }
 
+    final EMpvNodeKind kind() {
+      return kind;
+    }
+
     @Override
     public BaseNode parent() {
       return parent;
@@ -79,11 +99,12 @@ public class MasterPathViewer
       return children;
     }
 
-    public boolean editable() {
+    @Override
+    public boolean isObject() {
       return false;
     }
 
-    boolean isObject() {
+    public boolean editable() {
       return false;
     }
 
@@ -101,7 +122,7 @@ public class MasterPathViewer
     private final ISkClassInfo classInfo;
 
     ObjectNode( ISkClassInfo aClassInfo, BaseNode aParent ) {
-      super( aParent, aClassInfo.id(), aClassInfo.nmName(), aClassInfo.description() );
+      super( EMpvNodeKind.OBJECT, aParent, aClassInfo.id(), aClassInfo.nmName(), aClassInfo.description() );
       classInfo = aClassInfo;
       imgBox = iconManager().loadStdIcon( ICONID_OBJECT, EIconSize.IS_16X16 );
     }
@@ -112,12 +133,12 @@ public class MasterPathViewer
       IStridablesList<IDtoLinkInfo> linksList = classInfo.links().list();
 
       for( IDtoRivetInfo ri : rivetsList ) {
-        RivetNode ln = new RivetNode( ri, this );
+        RivetNode ln = new RivetNode( classInfo.id(), ri, this );
         children.add( ln );
       }
 
       for( IDtoLinkInfo li : linksList ) {
-        LinkNode ln = new LinkNode( li, this );
+        LinkNode ln = new LinkNode( classInfo.id(), li, this );
         children.add( ln );
       }
     }
@@ -128,13 +149,29 @@ public class MasterPathViewer
     }
 
     @Override
-    public ICompoundResolverConfig resolverConfig() {
-      Gwid gwid = Gwid.createClass( classInfo.id() );
-      return DirectGwidResolver.createResolverConfig( gwid );
+    public SimpleResolverCfg resolverConfig() {
+      BaseNode parent = parent();
+      if( parent.kind() == EMpvNodeKind.LINK ) {
+        LinkNode ln = (LinkNode)parent;
+        IDtoLinkInfo li = ln.linkInfo;
+        Ugwi ugwi = UgwiKindSkLinkInfo.makeUgwi( ln.classId(), li.id() );
+        IOptionSetEdit opSet = new OptionSet();
+        opSet.setValobj( PROP_UGWI, ugwi );
+        return new SimpleResolverCfg( LinkInfoResolver.FACTORY_ID, opSet );
+      }
+      if( parent.kind() == EMpvNodeKind.RIVET ) {
+        RivetNode rn = (RivetNode)parent;
+        IDtoRivetInfo ri = rn.rivetInfo;
+        Ugwi ugwi = UgwiKindSkRivetInfo.makeUgwi( rn.classId(), ri.id() );
+        IOptionSetEdit opSet = new OptionSet();
+        opSet.setValobj( PROP_UGWI, ugwi );
+        return new SimpleResolverCfg( RivetInfoResolver.FACTORY_ID, opSet );
+      }
+      return null;
     }
 
     @Override
-    boolean isObject() {
+    public boolean isObject() {
       return true;
     }
   }
@@ -150,7 +187,7 @@ public class MasterPathViewer
     private ISkoRecognizerCfg recognizerCfg = null;
 
     MultiObjectsNode( ISkClassInfo aClassInfo, BaseNode aParent ) {
-      super( aParent, aClassInfo.id(), aClassInfo.nmName(), aClassInfo.description() );
+      super( EMpvNodeKind.MULTI, aParent, aClassInfo.id(), aClassInfo.nmName(), aClassInfo.description() );
       classInfo = aClassInfo;
       imgObjects = iconManager().loadStdIcon( ICONID_OBJECTS, EIconSize.IS_16X16 );
       imgResolvedObject = iconManager().loadStdIcon( ICONID_RESOLVED_OBJECT, EIconSize.IS_16X16 );
@@ -162,12 +199,12 @@ public class MasterPathViewer
       IStridablesList<IDtoLinkInfo> linksList = classInfo.links().list();
 
       for( IDtoRivetInfo ri : rivetsList ) {
-        RivetNode ln = new RivetNode( ri, this );
+        RivetNode ln = new RivetNode( classInfo.id(), ri, this );
         children.add( ln );
       }
 
       for( IDtoLinkInfo li : linksList ) {
-        LinkNode ln = new LinkNode( li, this );
+        LinkNode ln = new LinkNode( classInfo.id(), li, this );
         children.add( ln );
       }
     }
@@ -185,6 +222,14 @@ public class MasterPathViewer
       return true;
     }
 
+    @Override
+    public boolean isObject() {
+      if( recognizerCfg != null ) {
+        return true;
+      }
+      return false;
+    }
+
     ISkoRecognizerCfg recognizerCfg() {
       return recognizerCfg;
     }
@@ -197,8 +242,27 @@ public class MasterPathViewer
     }
 
     @Override
-    public ICompoundResolverConfig resolverConfig() {
-      throw new TsUnsupportedFeatureRtException();
+    public SimpleResolverCfg resolverConfig() {
+      BaseNode parent = parent();
+      if( parent.kind() == EMpvNodeKind.LINK ) {
+        LinkNode ln = (LinkNode)parent;
+        IDtoLinkInfo li = ln.linkInfo;
+        Ugwi ugwi = UgwiKindSkLinkInfo.makeUgwi( ln.classId(), li.id() );
+        IOptionSetEdit opSet = new OptionSet();
+        opSet.setValobj( PROP_UGWI, ugwi );
+        opSet.setValobj( LinkInfoResolver.PROPID_RECOGNIZER_CFG, recognizerCfg );
+        return new SimpleResolverCfg( LinkInfoResolver.FACTORY_ID, opSet );
+      }
+      if( parent.kind() == EMpvNodeKind.RIVET ) {
+        RivetNode rn = (RivetNode)parent;
+        IDtoRivetInfo ri = rn.rivetInfo;
+        Ugwi ugwi = UgwiKindSkRivetInfo.makeUgwi( rn.classId(), ri.id() );
+        IOptionSetEdit opSet = new OptionSet();
+        opSet.setValobj( PROP_UGWI, ugwi );
+        opSet.setValobj( RivetInfoResolver.PROPID_RECOGNIZER_CFG, recognizerCfg );
+        return new SimpleResolverCfg( RivetInfoResolver.FACTORY_ID, opSet );
+      }
+      return null;
     }
   }
 
@@ -207,10 +271,13 @@ public class MasterPathViewer
 
     private final Image imgRivet;
 
+    private final String classId;
+
     private final IDtoRivetInfo rivetInfo;
 
-    RivetNode( IDtoRivetInfo aRivetInfo, BaseNode aParent ) {
-      super( aParent, aRivetInfo.id(), aRivetInfo.nmName(), aRivetInfo.description() );
+    RivetNode( String aClassId, IDtoRivetInfo aRivetInfo, BaseNode aParent ) {
+      super( EMpvNodeKind.RIVET, aParent, aRivetInfo.id(), aRivetInfo.nmName(), aRivetInfo.description() );
+      classId = aClassId;
       rivetInfo = aRivetInfo;
       imgRivet = iconManager().loadStdIcon( ICONID_RIVET, EIconSize.IS_16X16 );
     }
@@ -228,8 +295,12 @@ public class MasterPathViewer
     }
 
     @Override
-    public ICompoundResolverConfig resolverConfig() {
+    public SimpleResolverCfg resolverConfig() {
       throw new TsUnsupportedFeatureRtException(); // нельзя вызывать этот метод для данного узла
+    }
+
+    String classId() {
+      return classId;
     }
   }
 
@@ -238,10 +309,13 @@ public class MasterPathViewer
 
     private final Image imgLink;
 
+    private final String classId;
+
     private final IDtoLinkInfo linkInfo;
 
-    LinkNode( IDtoLinkInfo aLinkInfo, BaseNode aParent ) {
-      super( aParent, aLinkInfo.id(), aLinkInfo.nmName(), aLinkInfo.description() );
+    LinkNode( String aClassId, IDtoLinkInfo aLinkInfo, BaseNode aParent ) {
+      super( EMpvNodeKind.LINK, aParent, aLinkInfo.id(), aLinkInfo.nmName(), aLinkInfo.description() );
+      classId = aClassId;
       linkInfo = aLinkInfo;
       imgLink = iconManager().loadStdIcon( ICONID_LINK, EIconSize.IS_16X16 );
     }
@@ -265,8 +339,12 @@ public class MasterPathViewer
     }
 
     @Override
-    public ICompoundResolverConfig resolverConfig() {
+    public SimpleResolverCfg resolverConfig() {
       throw new TsUnsupportedFeatureRtException(); // нельзя вызывать этот метод для данного узла
+    }
+
+    String classId() {
+      return classId;
     }
   }
 
@@ -408,16 +486,20 @@ public class MasterPathViewer
   }
 
   /**
-   * Возвращает выделенный узел дерева сооответствующий объекту или <code>null</code>.
+   * Возвращает конфигурацию "разрешителя", который разрешает {@link Skid} мастер-объекта в {@link Ugwi} типа
+   * {@link UgwiKindSkSkid} требемого объекта.
    *
-   * @return {@link IMasterPathNode} - выделенный узел дерева сооответствующий объекту или <code>null</code>
+   * @return {@link ICompoundResolverConfig} - конфигурация "разрешителя"
    */
-  public IMasterPathNode selectedObjectNode() {
-    BaseNode bn = selectedBaseNode();
-    if( bn != null && bn.isObject() ) {
-      return bn;
+  public ICompoundResolverConfig resolverConfig() {
+    IListEdit<SimpleResolverCfg> simpleConfigs = new ElemArrayList<>();
+    IMasterPathNode node = selectedNode();
+    while( node.isObject() && node.parent() != null ) {
+      SimpleResolverCfg cfg = node.resolverConfig();
+      simpleConfigs.insert( 0, cfg );
+      node = node.parent().parent();
     }
-    return null;
+    return new CompoundResolverConfig( simpleConfigs );
   }
 
   // ------------------------------------------------------------------------------------

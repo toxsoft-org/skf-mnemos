@@ -1,4 +1,4 @@
-package org.toxsoft.skf.mnemo.gui.skved.mastobj;
+package org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers;
 
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
@@ -20,18 +20,17 @@ import org.toxsoft.uskat.core.connection.*;
  * Класс, который разрешает Ugwi типа {@link UgwiKindSkSkid} с помощью мастер-мастер объекта в Ugwi типа
  * {@link UgwiKindSkRtdata}.
  * <p>
- * В качестве конфигурационной информации хранит абстрактный Gwid требуемой sk-сущности от класса мастер объекта.
+ * В качестве конфигурационной информации хранит абстрактный Ugwi РВ-данного.
  *
  * @author vs
  */
 public class DirectRtDataResolver
-    extends AbstractSimpleResolver
-    implements IGwidResolver {
+    extends AbstractSimpleResolver {
 
   /**
    * ИД фабрики
    */
-  public static final String FACTORY_ID = "directGwidResolverFactory"; //$NON-NLS-1$
+  public static final String FACTORY_ID = "directRtDataResolverFactory"; //$NON-NLS-1$
 
   private static final IStridablesList<IDataDef> dataDefs = new StridablesList<>( PROP_GWID );
 
@@ -43,8 +42,6 @@ public class DirectRtDataResolver
 
     @Override
     protected AbstractSimpleResolver doCreateResolver( IOptionSet aResolverConfig, ISkConnection aSkConn ) {
-      // Gwid gwid = aResolverConfig.getValobj( PROP_GWID );
-      // return new DirectGwidResolver( gwid, aSkConn );
       return new DirectRtDataResolver( aResolverConfig, aSkConn );
     }
   };
@@ -60,22 +57,17 @@ public class DirectRtDataResolver
   }
 
   // ------------------------------------------------------------------------------------
-  // IGwidResolver
+  // AbstractSimpleResolver
   //
 
   @Override
-  public Gwid resolve( Skid aMasterSkid ) {
-    Gwid abstractGwid = cfg().getValobj( PROP_GWID );
-    return makeConcreteGwid( aMasterSkid.strid(), abstractGwid );
-  }
-
-  @Override
   protected Ugwi doResolve( Ugwi aMaster ) {
-    String essence = aMaster.essence();
-    Gwid gwid = Gwid.of( essence );
-    gwid = resolve( gwid.skid() );
-    // FIXME return Ugwi.of( UgwiKindGwid.KIND_ID, gwid.canonicalString() );
-    return Ugwi.of( "gwid", gwid.canonicalString() );
+    if( aMaster.kindId().equals( UgwiKindSkSkid.KIND_ID ) ) {
+      Skid masterSkid = UgwiKindSkSkid.getSkid( aMaster );
+      Ugwi ugwi = cfg().getValobj( PROPID_UGWI );
+      return createRtDataUgwi( masterSkid, ugwi );
+    }
+    return null;
   }
 
   // ------------------------------------------------------------------------------------
@@ -97,46 +89,15 @@ public class DirectRtDataResolver
     return cfg;
   }
 
-  /**
-   * Возвращает признак того, есть ли в парметрах {@link Gwid}.
-   *
-   * @param aCfg {@link SimpleResolverCfg} - конфигурация "разрешителя"
-   * @return <b>true</b> - Gwid есть<br>
-   *         <b>false</b> - Gwid'a нет
-   */
-  public static boolean hasGwid( SimpleResolverCfg aCfg ) {
-    return aCfg.params().hasKey( PROPID_GWID );
-  }
-
-  /**
-   * Возвращает {@link Gwid} - мастер объекта, который м.б. разрешен с помощью Strid'a
-   *
-   * @param aCfg {@link SimpleResolverCfg} - конфигурация "разрешителя"
-   * @return Gwid - gwid мастер-объекта
-   */
-  public static Gwid gwid( SimpleResolverCfg aCfg ) {
-    return aCfg.params().getValobj( PROPID_GWID );
-  }
-
   // ------------------------------------------------------------------------------------
   // Implememntation
   //
 
-  /**
-   * Создает "конкретный" Gwid из абстрактного.<br>
-   * Более точно - задает новому Gwid'у указанный ИД оъекта, сохраняя все остальные свойства.
-   *
-   * @param aObjId String - ИД объекта
-   * @param aGwid Gwid - исходный Gwid
-   * @return Gwid с указанным идентификатором объекта
-   */
-  public static Gwid makeConcreteGwid( String aObjId, Gwid aGwid ) {
-    String classId = aGwid.classId();
-    String propSectId = aGwid.propSectId();
-    String propId = aGwid.propId();
-    String subPropSectId = aGwid.subPropSectId();
-    String subPropId = aGwid.subPropId();
-    return Gwid.create( classId, aObjId, propSectId, propId, subPropSectId, subPropId );
+  private static Ugwi createRtDataUgwi( Skid aObjSkid, Ugwi aUgwi ) {
+    if( aUgwi.kindId().equals( UgwiKindSkRtdata.KIND_ID ) ) {
+      return UgwiKindSkRtDataInfo.makeUgwi( aObjSkid, UgwiKindSkRtDataInfo.getRtDataId( aUgwi ) );
+    }
+    return null;
   }
 
 }

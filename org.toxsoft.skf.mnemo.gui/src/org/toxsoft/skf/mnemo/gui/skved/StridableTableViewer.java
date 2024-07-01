@@ -95,4 +95,19 @@ public class StridableTableViewer {
     return viewer;
   }
 
+  /**
+   * Выделяет в списке элемент с указанным ИДом.
+   *
+   * @param aItemId String - ИД элемента
+   */
+  public void setSelectedItemById( String aItemId ) {
+    IStridable[] items = (IStridable[])viewer.getInput();
+    for( IStridable item : items ) {
+      if( item.id().equals( aItemId ) ) {
+        viewer.setSelection( new StructuredSelection( item ) );
+        break;
+      }
+    }
+  }
+
 }
