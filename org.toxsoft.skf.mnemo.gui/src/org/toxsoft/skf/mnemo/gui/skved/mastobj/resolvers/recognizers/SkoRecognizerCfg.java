@@ -29,13 +29,13 @@ public final class SkoRecognizerCfg
         @Override
         protected void doWrite( IStrioWriter aSw, ISkoRecognizerCfg aEntity ) {
           aSw.incNewLine();
-          // item ID and factory ID
+          // item ID and kind
           aSw.writeAsIs( aEntity.id() );
           aSw.writeSeparatorChar();
           aSw.writeAsIs( aEntity.kind().id() );
           aSw.writeSeparatorChar();
-          aSw.writeAsIs( aEntity.factoryId() );
-          aSw.writeSeparatorChar();
+          // aSw.writeAsIs( aEntity.factoryId() );
+          // aSw.writeSeparatorChar();
           aSw.writeEol();
           // properties values
           OptionSetKeeper.KEEPER_INDENTED.write( aSw, aEntity.propValues() );
@@ -43,16 +43,17 @@ public final class SkoRecognizerCfg
 
         @Override
         protected ISkoRecognizerCfg doRead( IStrioReader aSr ) {
-          // item ID and factory ID
+          // item ID and kind
           String id = aSr.readIdPath();
           aSr.ensureSeparatorChar();
           ESkoRecognizerKind kind = ESkoRecognizerKind.getById( aSr.readIdName() );
           aSr.ensureSeparatorChar();
-          String factoryId = aSr.readIdPath();
-          aSr.ensureSeparatorChar();
+          // String factoryId = aSr.readIdPath();
+          // aSr.ensureSeparatorChar();
           // properties values
           IOptionSet propValues = OptionSetKeeper.KEEPER.read( aSr );
-          SkoRecognizerCfg itemCfg = new SkoRecognizerCfg( id, kind, factoryId, propValues );
+          // SkoRecognizerCfg itemCfg = new SkoRecognizerCfg( id, kind, factoryId, propValues );
+          SkoRecognizerCfg itemCfg = new SkoRecognizerCfg( id, kind, propValues );
           return itemCfg;
         }
       };
@@ -61,7 +62,7 @@ public final class SkoRecognizerCfg
 
   private final ESkoRecognizerKind kind;
 
-  private final String factoryId;
+  // private final String factoryId;
 
   private final IOptionSetEdit opSet;
 
@@ -73,10 +74,11 @@ public final class SkoRecognizerCfg
    * @param aFactoryId String - ИД фабрики создания
    * @param aProps {@link IOptionSet} - значения свойств "раcпознавателя"
    */
-  public SkoRecognizerCfg( String aId, ESkoRecognizerKind aKind, String aFactoryId, IOptionSet aProps ) {
+  // public SkoRecognizerCfg( String aId, ESkoRecognizerKind aKind, String aFactoryId, IOptionSet aProps ) {
+  public SkoRecognizerCfg( String aId, ESkoRecognizerKind aKind, IOptionSet aProps ) {
     id = aId;
     kind = aKind;
-    factoryId = aFactoryId;
+    // factoryId = aFactoryId;
     opSet = new OptionSet( aProps );
   }
 
@@ -108,10 +110,10 @@ public final class SkoRecognizerCfg
     return kind;
   }
 
-  @Override
-  public String factoryId() {
-    return factoryId;
-  }
+  // @Override
+  // public String factoryId() {
+  // return factoryId;
+  // }
 
   @Override
   public IOptionSet propValues() {

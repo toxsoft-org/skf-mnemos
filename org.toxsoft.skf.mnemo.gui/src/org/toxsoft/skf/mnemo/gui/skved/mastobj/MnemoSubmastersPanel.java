@@ -15,12 +15,15 @@ import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
+import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
@@ -69,8 +72,10 @@ public class MnemoSubmastersPanel
         ISkClassInfo clsInfo = SkGuiUtils.selectClass( null, vedScreen.tsContext() );
         if( clsInfo != null ) {
           labelMasterClass.setText( clsInfo.nmName() );
-          Gwid gwid = Gwid.createClass( clsInfo.id() );
-          ICompoundResolverConfig resCfg = DirectGwidResolver.createResolverConfig( gwid );
+          // Gwid gwid = Gwid.createClass( clsInfo.id() );
+          // ICompoundResolverConfig resCfg = DirectGwidResolver.createResolverConfig( gwid );
+          Ugwi ugwi = UgwiKindSkClassInfo.makeUgwi( clsInfo.id() );
+          ICompoundResolverConfig resCfg = DirectSkidResolver.createResolverConfig( ugwi );
           SubmasterConfig smCfg = SubmasterConfig.create( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID, new OptionSet(), resCfg );
           resolverConfig.subMasters().add( smCfg );
           String itemId = VED_SCREEN_EXTRA_DATA_ID_MNEMO_RESOLVER_CONGIF;
@@ -95,6 +100,15 @@ public class MnemoSubmastersPanel
           ISkClassInfo clsInfo = coreApi.sysdescr().findClassInfo( gwid.classId() );
           labelMasterClass.setText( clsInfo.nmName() );
           masterClassId = gwid.classId();
+        }
+        if( smCfg.resolverCfg().cfgs().first().params().hasKey( PROPID_UGWI ) ) {
+          Ugwi ugwi = smCfg.resolverCfg().cfgs().first().params().getValobj( PROPID_UGWI );
+          if( ugwi.kindId().equals( UgwiKindSkClassInfo.KIND_ID ) ) {
+            ISkCoreApi coreApi = SkGuiUtils.getCoreApi( tsContext() );
+            ISkClassInfo clsInfo = coreApi.sysdescr().findClassInfo( UgwiKindSkClassInfo.getClassId( ugwi ) );
+            labelMasterClass.setText( clsInfo.nmName() );
+            masterClassId = clsInfo.id();
+          }
         }
         submastersPanel.setMasterClassId( masterClassId );
       }

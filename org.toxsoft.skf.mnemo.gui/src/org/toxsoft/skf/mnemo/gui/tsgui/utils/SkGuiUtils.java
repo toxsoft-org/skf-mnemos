@@ -4,11 +4,13 @@ import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.m5.gui.*;
+import org.toxsoft.core.tsgui.m5.gui.panels.*;
 import org.toxsoft.core.tsgui.m5.model.*;
 import org.toxsoft.core.tslib.bricks.strid.more.*;
 import org.toxsoft.skf.reports.gui.panels.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
+import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 import org.toxsoft.uskat.core.gui.km5.sgw.*;
@@ -66,6 +68,16 @@ public class SkGuiUtils {
     ITsDialogInfo dlgInfo;
     dlgInfo = new TsDialogInfo( aTsContext, "Выбор класса", "Выберите соответствующий класс и нажмите \"ОК\"" );
     return M5GuiUtils.askSelectItem( dlgInfo, model, aSelectedClass, lm.itemsProvider(), null );
+  }
+
+  public static IM5CollectionPanel<IDtoAttrInfo> getAttrsListPanel( ITsGuiContext aTsContext ) {
+    ISkConnection conn = getConnection( aTsContext );
+    // тут получаем KM5 модель IDtoAttrInfo
+    IM5Domain m5 = conn.scope().get( IM5Domain.class );
+    IM5Model<IDtoAttrInfo> model = m5.getModel( ISgwM5Constants.MID_SGW_ATTR_INFO, IDtoAttrInfo.class );
+    IM5LifecycleManager<IDtoAttrInfo> lm = model.getLifecycleManager( conn );
+
+    return model.panelCreator().createCollViewerPanel( aTsContext, lm.itemsProvider() );
   }
 
   /**

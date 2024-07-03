@@ -10,6 +10,7 @@ import org.toxsoft.skf.mnemo.gui.km5.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.valed.*;
 import org.toxsoft.skf.mnemo.gui.tools.imageset.*;
@@ -51,6 +52,7 @@ public class QuantSkMnemoGui
     TsValobjUtils.registerKeeperIfNone( PopupMnemoInfo.KEEPER_ID, PopupMnemoInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( SwitchPerspInfo.KEEPER_ID, SwitchPerspInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( MPerspId.KEEPER_ID, MPerspId.KEEPER );
+    TsValobjUtils.registerKeeperIfNone( SkoRecognizerCfg.KEEPER_ID, SkoRecognizerCfg.KEEPER );
 
     // IVedViselFactoriesRegistry visFact = aAppContext.get( IVedViselFactoriesRegistry.class );
     // visFact.register( ViselPanel.FACTORY );

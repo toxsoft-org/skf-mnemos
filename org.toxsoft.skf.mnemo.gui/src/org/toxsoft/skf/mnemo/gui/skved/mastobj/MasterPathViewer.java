@@ -14,6 +14,7 @@ import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.gw.skid.*;
@@ -22,8 +23,9 @@ import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.*;
 import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers.ConfigRecognizerPanel.*;
 import org.toxsoft.uskat.core.*;
+import org.toxsoft.uskat.core.api.linkserv.*;
+import org.toxsoft.uskat.core.api.objserv.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
@@ -111,7 +113,6 @@ public class MasterPathViewer
     protected abstract Image image();
 
     protected abstract void fillChildren();
-
   }
 
   class ObjectNode
@@ -173,6 +174,11 @@ public class MasterPathViewer
     @Override
     public boolean isObject() {
       return true;
+    }
+
+    @Override
+    public String classId() {
+      return classInfo.id();
     }
   }
 
@@ -264,6 +270,19 @@ public class MasterPathViewer
       }
       return null;
     }
+
+    IStridablesList<ISkObject> listObjects() {
+      if( parent().kind() == EMpvNodeKind.LINK ) {
+        return ((LinkNode)parent()).linkedObjects();
+      }
+      return IStridablesList.EMPTY;
+    }
+
+    @Override
+    public String classId() {
+      return classInfo.id();
+    }
+
   }
 
   class RivetNode
@@ -299,7 +318,8 @@ public class MasterPathViewer
       throw new TsUnsupportedFeatureRtException(); // нельзя вызывать этот метод для данного узла
     }
 
-    String classId() {
+    @Override
+    public String classId() {
       return classId;
     }
   }
@@ -343,9 +363,22 @@ public class MasterPathViewer
       throw new TsUnsupportedFeatureRtException(); // нельзя вызывать этот метод для данного узла
     }
 
-    String classId() {
+    @Override
+    public String classId() {
       return classId;
     }
+
+    IStridablesList<ISkObject> linkedObjects() {
+      if( parent().kind() == EMpvNodeKind.OBJECT ) {
+        ObjectNode objNode = (ObjectNode)parent();
+        ISkObject parentObj = coreApi.objService().listObjs( objNode.classInfo.id(), true ).first();
+        IDtoLinkFwd lfwd = coreApi.linkService().getLinkFwd( parentObj.skid(), linkInfo.id() );
+        IList<ISkObject> skObjs = coreApi.objService().getObjs( lfwd.rightSkids() );
+        return new StridablesList<>( skObjs );
+      }
+      return IStridablesList.EMPTY;
+    }
+
   }
 
   ITreeContentProvider contentProvider = new ITreeContentProvider() {
@@ -383,9 +416,10 @@ public class MasterPathViewer
     protected CellEditor getCellEditor( Object aElement ) {
       MultiObjectsNode node = (MultiObjectsNode)aElement;
 
-      Skid objSkid = coreApi.objService().listObjs( node.classInfo.id(), true ).first().skid();
-      PanelCtx ctx = new PanelCtx( objSkid, MasterPathViewer.this.tsContext() );
-      return new RecognizerCellEditor( viewer.getTree(), ctx );
+      // IList<ISkObject> objs = coreApi.objService().listObjs( node.classInfo.id(), true );
+      // IStridablesList<ISkObject> objects = new StridablesList<>( objs );
+      IStridablesList<ISkObject> objects = node.listObjects();
+      return new RecognizerCellEditor( viewer.getTree(), objects, tsContext() );
     }
 
     @Override

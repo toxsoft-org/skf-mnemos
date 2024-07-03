@@ -7,8 +7,8 @@ import org.toxsoft.core.tslib.bricks.keeper.std.*;
 import org.toxsoft.core.tslib.bricks.strid.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
-import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.uskat.core.api.objserv.*;
 
 /**
  * Тип "распознователя" объекта.
@@ -92,35 +92,28 @@ public enum ESkoRecognizerKind
    * @return ISkObjectRecognizer - "распознаватель" объекта для данного типа
    */
   ISkObjectRecognizer recognizer( ISkoRecognizerCfg aCfg ) {
-    switch( this ) {
-      case ATTR:
+    return switch( this ) {
+      case ATTR -> {
         String attrId = aCfg.propValues().getStr( ByAttrValueRecognizer.PROPID_ATTRID );
         IAtomicValue attrValue = aCfg.propValues().getValue( ByAttrValueRecognizer.PROPID_ATTR_VALUE );
-        return new ByAttrValueRecognizer( attrId, attrValue );
-      case RRI_ATTR:
-        throw new TsUnderDevelopmentRtException();
-      case LINK:
-        throw new TsUnderDevelopmentRtException();
-      case RRI_LINK:
-        throw new TsUnderDevelopmentRtException();
-      default:
-        throw new TsNotAllEnumsUsedRtException( this.id );
-    }
+        yield new ByAttrValueRecognizer( attrId, attrValue );
+      }
+      case RRI_ATTR -> throw new TsUnderDevelopmentRtException();
+      case LINK -> throw new TsUnderDevelopmentRtException();
+      case RRI_LINK -> throw new TsUnderDevelopmentRtException();
+      default -> throw new TsNotAllEnumsUsedRtException( this.id );
+    };
   }
 
-  ISkoRecognizerCfgPanel getCfgEditPanel( Skid aObjSkid, ITsGuiContext aContext ) {
-    switch( this ) {
-      case ATTR:
-        return new ByAttrValueRecognizerCfgPanel( aObjSkid, aContext );
-      case RRI_ATTR:
-        throw new TsUnderDevelopmentRtException();
-      case LINK:
-        throw new TsUnderDevelopmentRtException();
-      case RRI_LINK:
-        throw new TsUnderDevelopmentRtException();
-      default:
-        throw new TsNotAllEnumsUsedRtException( this.id );
-    }
+  // ISkoRecognizerCfgPanel getCfgEditPanel( Skid aObjSkid, ITsGuiContext aContext ) {
+  ISkoRecognizerCfgPanel getCfgEditPanel( IStridablesList<ISkObject> aObjects, ITsGuiContext aContext ) {
+    return switch( this ) {
+      case ATTR -> new ByAttrValueRecognizerCfgPanel( aObjects, aContext );
+      case RRI_ATTR -> throw new TsUnderDevelopmentRtException();
+      case LINK -> throw new TsUnderDevelopmentRtException();
+      case RRI_LINK -> throw new TsUnderDevelopmentRtException();
+      default -> throw new TsNotAllEnumsUsedRtException( this.id );
+    };
   }
 
   /**

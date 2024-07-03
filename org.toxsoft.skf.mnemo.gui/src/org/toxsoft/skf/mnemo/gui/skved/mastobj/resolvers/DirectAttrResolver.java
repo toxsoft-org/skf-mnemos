@@ -7,9 +7,6 @@ import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
-import org.toxsoft.core.tslib.coll.*;
-import org.toxsoft.core.tslib.coll.impl.*;
-import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
@@ -77,16 +74,25 @@ public class DirectAttrResolver
   /**
    * Возвращает конфигурацию для {@link DirectAttrResolver}.
    *
-   * @param aGwid Gwid - Gwid объекта м.б. абстрактным
-   * @return {@link ICompoundResolverConfig} - конфигурацию для {@link DirectAttrResolver}
+   * @param aUgwi Ugwi - ugwi типа {@link UgwiKindSkAttrInfo} или {@link UgwiKindSkAttr}
+   * @return {@link SimpleResolverCfg} - конфигурацию для {@link DirectAttrResolver}
    */
-  public static ICompoundResolverConfig createResolverConfig( Gwid aGwid ) {
+  public static SimpleResolverCfg createResolverConfig( Ugwi aUgwi ) {
     IOptionSetEdit opSet = new OptionSet();
-    opSet.setValobj( PROPID_GWID, aGwid );
-    SimpleResolverCfg simpleCfg = new SimpleResolverCfg( FACTORY_ID, opSet );
-    IList<SimpleResolverCfg> simpleConfigs = new ElemArrayList<>( simpleCfg );
-    CompoundResolverConfig cfg = new CompoundResolverConfig( simpleConfigs );
-    return cfg;
+    opSet.setValobj( PROPID_UGWI, aUgwi );
+    return new SimpleResolverCfg( FACTORY_ID, opSet );
+  }
+
+  /**
+   * Возвращает конфигурацию для {@link DirectAttrResolver}.
+   *
+   * @param aClassId String - ИД класса
+   * @param aAttrId String - ИД атрибута
+   * @return {@link SimpleResolverCfg} - конфигурацию для {@link DirectAttrResolver}
+   */
+  public static SimpleResolverCfg createResolverConfig( String aClassId, String aAttrId ) {
+    Ugwi ugwi = UgwiKindSkAttrInfo.makeUgwi( aClassId, aAttrId );
+    return createResolverConfig( ugwi );
   }
 
   // ------------------------------------------------------------------------------------

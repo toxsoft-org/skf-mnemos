@@ -498,8 +498,11 @@ public class MnemoEditorPanel
       IEntityKeeper<IMnemoResolverConfig> keeper = MnemoResolverConfig.KEEPER;
       IKeepablesStorageRo ks = aCfg.extraData();
       resolverConfig = (MnemoResolverConfig)ks.readItem( sectionId, keeper, resolverConfig );
-      submastersPanel.setMnemoResolverConfig( resolverConfig );
     }
+    else {
+      resolverConfig = new MnemoResolverConfig();
+    }
+    submastersPanel.setMnemoResolverConfig( resolverConfig );
 
     undoManager.reset();
     setChanged( false );

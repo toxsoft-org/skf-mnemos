@@ -2,7 +2,6 @@ package org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers;
 
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.*;
 
 /**
  * Конфигурационная информация "распознавателя" sk-объектов.
@@ -10,7 +9,8 @@ import org.toxsoft.skf.mnemo.gui.skved.mastobj.*;
  * @author vs
  */
 public sealed interface ISkoRecognizerCfg
-    extends IStridable permits SkoRecognizerCfg {
+    extends IStridable
+    permits SkoRecognizerCfg {
 
   /**
    * Тип "распознавателя".
@@ -19,12 +19,12 @@ public sealed interface ISkoRecognizerCfg
    */
   ESkoRecognizerKind kind();
 
-  /**
-   * ИД фабрики создания "распознавателя".
-   *
-   * @return String - ИД фабрики создания "распознавателя"
-   */
-  String factoryId();
+  // /**
+  // * ИД фабрики создания "распознавателя".
+  // *
+  // * @return String - ИД фабрики создания "распознавателя"
+  // */
+  // String factoryId();
 
   /**
    * Значения свойств "распознавателя".

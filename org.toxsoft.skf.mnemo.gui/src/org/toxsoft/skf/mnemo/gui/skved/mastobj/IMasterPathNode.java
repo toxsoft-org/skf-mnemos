@@ -41,11 +41,11 @@ public interface IMasterPathNode
    */
   SimpleResolverCfg resolverConfig();
 
-  // /**
-  // * Возвращает кофигурацию "разрешителя" для данного узла.
-  // *
-  // * @return {@link ICompoundResolverConfig} - кофигурация "разрешителя" для данного узла
-  // */
-  // ICompoundResolverConfig resolverConfig();
+  /**
+   * Возвращает Ид класса к которому относится данный узел
+   *
+   * @return String ИД класса к которому относится данный узел
+   */
+  String classId();
 
 }

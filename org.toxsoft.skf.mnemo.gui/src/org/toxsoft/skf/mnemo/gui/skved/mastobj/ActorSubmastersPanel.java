@@ -1,6 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
+import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
 
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.*;
@@ -13,11 +14,15 @@ import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.bricks.keeper.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
+import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
 import org.toxsoft.uskat.core.*;
@@ -40,6 +45,11 @@ public class ActorSubmastersPanel
 
     ViewerRow( String aPropertyId ) {
       propertyId = aPropertyId;
+    }
+
+    ViewerRow( String aPropertyId, ICompoundResolverConfig aCfg ) {
+      propertyId = aPropertyId;
+      cfg = aCfg;
     }
   }
 
@@ -142,6 +152,22 @@ public class ActorSubmastersPanel
         if( cfg != null ) {
           row.cfg = cfg;
           viewer.update( row, null );
+          MnemoResolverConfig resCfg = getResolverConfig();
+          if( resCfg != null ) {
+            resCfg.defineActorSubmaster( actor.id(), VED_SCREEN_MAIN_MNEMO_RESOLVER_ID );
+            IStringMap<ICompoundResolverConfig> actorResolvers;
+            String sectionId = VED_ITEM_EXTRA_DATA_ID_PROPERTIES_RESOLVERS;
+            if( actor.extraData().hasSection( sectionId ) ) {
+              actorResolvers = actor.extraData().readStridMap( sectionId, CompoundResolverConfig.KEEPER );
+            }
+            else {
+              actorResolvers = new StringMap<>();
+            }
+            IStringMapEdit<ICompoundResolverConfig> result = new StringMap<>( actorResolvers );
+            result.put( row.propertyId, cfg );
+            actor.extraData().writeStridMap( sectionId, result, CompoundResolverConfig.KEEPER );
+          }
+          System.out.println( cfg.toString() );
         }
       }
         break;
@@ -169,11 +195,23 @@ public class ActorSubmastersPanel
       viewer.setInput( null );
     }
     else {
+      IStringMap<ICompoundResolverConfig> actorResolvers = null;
+      String sectionId = VED_ITEM_EXTRA_DATA_ID_PROPERTIES_RESOLVERS;
+      if( actor.extraData().hasSection( sectionId ) ) {
+        actorResolvers = actor.extraData().readStridMap( sectionId, CompoundResolverConfig.KEEPER );
+      }
+
       IStridablesList<IDataDef> propDefs = actor.props().propDefs();
       IListEdit<ViewerRow> rows = new ElemArrayList<>();
       for( IDataDef dd : propDefs ) {
         if( dd.keeperId() != null && dd.keeperId().equals( Ugwi.KEEPER_ID ) ) { // свойство является Ugwi
-          rows.add( new ViewerRow( dd.id() ) );
+          if( actorResolvers != null && actorResolvers.hasKey( dd.id() ) ) {
+            ICompoundResolverConfig resCfg = actorResolvers.getByKey( dd.id() );
+            rows.add( new ViewerRow( dd.id(), resCfg ) );
+          }
+          else {
+            rows.add( new ViewerRow( dd.id() ) );
+          }
         }
       }
       viewer.setInput( rows.toArray() );
@@ -183,5 +221,14 @@ public class ActorSubmastersPanel
   // ------------------------------------------------------------------------------------
   // Implementation
   //
+
+  MnemoResolverConfig getResolverConfig() {
+    String sectionId = VED_SCREEN_EXTRA_DATA_ID_MNEMO_RESOLVER_CONGIF;
+    if( vedScreen.model().extraData().hasSection( sectionId ) ) {
+      IEntityKeeper<IMnemoResolverConfig> keeper = MnemoResolverConfig.KEEPER;
+      return (MnemoResolverConfig)vedScreen.model().extraData().readItem( sectionId, keeper, null );
+    }
+    return null;
+  }
 
 }

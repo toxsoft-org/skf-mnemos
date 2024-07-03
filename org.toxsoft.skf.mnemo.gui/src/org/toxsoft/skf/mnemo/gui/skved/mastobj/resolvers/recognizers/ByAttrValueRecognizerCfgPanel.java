@@ -11,6 +11,7 @@ import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.impl.*;
 import org.toxsoft.core.tslib.bricks.validator.*;
 import org.toxsoft.core.tslib.coll.*;
@@ -31,16 +32,22 @@ public class ByAttrValueRecognizerCfgPanel
 
   StridableTableViewer attrsViewer;
 
-  IList<ISkObject> objects;
+  // IList<ISkObject> objects;
 
   ListViewer valuesViewer;
 
   private final Skid       objSkid;
   private final ISkCoreApi coreApi;
 
-  public ByAttrValueRecognizerCfgPanel( Skid aObjSkid, ITsGuiContext aContext ) {
+  private final IStridablesList<ISkObject> objects;
+
+  // public ByAttrValueRecognizerCfgPanel( Skid aObjSkid, IStridablesList<ISkObject> aObjects, ITsGuiContext aContext )
+  // {
+  public ByAttrValueRecognizerCfgPanel( IStridablesList<ISkObject> aObjects, ITsGuiContext aContext ) {
     super( aContext, false );
-    objSkid = aObjSkid;
+    objects = aObjects;
+    objSkid = aObjects.first().skid();
+    // objSkid = aObjSkid;
     coreApi = SkGuiUtils.getCoreApi( aContext );
   }
 
@@ -68,7 +75,7 @@ public class ByAttrValueRecognizerCfgPanel
       opSet.setValue( ByAttrValueRecognizer.PROPID_ATTR_VALUE, attrValue );
       String idPath = StridUtils.makeIdPath( objSkid.classId(), objSkid.strid() );
       idPath = StridUtils.makeIdPath( idPath, attrInfo.id() );
-      return new SkoRecognizerCfg( idPath, ESkoRecognizerKind.ATTR, null, opSet );
+      return new SkoRecognizerCfg( idPath, ESkoRecognizerKind.ATTR, opSet );
     }
     return null;
   }
@@ -96,7 +103,7 @@ public class ByAttrValueRecognizerCfgPanel
     l = new CLabel( bkPanel, SWT.NONE );
     l.setText( "Значения:" );
 
-    objects = coreApi.objService().listObjs( objSkid.classId(), true );
+    // objects = coreApi.objService().listObjs( objSkid.classId(), true );
 
     int style = SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.H_SCROLL;
     attrsViewer = new StridableTableViewer( bkPanel, style, 80, 200, -1 );
