@@ -50,7 +50,7 @@ public class DirectAttrResolver
    * @param aSkConn {@link ISkConnection} - соединение с сервером
    */
   public DirectAttrResolver( IOptionSet aResolverConfig, ISkConnection aSkConn ) {
-    super( new OptionSet(), aSkConn );
+    super( aResolverConfig, aSkConn );
   }
 
   // ------------------------------------------------------------------------------------

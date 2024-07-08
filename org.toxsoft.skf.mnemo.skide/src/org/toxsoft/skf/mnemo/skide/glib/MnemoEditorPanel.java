@@ -29,15 +29,19 @@ import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
 import org.toxsoft.core.tslib.bricks.keeper.*;
 import org.toxsoft.core.tslib.bricks.strid.more.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.txtproj.lib.storage.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
+import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.skved.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.tools.*;
+import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
 import org.toxsoft.skf.mnemo.lib.*;
+import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
@@ -489,7 +493,14 @@ public class MnemoEditorPanel
 
   @Override
   public void setCurrentConfig( IVedScreenCfg aCfg ) {
-    VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
+    ISkConnection skConn = SkGuiUtils.getConnection( tsContext() );
+    ISimpleResolverFactoriesRegistry resRegistry = tsContext().get( ISimpleResolverFactoriesRegistry.class );
+    MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn, resRegistry );
+    Ugwi ugwi = UgwiKindSkSkid.makeUgwi( "gbh.TurboCompressor", "turboCompressor1" );
+    IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, aCfg, skConn );
+
+    // VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
+    VedScreenUtils.setVedScreenConfig( vedScreen, newCfg );
 
     String sectionId = VED_SCREEN_EXTRA_DATA_ID_MNEMO_RESOLVER_CONGIF;
     if( aCfg.extraData().hasSection( sectionId ) ) {

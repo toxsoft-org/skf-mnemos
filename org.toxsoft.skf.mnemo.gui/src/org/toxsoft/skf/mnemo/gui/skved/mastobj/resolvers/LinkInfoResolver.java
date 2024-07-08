@@ -112,7 +112,8 @@ public class LinkInfoResolver
     if( cfg().hasKey( PROPID_RECOGNIZER_CFG ) ) {
       IAtomicValue value = cfg().getValue( PROP_RECOGNIZER_CFG );
       if( value.isAssigned() ) {
-        return value.asValobj();
+        ISkoRecognizerCfg rCfg = value.asValobj();
+        return rCfg.kind().recognizer( rCfg );
       }
     }
     return null;

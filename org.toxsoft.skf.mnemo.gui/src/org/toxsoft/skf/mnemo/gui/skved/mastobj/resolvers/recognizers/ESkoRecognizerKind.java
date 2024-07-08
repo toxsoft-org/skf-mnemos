@@ -91,7 +91,7 @@ public enum ESkoRecognizerKind
    * @param aCfg ISkObjectRecognizer - конфигурация "распознавателя"
    * @return ISkObjectRecognizer - "распознаватель" объекта для данного типа
    */
-  ISkObjectRecognizer recognizer( ISkoRecognizerCfg aCfg ) {
+  public ISkObjectRecognizer recognizer( ISkoRecognizerCfg aCfg ) {
     return switch( this ) {
       case ATTR -> {
         String attrId = aCfg.propValues().getStr( ByAttrValueRecognizer.PROPID_ATTRID );
@@ -106,7 +106,7 @@ public enum ESkoRecognizerKind
   }
 
   // ISkoRecognizerCfgPanel getCfgEditPanel( Skid aObjSkid, ITsGuiContext aContext ) {
-  ISkoRecognizerCfgPanel getCfgEditPanel( IStridablesList<ISkObject> aObjects, ITsGuiContext aContext ) {
+  public ISkoRecognizerCfgPanel getCfgEditPanel( IStridablesList<ISkObject> aObjects, ITsGuiContext aContext ) {
     return switch( this ) {
       case ATTR -> new ByAttrValueRecognizerCfgPanel( aObjects, aContext );
       case RRI_ATTR -> throw new TsUnderDevelopmentRtException();

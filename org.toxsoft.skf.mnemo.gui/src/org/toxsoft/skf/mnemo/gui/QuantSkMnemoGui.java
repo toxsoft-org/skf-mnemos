@@ -101,6 +101,7 @@ public class QuantSkMnemoGui
       resolversRegistry = new SimpleResolverFactoriesRegistry();
       aWinContext.set( ISimpleResolverFactoriesRegistry.class, resolversRegistry );
     }
+    resolversRegistry.register( DirectSkidResolver.FACTORY );
     resolversRegistry.register( DirectAttrResolver.FACTORY );
     resolversRegistry.register( DirectRriAttrResolver.FACTORY );
     resolversRegistry.register( DirectRtDataResolver.FACTORY );

@@ -52,7 +52,7 @@ public class DirectSkidResolver
    * @param aSkConn {@link ISkConnection} - соединение с сервером
    */
   public DirectSkidResolver( IOptionSet aResolverConfig, ISkConnection aSkConn ) {
-    super( new OptionSet(), aSkConn );
+    super( aResolverConfig, aSkConn );
   }
 
   // ------------------------------------------------------------------------------------
