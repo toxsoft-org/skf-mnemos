@@ -37,12 +37,6 @@ import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 public class PanelActorPropertyResolverConfig
     extends AbstractTsDialogPanel<ICompoundResolverConfig, IVedScreen> {
 
-  // enum ESkPropertyKind {
-  // ATTRIBUTE,
-  // RTDATA,
-  // COMMAND
-  // }
-
   protected PanelActorPropertyResolverConfig( Composite aParent,
       TsDialog<ICompoundResolverConfig, IVedScreen> aOwnerDialog ) {
     super( aParent, aOwnerDialog );

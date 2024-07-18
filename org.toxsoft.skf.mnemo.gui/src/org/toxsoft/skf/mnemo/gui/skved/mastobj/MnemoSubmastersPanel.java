@@ -2,7 +2,6 @@ package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 
 import static org.toxsoft.core.tsgui.graphics.icons.ITsStdIconIds.*;
 import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
-import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.mastobj.ISkResources.*;
 
 import org.eclipse.swt.*;
@@ -14,7 +13,6 @@ import org.toxsoft.core.tsgui.graphics.icons.*;
 import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
-import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
@@ -24,7 +22,6 @@ import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
-import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
  * Панель для редактирования класса главного мастер-объекта
@@ -58,7 +55,6 @@ public class MnemoSubmastersPanel
 
     setLayout( new GridLayout( 2, false ) );
     CLabel l = new CLabel( this, SWT.NONE );
-
     l.setText( STR_L_MASTER_OBJECT_CLASS );
     l.setLayoutData( new GridData( SWT.FILL, SWT.TOP, true, false, 2, 1 ) );
     labelMasterClass = new CLabel( this, SWT.BORDER );
@@ -84,34 +80,26 @@ public class MnemoSubmastersPanel
       }
     } );
 
-    submastersPanel = new PanelSubmastersList( this, vedScreen.tsContext() );
+    submastersPanel = new PanelSubmastersList( this, vedScreen );
     submastersPanel.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
   }
 
+  /**
+   * Задает конфигурацию "разрешителя" главного мастер-объета мнемосхемы.
+   *
+   * @param aCfg MnemoResolverConfig - конфигурация "разрешителя" главного мастер-объета мнемосхемы
+   */
   public void setMnemoResolverConfig( MnemoResolverConfig aCfg ) {
     resolverConfig = aCfg;
     labelMasterClass.setText( TsLibUtils.EMPTY_STRING );
     if( aCfg != null ) {
-      if( resolverConfig.subMasters().hasKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ) ) {
-        SubmasterConfig smCfg = resolverConfig.subMasters().getByKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID );
-        if( smCfg.resolverCfg().cfgs().first().params().hasKey( PROPID_GWID ) ) {
-          Gwid gwid = DirectGwidResolver.gwid( smCfg.resolverCfg().cfgs().first() );
-          ISkCoreApi coreApi = vedScreen.tsContext().get( ISkConnectionSupplier.class ).defConn().coreApi();
-          ISkClassInfo clsInfo = coreApi.sysdescr().findClassInfo( gwid.classId() );
-          labelMasterClass.setText( clsInfo.nmName() );
-          masterClassId = gwid.classId();
-        }
-        if( smCfg.resolverCfg().cfgs().first().params().hasKey( PROPID_UGWI ) ) {
-          Ugwi ugwi = smCfg.resolverCfg().cfgs().first().params().getValobj( PROPID_UGWI );
-          if( ugwi.kindId().equals( UgwiKindSkClassInfo.KIND_ID ) ) {
-            ISkCoreApi coreApi = SkGuiUtils.getCoreApi( tsContext() );
-            ISkClassInfo clsInfo = coreApi.sysdescr().findClassInfo( UgwiKindSkClassInfo.getClassId( ugwi ) );
-            labelMasterClass.setText( clsInfo.nmName() );
-            masterClassId = clsInfo.id();
-          }
-        }
-        submastersPanel.setMasterClassId( masterClassId );
+      ISkCoreApi coreApi = SkGuiUtils.getCoreApi( vedScreen.tsContext() );
+      ISkClassInfo clsInfo = MasterObjectUtils.findMainMasterClassId( aCfg, coreApi );
+      if( clsInfo != null ) {
+        masterClassId = clsInfo.id();
+        labelMasterClass.setText( clsInfo.nmName() );
       }
+      submastersPanel.setMnemoResolverConfig( aCfg );
     }
   }
 

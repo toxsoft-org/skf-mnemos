@@ -1,7 +1,6 @@
 package org.toxsoft.skf.mnemo.skide.glib;
 
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
-import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
 import static org.toxsoft.skf.mnemo.skide.glib.ISkResources.*;
 import static org.toxsoft.uskat.core.gui.ISkCoreGuiConstants.*;
 
@@ -27,11 +26,9 @@ import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
-import org.toxsoft.core.tslib.bricks.keeper.*;
 import org.toxsoft.core.tslib.bricks.strid.more.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.core.txtproj.lib.storage.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
@@ -499,20 +496,21 @@ public class MnemoEditorPanel
     Ugwi ugwi = UgwiKindSkSkid.makeUgwi( "gbh.TurboCompressor", "turboCompressor1" );
     IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, aCfg, skConn );
 
-    // VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
-    VedScreenUtils.setVedScreenConfig( vedScreen, newCfg );
+    VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
+    // VedScreenUtils.setVedScreenConfig( vedScreen, newCfg );
 
-    String sectionId = VED_SCREEN_EXTRA_DATA_ID_MNEMO_RESOLVER_CONGIF;
-    if( aCfg.extraData().hasSection( sectionId ) ) {
-      resolverConfig.subMasters().clear();
-      resolverConfig.clearActorSubmasterIds();
-      IEntityKeeper<IMnemoResolverConfig> keeper = MnemoResolverConfig.KEEPER;
-      IKeepablesStorageRo ks = aCfg.extraData();
-      resolverConfig = (MnemoResolverConfig)ks.readItem( sectionId, keeper, resolverConfig );
-    }
-    else {
-      resolverConfig = new MnemoResolverConfig();
-    }
+    // String sectionId = VED_SCREEN_EXTRA_DATA_ID_MNEMO_RESOLVER_CONGIF;
+    // if( aCfg.extraData().hasSection( sectionId ) ) {
+    // resolverConfig.subMasters().clear();
+    // resolverConfig.clearActorSubmasterIds();
+    // IEntityKeeper<IMnemoResolverConfig> keeper = MnemoResolverConfig.KEEPER;
+    // IKeepablesStorageRo ks = aCfg.extraData();
+    // resolverConfig = (MnemoResolverConfig)ks.readItem( sectionId, keeper, resolverConfig );
+    // }
+    // else {
+    // resolverConfig = new MnemoResolverConfig();
+    // }
+    resolverConfig = MasterObjectUtils.readMnemoResolverConfig( aCfg );
     submastersPanel.setMnemoResolverConfig( resolverConfig );
 
     undoManager.reset();

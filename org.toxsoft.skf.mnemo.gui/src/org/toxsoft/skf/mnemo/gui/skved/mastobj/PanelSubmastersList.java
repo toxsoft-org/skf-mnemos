@@ -1,26 +1,31 @@
 package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
+import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
 
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.actions.*;
-import org.toxsoft.core.tsgui.bricks.ctx.*;
+import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.graphics.icons.*;
 import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tsgui.panels.toolbar.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
-import org.toxsoft.core.tslib.coll.*;
-import org.toxsoft.core.tslib.coll.impl.*;
-import org.toxsoft.core.tslib.gw.gwid.*;
-import org.toxsoft.core.tslib.utils.*;
+import org.toxsoft.core.tsgui.ved.screen.*;
+import org.toxsoft.core.tsgui.ved.screen.cfg.*;
+import org.toxsoft.core.tsgui.ved.screen.impl.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
+import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
+import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
+import org.toxsoft.uskat.core.*;
+import org.toxsoft.uskat.core.api.sysdescr.*;
 
 /**
- * Панель с редактируемым списком sub-мастеров.
+ * Панель с редактируемым списком sub-мастеров всей мнемосхемы.
  * <p>
  *
  * @author vs
@@ -33,31 +38,34 @@ public class PanelSubmastersList
 
   StridableTableViewer viewer;
 
-  // final IStridablesListEdit<ISkClassInfo> submasters = new StridablesList<>();
-  final IListEdit<ICompoundResolverConfig> resolverConfigs = new ElemArrayList<>();
+  private final IVedScreen vedScreen;
 
-  private String masterClassId = TsLibUtils.EMPTY_STRING;
+  final IStridablesListEdit<SubmasterConfig> submasterConfigs = new StridablesList<>();
+
+  // private String masterClassId = TsLibUtils.EMPTY_STRING;
 
   /**
    * Конструктор.
    *
    * @param aParent {@link Composite} - родительская панель
-   * @param aContext {@link ITsGuiContext} - соответствующий контекст
+   * @param aVedScreen {@link IVedScreen} - экран мнемосхемы
    */
-  public PanelSubmastersList( Composite aParent, ITsGuiContext aContext ) {
-    super( aParent, aContext );
+  public PanelSubmastersList( Composite aParent, IVedScreen aVedScreen ) {
+    super( aParent, aVedScreen.tsContext() );
+    vedScreen = aVedScreen;
     setLayout( new BorderLayout() );
-    toolBar = TsToolbar.create( this, aContext, EIconSize.IS_24X24, ACDEF_ADD, ACDEF_REMOVE );
+    toolBar = TsToolbar.create( this, aVedScreen.tsContext(), EIconSize.IS_24X24, ACDEF_ADD, ACDEF_REMOVE );
     toolBar.setNameLabelText( "Sub-мастера: " );
     toolBar.getControl().setLayoutData( BorderLayout.NORTH );
 
     int style = SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION;
-    viewer = new StridableTableViewer( this, style, 120, 200, 0 );
+    viewer = new StridableTableViewer( this, style, 0, 200, 0 );
     viewer.viewer().getControl().setLayoutData( BorderLayout.CENTER );
     viewer.viewer().addSelectionChangedListener( aEvent -> {
       IStructuredSelection selection = (IStructuredSelection)aEvent.getSelection();
       toolBar.getAction( ACTID_REMOVE ).setEnabled( !selection.isEmpty() );
     } );
+    // toolBar.getAction( ACTID_ADD ).setEnabled( false );
     toolBar.getAction( ACTID_REMOVE ).setEnabled( false );
     toolBar.addListener( this );
   }
@@ -70,22 +78,36 @@ public class PanelSubmastersList
   public void handleAction( String aActionId ) {
     switch( aActionId ) {
       case ACTID_ADD: {
-        Gwid gwid = Gwid.createClass( masterClassId );
-        ICompoundResolverConfig resCfg = DirectGwidResolver.createResolverConfig( gwid );
-        resCfg = PanelCompoundResolverConfig.edit( resCfg, tsContext() );
-        System.out.println( resCfg.toString() );
-        // ISkClassInfo clsInfo = SkGuiUtils.selectClass( null, tsContext() );
-        // if( clsInfo != null ) {
-        // submasters.add( clsInfo );
-        // viewer.viewer().setInput( submasters.toArray() );
-        // }
+        IVedScreenCfg screenCfg = VedScreenUtils.getVedScreenConfig( vedScreen );
+        MnemoResolverConfig mnemoResolerConfig = MasterObjectUtils.readMnemoResolverConfig( screenCfg );
+        if( !mnemoResolerConfig.subMasters().hasKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ) ) {
+          TsDialogUtils.warn( getShell(), "Задайте \"мастер-объект\" мнемосхемы" );
+          return;
+        }
+        ISkCoreApi coreApi = SkGuiUtils.getCoreApi( vedScreen.tsContext() );
+        ISkClassInfo clsInfo = MasterObjectUtils.findMainMasterClassId( mnemoResolerConfig, coreApi );
+        if( clsInfo == null ) {
+          viewer.viewer().setInput( null );
+          MasterObjectUtils.updateSubmastersList( IStridablesList.EMPTY, vedScreen );
+          return;
+        }
+        // masterClassId = clsInfo.id();
+        SubmasterConfig cfg = PanelMnemoSubmasterResolverConfig.edit( null, vedScreen );
+        if( cfg != null && !submasterConfigs.hasKey( cfg.id() ) ) {
+          submasterConfigs.add( cfg );
+          MasterObjectUtils.updateSubmastersList( submasterConfigs, vedScreen );
+          viewer.viewer().setInput( submasterConfigs.toArray() );
+        }
       }
         break;
       case ACTID_REMOVE: {
-        // IStructuredSelection selection = (IStructuredSelection)viewer.viewer().getSelection();
-        // ISkClassInfo clsInfo = (ISkClassInfo)selection.getFirstElement();
-        // submasters.remove( clsInfo );
-        // viewer.viewer().setInput( submasters.toArray() );
+        IStructuredSelection selection = (IStructuredSelection)viewer.viewer().getSelection();
+        if( !selection.isEmpty() ) {
+          SubmasterConfig smCfg = (SubmasterConfig)selection.getFirstElement();
+          submasterConfigs.remove( smCfg );
+          MasterObjectUtils.updateSubmastersList( submasterConfigs, vedScreen );
+          viewer.viewer().setInput( submasterConfigs.toArray() );
+        }
       }
         break;
       default:
@@ -98,10 +120,15 @@ public class PanelSubmastersList
   //
 
   /**
-   * @param aMasterClassId String - ИД класса мастер-объекта мнемосхемы
+   * Задает конфигурацию "разрешителя" мастер-объекта мнемосхемы.
+   *
+   * @param aCfg {@link MnemoResolverConfig} - конфигурация "разрешителя" мастер-объекта мнемосхемы
    */
-  public void setMasterClassId( String aMasterClassId ) {
-    masterClassId = aMasterClassId;
+  public void setMnemoResolverConfig( MnemoResolverConfig aCfg ) {
+    submasterConfigs.clear();
+    submasterConfigs.addAll( aCfg.subMasters() );
+    // submasterConfigs.removeByKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ); // Удалим resolver главного мастера
+    viewer.viewer().setInput( submasterConfigs.toArray() );
   }
 
 }

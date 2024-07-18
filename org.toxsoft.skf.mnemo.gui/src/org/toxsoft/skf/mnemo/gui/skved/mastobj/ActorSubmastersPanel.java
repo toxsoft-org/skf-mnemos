@@ -5,12 +5,15 @@ import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
 
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.*;
+import org.eclipse.swt.custom.*;
+import org.eclipse.swt.events.*;
+import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.graphics.icons.*;
 import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tsgui.panels.toolbar.*;
-import org.toxsoft.core.tsgui.utils.layout.*;
+import org.toxsoft.core.tsgui.utils.layout.BorderLayout;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
@@ -63,6 +66,8 @@ public class ActorSubmastersPanel
 
   private final IVedScreen vedScreen;
 
+  SubMastersCombo smCombo;
+
   /**
    * Конструктор.
    *
@@ -74,7 +79,31 @@ public class ActorSubmastersPanel
     super( aParent, aVedScreen.tsContext(), aStyle );
     vedScreen = aVedScreen;
     setLayout( new BorderLayout() );
-    toolBar = TsToolbar.create( this, tsContext(), EIconSize.IS_24X24, ACDEF_EDIT, ACDEF_REMOVE );
+
+    Composite comboComp = new Composite( this, SWT.NONE );
+    comboComp.setLayoutData( BorderLayout.NORTH );
+    comboComp.setLayout( new GridLayout( 2, false ) );
+
+    CLabel l = new CLabel( comboComp, SWT.CENTER );
+    l.setText( "Sub-мастер: " );
+    smCombo = new SubMastersCombo( comboComp, vedScreen );
+    smCombo.getControl().setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
+    smCombo.getControl().addSelectionListener( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( SelectionEvent aEvent ) {
+        SubmasterConfig smCfg = smCombo.selectedConfig();
+        if( smCfg != null ) {
+
+        }
+      }
+    } );
+
+    Composite listComp = new Composite( this, SWT.NONE );
+    listComp.setLayoutData( BorderLayout.CENTER );
+    listComp.setLayout( new BorderLayout() );
+
+    toolBar = TsToolbar.create( listComp, tsContext(), EIconSize.IS_24X24, ACDEF_EDIT, ACDEF_REMOVE );
     toolBar.setNameLabelText( "Данные: " );
     toolBar.getControl().setLayoutData( BorderLayout.NORTH );
     toolBar.getAction( ACTID_EDIT ).setEnabled( false );
@@ -82,7 +111,7 @@ public class ActorSubmastersPanel
     toolBar.addListener( this );
 
     int style = SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION;
-    viewer = new TableViewer( this, style );
+    viewer = new TableViewer( listComp, style );
     viewer.getTable().setHeaderVisible( true );
     viewer.getTable().setLinesVisible( true );
 
@@ -215,6 +244,7 @@ public class ActorSubmastersPanel
         }
       }
       viewer.setInput( rows.toArray() );
+      smCombo.refresh();
     }
   }
 
