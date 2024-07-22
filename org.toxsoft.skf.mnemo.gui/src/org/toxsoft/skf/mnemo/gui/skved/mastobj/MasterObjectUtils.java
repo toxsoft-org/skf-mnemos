@@ -31,6 +31,11 @@ import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 public class MasterObjectUtils {
 
   /**
+   * ИД опции класс ИДа, в который разрешается входной Ugwi
+   */
+  public static final String PROPID_RESOLVER_OUTPUT_CLASS_ID = "resolver.output.classId"; //$NON-NLS-1$
+
+  /**
    * Возвращает конфигурацию для {@link DirectGwidResolver}.
    *
    * @param aGwid Gwid - Gwid объекта м.б. абстрактным
@@ -80,7 +85,7 @@ public class MasterObjectUtils {
    *
    * @param aResolverConfig {@link MnemoResolverConfig} - конфигурация "разрешителя" мнемосхемы
    * @param aCoreApi {@link ISkCoreApi} - API сервера
-   * @return {@link ISkClassInfo} - описание класса мастер-объекта мнемосхемы или null
+   * @return {@link ISkClassInfo} - описание класса мастер-объекта мнемосхемы или <code>null</code>
    */
   public static ISkClassInfo findMainMasterClassId( MnemoResolverConfig aResolverConfig, ISkCoreApi aCoreApi ) {
     if( aResolverConfig.subMasters().hasKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ) ) {
@@ -91,6 +96,19 @@ public class MasterObjectUtils {
           return aCoreApi.sysdescr().findClassInfo( UgwiKindSkClassInfo.getClassId( ugwi ) );
         }
       }
+    }
+    return null;
+  }
+
+  /**
+   * Находит и возвращает ИД класса объекта в который разрешается подмастер или <code>null</code>.
+   *
+   * @param aSubmasterCfg {@link MnemoResolverConfig} - конфигурация подмастера
+   * @return {@link ISkClassInfo} - описание класса мастер-объекта мнемосхемы или или <code>null</code>
+   */
+  public static String outputSubmasterClassId( SubmasterConfig aSubmasterCfg ) {
+    if( aSubmasterCfg.params().hasKey( PROPID_RESOLVER_OUTPUT_CLASS_ID ) ) {
+      return aSubmasterCfg.params().getStr( PROPID_RESOLVER_OUTPUT_CLASS_ID );
     }
     return null;
   }

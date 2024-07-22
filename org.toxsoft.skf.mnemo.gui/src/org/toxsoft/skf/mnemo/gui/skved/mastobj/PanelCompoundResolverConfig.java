@@ -46,7 +46,7 @@ public class PanelCompoundResolverConfig
 
   @Override
   protected ICompoundResolverConfig doGetDataRecord() {
-    return viewer.resolverConfig();
+    return viewer.resolverConfig().left();
   }
 
   @Override

@@ -26,6 +26,7 @@ import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.PanelActorPropertyResolverConfig.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.ugwis.*;
@@ -179,7 +180,10 @@ public class ActorSubmastersPanel
       case ACTID_EDIT: {
         IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
         ViewerRow row = (ViewerRow)selection.getFirstElement();
-        ICompoundResolverConfig cfg = PanelActorPropertyResolverConfig.edit( row.cfg, vedScreen );
+        SubmasterConfig smCfg = smCombo.selectedConfig();
+        String smClassId = MasterObjectUtils.outputSubmasterClassId( smCfg );
+        PanelContext pCtx = new PanelContext( smClassId, vedScreen );
+        ICompoundResolverConfig cfg = PanelActorPropertyResolverConfig.edit( row.cfg, pCtx );
         if( cfg != null ) {
           row.cfg = cfg;
           viewer.update( row, null );

@@ -19,6 +19,7 @@ import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
+import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.*;
@@ -533,12 +534,12 @@ public class MasterPathViewer
   }
 
   /**
-   * Возвращает конфигурацию "разрешителя", который разрешает {@link Skid} мастер-объекта в {@link Ugwi} типа
-   * {@link UgwiKindSkSkid} требемого объекта.
+   * Возвращает пару - конфигурацию "разрешителя", который разрешает {@link Skid} мастер-объекта в {@link Ugwi} типа
+   * {@link UgwiKindSkSkid} требуемого объекта и ИД класса в который разрешется входной {@link Ugwi}.
    *
    * @return {@link ICompoundResolverConfig} - конфигурация "разрешителя"
    */
-  public ICompoundResolverConfig resolverConfig() {
+  public Pair<ICompoundResolverConfig, String> resolverConfig() {
     IListEdit<SimpleResolverCfg> simpleConfigs = new ElemArrayList<>();
     IMasterPathNode node = selectedNode();
     while( node.isObject() && node.parent() != null ) {
@@ -546,7 +547,7 @@ public class MasterPathViewer
       simpleConfigs.insert( 0, cfg );
       node = node.parent().parent();
     }
-    return new CompoundResolverConfig( simpleConfigs );
+    return new Pair<>( new CompoundResolverConfig( simpleConfigs ), selectedNode().classId() );
   }
 
   // ------------------------------------------------------------------------------------

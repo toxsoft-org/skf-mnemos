@@ -69,7 +69,12 @@ public class MnemoMasterObjectManager
         continue;
       }
       // find master UGWI for this actor
-      Ugwi destMaster = subMastersMap.findByKey( srcCfg.id() );
+      String submasterId = mrConfig.actorSubmasterIds().findByKey( srcCfg.id() );
+      Ugwi destMaster = null;
+      if( submasterId != null ) {
+        destMaster = subMastersMap.findByKey( submasterId );
+      }
+      // Ugwi destMaster = subMastersMap.findByKey( srcCfg.id() );
       if( destMaster == null ) {
         destMaster = aMasterObject;
       }

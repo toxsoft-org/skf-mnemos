@@ -17,6 +17,7 @@ import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
+import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
@@ -41,8 +42,6 @@ public class PanelSubmastersList
   private final IVedScreen vedScreen;
 
   final IStridablesListEdit<SubmasterConfig> submasterConfigs = new StridablesList<>();
-
-  // private String masterClassId = TsLibUtils.EMPTY_STRING;
 
   /**
    * Конструктор.
@@ -92,9 +91,9 @@ public class PanelSubmastersList
           return;
         }
         // masterClassId = clsInfo.id();
-        SubmasterConfig cfg = PanelMnemoSubmasterResolverConfig.edit( null, vedScreen );
-        if( cfg != null && !submasterConfigs.hasKey( cfg.id() ) ) {
-          submasterConfigs.add( cfg );
+        Pair<SubmasterConfig, String> cfg = PanelMnemoSubmasterResolverConfig.edit( null, vedScreen );
+        if( cfg != null && !submasterConfigs.hasKey( cfg.left().id() ) ) {
+          submasterConfigs.add( cfg.left() );
           MasterObjectUtils.updateSubmastersList( submasterConfigs, vedScreen );
           updateSubmustersList();
           // viewer.viewer().setInput( submasterConfigs.toArray() );

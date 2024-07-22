@@ -39,7 +39,7 @@ public class MnemoSubmastersPanel
 
   private final PanelSubmastersList submastersPanel;
 
-  private String masterClassId = TsLibUtils.EMPTY_STRING;
+  // private String masterClassId = TsLibUtils.EMPTY_STRING;
 
   /**
    * Конструктор.
@@ -96,7 +96,7 @@ public class MnemoSubmastersPanel
       ISkCoreApi coreApi = SkGuiUtils.getCoreApi( vedScreen.tsContext() );
       ISkClassInfo clsInfo = MasterObjectUtils.findMainMasterClassId( aCfg, coreApi );
       if( clsInfo != null ) {
-        masterClassId = clsInfo.id();
+        // masterClassId = clsInfo.id();
         labelMasterClass.setText( clsInfo.nmName() );
       }
       submastersPanel.setMnemoResolverConfig( aCfg );

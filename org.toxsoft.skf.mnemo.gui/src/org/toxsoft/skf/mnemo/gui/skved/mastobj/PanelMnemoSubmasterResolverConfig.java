@@ -13,6 +13,7 @@ import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.idgen.*;
 import org.toxsoft.core.tslib.bricks.validator.*;
+import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
@@ -32,17 +33,18 @@ import org.toxsoft.uskat.core.api.sysdescr.*;
  * @author vs
  */
 public class PanelMnemoSubmasterResolverConfig
-    extends AbstractTsDialogPanel<SubmasterConfig, IVedScreen> {
+    extends AbstractTsDialogPanel<Pair<SubmasterConfig, String>, IVedScreen> {
 
   private static final IStridGenerator idGen = new SimpleStridGenerator( "submaster", System.currentTimeMillis(), 0 ); //$NON-NLS-1$
 
-  protected PanelMnemoSubmasterResolverConfig( Composite aParent, TsDialog<SubmasterConfig, IVedScreen> aOwnerDialog ) {
+  protected PanelMnemoSubmasterResolverConfig( Composite aParent,
+      TsDialog<Pair<SubmasterConfig, String>, IVedScreen> aOwnerDialog ) {
     super( aParent, aOwnerDialog );
     init();
   }
 
-  protected PanelMnemoSubmasterResolverConfig( Composite aParent, SubmasterConfig aData, IVedScreen aVedScreen,
-      int aFlags ) {
+  protected PanelMnemoSubmasterResolverConfig( Composite aParent, Pair<SubmasterConfig, String> aData,
+      IVedScreen aVedScreen, int aFlags ) {
     super( aParent, aVedScreen.tsContext(), aData, aVedScreen, aFlags );
     init();
   }
@@ -52,20 +54,19 @@ public class PanelMnemoSubmasterResolverConfig
   //
 
   @Override
-  protected void doSetDataRecord( SubmasterConfig aData ) {
+  protected void doSetDataRecord( Pair<SubmasterConfig, String> aData ) {
     if( aData != null ) {
-      fldName.setText( aData.nmName() );
-    }
-    else {
+      throw new TsIllegalStateRtException( "This method should not be invoked for non null data" ); //$NON-NLS-1$
     }
   }
 
   @Override
-  protected SubmasterConfig doGetDataRecord() {
-    ICompoundResolverConfig cfg = viewer.resolverConfig();
+  protected Pair<SubmasterConfig, String> doGetDataRecord() {
+    Pair<ICompoundResolverConfig, String> cfg = viewer.resolverConfig();
     IOptionSetEdit opSet = new OptionSet();
     opSet.setStr( TSID_NAME, fldName.getText() );
-    return SubmasterConfig.create( idGen.nextId(), opSet, cfg );
+    opSet.setStr( MasterObjectUtils.PROPID_RESOLVER_OUTPUT_CLASS_ID, cfg.right() );
+    return new Pair<>( SubmasterConfig.create( idGen.nextId(), opSet, cfg.left() ), cfg.right() );
   }
 
   @Override
@@ -98,40 +99,6 @@ public class PanelMnemoSubmasterResolverConfig
     l.setText( "Название: " );
     fldName = new Text( topComp, SWT.BORDER );
     fldName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
-    // SubMastersCombo smCombo = new SubMastersCombo( topComp, environ() );
-    // smCombo.getControl().addSelectionListener( new SelectionAdapter() {
-    //
-    // @Override
-    // public void widgetSelected( SelectionEvent aEvent ) {
-    // SubmasterConfig smCfg = smCombo.selectedConfig();
-    // if( smCfg != null ) {
-    //
-    // }
-    // }
-    // } );
-
-    // String moClsId = "SkObject"; //$NON-NLS-1$
-    // if( dataRecordInput() != null ) {
-    // SubmasterConfig smCfg = dataRecordInput();
-    // SimpleResolverCfg cfg = smCfg.resolverCfg().cfgs().first();
-    // if( DirectGwidResolver.hasGwid( cfg ) ) {
-    // Gwid gwid = DirectGwidResolver.gwid( cfg );
-    // moClsId = gwid.classId();
-    // }
-    // }
-    // else {
-    // String sectionId = VED_SCREEN_EXTRA_DATA_ID_MNEMO_RESOLVER_CONGIF;
-    // if( environ().model().extraData().hasSection( sectionId ) ) {
-    // IMnemoResolverConfig resCfg;
-    // resCfg = environ().model().extraData().readItem( sectionId, MnemoResolverConfig.KEEPER, null );
-    // if( resCfg.subMasters().hasKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ) ) {
-    // SubmasterConfig smCfg = resCfg.subMasters().getByKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID );
-    // Ugwi ugwi = smCfg.resolverCfg().cfgs().first().params().getValobj( PROPID_UGWI );
-    // moClsId = UgwiKindSkClassInfo.getClassId( ugwi );
-    // System.out.println( ugwi.toString() );
-    // }
-    // }
-    // }
 
     MnemoResolverConfig mnemoResolverCfg = MasterObjectUtils.readMnemoResolverConfig( environ() );
     ISkCoreApi coreApi = SkGuiUtils.getCoreApi( environ().tsContext() );
@@ -140,12 +107,6 @@ public class PanelMnemoSubmasterResolverConfig
     viewer = new MasterPathViewer( this, clsInfo.id(), tsContext() );
     viewer.setLayoutData( BorderLayout.CENTER );
     viewer.viewer.addSelectionChangedListener( aEvent -> {
-      // IMasterPathNode node = viewer.selectedNode();
-      // if( node.isObject() ) {
-      // // SubmasterConfig cfg = node.resolverConfig();
-      // ISkCoreApi coreApi = SkGuiUtils.getCoreApi( tsContext() );
-      // ISkClassInfo clsInfo = coreApi.sysdescr().findClassInfo( node.classId() );
-      // }
       fireContentChangeEvent();
     } );
   }
@@ -157,16 +118,16 @@ public class PanelMnemoSubmasterResolverConfig
   /**
    * Статический метод вызова диалога редактирования параметров выравнивания содержимого ячейки.
    *
-   * @param aData SubmasterConfig - параметры выравнивания содержимого ячейки
+   * @param aData Pair<SubmasterConfig,String> - параметры выравнивания содержимого ячейки
    * @param aVedScreen IVedScreen - соответствующий контекст
    * @return {@link VedTableLayoutControllerConfig} - новая отредактированнная конфигурация или <b>null</br>
    */
-  public static final SubmasterConfig edit( SubmasterConfig aData, IVedScreen aVedScreen ) {
+  public static final Pair<SubmasterConfig, String> edit( Pair<SubmasterConfig, String> aData, IVedScreen aVedScreen ) {
     TsNullArgumentRtException.checkNull( aVedScreen );
-    IDialogPanelCreator<SubmasterConfig, IVedScreen> creator = PanelMnemoSubmasterResolverConfig::new;
+    IDialogPanelCreator<Pair<SubmasterConfig, String>, IVedScreen> creator = PanelMnemoSubmasterResolverConfig::new;
     ITsDialogInfo dlgInfo;
     dlgInfo = new TsDialogInfo( aVedScreen.tsContext(), "DLG_T_SELECT_MASTER_PATH", "STR_MSG_SELECT_MASTER_PATH" );
-    TsDialog<SubmasterConfig, IVedScreen> d = new TsDialog<>( dlgInfo, aData, aVedScreen, creator );
+    TsDialog<Pair<SubmasterConfig, String>, IVedScreen> d = new TsDialog<>( dlgInfo, aData, aVedScreen, creator );
     return d.execData();
   }
 
