@@ -21,4 +21,15 @@ public interface IDeleteProcessor
    * @param aParams {@link IOptionSetEdit} - редактируемый набор параметров
    */
   void editIdsForDelete( IStringListEdit aViselIds, IStringListEdit aActorIds, IOptionSetEdit aParams );
+
+  /**
+   * Осуществляет необходимую дополнительную обработку после фактического удаления элементов.<br>
+   * Данную обаботку невозможно произвести в методе
+   * {@linkplain #editIdsForDelete(IStringListEdit, IStringListEdit, IOptionSetEdit)}, так как другие процессоры могут
+   * корректировать список удаляемых элементов.
+   *
+   * @param aViselIds {@link IStringListEdit} - текущий список удаляемых идентификаторов визуальных элементов
+   * @param aActorIds {@link IStringListEdit} - текущий список удаляемых идентификаторов акторов
+   */
+  void handlePostDeletion( IStringListEdit aViselIds, IStringListEdit aActorIds );
 }

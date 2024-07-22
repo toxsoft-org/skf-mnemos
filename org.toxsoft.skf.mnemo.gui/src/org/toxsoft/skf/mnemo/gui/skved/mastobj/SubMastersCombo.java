@@ -64,4 +64,19 @@ public class SubMastersCombo {
     return null;
   }
 
+  void selectSubmasterCnfig( SubmasterConfig aCfg ) {
+    Object[] input = (Object[])viewer.getInput();
+    for( int i = 0; i < input.length; i++ ) {
+      if( ((SubmasterConfig)input[i]).id().equals( aCfg.id() ) ) {
+        viewer.getCombo().select( i );
+        break;
+      }
+    }
+    // viewer.setSelection( new StructuredSelection( aCfg ) );
+  }
+
+  void addSelectionChangedListener( ISelectionChangedListener aListener ) {
+    viewer.addSelectionChangedListener( aListener );
+  }
+
 }

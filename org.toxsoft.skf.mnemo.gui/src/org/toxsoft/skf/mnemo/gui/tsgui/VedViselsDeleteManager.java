@@ -82,6 +82,9 @@ public class VedViselsDeleteManager
     }
     deleteActors( actorIds );
     deleteVisels( viselIds );
+    for( IDeleteProcessor p : processors ) {
+      p.handlePostDeletion( viselIds, actorIds );
+    }
 
     vedScreen.model().visels().eventer().resumeFiring( !viselIds.isEmpty() );
     vedScreen.model().actors().eventer().resumeFiring( !actorIds.isEmpty() );

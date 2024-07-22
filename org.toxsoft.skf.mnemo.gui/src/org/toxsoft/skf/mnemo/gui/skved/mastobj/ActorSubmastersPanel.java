@@ -6,7 +6,6 @@ import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
-import org.eclipse.swt.events.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.actions.*;
@@ -64,9 +63,21 @@ public class ActorSubmastersPanel
 
   private final ISkUgwiService ugwiService;
 
-  private final IVedScreen vedScreen;
+  // private final IVedScreen vedScreen;
+  private IVedScreen vedScreen;
 
   SubMastersCombo smCombo;
+
+  ISelectionChangedListener smChangeListener = aEvent -> {
+    if( this.actor != null ) {
+      SubmasterConfig smCfg = smCombo.selectedConfig();
+      if( smCfg != null ) {
+        MnemoResolverConfig mrCfg = MasterObjectUtils.readMnemoResolverConfig( vedScreen );
+        mrCfg.defineActorSubmaster( actor.id(), smCfg.id() );
+        MasterObjectUtils.updateMnemoResolverConfig( mrCfg, vedScreen );
+      }
+    }
+  };
 
   /**
    * Конструктор.
@@ -88,16 +99,7 @@ public class ActorSubmastersPanel
     l.setText( "Sub-мастер: " );
     smCombo = new SubMastersCombo( comboComp, vedScreen );
     smCombo.getControl().setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
-    smCombo.getControl().addSelectionListener( new SelectionAdapter() {
-
-      @Override
-      public void widgetSelected( SelectionEvent aEvent ) {
-        SubmasterConfig smCfg = smCombo.selectedConfig();
-        if( smCfg != null ) {
-
-        }
-      }
-    } );
+    smCombo.addSelectionChangedListener( smChangeListener );
 
     Composite listComp = new Composite( this, SWT.NONE );
     listComp.setLayoutData( BorderLayout.CENTER );
@@ -218,6 +220,11 @@ public class ActorSubmastersPanel
   // API
   //
 
+  /**
+   * Задает актор.
+   *
+   * @param aActor {@link IVedActor} - актор
+   */
   public void setActor( IVedActor aActor ) {
     actor = aActor;
     if( actor == null ) {
@@ -245,6 +252,11 @@ public class ActorSubmastersPanel
       }
       viewer.setInput( rows.toArray() );
       smCombo.refresh();
+      MnemoResolverConfig mrCfg = MasterObjectUtils.readMnemoResolverConfig( vedScreen );
+      SubmasterConfig smCfg = MasterObjectUtils.actorSubmaster( aActor.id(), mrCfg );
+      if( smCfg != null ) {
+        smCombo.selectSubmasterCnfig( smCfg );
+      }
     }
   }
 

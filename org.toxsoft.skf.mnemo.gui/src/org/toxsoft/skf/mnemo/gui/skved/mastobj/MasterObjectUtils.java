@@ -96,6 +96,40 @@ public class MasterObjectUtils {
   }
 
   /**
+   * Возвращает конфигурацию sub-мастера актора или <code>null</code>.
+   *
+   * @param aActorId String - ИД актора
+   * @param aResolverConfig {@link MnemoResolverConfig} - конфигурация "разрешителя" мастер-объекта мнемосхемы
+   * @return {@link SubmasterConfig} - конфигурация sub-мастера актора
+   */
+  public static SubmasterConfig actorSubmaster( String aActorId, MnemoResolverConfig aResolverConfig ) {
+    if( aResolverConfig.actorSubmasterIds().hasKey( aActorId ) ) {
+      String smId = aResolverConfig.actorSubmasterIds().getByKey( aActorId );
+      return aResolverConfig.subMasters().getByKey( smId );
+    }
+    return null;
+  }
+
+  /**
+   * Удалят ИДы подмастеров для указанных акторов.
+   *
+   * @param aActorIds {@link IStringList} - ИДы акторов
+   * @param aVedScreen {@link IVedScreen} - экран мнемосхемы
+   */
+  public static void deleteActorSubmasters( IStringList aActorIds, IVedScreen aVedScreen ) {
+    MnemoResolverConfig mrCfg = MasterObjectUtils.readMnemoResolverConfig( aVedScreen );
+    IStringMap<String> actorSmIds = new StringMap<>( mrCfg.actorSubmasterIds() );
+    mrCfg.clearActorSubmasterIds();
+    for( String actorId : actorSmIds.keys() ) {
+      if( !aActorIds.hasElem( actorId ) ) {
+        String submasterId = actorSmIds.getByKey( actorId );
+        mrCfg.defineActorSubmaster( actorId, submasterId );
+      }
+    }
+    updateMnemoResolverConfig( mrCfg, aVedScreen );
+  }
+
+  /**
    * Обновляет список подмастеров мнемосхемы.
    *
    * @param aSubmasters IStridablesList&lt;SubmasterConfig> - список подмастеров

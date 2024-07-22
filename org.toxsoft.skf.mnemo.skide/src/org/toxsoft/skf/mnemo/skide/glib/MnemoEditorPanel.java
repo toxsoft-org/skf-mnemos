@@ -236,6 +236,7 @@ public class MnemoEditorPanel
     toolsManager.addTool( new ZOrdererTool( selectionManager, vedScreen ) );
 
     copyPasteManager.addProcessor( new SelectionCopyPasteProcessor( vedScreen, selectionManager ) );
+    copyPasteManager.addProcessor( new MasterObjectCopyPasteProcessor( vedScreen ) );
 
     masterSlaveManager = new VedViselsMasterSlaveRelationsManager( vedScreen, selectionManager );
     layoutManager = new VedViselsLayoutManager( vedScreen, IVedLayoutFactoriesProvider.DEFAULT, selectionManager,
@@ -244,6 +245,7 @@ public class MnemoEditorPanel
 
     deleteManager.addProcessor( new SelectionDeleteProcessor( vedScreen, selectionManager ) );
     deleteManager.addProcessor( new MasterSlaveDeleteProcessor( vedScreen, masterSlaveManager ) );
+    deleteManager.addProcessor( new MasterObjectDeleteProcessor( vedScreen ) );
 
     positionManager.addProcessor( new SelectedViselsPositionManager( selectionManager ) );
     positionManager.addProcessor( new MasterSlavePositionProcessor( masterSlaveManager ) );

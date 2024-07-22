@@ -96,7 +96,8 @@ public class PanelSubmastersList
         if( cfg != null && !submasterConfigs.hasKey( cfg.id() ) ) {
           submasterConfigs.add( cfg );
           MasterObjectUtils.updateSubmastersList( submasterConfigs, vedScreen );
-          viewer.viewer().setInput( submasterConfigs.toArray() );
+          updateSubmustersList();
+          // viewer.viewer().setInput( submasterConfigs.toArray() );
         }
       }
         break;
@@ -106,7 +107,8 @@ public class PanelSubmastersList
           SubmasterConfig smCfg = (SubmasterConfig)selection.getFirstElement();
           submasterConfigs.remove( smCfg );
           MasterObjectUtils.updateSubmastersList( submasterConfigs, vedScreen );
-          viewer.viewer().setInput( submasterConfigs.toArray() );
+          updateSubmustersList();
+          // viewer.viewer().setInput( submasterConfigs.toArray() );
         }
       }
         break;
@@ -127,8 +129,16 @@ public class PanelSubmastersList
   public void setMnemoResolverConfig( MnemoResolverConfig aCfg ) {
     submasterConfigs.clear();
     submasterConfigs.addAll( aCfg.subMasters() );
-    // submasterConfigs.removeByKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ); // Удалим resolver главного мастера
-    viewer.viewer().setInput( submasterConfigs.toArray() );
+    updateSubmustersList();
   }
 
+  // ------------------------------------------------------------------------------------
+  // Implementation
+  //
+
+  void updateSubmustersList() {
+    IStridablesListEdit<SubmasterConfig> smList = new StridablesList<SubmasterConfig>( submasterConfigs );
+    smList.removeByKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ); // Удалим конфигурацию главного мастера
+    viewer.viewer().setInput( smList.toArray() );
+  }
 }

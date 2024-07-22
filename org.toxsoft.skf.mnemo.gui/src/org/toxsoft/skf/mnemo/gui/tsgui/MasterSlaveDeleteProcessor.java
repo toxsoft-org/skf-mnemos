@@ -55,6 +55,11 @@ public class MasterSlaveDeleteProcessor
     }
   }
 
+  @Override
+  public void handlePostDeletion( IStringListEdit aViselIds, IStringListEdit aActorIds ) {
+    // nop
+  }
+
   // ------------------------------------------------------------------------------------
   // Implementation
   //

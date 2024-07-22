@@ -201,6 +201,10 @@ public class MasterPathViewer
 
     @Override
     protected void fillChildren() {
+      if( recognizerCfg == null ) {
+        children.clear();
+        return;
+      }
       IStridablesList<IDtoRivetInfo> rivetsList = classInfo.rivets().list();
       IStridablesList<IDtoLinkInfo> linksList = classInfo.links().list();
 
@@ -436,8 +440,17 @@ public class MasterPathViewer
     @Override
     protected void setValue( Object aElement, Object aValue ) {
       MultiObjectsNode node = (MultiObjectsNode)aElement;
-      node.setRecognizerCfg( (ISkoRecognizerCfg)aValue );
-      viewer.update( node, null );
+      if( node.recognizerCfg() == null || !node.recognizerCfg().equals( aValue ) ) {
+        node.setRecognizerCfg( (ISkoRecognizerCfg)aValue );
+        node.fillChildren();
+        viewer.update( node, null );
+
+        BaseNode bn = node;
+        while( bn != null ) {
+          viewer.setExpandedElements( bn );
+          bn = bn.parent();
+        }
+      }
     }
 
   }
@@ -463,7 +476,7 @@ public class MasterPathViewer
 
     coreApi = aContext.get( ISkConnectionSupplier.class ).defConn().coreApi();
 
-    viewer = new TreeViewer( this, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL );
+    viewer = new TreeViewer( this, SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.H_SCROLL );
     viewer.getTree().setHeaderVisible( true );
     viewer.getTree().setLinesVisible( true );
 

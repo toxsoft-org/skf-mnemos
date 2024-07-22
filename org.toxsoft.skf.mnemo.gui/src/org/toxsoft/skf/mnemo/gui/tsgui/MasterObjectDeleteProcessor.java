@@ -1,21 +1,17 @@
 package org.toxsoft.skf.mnemo.gui.tsgui;
 
-import org.toxsoft.core.tsgui.ved.editor.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
-import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.*;
 
-public class SelectionDeleteProcessor
+public class MasterObjectDeleteProcessor
     implements IDeleteProcessor {
-
-  private final IVedViselSelectionManager selectionManager;
 
   private final IVedScreen vedScreen;
 
-  public SelectionDeleteProcessor( IVedScreen aVedScreen, IVedViselSelectionManager aSelectionManager ) {
+  public MasterObjectDeleteProcessor( IVedScreen aVedScreen ) {
     vedScreen = aVedScreen;
-    selectionManager = aSelectionManager;
   }
 
   // ------------------------------------------------------------------------------------
@@ -24,17 +20,17 @@ public class SelectionDeleteProcessor
 
   @Override
   public String id() {
-    return "ved.delete.selection.processor";
+    return "ved.delete.masterObject.processor"; //$NON-NLS-1$
   }
 
   @Override
   public String nmName() {
-    return "Удалить выделенное";
+    return "Корректор информации \"разрешителя\" мастер-объекта мнемосхемы при удалении";
   }
 
   @Override
   public String description() {
-    return "Удаляет выделеные визуальные элементы и связанные с ними акторы";
+    return "Корректирует информацию \"разрешителя\" мастер-объекта мнемосхемы в соотвествии удаляемыми элементами";
   }
 
   // ------------------------------------------------------------------------------------
@@ -43,15 +39,12 @@ public class SelectionDeleteProcessor
 
   @Override
   public void editIdsForDelete( IStringListEdit aViselIds, IStringListEdit aActorIds, IOptionSetEdit aParams ) {
-    aViselIds.addAll( selectionManager.selectedViselIds() );
-    for( String viselId : aViselIds ) {
-      aActorIds.addAll( VedScreenUtils.viselActorIds( viselId, vedScreen ) );
-    }
+    // nop
   }
 
   @Override
   public void handlePostDeletion( IStringListEdit aViselIds, IStringListEdit aActorIds ) {
-    // nop
+    MasterObjectUtils.deleteActorSubmasters( aActorIds, vedScreen );
   }
 
 }
