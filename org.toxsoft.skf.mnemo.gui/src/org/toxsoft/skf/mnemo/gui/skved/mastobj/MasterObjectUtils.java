@@ -87,13 +87,27 @@ public class MasterObjectUtils {
    * @param aCoreApi {@link ISkCoreApi} - API сервера
    * @return {@link ISkClassInfo} - описание класса мастер-объекта мнемосхемы или <code>null</code>
    */
-  public static ISkClassInfo findMainMasterClassId( MnemoResolverConfig aResolverConfig, ISkCoreApi aCoreApi ) {
+  public static ISkClassInfo findMainMasterClassInfo( MnemoResolverConfig aResolverConfig, ISkCoreApi aCoreApi ) {
+    String classId = findMainMasterClassId( aResolverConfig );
+    if( classId != null ) {
+      return aCoreApi.sysdescr().findClassInfo( classId );
+    }
+    return null;
+  }
+
+  /**
+   * Находит и возвращает описание класса мастер-объекта мнемосхемы или <code>null</code>.
+   *
+   * @param aResolverConfig {@link MnemoResolverConfig} - конфигурация "разрешителя" мнемосхемы
+   * @return {@link ISkClassInfo} - описание класса мастер-объекта мнемосхемы или <code>null</code>
+   */
+  public static String findMainMasterClassId( MnemoResolverConfig aResolverConfig ) {
     if( aResolverConfig.subMasters().hasKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ) ) {
       SubmasterConfig smCfg = aResolverConfig.subMasters().getByKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID );
       if( smCfg.resolverCfg().cfgs().first().params().hasKey( PROPID_UGWI ) ) {
         Ugwi ugwi = smCfg.resolverCfg().cfgs().first().params().getValobj( PROPID_UGWI );
         if( ugwi.kindId().equals( UgwiKindSkClassInfo.KIND_ID ) ) {
-          return aCoreApi.sysdescr().findClassInfo( UgwiKindSkClassInfo.getClassId( ugwi ) );
+          return UgwiKindSkClassInfo.getClassId( ugwi );
         }
       }
     }

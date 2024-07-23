@@ -102,7 +102,7 @@ public class PanelMnemoSubmasterResolverConfig
 
     MnemoResolverConfig mnemoResolverCfg = MasterObjectUtils.readMnemoResolverConfig( environ() );
     ISkCoreApi coreApi = SkGuiUtils.getCoreApi( environ().tsContext() );
-    ISkClassInfo clsInfo = MasterObjectUtils.findMainMasterClassId( mnemoResolverCfg, coreApi );
+    ISkClassInfo clsInfo = MasterObjectUtils.findMainMasterClassInfo( mnemoResolverCfg, coreApi );
 
     viewer = new MasterPathViewer( this, clsInfo.id(), tsContext() );
     viewer.setLayoutData( BorderLayout.CENTER );

@@ -84,7 +84,7 @@ public class PanelSubmastersList
           return;
         }
         ISkCoreApi coreApi = SkGuiUtils.getCoreApi( vedScreen.tsContext() );
-        ISkClassInfo clsInfo = MasterObjectUtils.findMainMasterClassId( mnemoResolerConfig, coreApi );
+        ISkClassInfo clsInfo = MasterObjectUtils.findMainMasterClassInfo( mnemoResolerConfig, coreApi );
         if( clsInfo == null ) {
           viewer.viewer().setInput( null );
           MasterObjectUtils.updateSubmastersList( IStridablesList.EMPTY, vedScreen );

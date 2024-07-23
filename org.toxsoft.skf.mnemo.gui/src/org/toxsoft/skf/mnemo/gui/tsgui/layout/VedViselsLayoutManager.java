@@ -53,7 +53,7 @@ public class VedViselsLayoutManager
     /**
      * ID of action {@link #ACDEF_SHOW_GRID}.
      */
-    public static final String ACTID_SHOW_GRID = "ved.layout.showGrid";
+    public static final String ACTID_SHOW_GRID = "ved.layout.showGrid"; //$NON-NLS-1$
 
     /**
      * Action: copy selected visels and associated actors to the internal buffer.

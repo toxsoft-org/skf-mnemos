@@ -497,21 +497,10 @@ public class MnemoEditorPanel
     MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn, resRegistry );
     Ugwi ugwi = UgwiKindSkSkid.makeUgwi( "gbh.TurboCompressor", "turboCompressor1" );
     IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, aCfg, skConn );
-
-    VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
     // VedScreenUtils.setVedScreenConfig( vedScreen, newCfg );
 
-    // String sectionId = VED_SCREEN_EXTRA_DATA_ID_MNEMO_RESOLVER_CONGIF;
-    // if( aCfg.extraData().hasSection( sectionId ) ) {
-    // resolverConfig.subMasters().clear();
-    // resolverConfig.clearActorSubmasterIds();
-    // IEntityKeeper<IMnemoResolverConfig> keeper = MnemoResolverConfig.KEEPER;
-    // IKeepablesStorageRo ks = aCfg.extraData();
-    // resolverConfig = (MnemoResolverConfig)ks.readItem( sectionId, keeper, resolverConfig );
-    // }
-    // else {
-    // resolverConfig = new MnemoResolverConfig();
-    // }
+    VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
+
     resolverConfig = MasterObjectUtils.readMnemoResolverConfig( aCfg );
     submastersPanel.setMnemoResolverConfig( resolverConfig );
 

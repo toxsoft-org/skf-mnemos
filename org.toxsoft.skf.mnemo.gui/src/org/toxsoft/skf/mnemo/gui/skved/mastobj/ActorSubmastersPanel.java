@@ -181,7 +181,13 @@ public class ActorSubmastersPanel
         IStructuredSelection selection = (IStructuredSelection)viewer.getSelection();
         ViewerRow row = (ViewerRow)selection.getFirstElement();
         SubmasterConfig smCfg = smCombo.selectedConfig();
-        String smClassId = MasterObjectUtils.outputSubmasterClassId( smCfg );
+        String smClassId;
+        if( smCfg.id().equals( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ) ) {
+          smClassId = MasterObjectUtils.findMainMasterClassId( getResolverConfig() );
+        }
+        else {
+          smClassId = MasterObjectUtils.outputSubmasterClassId( smCfg );
+        }
         PanelContext pCtx = new PanelContext( smClassId, vedScreen );
         ICompoundResolverConfig cfg = PanelActorPropertyResolverConfig.edit( row.cfg, pCtx );
         if( cfg != null ) {
@@ -260,6 +266,9 @@ public class ActorSubmastersPanel
       SubmasterConfig smCfg = MasterObjectUtils.actorSubmaster( aActor.id(), mrCfg );
       if( smCfg != null ) {
         smCombo.selectSubmasterCnfig( smCfg );
+      }
+      else {
+        smCombo.viewer.getCombo().select( 0 );
       }
     }
   }

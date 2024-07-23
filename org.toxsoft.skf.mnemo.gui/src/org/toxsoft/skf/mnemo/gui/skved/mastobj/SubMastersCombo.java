@@ -1,6 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
+import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
 
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.*;
@@ -8,6 +9,7 @@ import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
+import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 
 /**
@@ -37,6 +39,9 @@ public class SubMastersCombo {
       @Override
       public String getText( Object aElement ) {
         SubmasterConfig cfg = (SubmasterConfig)aElement;
+        if( cfg.id().equals( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ) ) {
+          return TsLibUtils.EMPTY_STRING;
+        }
         if( cfg.params().hasKey( TSID_NAME ) ) {
           return cfg.params().getStr( TSID_NAME );
         }

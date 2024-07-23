@@ -94,7 +94,7 @@ public class MnemoSubmastersPanel
     labelMasterClass.setText( TsLibUtils.EMPTY_STRING );
     if( aCfg != null ) {
       ISkCoreApi coreApi = SkGuiUtils.getCoreApi( vedScreen.tsContext() );
-      ISkClassInfo clsInfo = MasterObjectUtils.findMainMasterClassId( aCfg, coreApi );
+      ISkClassInfo clsInfo = MasterObjectUtils.findMainMasterClassInfo( aCfg, coreApi );
       if( clsInfo != null ) {
         // masterClassId = clsInfo.id();
         labelMasterClass.setText( clsInfo.nmName() );

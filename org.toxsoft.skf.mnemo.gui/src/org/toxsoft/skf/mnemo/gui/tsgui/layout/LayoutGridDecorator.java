@@ -27,6 +27,14 @@ public class LayoutGridDecorator
 
   Color lineColor = new Color( 128, 0, 128 );
 
+  /**
+   * Constructor.
+   *
+   * @param aViselId String - ИД визеля
+   * @param aLayoutManager {@link IVedViselsLayoutManager} - менеджер размещений
+   * @param aMsManager {@link IVedViselsMasterSlaveRelationsManager} - менеджер отношений родитель-ребенок
+   * @param aScreen {@link IVedScreen} - экран мнемосхемы
+   */
   public LayoutGridDecorator( String aViselId, IVedViselsLayoutManager aLayoutManager,
       IVedViselsMasterSlaveRelationsManager aMsManager, IVedScreen aScreen ) {
     super( aScreen );
