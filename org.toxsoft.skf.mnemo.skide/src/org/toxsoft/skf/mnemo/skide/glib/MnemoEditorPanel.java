@@ -496,7 +496,7 @@ public class MnemoEditorPanel
     ISimpleResolverFactoriesRegistry resRegistry = tsContext().get( ISimpleResolverFactoriesRegistry.class );
     MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn, resRegistry );
     Ugwi ugwi = UgwiKindSkSkid.makeUgwi( "gbh.TurboCompressor", "turboCompressor1" );
-    IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, aCfg, skConn );
+    // IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, aCfg, skConn );
     // VedScreenUtils.setVedScreenConfig( vedScreen, newCfg );
 
     VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
