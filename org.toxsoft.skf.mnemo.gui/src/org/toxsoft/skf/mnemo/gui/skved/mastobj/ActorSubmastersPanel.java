@@ -2,6 +2,7 @@ package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
 import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
+import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.*;
@@ -43,15 +44,18 @@ public class ActorSubmastersPanel
 
   static class ViewerRow {
 
+    private final String    ugwiKindId;
     private final String    propertyId;
     ICompoundResolverConfig cfg;
 
-    ViewerRow( String aPropertyId ) {
+    ViewerRow( String aPropertyId, String aUgwiKindId ) {
       propertyId = aPropertyId;
+      ugwiKindId = aUgwiKindId;
     }
 
-    ViewerRow( String aPropertyId, ICompoundResolverConfig aCfg ) {
+    ViewerRow( String aPropertyId, String aUgwiKindId, ICompoundResolverConfig aCfg ) {
       propertyId = aPropertyId;
+      ugwiKindId = aUgwiKindId;
       cfg = aCfg;
     }
   }
@@ -188,7 +192,7 @@ public class ActorSubmastersPanel
         else {
           smClassId = MasterObjectUtils.outputSubmasterClassId( smCfg );
         }
-        PanelContext pCtx = new PanelContext( smClassId, vedScreen );
+        PanelContext pCtx = new PanelContext( row.ugwiKindId, smClassId, vedScreen );
         ICompoundResolverConfig cfg = PanelActorPropertyResolverConfig.edit( row.cfg, pCtx );
         if( cfg != null ) {
           row.cfg = cfg;
@@ -251,12 +255,13 @@ public class ActorSubmastersPanel
       IListEdit<ViewerRow> rows = new ElemArrayList<>();
       for( IDataDef dd : propDefs ) {
         if( dd.keeperId() != null && dd.keeperId().equals( Ugwi.KEEPER_ID ) ) { // свойство является Ugwi
+          String ugwiKindId = dd.params().getStr( PROPID_UGWI_KIND );
           if( actorResolvers != null && actorResolvers.hasKey( dd.id() ) ) {
             ICompoundResolverConfig resCfg = actorResolvers.getByKey( dd.id() );
-            rows.add( new ViewerRow( dd.id(), resCfg ) );
+            rows.add( new ViewerRow( dd.id(), ugwiKindId, resCfg ) );
           }
           else {
-            rows.add( new ViewerRow( dd.id() ) );
+            rows.add( new ViewerRow( dd.id(), ugwiKindId ) );
           }
         }
       }

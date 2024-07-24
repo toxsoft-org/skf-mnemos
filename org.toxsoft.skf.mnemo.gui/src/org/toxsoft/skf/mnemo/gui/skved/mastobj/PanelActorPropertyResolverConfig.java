@@ -24,6 +24,7 @@ import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
+import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 
 /**
  * Панель создания/редактирования конфигурации составного "разрешителя" {@link Ugwi}.
@@ -38,20 +39,25 @@ public class PanelActorPropertyResolverConfig
 
     private final String     submasterClassId;
     private final IVedScreen vedScreen;
+    private final String     ugwiKingId;
 
-    public PanelContext( String aSubmasterClassId, IVedScreen aVedScreen ) {
+    public PanelContext( String aUgwiKingId, String aSubmasterClassId, IVedScreen aVedScreen ) {
+      ugwiKingId = aUgwiKingId;
       submasterClassId = aSubmasterClassId;
       vedScreen = aVedScreen;
     }
 
-    public String submasterClassId() {
-      return submasterClassId;
-    }
-
-    public IVedScreen vedScreen() {
-      return vedScreen;
-    }
-
+    // public String submasterClassId() {
+    // return submasterClassId;
+    // }
+    //
+    // public IVedScreen vedScreen() {
+    // return vedScreen;
+    // }
+    //
+    // public String ugwiKindId() {
+    // return ugwiKingId;
+    // }
   }
 
   protected PanelActorPropertyResolverConfig( Composite aParent,
@@ -62,7 +68,7 @@ public class PanelActorPropertyResolverConfig
 
   protected PanelActorPropertyResolverConfig( Composite aParent, ICompoundResolverConfig aData, PanelContext aCtx,
       int aFlags ) {
-    super( aParent, aCtx.vedScreen().tsContext(), aData, aCtx, aFlags );
+    super( aParent, aCtx.vedScreen.tsContext(), aData, aCtx, aFlags );
     init();
   }
 
@@ -83,12 +89,18 @@ public class PanelActorPropertyResolverConfig
     Pair<ICompoundResolverConfig, String> cfg = viewer.resolverConfig();
     String classId = viewer.selectedNode().classId();
 
-    IStructuredSelection sel = (IStructuredSelection)attrsViewer.viewer().getSelection();
-    IDtoAttrInfo attrInfo = (IDtoAttrInfo)sel.getFirstElement();
-    SimpleResolverCfg arCfg = DirectAttrResolver.createResolverConfig( classId, attrInfo.id() );
-
+    IStructuredSelection sel = (IStructuredSelection)propsViewer.viewer().getSelection();
+    SimpleResolverCfg propCfg = null;
+    if( environ().ugwiKingId.equals( UgwiKindSkAttr.KIND_ID ) ) {
+      IDtoAttrInfo attrInfo = (IDtoAttrInfo)sel.getFirstElement();
+      propCfg = DirectAttrResolver.createResolverConfig( classId, attrInfo.id() );
+    }
+    if( environ().ugwiKingId.equals( UgwiKindSkRtdata.KIND_ID ) ) {
+      IDtoRtdataInfo rtDataInfo = (IDtoRtdataInfo)sel.getFirstElement();
+      propCfg = DirectAttrResolver.createResolverConfig( classId, rtDataInfo.id() );
+    }
     IListEdit<SimpleResolverCfg> configs = new ElemArrayList<>( cfg.left().cfgs() );
-    configs.add( arCfg );
+    configs.add( propCfg );
 
     return new CompoundResolverConfig( configs );
   }
@@ -99,7 +111,7 @@ public class PanelActorPropertyResolverConfig
     if( node == null || !node.isObject() || node.parent() == null ) {
       return ValidationResult.create( EValidationResultType.ERROR, "Необходимо выбрать узел объекта" );
     }
-    if( attrsViewer.viewer().getSelection().isEmpty() ) {
+    if( propsViewer.viewer().getSelection().isEmpty() ) {
       return ValidationResult.create( EValidationResultType.ERROR, "Необходимо выбрать свойство объекта" );
     }
     return ValidationResult.SUCCESS;
@@ -111,7 +123,7 @@ public class PanelActorPropertyResolverConfig
 
   MasterPathViewer viewer;
 
-  StridableTableViewer attrsViewer;
+  StridableTableViewer propsViewer;
 
   void init() {
     // setLayout( new BorderLayout() );
@@ -141,7 +153,7 @@ public class PanelActorPropertyResolverConfig
     // }
 
     // viewer = new MasterPathViewer( this, moClsId, tsContext() );
-    viewer = new MasterPathViewer( sash, environ().submasterClassId(), tsContext() );
+    viewer = new MasterPathViewer( sash, environ().submasterClassId, tsContext() );
     viewer.setLayoutData( BorderLayout.CENTER );
     viewer.viewer.addSelectionChangedListener( aEvent -> {
       IMasterPathNode node = viewer.selectedNode();
@@ -149,10 +161,15 @@ public class PanelActorPropertyResolverConfig
         // ICompoundResolverConfig cfg = node.resolverConfig();
         ISkCoreApi coreApi = SkGuiUtils.getCoreApi( tsContext() );
         ISkClassInfo clsInfo = coreApi.sysdescr().findClassInfo( node.classId() );
-        attrsViewer.viewer().setInput( clsInfo.attrs().list().toArray() );
+        if( environ().ugwiKingId.equals( UgwiKindSkAttr.KIND_ID ) ) {
+          propsViewer.viewer().setInput( clsInfo.attrs().list().toArray() );
+        }
+        if( environ().ugwiKingId.equals( UgwiKindSkRtdata.KIND_ID ) ) {
+          propsViewer.viewer().setInput( clsInfo.rtdata().list().toArray() );
+        }
       }
       else {
-        attrsViewer.viewer().setInput( null );
+        propsViewer.viewer().setInput( null );
       }
       fireContentChangeEvent();
     } );
@@ -172,10 +189,9 @@ public class PanelActorPropertyResolverConfig
     // ctrl.setLayoutData( BorderLayout.CENTER );
 
     int style = SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.H_SCROLL;
-    attrsViewer = new StridableTableViewer( bottomComp, style, 80, 200, -1 );
-
-    attrsViewer.viewer().getControl().setLayoutData( BorderLayout.CENTER );
-    attrsViewer.viewer().addSelectionChangedListener( aEvent -> fireContentChangeEvent() );
+    propsViewer = new StridableTableViewer( bottomComp, style, 80, 200, -1 );
+    propsViewer.viewer().getControl().setLayoutData( BorderLayout.CENTER );
+    propsViewer.viewer().addSelectionChangedListener( aEvent -> fireContentChangeEvent() );
 
     sash.setWeights( 50, 50 );
 
@@ -195,7 +211,7 @@ public class PanelActorPropertyResolverConfig
   public static final ICompoundResolverConfig edit( ICompoundResolverConfig aData, PanelContext aCtx ) {
     TsNullArgumentRtException.checkNull( aCtx );
     IDialogPanelCreator<ICompoundResolverConfig, PanelContext> creator = PanelActorPropertyResolverConfig::new;
-    ITsGuiContext tsContext = aCtx.vedScreen().tsContext();
+    ITsGuiContext tsContext = aCtx.vedScreen.tsContext();
     ITsDialogInfo dlgInfo;
     dlgInfo = new TsDialogInfo( tsContext, "DLG_T_SELECT_MASTER_PATH", "STR_MSG_SELECT_MASTER_PATH" );
     TsDialog<ICompoundResolverConfig, PanelContext> d = new TsDialog<>( dlgInfo, aData, aCtx, creator );
