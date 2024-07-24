@@ -57,8 +57,10 @@ public class MasterObjectCopyPasteProcessor
     IStringMap<String> actorSubmasters = mrCfg.actorSubmasterIds();
     for( String oldActorId : aActorsMap.keys() ) {
       String newActorId = aActorsMap.getByKey( oldActorId );
-      String submasterId = actorSubmasters.getByKey( oldActorId );
-      mrCfg.defineActorSubmaster( newActorId, submasterId );
+      String submasterId = actorSubmasters.findByKey( oldActorId );
+      if( submasterId != null ) {
+        mrCfg.defineActorSubmaster( newActorId, submasterId );
+      }
     }
     MasterObjectUtils.updateMnemoResolverConfig( mrCfg, vedScreen );
   }
