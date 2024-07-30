@@ -1,12 +1,15 @@
 package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 
+import java.awt.*;
+
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
 import org.eclipse.swt.layout.*;
-import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Composite;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
+import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.utils.layout.BorderLayout;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tslib.bricks.validator.*;
@@ -79,8 +82,7 @@ public class PanelActorPropertyResolverConfig
   @Override
   protected void doSetDataRecord( ICompoundResolverConfig aData ) {
     if( aData != null ) {
-    }
-    else {
+      viewer.setResolverConfig( aData );
     }
   }
 
@@ -127,30 +129,9 @@ public class PanelActorPropertyResolverConfig
 
   void init() {
     // setLayout( new BorderLayout() );
+    this.setData( AWTLayout.KEY_PREFERRED_SIZE, new Dimension( 800, 600 ) );
     setLayout( new FillLayout() );
     SashForm sash = new SashForm( this, SWT.VERTICAL );
-
-    // String moClsId = "SkObject"; //$NON-NLS-1$
-    // if( dataRecordInput() != null ) {
-    // SimpleResolverCfg cfg = dataRecordInput().cfgs().first();
-    // if( DirectGwidResolver.hasGwid( cfg ) ) {
-    // Gwid gwid = DirectGwidResolver.gwid( cfg );
-    // moClsId = gwid.classId();
-    // }
-    // }
-    // else {
-    // String sectionId = VED_SCREEN_EXTRA_DATA_ID_MNEMO_RESOLVER_CONGIF;
-    // if( environ().vedScreen().model().extraData().hasSection( sectionId ) ) {
-    // IMnemoResolverConfig resCfg;
-    // resCfg = environ().vedScreen().model().extraData().readItem( sectionId, MnemoResolverConfig.KEEPER, null );
-    // if( resCfg.subMasters().hasKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ) ) {
-    // SubmasterConfig smCfg = resCfg.subMasters().getByKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID );
-    // Ugwi ugwi = smCfg.resolverCfg().cfgs().first().params().getValobj( PROPID_UGWI );
-    // moClsId = UgwiKindSkClassInfo.getClassId( ugwi );
-    // System.out.println( ugwi.toString() );
-    // }
-    // }
-    // }
 
     // viewer = new MasterPathViewer( this, moClsId, tsContext() );
     viewer = new MasterPathViewer( sash, environ().submasterClassId, tsContext() );
@@ -193,7 +174,7 @@ public class PanelActorPropertyResolverConfig
     propsViewer.viewer().getControl().setLayoutData( BorderLayout.CENTER );
     propsViewer.viewer().addSelectionChangedListener( aEvent -> fireContentChangeEvent() );
 
-    sash.setWeights( 50, 50 );
+    sash.setWeights( 60, 40 );
 
   }
 

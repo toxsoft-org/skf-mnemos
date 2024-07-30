@@ -56,7 +56,8 @@ public class SkActorRriInputField
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_VISEL_PROP_ID );
-      fields.add( TFI_RRI_ID );
+      // fields.add( TFI_RRI_ID );
+      fields.add( TFI_RRI_ATTR_UGWI );
       fields.add( TFI_FORMAT_STRING );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRriInputField.class );
     }

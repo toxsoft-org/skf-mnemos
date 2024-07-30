@@ -111,9 +111,17 @@ public class MasterPathViewer
       return false;
     }
 
+    // boolean isMy(SimpleResolverCfg aCfg) {
+    // return false;
+    // }
+
     protected abstract Image image();
 
     protected abstract void fillChildren();
+
+    protected abstract boolean isMy( SimpleResolverCfg aCfg );
+
+    // protected abstract boolean
   }
 
   class ObjectNode
@@ -180,6 +188,20 @@ public class MasterPathViewer
     @Override
     public String classId() {
       return classInfo.id();
+    }
+
+    @Override
+    protected boolean isMy( SimpleResolverCfg aCfg ) {
+      if( aCfg.params().hasKey( LinkInfoResolver.PROPID_RECOGNIZER_CFG )
+          && aCfg.params().getValue( LinkInfoResolver.PROPID_RECOGNIZER_CFG ).isAssigned() ) {
+        return false;
+      }
+      if( aCfg.params().hasKey( RivetInfoResolver.PROPID_RECOGNIZER_CFG )
+          && aCfg.params().getValue( RivetInfoResolver.PROPID_RECOGNIZER_CFG ).isAssigned() ) {
+        return false;
+      }
+
+      return aCfg.kindId().equals( LinkInfoResolver.FACTORY_ID ) || aCfg.kindId().equals( LinkInfoResolver.FACTORY_ID );
     }
   }
 
@@ -288,6 +310,20 @@ public class MasterPathViewer
       return classInfo.id();
     }
 
+    @Override
+    protected boolean isMy( SimpleResolverCfg aCfg ) {
+      if( aCfg.kindId().equals( LinkInfoResolver.FACTORY_ID ) && //
+          aCfg.params().hasKey( LinkInfoResolver.PROPID_RECOGNIZER_CFG ) && //
+          aCfg.params().getValue( LinkInfoResolver.PROPID_RECOGNIZER_CFG ).isAssigned() ) {
+        return true;
+      }
+      if( aCfg.kindId().equals( RivetInfoResolver.FACTORY_ID ) && //
+          aCfg.params().hasKey( RivetInfoResolver.PROPID_RECOGNIZER_CFG ) && //
+          aCfg.params().getValue( RivetInfoResolver.PROPID_RECOGNIZER_CFG ).isAssigned() ) {
+        return true;
+      }
+      return false;
+    }
   }
 
   class RivetNode
@@ -326,6 +362,17 @@ public class MasterPathViewer
     @Override
     public String classId() {
       return classId;
+    }
+
+    @Override
+    protected boolean isMy( SimpleResolverCfg aCfg ) {
+      if( aCfg.kindId().equals( RivetInfoResolver.FACTORY_ID ) ) {
+        if( !aCfg.params().hasKey( RivetInfoResolver.PROPID_RECOGNIZER_CFG ) || //
+            !aCfg.params().getValue( RivetInfoResolver.PROPID_RECOGNIZER_CFG ).isAssigned() ) {
+          return true;
+        }
+      }
+      return false;
     }
   }
 
@@ -382,6 +429,22 @@ public class MasterPathViewer
         return new StridablesList<>( skObjs );
       }
       return IStridablesList.EMPTY;
+    }
+
+    @Override
+    protected boolean isMy( SimpleResolverCfg aCfg ) {
+      Ugwi ugwi = aCfg.params().getValobj( PROPID_UGWI );
+      if( ugwi.kindId().equals( UgwiKindSkLinkInfo.KIND_ID ) ) {
+        if( UgwiKindSkLinkInfo.getLinkId( ugwi ).equals( linkInfo.id() ) ) {
+          if( aCfg.kindId().equals( LinkInfoResolver.FACTORY_ID ) ) {
+            if( !aCfg.params().hasKey( LinkInfoResolver.PROPID_RECOGNIZER_CFG ) || //
+                !aCfg.params().getValue( LinkInfoResolver.PROPID_RECOGNIZER_CFG ).isAssigned() ) {
+              return true;
+            }
+          }
+        }
+      }
+      return false;
     }
 
   }
@@ -550,6 +613,26 @@ public class MasterPathViewer
     return new Pair<>( new CompoundResolverConfig( simpleConfigs ), selectedNode().classId() );
   }
 
+  public void setResolverConfig( ICompoundResolverConfig aCfg ) {
+    if( aCfg != null ) {
+      Object[] objs = (Object[])viewer.getInput();
+      BaseNode root = (BaseNode)objs[0];
+      // IListEdit<BaseNode> nodesToExpand = new ElemArrayList<BaseNode>();
+      // nodesToExpand.add( root );
+      viewer.setExpandedElements( root );
+      BaseNode node = root;
+      for( int i = 0; i < aCfg.cfgs().size(); i++ ) {
+        SimpleResolverCfg simpleCfg = aCfg.cfgs().get( i );
+        node = findChildNode( node, simpleCfg );
+        if( node == null ) {
+          break;
+        }
+        // nodesToExpand.add( node );
+        viewer.setExpandedState( node, true );
+      }
+    }
+  }
+
   // ------------------------------------------------------------------------------------
   // Implementation
   //
@@ -562,4 +645,14 @@ public class MasterPathViewer
     return null;
   }
 
+  BaseNode findChildNode( BaseNode aParentNode, SimpleResolverCfg aCfg ) {
+    IList<? extends BaseNode> children = aParentNode.children();
+    for( BaseNode bn : children ) {
+      if( bn.isMy( aCfg ) ) {
+        return bn;
+      }
+    }
+
+    return null;
+  }
 }
