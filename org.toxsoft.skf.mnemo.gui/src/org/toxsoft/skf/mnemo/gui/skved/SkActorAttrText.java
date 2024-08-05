@@ -18,10 +18,13 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
+import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.uskat.core.api.objserv.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
+import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.utils.*;
 
 /**
@@ -54,7 +57,6 @@ public class SkActorAttrText
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_VISEL_PROP_ID );
-      fields.add( TFI_ATTR_GWID );
       fields.add( TFI_FORMAT_STRING );
       fields.add( TFI_ATTR_UGWI );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorAttrText.class );
@@ -67,8 +69,8 @@ public class SkActorAttrText
 
   };
 
-  private Gwid         gwid      = null;
-  private IGwidList    gwidList  = IGwidList.EMPTY;
+  private Ugwi         ugwi      = null;
+  private IUgwiList    ugwiList  = IUgwiList.EMPTY;
   private String       fmtStr    = null;
   private IAtomicValue lastValue = IAtomicValue.NULL;
 
@@ -82,49 +84,63 @@ public class SkActorAttrText
 
   @Override
   protected void doInterceptPropsChange( IOptionSet aNewValues, IOptionSetEdit aValuesToSet ) {
-    // check and don't allow to set invalid GWID
-    if( aValuesToSet.hasKey( PROPID_ATTR_GWID ) ) {
-      Gwid g = aValuesToSet.getValobj( PROP_ATTR_GWID );
-      if( g.isAbstract() || g.kind() != EGwidKind.GW_ATTR || g.isMulti() ) {
-        aValuesToSet.remove( PROPID_ATTR_GWID );
-      }
-    }
+    // check and don't allow to set invalid UGWI
+    removeWrongUgwi( PROPID_ATTR_UGWI, UgwiKindSkAttr.KIND_ID, aValuesToSet );
+    // if( aValuesToSet.hasKey( PROPID_ATTR_UGWI ) ) {
+    // IAtomicValue v = aValuesToSet.getValue( PROPID_ATTR_UGWI );
+    // if( !v.isAssigned() ) {
+    // }
+    // else {
+    // Ugwi ug = v.asValobj();
+    // if( !ug.kindId().equals( UgwiKindSkAttr.KIND_ID ) ) {
+    // aValuesToSet.remove( PROPID_ATTR_UGWI );
+    // }
+    // }
+    // }
   }
 
   @Override
   protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
-    if( aChangedValues.hasKey( PROPID_ATTR_GWID ) ) {
-      gwid = props().getValobj( PROP_ATTR_GWID );
-      gwidList = new GwidList( gwid );
-    }
-    if( aChangedValues.hasKey( PROPID_FORMAT_STRING ) ) {
-      fmtStr = props().getStr( PROP_FORMAT_STRING );
-      if( fmtStr.isBlank() ) {
-        fmtStr = null;
-        ISkClassInfo classInfo = skSysdescr().findClassInfo( gwid.classId() );
-        if( classInfo != null ) {
-          IDtoAttrInfo attrInfo = classInfo.attrs().list().findByKey( gwid.propId() );
-          if( attrInfo != null ) {
-            IAtomicValue avFmtStr = SkHelperUtils.getConstraint( attrInfo, TSID_FORMAT_STRING );
-            if( avFmtStr != null && avFmtStr.isAssigned() ) {
-              fmtStr = avFmtStr.asString();
+    try {
+      if( aChangedValues.hasKey( PROPID_ATTR_UGWI ) ) {
+        IAtomicValue v = props().getValue( PROPID_ATTR_UGWI );
+        if( v.isAssigned() ) {
+          ugwi = v.asValobj();
+          ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
+        }
+      }
+      if( aChangedValues.hasKey( PROPID_FORMAT_STRING ) ) {
+        fmtStr = props().getStr( PROP_FORMAT_STRING );
+        if( fmtStr.isBlank() && ugwi != null && ugwi != Ugwi.NONE ) {
+          fmtStr = null;
+          ISkClassInfo classInfo = skSysdescr().findClassInfo( UgwiKindSkAttr.getClassId( ugwi ) );
+          if( classInfo != null ) {
+            IDtoAttrInfo attrInfo = classInfo.attrs().list().findByKey( UgwiKindSkAttr.getAttrId( ugwi ) );
+            if( attrInfo != null ) {
+              IAtomicValue avFmtStr = SkHelperUtils.getConstraint( attrInfo, TSID_FORMAT_STRING );
+              if( avFmtStr != null && avFmtStr.isAssigned() ) {
+                fmtStr = avFmtStr.asString();
+              }
             }
           }
         }
+        if( fmtStr != null && fmtStr.isBlank() ) {
+          fmtStr = null;
+        }
       }
-      if( fmtStr != null && fmtStr.isBlank() ) {
-        fmtStr = null;
-      }
+    }
+    catch( Throwable e ) {
+      e.printStackTrace();
     }
   }
 
   @Override
   public void whenRealTimePassed( long aRtTime ) {
-    if( gwid != null && gwid.skid() != null ) {
-      ISkObject skObj = skVedEnv().skConn().coreApi().objService().find( gwid.skid() );
+    if( ugwi != null && UgwiKindSkAttr.getSkid( ugwi ) != null ) {
+      ISkObject skObj = skVedEnv().skConn().coreApi().objService().find( UgwiKindSkAttr.getSkid( ugwi ) );
       IAtomicValue newValue = IAtomicValue.NULL;
       if( skObj != null ) {
-        newValue = skObj.attrs().getValue( gwid.propId() );
+        newValue = skObj.attrs().getValue( UgwiKindSkAttr.getAttrId( ugwi ) );
       }
       if( !newValue.equals( lastValue ) ) {
         String text = AvUtils.printAv( fmtStr, newValue );
@@ -140,7 +156,11 @@ public class SkActorAttrText
 
   @Override
   protected IGwidList doListUsedGwids() {
-    return gwidList;
+    GwidList gl = new GwidList();
+    for( Ugwi u : ugwiList.items() ) {
+      gl.add( UgwiKindSkAttr.getGwid( u ) );
+    }
+    return gl;
   }
 
 }

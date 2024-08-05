@@ -15,6 +15,8 @@ import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
+import org.toxsoft.core.tslib.utils.*;
+import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.txtproj.lib.storage.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
@@ -125,6 +127,52 @@ public class MasterObjectUtils {
       return aSubmasterCfg.params().getStr( PROPID_RESOLVER_OUTPUT_CLASS_ID );
     }
     return null;
+  }
+
+  /**
+   * Возвращает ИД класса объекта в который разрешается мастер-объект.
+   *
+   * @param aResolverCfg ICompoundResolverConfig - конфигурация "разрешителя"
+   * @return String ИД класса объекта в который разрешается мастер-объект или пустая строка
+   */
+  public static String resolverTargetClassId( ICompoundResolverConfig aResolverCfg ) {
+    TsNullArgumentRtException.checkNull( aResolverCfg );
+    SimpleResolverCfg simpleCfg = aResolverCfg.cfgs().last();
+    if( simpleCfg.params().hasKey( PROPID_UGWI ) ) {
+      Ugwi ugwi = simpleCfg.params().getValobj( PROPID_UGWI );
+      switch( ugwi.kindId() ) {
+        case UgwiKindSkAttrInfo.KIND_ID:
+          return UgwiKindSkAttrInfo.getClassId( ugwi );
+        case UgwiKindSkAttr.KIND_ID:
+          return UgwiKindSkAttr.getClassId( ugwi );
+        default:
+          break;
+      }
+    }
+    return TsLibUtils.EMPTY_STRING;
+  }
+
+  /**
+   * Возвращает ИД параметра объекта в который разрешается мастер-объект.
+   *
+   * @param aResolverCfg ICompoundResolverConfig - конфигурация "разрешителя"
+   * @return String ИД параметра объекта в который разрешается мастер-объект или пустая строка
+   */
+  public static String resolverTargetParamId( ICompoundResolverConfig aResolverCfg ) {
+    TsNullArgumentRtException.checkNull( aResolverCfg );
+    SimpleResolverCfg simpleCfg = aResolverCfg.cfgs().last();
+    if( simpleCfg.params().hasKey( PROPID_UGWI ) ) {
+      Ugwi ugwi = simpleCfg.params().getValobj( PROPID_UGWI );
+      switch( ugwi.kindId() ) {
+        case UgwiKindSkAttrInfo.KIND_ID:
+          return UgwiKindSkAttrInfo.getAttrId( ugwi );
+        case UgwiKindSkAttr.KIND_ID:
+          return UgwiKindSkAttr.getAttrId( ugwi );
+        default:
+          break;
+      }
+    }
+    return TsLibUtils.EMPTY_STRING;
   }
 
   /**

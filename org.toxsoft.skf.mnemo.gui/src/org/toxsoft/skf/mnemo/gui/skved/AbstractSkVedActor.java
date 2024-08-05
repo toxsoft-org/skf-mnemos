@@ -2,9 +2,12 @@ package org.toxsoft.skf.mnemo.gui.skved;
 
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
+import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.utils.*;
 
@@ -13,7 +16,7 @@ import org.toxsoft.uskat.core.utils.*;
  * <p>
  * Introduces {@link ISkVedEnvironment}.
  *
- * @author hazard157
+ * @author hazard157, vs
  */
 public abstract class AbstractSkVedActor
     extends VedAbstractActor
@@ -65,5 +68,24 @@ public abstract class AbstractSkVedActor
    * @return {@link IGwidList} - the GWIDs used by the actor
    */
   protected abstract IGwidList doListUsedGwids();
+
+  // ------------------------------------------------------------------------------------
+  // Static methods
+  //
+
+  protected static void removeWrongUgwi( String aPropId, String aUgwiKindId, IOptionSetEdit aValues ) {
+    if( aValues.hasKey( aPropId ) ) {
+      IAtomicValue av = aValues.getValue( aPropId );
+      if( !av.isAssigned() ) {
+        aValues.remove( aPropId );
+      }
+      else {
+        Ugwi ug = av.asValobj();
+        if( ug != Ugwi.NONE && !ug.kindId().equals( aUgwiKindId ) ) {
+          aValues.remove( aPropId );
+        }
+      }
+    }
+  }
 
 }

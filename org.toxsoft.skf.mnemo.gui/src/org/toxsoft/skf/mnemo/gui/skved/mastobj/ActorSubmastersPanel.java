@@ -124,7 +124,7 @@ public class ActorSubmastersPanel
 
     TableViewerColumn nameColumn = new TableViewerColumn( viewer, SWT.NONE );
     nameColumn.getColumn().setText( "Название свойства" );
-    nameColumn.getColumn().setWidth( 200 );
+    nameColumn.getColumn().setWidth( 150 );
     nameColumn.setLabelProvider( new CellLabelProvider() {
 
       @Override
@@ -132,6 +132,22 @@ public class ActorSubmastersPanel
         ViewerRow row = (ViewerRow)aCell.getElement();
         IDataDef dd = actor.props().propDefs().getByKey( row.propertyId );
         aCell.setText( dd.nmName() );
+      }
+    } );
+
+    TableViewerColumn dataColumn = new TableViewerColumn( viewer, SWT.NONE );
+    dataColumn.getColumn().setText( "Данное" );
+    dataColumn.getColumn().setWidth( 230 );
+    dataColumn.setLabelProvider( new CellLabelProvider() {
+
+      @Override
+      public void update( ViewerCell aCell ) {
+        ViewerRow row = (ViewerRow)aCell.getElement();
+        if( row.cfg != null ) {
+          String classId = MasterObjectUtils.resolverTargetClassId( row.cfg );
+          String paramId = MasterObjectUtils.resolverTargetParamId( row.cfg );
+          aCell.setText( classId + '[' + paramId + ']' );
+        }
       }
     } );
 

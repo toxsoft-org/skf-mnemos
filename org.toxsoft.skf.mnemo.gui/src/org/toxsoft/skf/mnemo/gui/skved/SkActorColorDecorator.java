@@ -27,7 +27,9 @@ import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.skf.mnemo.gui.tools.rgbaset.*;
+import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 
 /**
  * Актор устанавливающий цвет для указанного свойства в зависимости от значения указанного данного.
@@ -73,8 +75,8 @@ public class SkActorColorDecorator
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_VISEL_PROP_ID );
-      fields.add( TFI_RTD_UGWI );
       fields.add( TFI_RGBA_SET );
+      fields.add( TFI_RTD_UGWI );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorColorDecorator.class );
     }
 
@@ -85,9 +87,9 @@ public class SkActorColorDecorator
 
   };
 
-  private Gwid      gwid     = null;
-  private IGwidList gwidList = null;
-  // private IAtomicValue lastValue = IAtomicValue.NULL;
+  private Gwid         gwid      = null;
+  private Ugwi         ugwi      = null;
+  private IUgwiList    ugwiList  = IUgwiList.EMPTY;
   private IAtomicValue lastValue = null;
   private IRgbaSet     rgbaSet   = new RgbaSet();
 
@@ -104,22 +106,36 @@ public class SkActorColorDecorator
   @Override
   protected void doInterceptPropsChange( IOptionSet aNewValues, IOptionSetEdit aValuesToSet ) {
     // check and don't allow to set invalid GWID
-    if( aValuesToSet.hasKey( PROPID_RTD_GWID ) ) {
-      Gwid g = aValuesToSet.getValobj( PROP_RTD_GWID );
-      if( g.isAbstract() || g.kind() != EGwidKind.GW_RTDATA || g.isMulti() ) {
-        aValuesToSet.remove( PROPID_RTD_GWID );
+    if( aValuesToSet.hasKey( PROPID_RTD_UGWI ) ) {
+      IAtomicValue av = aValuesToSet.getValue( PROP_RTD_UGWI );
+      if( !av.isAssigned() ) {
+        aValuesToSet.remove( PROPID_RTD_UGWI );
+      }
+      else {
+        Ugwi ug = av.asValobj();
+        if( ug != Ugwi.NONE && !ug.kindId().equals( UgwiKindSkRtdata.KIND_ID ) ) {
+          aValuesToSet.remove( PROPID_RTD_UGWI );
+        }
       }
     }
   }
 
   @Override
   protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
-    if( aChangedValues.hasKey( PROPID_RTD_GWID ) ) {
-      gwid = props().getValobj( PROP_RTD_GWID );
-      gwidList = new GwidList( gwid );
+    if( aChangedValues.hasKey( PROPID_RTD_UGWI ) ) {
+      IAtomicValue av = aChangedValues.getValue( PROP_RTD_UGWI );
+      if( av.isAssigned() ) {
+        ugwi = av.asValobj();
+        gwid = UgwiKindSkRtdata.getGwid( ugwi );
+        ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
+      }
+      else {
+        gwid = null;
+        ugwiList = IUgwiList.EMPTY;
+      }
     }
     if( aChangedValues.hasKey( PROPID_RGBA_SET ) ) {
-      rgbaSet = props().getValobj( PROP_RGBA_SET );
+      rgbaSet = aChangedValues.getValobj( PROP_RGBA_SET );
     }
   }
 
@@ -148,7 +164,11 @@ public class SkActorColorDecorator
 
   @Override
   protected IGwidList doListUsedGwids() {
-    return gwidList;
+    GwidList gl = new GwidList();
+    for( Ugwi u : ugwiList.items() ) {
+      gl.add( UgwiKindSkRtdata.getGwid( u ) );
+    }
+    return gl;
   }
 
 }

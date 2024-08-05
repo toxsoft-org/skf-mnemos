@@ -18,9 +18,12 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
+import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
+import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.utils.*;
 
 /**
@@ -53,7 +56,6 @@ public class SkActorRtdataText
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_VISEL_PROP_ID );
-      fields.add( TFI_RTD_GWID );
       fields.add( TFI_FORMAT_STRING );
       fields.add( TFI_RTD_UGWI );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRtdataText.class );
@@ -66,8 +68,9 @@ public class SkActorRtdataText
 
   };
 
+  private Ugwi         ugwi      = null;
   private Gwid         gwid      = null;
-  private IGwidList    gwidList  = null;
+  private IUgwiList    ugwiList  = IUgwiList.EMPTY;
   private String       fmtStr    = null;
   private IAtomicValue lastValue = IAtomicValue.NULL;
 
@@ -82,27 +85,42 @@ public class SkActorRtdataText
   @Override
   protected void doInterceptPropsChange( IOptionSet aNewValues, IOptionSetEdit aValuesToSet ) {
     // check and don't allow to set invalid GWID
-    if( aValuesToSet.hasKey( PROPID_RTD_GWID ) ) {
-      Gwid g = aValuesToSet.getValobj( PROP_RTD_GWID );
-      if( g.isAbstract() || g.kind() != EGwidKind.GW_RTDATA || g.isMulti() ) {
-        aValuesToSet.remove( PROPID_RTD_GWID );
+    if( aValuesToSet.hasKey( PROPID_RTD_UGWI ) ) {
+      IAtomicValue av = aValuesToSet.getValue( PROP_RTD_UGWI );
+      if( !av.isAssigned() ) {
+        aValuesToSet.remove( PROPID_RTD_UGWI );
+      }
+      else {
+        Ugwi ug = av.asValobj();
+        if( ug != Ugwi.NONE && !ug.kindId().equals( UgwiKindSkRtdata.KIND_ID ) ) {
+          aValuesToSet.remove( PROPID_RTD_UGWI );
+        }
       }
     }
   }
 
   @Override
   protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
-    if( aChangedValues.hasKey( PROPID_RTD_GWID ) ) {
-      gwid = props().getValobj( PROP_RTD_GWID );
-      gwidList = new GwidList( gwid );
+    if( aChangedValues.hasKey( PROPID_RTD_UGWI ) ) {
+      IAtomicValue av = aChangedValues.getValue( PROPID_RTD_UGWI );
+      if( av.isAssigned() ) {
+        ugwi = aChangedValues.getValobj( PROP_RTD_UGWI );
+        gwid = UgwiKindSkRtdata.getGwid( ugwi );
+        ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
+      }
+      else {
+        ugwi = null;
+        gwid = null;
+        ugwiList = IUgwiList.EMPTY;
+      }
     }
     if( aChangedValues.hasKey( PROPID_FORMAT_STRING ) ) {
-      fmtStr = props().getStr( PROP_FORMAT_STRING );
-      if( fmtStr.isBlank() ) {
+      fmtStr = aChangedValues.getStr( PROP_FORMAT_STRING );
+      if( fmtStr.isBlank() && ugwi != null ) {
         fmtStr = null;
-        ISkClassInfo classInfo = skSysdescr().findClassInfo( gwid.classId() );
+        ISkClassInfo classInfo = skSysdescr().findClassInfo( UgwiKindSkRtdata.getClassId( ugwi ) );
         if( classInfo != null ) {
-          IDtoRtdataInfo rtdInfo = classInfo.rtdata().list().findByKey( gwid.propId() );
+          IDtoRtdataInfo rtdInfo = classInfo.rtdata().list().findByKey( UgwiKindSkRtdata.getRtdataId( ugwi ) );
           if( rtdInfo != null ) {
             IAtomicValue avFmtStr = SkHelperUtils.getConstraint( rtdInfo, TSID_FORMAT_STRING );
             if( avFmtStr != null ) {
@@ -133,7 +151,11 @@ public class SkActorRtdataText
 
   @Override
   protected IGwidList doListUsedGwids() {
-    return gwidList;
+    GwidList gl = new GwidList();
+    for( Ugwi u : ugwiList.items() ) {
+      gl.add( UgwiKindSkRtdata.getGwid( u ) );
+    }
+    return gl;
   }
 
 }
