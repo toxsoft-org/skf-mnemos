@@ -99,7 +99,7 @@ public class PanelActorPropertyResolverConfig
     }
     if( environ().ugwiKingId.equals( UgwiKindSkRtdata.KIND_ID ) ) {
       IDtoRtdataInfo rtDataInfo = (IDtoRtdataInfo)sel.getFirstElement();
-      propCfg = DirectAttrResolver.createResolverConfig( classId, rtDataInfo.id() );
+      propCfg = DirectRtDataResolver.createResolverConfig( classId, rtDataInfo.id() );
     }
     IListEdit<SimpleResolverCfg> configs = new ElemArrayList<>( cfg.left().cfgs() );
     configs.add( propCfg );

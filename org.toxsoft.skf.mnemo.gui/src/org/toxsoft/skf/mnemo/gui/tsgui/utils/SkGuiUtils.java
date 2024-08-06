@@ -6,8 +6,10 @@ import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.m5.gui.*;
 import org.toxsoft.core.tsgui.m5.model.*;
 import org.toxsoft.core.tslib.bricks.strid.more.*;
+import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.reports.gui.panels.*;
 import org.toxsoft.uskat.core.*;
+import org.toxsoft.uskat.core.api.objserv.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.gui.conn.*;
@@ -66,6 +68,27 @@ public class SkGuiUtils {
     ITsDialogInfo dlgInfo;
     dlgInfo = new TsDialogInfo( aTsContext, "Выбор класса", "Выберите соответствующий класс и нажмите \"ОК\"" );
     return M5GuiUtils.askSelectItem( dlgInfo, model, aSelectedClass, lm.itemsProvider(), null );
+  }
+
+  /**
+   * Вызывает диалог выбора объекта.
+   *
+   * @param aClassId String - ИД класса
+   * @param aTsContext {@link ITsGuiContext} - соответствующий контекст
+   * @return {@link ISkClassInfo} - описание класса
+   */
+  public static ISkObject selectObject( String aClassId, ITsGuiContext aTsContext ) {
+    TsNullArgumentRtException.checkNull( aClassId );
+    ISkConnection conn = getConnection( aTsContext );
+    // тут получаем KM5 модель ISkClassInfo
+    IM5Domain m5 = conn.scope().get( IM5Domain.class );
+    IM5Model<ISkObject> model = m5.getModel( ISgwM5Constants.MID_SGW_SK_OBJECT, ISkObject.class );
+
+    IM5ItemsProvider<ISkObject> ip = () -> getCoreApi( aTsContext ).objService().listObjs( aClassId, true );
+
+    ITsDialogInfo dlgInfo;
+    dlgInfo = new TsDialogInfo( aTsContext, "Выбор объекта", "Выберите соответствующий объект и нажмите \"ОК\"" );
+    return M5GuiUtils.askSelectItem( dlgInfo, model, null, ip, null );
   }
 
   // public static IM5CollectionPanel<IDtoAttrInfo> getAttrsListPanel( ITsGuiContext aTsContext ) {

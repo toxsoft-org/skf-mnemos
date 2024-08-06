@@ -9,6 +9,7 @@ import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
+import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
@@ -143,8 +144,15 @@ public class SkActorAttrText
         newValue = skObj.attrs().getValue( UgwiKindSkAttr.getAttrId( ugwi ) );
       }
       if( !newValue.equals( lastValue ) ) {
-        String text = AvUtils.printAv( fmtStr, newValue );
-        setStdViselPropValue( avStr( text ) );
+        try {
+          String text = AvUtils.printAv( fmtStr, newValue );
+          setStdViselPropValue( avStr( text ) );
+        }
+        catch( Throwable e ) {
+          TsDialogUtils.error( getShell(), e );
+          e.printStackTrace();
+        }
+        // Даже если формат неверный все равно обновим значение, чтобы избежать повторных исключений на этапе разработки
         lastValue = newValue;
       }
     }

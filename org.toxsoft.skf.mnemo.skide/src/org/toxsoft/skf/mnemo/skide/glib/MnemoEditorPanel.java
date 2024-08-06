@@ -38,6 +38,7 @@ import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.tools.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
 import org.toxsoft.skf.mnemo.lib.*;
+import org.toxsoft.uskat.core.api.objserv.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.gui.conn.*;
@@ -90,6 +91,8 @@ public class MnemoEditorPanel
   class AspRunActors
       extends AspActorsRunner {
 
+    IVedScreenCfg oldConfig = null;
+
     public AspRunActors( IVedScreen aVedScreen ) {
       super( aVedScreen );
     }
@@ -98,12 +101,28 @@ public class MnemoEditorPanel
     protected void doBeforeActorsRun() {
       // TODO when actors enabled, turn off editing
       // TODO when actors enabled, turn off SAVE, etc.
+      oldConfig = VedScreenUtils.getVedScreenConfig( vedScreen );
+      String masterClassId = MasterObjectUtils.findMainMasterClassId( resolverConfig );
+      if( masterClassId != null ) { // у мнемосхемы есть мастер-объект
+        ISkObject masterObj = SkGuiUtils.selectObject( masterClassId, tsContext() );
+        if( masterObj != null ) {
+          ISkConnection skConn = SkGuiUtils.getConnection( tsContext() );
+          ISimpleResolverFactoriesRegistry resRegistry = tsContext().get( ISimpleResolverFactoriesRegistry.class );
+          MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn, resRegistry );
+          Ugwi ugwi = UgwiKindSkSkid.makeUgwi( masterObj.classId(), masterObj.strid() );
+          IVedScreenCfg scrCfg = VedScreenUtils.getVedScreenConfig( vedScreen );
+          IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, scrCfg, skConn );
+          VedScreenUtils.setVedScreenConfig( vedScreen, newCfg );
+        }
+      }
 
       vedScreen.model().screenHandlersBefore().remove( vertexSetManager );
       vedScreen.model().screenHandlersBefore().remove( multiSelectionHandler );
       vedScreen.model().screenHandlersBefore().remove( viselsPositionHandler );
       vedScreen.model().screenHandlersBefore().remove( viselCtxMenuManager );
       vedScreen.model().screenHandlersBefore().remove( paletteSelectionManager );
+
+      skVedEnvironment.restart();
 
       undoManager.setEnabled( false ); // when actors enabled, turn off UNDO/REDO
     }
@@ -115,9 +134,10 @@ public class MnemoEditorPanel
       vedScreen.model().screenHandlersBefore().add( viselsPositionHandler );
       vedScreen.model().screenHandlersBefore().add( viselCtxMenuManager );
       vedScreen.model().screenHandlersBefore().add( paletteSelectionManager );
-      skVedEnvironment.restart();
+
       // TODO when actors disabled, turn on editing
       // TODO when actors disabled, turn on SAVE, etc.
+      VedScreenUtils.setVedScreenConfig( vedScreen, oldConfig );
     }
 
     @Override

@@ -81,7 +81,7 @@ public abstract class AbstractSkVedActor
       }
       else {
         Ugwi ug = av.asValobj();
-        if( ug != Ugwi.NONE && !ug.kindId().equals( aUgwiKindId ) ) {
+        if( ug != null && ug != Ugwi.NONE && !ug.kindId().equals( aUgwiKindId ) ) {
           aValues.remove( aPropId );
         }
       }

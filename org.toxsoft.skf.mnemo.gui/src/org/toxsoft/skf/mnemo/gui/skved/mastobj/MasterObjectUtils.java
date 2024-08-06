@@ -138,6 +138,16 @@ public class MasterObjectUtils {
   public static String resolverTargetClassId( ICompoundResolverConfig aResolverCfg ) {
     TsNullArgumentRtException.checkNull( aResolverCfg );
     SimpleResolverCfg simpleCfg = aResolverCfg.cfgs().last();
+    if( simpleCfg.params().hasKey( PROPID_RTD_UGWI ) ) {
+      Ugwi ugwi = simpleCfg.params().getValobj( PROPID_RTD_UGWI );
+      if( ugwi.kindId().equals( UgwiKindSkRtdata.KIND_ID ) ) {
+        return UgwiKindSkRtdata.getClassId( ugwi );
+      }
+      if( ugwi.kindId().equals( UgwiKindSkRtDataInfo.KIND_ID ) ) {
+        return UgwiKindSkRtDataInfo.getClassId( ugwi );
+      }
+      return TsLibUtils.EMPTY_STRING;
+    }
     if( simpleCfg.params().hasKey( PROPID_UGWI ) ) {
       Ugwi ugwi = simpleCfg.params().getValobj( PROPID_UGWI );
       switch( ugwi.kindId() ) {
@@ -161,6 +171,17 @@ public class MasterObjectUtils {
   public static String resolverTargetParamId( ICompoundResolverConfig aResolverCfg ) {
     TsNullArgumentRtException.checkNull( aResolverCfg );
     SimpleResolverCfg simpleCfg = aResolverCfg.cfgs().last();
+    if( simpleCfg.params().hasKey( PROPID_RTD_UGWI ) ) {
+      Ugwi ugwi = simpleCfg.params().getValobj( PROPID_RTD_UGWI );
+      if( ugwi.kindId().equals( UgwiKindSkRtdata.KIND_ID ) ) {
+        return UgwiKindSkRtdata.getRtdataId( ugwi );
+      }
+      if( ugwi.kindId().equals( UgwiKindSkRtDataInfo.KIND_ID ) ) {
+        return UgwiKindSkRtDataInfo.getRtDataId( ugwi );
+      }
+      return TsLibUtils.EMPTY_STRING;
+    }
+
     if( simpleCfg.params().hasKey( PROPID_UGWI ) ) {
       Ugwi ugwi = simpleCfg.params().getValobj( PROPID_UGWI );
       switch( ugwi.kindId() ) {

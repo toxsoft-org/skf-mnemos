@@ -85,18 +85,33 @@ public class SkActorRtdataText
   @Override
   protected void doInterceptPropsChange( IOptionSet aNewValues, IOptionSetEdit aValuesToSet ) {
     // check and don't allow to set invalid GWID
+    removeWrongUgwi( PROPID_RTD_UGWI, UgwiKindSkRtdata.KIND_ID, aValuesToSet );
     if( aValuesToSet.hasKey( PROPID_RTD_UGWI ) ) {
-      IAtomicValue av = aValuesToSet.getValue( PROP_RTD_UGWI );
-      if( !av.isAssigned() ) {
-        aValuesToSet.remove( PROPID_RTD_UGWI );
-      }
-      else {
-        Ugwi ug = av.asValobj();
-        if( ug != Ugwi.NONE && !ug.kindId().equals( UgwiKindSkRtdata.KIND_ID ) ) {
-          aValuesToSet.remove( PROPID_RTD_UGWI );
+      IAtomicValue av = aValuesToSet.getValue( PROPID_RTD_UGWI );
+      if( av.isAssigned() ) {
+        ugwi = aValuesToSet.getValobj( PROP_RTD_UGWI );
+        if( ugwi != null ) {
+          gwid = UgwiKindSkRtdata.getGwid( ugwi );
+          ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
+        }
+        else {
+          gwid = null;
+          ugwiList = IUgwiList.EMPTY;
         }
       }
     }
+    // if( aValuesToSet.hasKey( PROPID_RTD_UGWI ) ) {
+    // IAtomicValue av = aValuesToSet.getValue( PROP_RTD_UGWI );
+    // if( !av.isAssigned() ) {
+    // aValuesToSet.remove( PROPID_RTD_UGWI );
+    // }
+    // else {
+    // Ugwi ug = av.asValobj();
+    // if( ug != Ugwi.NONE && !ug.kindId().equals( UgwiKindSkRtdata.KIND_ID ) ) {
+    // aValuesToSet.remove( PROPID_RTD_UGWI );
+    // }
+    // }
+    // }
   }
 
   @Override
@@ -105,13 +120,14 @@ public class SkActorRtdataText
       IAtomicValue av = aChangedValues.getValue( PROPID_RTD_UGWI );
       if( av.isAssigned() ) {
         ugwi = aChangedValues.getValobj( PROP_RTD_UGWI );
-        gwid = UgwiKindSkRtdata.getGwid( ugwi );
-        ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
-      }
-      else {
-        ugwi = null;
-        gwid = null;
-        ugwiList = IUgwiList.EMPTY;
+        if( ugwi != null ) {
+          gwid = UgwiKindSkRtdata.getGwid( ugwi );
+          ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
+        }
+        else {
+          gwid = null;
+          ugwiList = IUgwiList.EMPTY;
+        }
       }
     }
     if( aChangedValues.hasKey( PROPID_FORMAT_STRING ) ) {
