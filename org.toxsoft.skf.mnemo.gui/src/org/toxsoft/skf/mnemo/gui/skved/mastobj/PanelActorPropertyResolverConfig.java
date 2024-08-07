@@ -110,7 +110,7 @@ public class PanelActorPropertyResolverConfig
   @Override
   protected ValidationResult doValidate() {
     IMasterPathNode node = viewer.selectedNode();
-    if( node == null || !node.isObject() || node.parent() == null ) {
+    if( node == null || !node.isObject() ) {// || node.parent() == null ) {
       return ValidationResult.create( EValidationResultType.ERROR, "Необходимо выбрать узел объекта" );
     }
     if( propsViewer.viewer().getSelection().isEmpty() ) {

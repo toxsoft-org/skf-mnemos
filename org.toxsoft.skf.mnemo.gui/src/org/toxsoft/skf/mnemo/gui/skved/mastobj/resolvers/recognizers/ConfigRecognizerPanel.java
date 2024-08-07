@@ -1,12 +1,16 @@
 package org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers;
 
+import java.awt.*;
+
 import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
 import org.eclipse.swt.events.*;
-import org.eclipse.swt.layout.*;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
+import org.eclipse.swt.widgets.Composite;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
+import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.utils.layout.BorderLayout;
 import org.toxsoft.core.tsgui.valed.controls.enums.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
@@ -100,6 +104,7 @@ public class ConfigRecognizerPanel
   void init() {
     coreApi = SkGuiUtils.getCoreApi( tsContext() );
     setLayout( new BorderLayout() );
+    this.setData( AWTLayout.KEY_PREFERRED_SIZE, new Dimension( 600, 400 ) );
 
     Composite topPanel = new Composite( this, SWT.NONE );
     topPanel.setLayout( new GridLayout( 2, false ) );
