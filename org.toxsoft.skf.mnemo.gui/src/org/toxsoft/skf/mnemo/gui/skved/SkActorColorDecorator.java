@@ -123,15 +123,15 @@ public class SkActorColorDecorator
   @Override
   protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
     if( aChangedValues.hasKey( PROPID_RTD_UGWI ) ) {
+      gwid = null;
+      ugwiList = IUgwiList.EMPTY;
       IAtomicValue av = aChangedValues.getValue( PROP_RTD_UGWI );
       if( av.isAssigned() ) {
         ugwi = av.asValobj();
-        gwid = UgwiKindSkRtdata.getGwid( ugwi );
-        ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
-      }
-      else {
-        gwid = null;
-        ugwiList = IUgwiList.EMPTY;
+        if( ugwi != null && ugwi != Ugwi.NONE ) {
+          gwid = UgwiKindSkRtdata.getGwid( ugwi );
+          ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
+        }
       }
     }
     if( aChangedValues.hasKey( PROPID_RGBA_SET ) ) {
