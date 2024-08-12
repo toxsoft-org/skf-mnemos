@@ -21,6 +21,7 @@ public interface ISkMnemoGuiConstants {
   String ICONID_ENSLAVE            = "enslave";       //$NON-NLS-1$
   String ICONID_FREE               = "unlink";        //$NON-NLS-1$
   String ICONID_RT_ACTION_ACTOR    = "actors-dialog"; //$NON-NLS-1$
+  String ICONID_DIAGNOSTICS        = "checklist";     //$NON-NLS-1$
 
   String ICONID_OBJECT  = "box";
   String ICONID_RIVET   = "clip";

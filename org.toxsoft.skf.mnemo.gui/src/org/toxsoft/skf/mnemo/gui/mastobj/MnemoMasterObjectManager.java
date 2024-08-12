@@ -3,10 +3,12 @@ package org.toxsoft.skf.mnemo.gui.mastobj;
 import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
 
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
+import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.utils.*;
@@ -56,7 +58,9 @@ public class MnemoMasterObjectManager
       ICompoundResolverConfig crCfg = subCfg.resolverCfg();
       IUgwiResolver ugwiResolver = CompoundResolver.create( crCfg, aSkConn, registry );
       Ugwi subMasterUgwi = ugwiResolver.resolve( aMasterObject );
-      subMastersMap.put( subCfg.id(), subMasterUgwi );
+      if( subMasterUgwi != null ) {
+        subMastersMap.put( subCfg.id(), subMasterUgwi );
+      }
     }
     // iterate over all actors to resolve it's properties
     for( IVedItemCfg srcCfg : aCfg.actorCfgs() ) {
@@ -84,7 +88,13 @@ public class MnemoMasterObjectManager
         ICompoundResolverConfig crc = propResolverConfigsMap.getByKey( propId );
         IUgwiResolver resolver = CompoundResolver.create( crc, aSkConn, registry );
         Ugwi destUgwi = resolver.resolve( destMaster );
-        destCfg.propValues().setValobj( propId, destUgwi );
+        if( destUgwi != null ) {
+          destCfg.propValues().setValobj( propId, destUgwi );
+        }
+        else {
+          LoggerUtils.errorLogger().error( "Resolve failed for property: \"%s\"", propId ); //$NON-NLS-1$
+          destCfg.propValues().setValobj( propId, IAtomicValue.NULL );
+        }
       }
       cfg.actorCfgs().add( destCfg );
     }

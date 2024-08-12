@@ -1,9 +1,11 @@
 package org.toxsoft.skf.mnemo.gui.mastobj.resolver;
 
+import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.uskat.core.connection.*;
 
@@ -52,6 +54,14 @@ public class CompoundResolver
     Ugwi ugwi = aMaster;
     for( IUgwiResolver ur : resolversList ) {
       ugwi = ur.resolve( ugwi );
+      if( ugwi == null ) {
+        String str = ur.toString();
+        if( ur instanceof AbstractSimpleResolver asr ) {
+          str = OptionSetKeeper.KEEPER.ent2str( asr.cfg() );
+        }
+        LoggerUtils.errorLogger().error( "Resolve failed. Resolver: \"%s\"", str ); //$NON-NLS-1$
+        return null;
+      }
     }
     return ugwi;
   }

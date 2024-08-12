@@ -161,6 +161,7 @@ public interface ISkVedConstants {
   IDataDef PROP_CMD_UGWI = DataDef.create( PROPID_CMD_UGWI, VALOBJ, //
       TSID_NAME, STR_PROP_CMD_UGWI, //
       TSID_DESCRIPTION, STR_PROP_CMD_UGWI_D, //
+      PROPID_UGWI_KIND, avStr( UgwiKindSkCmd.KIND_ID ), //
       TSID_KEEPER_ID, Ugwi.KEEPER_ID, //
       OPDEF_EDITOR_FACTORY_NAME, ValedAvUgwiSelector.FACTORY_NAME, //
       ValedUgwiSelector.OPDEF_SINGLE_UGWI_KIND_ID, avStr( UgwiKindSkCmd.KIND_ID ), //

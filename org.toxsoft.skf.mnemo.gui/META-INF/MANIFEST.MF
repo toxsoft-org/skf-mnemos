@@ -54,4 +54,5 @@ Export-Package: org.toxsoft.skf.mnemo.gui,
  org.toxsoft.skf.mnemo.gui.tsgui.layout.line,
  org.toxsoft.skf.mnemo.gui.tsgui.layout.table,
  org.toxsoft.skf.mnemo.gui.tsgui.tools,
- org.toxsoft.skf.mnemo.gui.tsgui.utils
+ org.toxsoft.skf.mnemo.gui.tsgui.utils,
+ org.toxsoft.skf.mnemo.gui.utils

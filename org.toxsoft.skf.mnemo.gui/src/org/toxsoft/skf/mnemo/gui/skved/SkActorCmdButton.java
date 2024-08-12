@@ -18,8 +18,12 @@ import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.uskat.core.api.cmdserv.*;
+import org.toxsoft.uskat.core.api.ugwis.*;
+import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.api.users.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
@@ -52,7 +56,6 @@ public class SkActorCmdButton
       fields.add( TFI_NAME );
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
-      fields.add( TFI_CMD_GWID );
       fields.add( TFI_CMD_UGWI );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorCmdButton.class );
     }
@@ -77,10 +80,17 @@ public class SkActorCmdButton
       ISkConnectionSupplier conn = aVedScreen.tsContext().get( ISkConnectionSupplier.class );
       ISkUser user = conn.defConn().coreApi().userService().findUser( "root" );
 
-      Gwid cmdGwid = props().getValobj( PROP_CMD_GWID );
-      currCommand = vedEnv.sendCommand( cmdGwid, user.skid(), IOptionSet.NULL );
-      if( currCommand == null ) {
-
+      Ugwi ugwi = SkUgwiUtils.findUgwi( TFI_CMD_UGWI.id(), props() );
+      if( ugwi != null && ugwi != Ugwi.NONE ) {
+        Gwid cmdGwid = UgwiKindSkCmd.getGwid( ugwi );
+        currCommand = vedEnv.sendCommand( cmdGwid, user.skid(), IOptionSet.NULL );
+        if( currCommand == null ) {
+          TsDialogUtils.error( getShell(), "Unexpected NULL command returned" ); //$NON-NLS-1$
+        }
+      }
+      else {
+        currCommand = null;
+        LoggerUtils.errorLogger().error( "Attempt to send command with null or none UGWI" ); //$NON-NLS-1$
       }
       //
       // /**
@@ -122,9 +132,18 @@ public class SkActorCmdButton
   }
 
   @Override
+  protected void doInterceptPropsChange( IOptionSet aNewValues, IOptionSetEdit aValuesToSet ) {
+    removeWrongUgwi( TFI_CMD_UGWI.id(), UgwiKindSkCmd.KIND_ID, aValuesToSet, coreApi() );
+  }
+
+  @Override
   protected IGwidList doListUsedGwids() {
-    Gwid cmdGwid = props().getValobj( PROP_CMD_GWID );
-    return new GwidList( cmdGwid );
+    // TODO может быть для команды всегда возвращать пустой список?
+    Ugwi ugwi = SkUgwiUtils.findUgwi( TFI_CMD_UGWI.id(), props() );
+    if( ugwi != null && ugwi != Ugwi.NONE ) {
+      return new GwidList( UgwiKindSkCmd.getGwid( ugwi ) );
+    }
+    return IGwidList.EMPTY;
   }
 
 }

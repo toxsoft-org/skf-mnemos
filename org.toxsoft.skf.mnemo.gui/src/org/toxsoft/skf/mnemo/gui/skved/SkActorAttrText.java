@@ -86,18 +86,7 @@ public class SkActorAttrText
   @Override
   protected void doInterceptPropsChange( IOptionSet aNewValues, IOptionSetEdit aValuesToSet ) {
     // check and don't allow to set invalid UGWI
-    removeWrongUgwi( PROPID_ATTR_UGWI, UgwiKindSkAttr.KIND_ID, aValuesToSet );
-    // if( aValuesToSet.hasKey( PROPID_ATTR_UGWI ) ) {
-    // IAtomicValue v = aValuesToSet.getValue( PROPID_ATTR_UGWI );
-    // if( !v.isAssigned() ) {
-    // }
-    // else {
-    // Ugwi ug = v.asValobj();
-    // if( !ug.kindId().equals( UgwiKindSkAttr.KIND_ID ) ) {
-    // aValuesToSet.remove( PROPID_ATTR_UGWI );
-    // }
-    // }
-    // }
+    removeWrongUgwi( PROPID_ATTR_UGWI, UgwiKindSkAttr.KIND_ID, aValuesToSet, coreApi() );
   }
 
   @Override
@@ -108,6 +97,18 @@ public class SkActorAttrText
         if( v.isAssigned() ) {
           ugwi = v.asValobj();
           ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
+        }
+      }
+      if( aChangedValues.hasKey( PROPID_ATTR_UGWI ) ) {
+        IAtomicValue av = aChangedValues.getValue( PROPID_ATTR_UGWI );
+        if( av.isAssigned() ) {
+          ugwi = av.asValobj();
+          if( ugwi != null && ugwi != Ugwi.NONE ) {
+            ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
+          }
+          else {
+            ugwiList = IUgwiList.EMPTY;
+          }
         }
       }
       if( aChangedValues.hasKey( PROPID_FORMAT_STRING ) ) {

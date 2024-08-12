@@ -18,9 +18,6 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
-import org.toxsoft.core.tslib.coll.impl.*;
-import org.toxsoft.core.tslib.gw.gwid.*;
-import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
@@ -32,7 +29,7 @@ import org.toxsoft.uskat.core.utils.*;
  * @author hazard157
  */
 public class SkActorRtdataText
-    extends AbstractSkVedActor {
+    extends AbstractSkActorSingleRtDataConsumer {
 
   /**
    * The actor factor ID.
@@ -68,75 +65,25 @@ public class SkActorRtdataText
 
   };
 
-  private Ugwi         ugwi      = null;
-  private Gwid         gwid      = null;
-  private IUgwiList    ugwiList  = IUgwiList.EMPTY;
-  private String       fmtStr    = null;
-  private IAtomicValue lastValue = IAtomicValue.NULL;
+  private String fmtStr = null;
 
   SkActorRtdataText( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
   }
 
   // ------------------------------------------------------------------------------------
-  // VedAbstractActor
+  // AbstractSkActorSingleRtDataConsumer
   //
 
   @Override
-  protected void doInterceptPropsChange( IOptionSet aNewValues, IOptionSetEdit aValuesToSet ) {
-    // check and don't allow to set invalid GWID
-    removeWrongUgwi( PROPID_RTD_UGWI, UgwiKindSkRtdata.KIND_ID, aValuesToSet );
-    if( aValuesToSet.hasKey( PROPID_RTD_UGWI ) ) {
-      IAtomicValue av = aValuesToSet.getValue( PROPID_RTD_UGWI );
-      if( av.isAssigned() ) {
-        ugwi = aValuesToSet.getValobj( PROP_RTD_UGWI );
-        if( ugwi != null ) {
-          gwid = UgwiKindSkRtdata.getGwid( ugwi );
-          ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
-        }
-        else {
-          gwid = null;
-          ugwiList = IUgwiList.EMPTY;
-        }
-      }
-    }
-    // if( aValuesToSet.hasKey( PROPID_RTD_UGWI ) ) {
-    // IAtomicValue av = aValuesToSet.getValue( PROP_RTD_UGWI );
-    // if( !av.isAssigned() ) {
-    // aValuesToSet.remove( PROPID_RTD_UGWI );
-    // }
-    // else {
-    // Ugwi ug = av.asValobj();
-    // if( ug != Ugwi.NONE && !ug.kindId().equals( UgwiKindSkRtdata.KIND_ID ) ) {
-    // aValuesToSet.remove( PROPID_RTD_UGWI );
-    // }
-    // }
-    // }
-  }
-
-  @Override
-  protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
-    if( aChangedValues.hasKey( PROPID_RTD_UGWI ) ) {
-      IAtomicValue av = aChangedValues.getValue( PROPID_RTD_UGWI );
-      if( av.isAssigned() ) {
-        ugwi = aChangedValues.getValobj( PROP_RTD_UGWI );
-        if( ugwi != null ) {
-          gwid = UgwiKindSkRtdata.getGwid( ugwi );
-          ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
-        }
-        else {
-          gwid = null;
-          ugwiList = IUgwiList.EMPTY;
-        }
-      }
-    }
+  protected void doDoUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
     if( aChangedValues.hasKey( PROPID_FORMAT_STRING ) ) {
       fmtStr = aChangedValues.getStr( PROP_FORMAT_STRING );
-      if( fmtStr.isBlank() && ugwi != null ) {
+      if( fmtStr.isBlank() && ugwi() != null ) {
         fmtStr = null;
-        ISkClassInfo classInfo = skSysdescr().findClassInfo( UgwiKindSkRtdata.getClassId( ugwi ) );
+        ISkClassInfo classInfo = skSysdescr().findClassInfo( UgwiKindSkRtdata.getClassId( ugwi() ) );
         if( classInfo != null ) {
-          IDtoRtdataInfo rtdInfo = classInfo.rtdata().list().findByKey( UgwiKindSkRtdata.getRtdataId( ugwi ) );
+          IDtoRtdataInfo rtdInfo = classInfo.rtdata().list().findByKey( UgwiKindSkRtdata.getRtdataId( ugwi() ) );
           if( rtdInfo != null ) {
             IAtomicValue avFmtStr = SkHelperUtils.getConstraint( rtdInfo, TSID_FORMAT_STRING );
             if( avFmtStr != null ) {
@@ -152,26 +99,9 @@ public class SkActorRtdataText
   }
 
   @Override
-  public void whenRealTimePassed( long aRtTime ) {
-    IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
-    if( !newValue.equals( lastValue ) ) {
-      String text = AvUtils.printAv( fmtStr, newValue );
-      setStdViselPropValue( avStr( text ) );
-      lastValue = newValue;
-    }
-  }
-
-  // ------------------------------------------------------------------------------------
-  // AbstractSkVedActor
-  //
-
-  @Override
-  protected IGwidList doListUsedGwids() {
-    GwidList gl = new GwidList();
-    for( Ugwi u : ugwiList.items() ) {
-      gl.add( UgwiKindSkRtdata.getGwid( u ) );
-    }
-    return gl;
+  protected void doOnValueChanged( IAtomicValue aNewValue ) {
+    String text = AvUtils.printAv( fmtStr, aNewValue );
+    setStdViselPropValue( avStr( text ) );
   }
 
 }

@@ -17,10 +17,8 @@ import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
-import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
-import org.toxsoft.core.tslib.gw.gwid.*;
 
 /**
  * Actor: reads specified RTDATA value and supplies it to the specified property of the VISEL.
@@ -28,7 +26,7 @@ import org.toxsoft.core.tslib.gw.gwid.*;
  * @author hazard157
  */
 public class SkActorRtBooleanValue
-    extends AbstractSkVedActor {
+    extends AbstractSkActorSingleRtDataConsumer {
 
   /**
    * The actor factor ID.
@@ -74,60 +72,24 @@ public class SkActorRtBooleanValue
 
   };
 
-  private Gwid         gwid      = null;
-  private IGwidList    gwidList  = null;
-  private IAtomicValue lastValue = IAtomicValue.NULL;
-
   SkActorRtBooleanValue( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
   }
 
   // ------------------------------------------------------------------------------------
-  // VedAbstractActor
+  // AbstractSkActorSingleRtDataConsumer
   //
 
   @Override
-  protected void doInterceptPropsChange( IOptionSet aNewValues, IOptionSetEdit aValuesToSet ) {
-    // check and don't allow to set invalid GWID
-    if( aValuesToSet.hasKey( PROPID_RTD_GWID ) ) {
-      Gwid g = aValuesToSet.getValobj( PROP_RTD_GWID );
-      if( g.isAbstract() || g.kind() != EGwidKind.GW_RTDATA || g.isMulti() ) {
-        aValuesToSet.remove( PROPID_RTD_GWID );
+  protected void doOnValueChanged( IAtomicValue aNewValue ) {
+    IAtomicValue val2set = aNewValue;
+    if( aNewValue.atomicType() == EAtomicType.BOOLEAN && props().hasKey( PROPID_INVERSE_BOOLEAN ) ) {
+      boolean inverse = props().getBool( PROPID_INVERSE_BOOLEAN );
+      if( inverse ) {
+        val2set = avBool( !aNewValue.asBool() );
       }
     }
-  }
-
-  @Override
-  protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
-    if( aChangedValues.hasKey( PROPID_RTD_GWID ) ) {
-      gwid = props().getValobj( PROP_RTD_GWID );
-      gwidList = new GwidList( gwid );
-    }
-  }
-
-  @Override
-  public void whenRealTimePassed( long aRtTime ) {
-    IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
-    if( !newValue.equals( lastValue ) ) {
-      IAtomicValue val2set = newValue;
-      if( newValue.atomicType() == EAtomicType.BOOLEAN && props().hasKey( PROPID_INVERSE_BOOLEAN ) ) {
-        boolean inverse = props().getBool( PROPID_INVERSE_BOOLEAN );
-        if( inverse ) {
-          val2set = avBool( !newValue.asBool() );
-        }
-      }
-      setStdViselPropValue( val2set );
-      lastValue = newValue;
-    }
-  }
-
-  // ------------------------------------------------------------------------------------
-  // AbstractSkVedActor
-  //
-
-  @Override
-  protected IGwidList doListUsedGwids() {
-    return gwidList;
+    setStdViselPropValue( val2set );
   }
 
 }

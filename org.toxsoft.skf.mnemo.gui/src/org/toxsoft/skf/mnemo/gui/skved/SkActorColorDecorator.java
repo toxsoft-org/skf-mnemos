@@ -29,7 +29,6 @@ import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.skf.mnemo.gui.tools.rgbaset.*;
-import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 
 /**
  * Актор устанавливающий цвет для указанного свойства в зависимости от значения указанного данного.
@@ -37,7 +36,7 @@ import org.toxsoft.uskat.core.api.ugwis.kinds.*;
  * @author vs
  */
 public class SkActorColorDecorator
-    extends AbstractSkVedActor {
+    extends AbstractSkActorSingleRtDataConsumer {
 
   /**
    * The actor factory ID.
@@ -100,52 +99,22 @@ public class SkActorColorDecorator
   }
 
   // ------------------------------------------------------------------------------------
-  // VedAbstractActor
+  // AbstractSkActorSingleRtDataConsumer
   //
 
   @Override
-  protected void doInterceptPropsChange( IOptionSet aNewValues, IOptionSetEdit aValuesToSet ) {
-    // check and don't allow to set invalid GWID
-    if( aValuesToSet.hasKey( PROPID_RTD_UGWI ) ) {
-      IAtomicValue av = aValuesToSet.getValue( PROP_RTD_UGWI );
-      if( !av.isAssigned() ) {
-        aValuesToSet.remove( PROPID_RTD_UGWI );
-      }
-      else {
-        Ugwi ug = av.asValobj();
-        if( ug != Ugwi.NONE && !ug.kindId().equals( UgwiKindSkRtdata.KIND_ID ) ) {
-          aValuesToSet.remove( PROPID_RTD_UGWI );
-        }
-      }
-    }
-  }
-
-  @Override
-  protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
-    if( aChangedValues.hasKey( PROPID_RTD_UGWI ) ) {
-      gwid = null;
-      ugwiList = IUgwiList.EMPTY;
-      IAtomicValue av = aChangedValues.getValue( PROP_RTD_UGWI );
-      if( av.isAssigned() ) {
-        ugwi = av.asValobj();
-        if( ugwi != null && ugwi != Ugwi.NONE ) {
-          gwid = UgwiKindSkRtdata.getGwid( ugwi );
-          ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
-        }
-      }
-    }
+  protected void doDoUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
     if( aChangedValues.hasKey( PROPID_RGBA_SET ) ) {
       rgbaSet = aChangedValues.getValobj( PROP_RGBA_SET );
     }
   }
 
   @Override
-  public void whenRealTimePassed( long aRtTime ) {
-    IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
-    if( !newValue.equals( lastValue ) && rgbaSet != null ) {
+  protected void doOnValueChanged( IAtomicValue aNewValue ) {
+    if( rgbaSet != null ) {
       RGBA rgba = rgbaSet.getRgba( 0 );
-      if( newValue.isAssigned() ) {
-        rgba = rgbaSet.getRgba( newValue.asInt() );
+      if( aNewValue.isAssigned() ) {
+        rgba = rgbaSet.getRgba( aNewValue.asInt() );
       }
       String viselPropId = props().getStr( PROPID_VISEL_PROP_ID );
       if( VedEditorUtils.isPropertyClass( TsFillInfo.class, viselPropId, getVisel(), tsContext() ) ) {
@@ -154,21 +123,7 @@ public class SkActorColorDecorator
       else {
         setStdViselPropValue( avValobj( rgba ) );
       }
-      lastValue = newValue;
     }
-  }
-
-  // ------------------------------------------------------------------------------------
-  // AbstractSkVedActor
-  //
-
-  @Override
-  protected IGwidList doListUsedGwids() {
-    GwidList gl = new GwidList();
-    for( Ugwi u : ugwiList.items() ) {
-      gl.add( UgwiKindSkRtdata.getGwid( u ) );
-    }
-    return gl;
   }
 
 }

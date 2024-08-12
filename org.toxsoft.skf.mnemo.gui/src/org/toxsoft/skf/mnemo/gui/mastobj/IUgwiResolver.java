@@ -14,7 +14,7 @@ public interface IUgwiResolver {
    * Calculates UGWI from the master UGWI.
    *
    * @param aMaster {@link Ugwi} - the master UGWI
-   * @return {@link Ugwi} - calculated (resolved) UGWI
+   * @return {@link Ugwi} - calculated (resolved) UGWI or <code>null</code> if resolve was unsuccessful
    * @throws TsNullArgumentRtException any argument = <code>null</code>
    */
   Ugwi resolve( Ugwi aMaster );

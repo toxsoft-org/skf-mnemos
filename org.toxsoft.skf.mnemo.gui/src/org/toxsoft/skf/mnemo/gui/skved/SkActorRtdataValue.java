@@ -13,18 +13,16 @@ import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
-import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
-import org.toxsoft.core.tslib.gw.gwid.*;
 
 /**
  * Actor: reads specified RTDATA value and supplies it to the specified property of the VISEL.
  *
- * @author hazard157
+ * @author hazard157, vs
  */
 public class SkActorRtdataValue
-    extends AbstractSkVedActor {
+    extends AbstractSkActorSingleRtDataConsumer {
 
   /**
    * The actor factor ID.
@@ -48,7 +46,7 @@ public class SkActorRtdataValue
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_VISEL_PROP_ID );
-      fields.add( TFI_RTD_GWID );
+      // fields.add( TFI_RTD_GWID );
       fields.add( TFI_RTD_UGWI );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRtdataValue.class );
     }
@@ -60,53 +58,17 @@ public class SkActorRtdataValue
 
   };
 
-  private Gwid         gwid      = null;
-  private IGwidList    gwidList  = null;
-  private IAtomicValue lastValue = IAtomicValue.NULL;
-
   SkActorRtdataValue( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
   }
 
   // ------------------------------------------------------------------------------------
-  // VedAbstractActor
+  // AbstractSkActorSingleRtDataConsumer
   //
 
   @Override
-  protected void doInterceptPropsChange( IOptionSet aNewValues, IOptionSetEdit aValuesToSet ) {
-    // check and don't allow to set invalid GWID
-    if( aValuesToSet.hasKey( PROPID_RTD_GWID ) ) {
-      Gwid g = aValuesToSet.getValobj( PROP_RTD_GWID );
-      if( g.isAbstract() || g.kind() != EGwidKind.GW_RTDATA || g.isMulti() ) {
-        aValuesToSet.remove( PROPID_RTD_GWID );
-      }
-    }
-  }
-
-  @Override
-  protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
-    if( aChangedValues.hasKey( PROPID_RTD_GWID ) ) {
-      gwid = props().getValobj( PROP_RTD_GWID );
-      gwidList = new GwidList( gwid );
-    }
-  }
-
-  @Override
-  public void whenRealTimePassed( long aRtTime ) {
-    IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
-    if( !newValue.equals( lastValue ) ) {
-      setStdViselPropValue( newValue );
-      lastValue = newValue;
-    }
-  }
-
-  // ------------------------------------------------------------------------------------
-  // AbstractSkVedActor
-  //
-
-  @Override
-  protected IGwidList doListUsedGwids() {
-    return gwidList;
+  protected void doOnValueChanged( IAtomicValue aNewValue ) {
+    setStdViselPropValue( aNewValue );
   }
 
 }

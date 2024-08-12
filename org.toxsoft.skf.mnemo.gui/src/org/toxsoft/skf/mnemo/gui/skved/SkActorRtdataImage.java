@@ -22,7 +22,6 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
-import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.skf.mnemo.gui.tools.imageset.*;
 
 /**
@@ -33,7 +32,7 @@ import org.toxsoft.skf.mnemo.gui.tools.imageset.*;
  * @author hazard157
  */
 public class SkActorRtdataImage
-    extends AbstractSkVedActor {
+    extends AbstractSkActorSingleRtDataConsumer {
 
   /**
    * The actor factor ID.
@@ -84,36 +83,18 @@ public class SkActorRtdataImage
 
   };
 
-  private Gwid         gwid      = null;
-  private IGwidList    gwidList  = null;
-  private IAtomicValue lastValue = null;                    // IAtomicValue.NULL;
-  IMnemoImageSetInfo   imageSet  = IMnemoImageSetInfo.EMPTY;
+  IMnemoImageSetInfo imageSet = IMnemoImageSetInfo.EMPTY;
 
   SkActorRtdataImage( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
   }
 
   // ------------------------------------------------------------------------------------
-  // VedAbstractActor
+  // AbstractSkActorSingleRtDataConsumer
   //
 
   @Override
-  protected void doInterceptPropsChange( IOptionSet aNewValues, IOptionSetEdit aValuesToSet ) {
-    // check and don't allow to set invalid GWID
-    if( aValuesToSet.hasKey( PROPID_RTD_GWID ) ) {
-      Gwid g = aValuesToSet.getValobj( PROP_RTD_GWID );
-      if( g.isAbstract() || g.kind() != EGwidKind.GW_RTDATA || g.isMulti() ) {
-        aValuesToSet.remove( PROPID_RTD_GWID );
-      }
-    }
-  }
-
-  @Override
-  protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
-    if( aChangedValues.hasKey( PROPID_RTD_GWID ) ) {
-      gwid = props().getValobj( PROP_RTD_GWID );
-      gwidList = new GwidList( gwid );
-    }
+  protected void doDoUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
     if( aChangedValues.hasKey( PROPID_IMAGE_SET ) ) {
       imageSet = props().getValobj( PROP_IMAGE_SET );
     }
@@ -126,27 +107,14 @@ public class SkActorRtdataImage
   }
 
   @Override
-  public void whenRealTimePassed( long aRtTime ) {
-    IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
-    if( !newValue.equals( lastValue ) ) {
-      if( newValue.isAssigned() ) {
-        TsImageDescriptor imd = imageSet.imageInfoes().get( newValue.asInt() ).imageDescriptor();
-        setStdViselPropValue( avValobj( imd ) );
-      }
-      else {
-        setStdViselPropValue( avValobj( TsImageDescriptor.NONE ) );
-      }
-      lastValue = newValue;
+  protected void doOnValueChanged( IAtomicValue aNewValue ) {
+    if( aNewValue.isAssigned() ) {
+      TsImageDescriptor imd = imageSet.imageInfoes().get( aNewValue.asInt() ).imageDescriptor();
+      setStdViselPropValue( avValobj( imd ) );
     }
-  }
-
-  // ------------------------------------------------------------------------------------
-  // AbstractSkVedActor
-  //
-
-  @Override
-  protected IGwidList doListUsedGwids() {
-    return gwidList;
+    else {
+      setStdViselPropValue( avValobj( TsImageDescriptor.NONE ) );
+    }
   }
 
 }
