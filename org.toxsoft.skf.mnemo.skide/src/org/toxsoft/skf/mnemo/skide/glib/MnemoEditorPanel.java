@@ -179,11 +179,10 @@ public class MnemoEditorPanel
         System.out.println( "Wrong UGWI actor: " + actor.id() );
       }
 
-      // for( IVedVisel visel : vedScreen.model().visels().list() ) {
-      // if( VedScreenUtils.viselActorIds( STR_TAB_VISEL_INSP, vedScr ).size() <= 0 ) {
-      // System.out.println( "Висячий визель: " + visel.id() );
-      // }
-      // }
+      IStridablesList<IVedVisel> visels = VedScreenUtils.listNonlinkedVisels( vedScr );
+      for( IVedVisel visel : visels ) {
+        System.out.println( "Не привязанный визель: " + visel.id() );
+      }
     }
 
     @Override
