@@ -1,6 +1,7 @@
 package org.toxsoft.skf.mnemo.skide.glib;
 
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
+import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
 import static org.toxsoft.skf.mnemo.skide.glib.ISkResources.*;
 import static org.toxsoft.uskat.core.gui.ISkCoreGuiConstants.*;
 
@@ -26,6 +27,7 @@ import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.more.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
@@ -37,6 +39,7 @@ import org.toxsoft.skf.mnemo.gui.tsgui.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.tools.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
+import org.toxsoft.skf.mnemo.gui.utils.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.api.objserv.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
@@ -143,6 +146,49 @@ public class MnemoEditorPanel
     @Override
     protected void doAfterActorsStop() {
       undoManager.setEnabled( true ); // when actors disabled, turn on UNDO/REDO
+    }
+
+  }
+
+  private final String ACTID_DIAGNOSTICS = "actMnemoDiagnostics"; //$NON-NLS-1$
+
+  /**
+   * Action: diagnoses mnemoscheme and show results as popup dialog.
+   *
+   * @author vs
+   */
+  class AspDiagnosticMnemo
+      extends AbstractSingleActionSetProvider {
+
+    private final IVedScreen vedScr;
+
+    public AspDiagnosticMnemo( IVedScreen aVedScreen ) {
+      super( TsActionDef.ofPush2( ACTID_DIAGNOSTICS, "Диагностика", "Диагностика мнемосхемы и отображение результатов",
+          ICONID_DIAGNOSTICS ) );
+      vedScr = aVedScreen;
+    }
+
+    @Override
+    public void run() {
+      IStridablesList<IVedItem> actors = VedScreenUtils.listHangedActors( vedScr );
+      for( IVedItem actor : actors ) {
+        System.out.println( "Висячий актор: " + actor.id() );
+      }
+      actors = MnemoUtils.listWrongUgwiActors( vedScr );
+      for( IVedItem actor : actors ) {
+        System.out.println( "Wrong UGWI actor: " + actor.id() );
+      }
+
+      // for( IVedVisel visel : vedScreen.model().visels().list() ) {
+      // if( VedScreenUtils.viselActorIds( STR_TAB_VISEL_INSP, vedScr ).size() <= 0 ) {
+      // System.out.println( "Висячий визель: " + visel.id() );
+      // }
+      // }
+    }
+
+    @Override
+    protected boolean doIsActionEnabled() {
+      return true;
     }
 
   }
@@ -295,6 +341,7 @@ public class MnemoEditorPanel
     actionsProvider.addHandler( new VedAspCanvasActions( vedScreen ) );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
     actionsProvider.addHandler( new AspRunActors( vedScreen ) );
+    actionsProvider.addHandler( new AspDiagnosticMnemo( vedScreen ) );
     // WEST
     westFolder = new TabFolder( sfMain, SWT.TOP | SWT.BORDER );
     tiObjTree = new TabItem( westFolder, SWT.NONE );
