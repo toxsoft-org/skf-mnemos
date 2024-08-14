@@ -1,9 +1,12 @@
 package org.toxsoft.skf.mnemo.gui.tsgui.utils;
 
+import static org.toxsoft.uskat.core.gui.km5.sgw.ISgwM5Constants.*;
+
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.m5.gui.*;
+import org.toxsoft.core.tsgui.m5.gui.panels.*;
 import org.toxsoft.core.tsgui.m5.model.*;
 import org.toxsoft.core.tslib.bricks.strid.more.*;
 import org.toxsoft.core.tslib.utils.errors.*;
@@ -11,6 +14,7 @@ import org.toxsoft.skf.reports.gui.panels.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.objserv.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
+import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 import org.toxsoft.uskat.core.gui.km5.sgw.*;
@@ -89,6 +93,23 @@ public class SkGuiUtils {
     ITsDialogInfo dlgInfo;
     dlgInfo = new TsDialogInfo( aTsContext, "Выбор объекта", "Выберите соответствующий объект и нажмите \"ОК\"" );
     return M5GuiUtils.askSelectItem( dlgInfo, model, null, ip, null );
+  }
+
+  /**
+   * Возвращает панель для выбора свойства класса.<br>
+   *
+   * @param aPropKind {@link ESkClassPropKind} - тип свойства класса
+   * @param aTsContext {@link ITsGuiContext} - соответствующий контекст
+   * @return IM5CollectionPanel&lt;IDtoClassPropInfoBase> - панель выбора свойства к класса
+   */
+  public static IM5CollectionPanel<IDtoClassPropInfoBase> getClassPorpertySelectionPanel( ESkClassPropKind aPropKind,
+      ITsGuiContext aTsContext ) {
+    ISkConnection conn = getConnection( aTsContext );
+    // тут получаем KM5 модель ISkClassInfo
+    IM5Domain m5 = conn.scope().get( IM5Domain.class );
+    String propModelId = sgwGetClassPropModelId( aPropKind );
+    IM5Model<IDtoClassPropInfoBase> modelProps = m5.getModel( propModelId, IDtoClassPropInfoBase.class );
+    return modelProps.panelCreator().createCollViewerPanel( aTsContext, IM5ItemsProvider.EMPTY );
   }
 
   // public static IM5CollectionPanel<IDtoAttrInfo> getAttrsListPanel( ITsGuiContext aTsContext ) {

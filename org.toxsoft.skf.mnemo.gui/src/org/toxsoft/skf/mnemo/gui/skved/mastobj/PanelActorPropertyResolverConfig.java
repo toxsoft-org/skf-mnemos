@@ -2,7 +2,6 @@ package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 
 import java.awt.*;
 
-import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
 import org.eclipse.swt.layout.*;
@@ -26,7 +25,6 @@ import org.toxsoft.skf.mnemo.gui.tsgui.layout.table.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
-import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 
 /**
@@ -91,15 +89,19 @@ public class PanelActorPropertyResolverConfig
     Pair<ICompoundResolverConfig, String> cfg = viewer.resolverConfig();
     String classId = viewer.selectedNode().classId();
 
-    IStructuredSelection sel = (IStructuredSelection)propsViewer.viewer().getSelection();
+    Ugwi ugwi = propSelector.selectedUgwi();
     SimpleResolverCfg propCfg = null;
     if( environ().ugwiKingId.equals( UgwiKindSkAttr.KIND_ID ) ) {
-      IDtoAttrInfo attrInfo = (IDtoAttrInfo)sel.getFirstElement();
-      propCfg = DirectAttrResolver.createResolverConfig( classId, attrInfo.id() );
+      String attrId = UgwiKindSkAttrInfo.getAttrId( ugwi );
+      propCfg = DirectAttrResolver.createResolverConfig( classId, attrId );
     }
     if( environ().ugwiKingId.equals( UgwiKindSkRtdata.KIND_ID ) ) {
-      IDtoRtdataInfo rtDataInfo = (IDtoRtdataInfo)sel.getFirstElement();
-      propCfg = DirectRtDataResolver.createResolverConfig( classId, rtDataInfo.id() );
+      String dataId = UgwiKindSkRtDataInfo.getRtDataId( ugwi );
+      propCfg = DirectAttrResolver.createResolverConfig( classId, dataId );
+    }
+    if( environ().ugwiKingId.equals( UgwiKindSkCmd.KIND_ID ) ) {
+      String cmdId = UgwiKindSkCmdInfo.getCmdId( ugwi );
+      propCfg = DirectCmdResolver.createResolverConfig( classId, cmdId );
     }
     IListEdit<SimpleResolverCfg> configs = new ElemArrayList<>( cfg.left().cfgs() );
     configs.add( propCfg );
@@ -113,7 +115,8 @@ public class PanelActorPropertyResolverConfig
     if( node == null || !node.isObject() ) {// || node.parent() == null ) {
       return ValidationResult.create( EValidationResultType.ERROR, "Необходимо выбрать узел объекта" );
     }
-    if( propsViewer.viewer().getSelection().isEmpty() ) {
+    // if( propsViewer.viewer().getSelection().isEmpty() ) {
+    if( propSelector.selectedUgwi() == null ) {
       return ValidationResult.create( EValidationResultType.ERROR, "Необходимо выбрать свойство объекта" );
     }
     return ValidationResult.SUCCESS;
@@ -127,13 +130,14 @@ public class PanelActorPropertyResolverConfig
 
   StridableTableViewer propsViewer;
 
+  PanelSkObjectPropertySelector propSelector;
+
   void init() {
     // setLayout( new BorderLayout() );
     this.setData( AWTLayout.KEY_PREFERRED_SIZE, new Dimension( 800, 600 ) );
     setLayout( new FillLayout() );
     SashForm sash = new SashForm( this, SWT.VERTICAL );
 
-    // viewer = new MasterPathViewer( this, moClsId, tsContext() );
     viewer = new MasterPathViewer( sash, environ().submasterClassId, tsContext() );
     viewer.setLayoutData( BorderLayout.CENTER );
     viewer.viewer.addSelectionChangedListener( aEvent -> {
@@ -142,23 +146,28 @@ public class PanelActorPropertyResolverConfig
         // ICompoundResolverConfig cfg = node.resolverConfig();
         ISkCoreApi coreApi = SkGuiUtils.getCoreApi( tsContext() );
         ISkClassInfo clsInfo = coreApi.sysdescr().findClassInfo( node.classId() );
-        if( environ().ugwiKingId.equals( UgwiKindSkAttr.KIND_ID ) ) {
-          propsViewer.viewer().setInput( clsInfo.attrs().list().toArray() );
-        }
-        if( environ().ugwiKingId.equals( UgwiKindSkRtdata.KIND_ID ) ) {
-          propsViewer.viewer().setInput( clsInfo.rtdata().list().toArray() );
-        }
+        // if( environ().ugwiKingId.equals( UgwiKindSkAttr.KIND_ID ) ) {
+        // propsViewer.viewer().setInput( clsInfo.attrs().list().toArray() );
+        // }
+        // if( environ().ugwiKingId.equals( UgwiKindSkRtdata.KIND_ID ) ) {
+        // propsViewer.viewer().setInput( clsInfo.rtdata().list().toArray() );
+        // }
+        propSelector.setClassInfo( clsInfo );
       }
       else {
-        propsViewer.viewer().setInput( null );
+        propSelector.clear();
+        // propsViewer.viewer().setInput( null );
       }
       fireContentChangeEvent();
     } );
 
-    // Composite bottomComp = new Composite( this, SWT.NONE );
     Composite bottomComp = new Composite( sash, SWT.NONE );
     bottomComp.setLayoutData( BorderLayout.NORTH );
     bottomComp.setLayout( new BorderLayout() );
+
+    propSelector = new PanelSkObjectPropertySelector( environ().ugwiKingId, bottomComp, tsContext(), SWT.NONE );
+    propSelector.addTsSelectionChangeListener( ( aSource, aSelectedItem ) -> fireContentChangeEvent() );
+
     // Composite selectionComp = new Composite( bottomComp, SWT.NONE );
     // selectionComp.setLayoutData( BorderLayout.NORTH );
     // selectionComp.setLayout( new GridLayout( 2, false ) );
@@ -169,12 +178,12 @@ public class PanelActorPropertyResolverConfig
     // Control ctrl = attrsPanel.createControl( bottomComp );
     // ctrl.setLayoutData( BorderLayout.CENTER );
 
-    int style = SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.H_SCROLL;
-    propsViewer = new StridableTableViewer( bottomComp, style, 80, 200, -1 );
-    propsViewer.viewer().getControl().setLayoutData( BorderLayout.CENTER );
-    propsViewer.viewer().addSelectionChangedListener( aEvent -> fireContentChangeEvent() );
+    // int style = SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.H_SCROLL;
+    // propsViewer = new StridableTableViewer( bottomComp, style, 80, 200, -1 );
+    // propsViewer.viewer().getControl().setLayoutData( BorderLayout.CENTER );
+    // propsViewer.viewer().addSelectionChangedListener( aEvent -> fireContentChangeEvent() );
 
-    sash.setWeights( 60, 40 );
+    sash.setWeights( 40, 60 );
 
   }
 
