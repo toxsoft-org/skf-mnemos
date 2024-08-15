@@ -71,21 +71,6 @@ public class DirectRtDataResolver
   // Static methods
   //
 
-  // /**
-  // * Возвращает конфигурацию для {@link DirectRtDataResolver}.
-  // *
-  // * @param aGwid Gwid - Gwid объекта м.б. абстрактным
-  // * @return {@link ICompoundResolverConfig} - конфигурацию для {@link DirectRtDataResolver}
-  // */
-  // public static ICompoundResolverConfig createResolverConfig( Gwid aGwid ) {
-  // IOptionSetEdit opSet = new OptionSet();
-  // opSet.setValobj( PROPID_GWID, aGwid );
-  // SimpleResolverCfg simpleCfg = new SimpleResolverCfg( FACTORY_ID, opSet );
-  // IList<SimpleResolverCfg> simpleConfigs = new ElemArrayList<>( simpleCfg );
-  // CompoundResolverConfig cfg = new CompoundResolverConfig( simpleConfigs );
-  // return cfg;
-  // }
-
   /**
    * Возвращает конфигурацию для {@link DirectRtDataResolver}.
    *

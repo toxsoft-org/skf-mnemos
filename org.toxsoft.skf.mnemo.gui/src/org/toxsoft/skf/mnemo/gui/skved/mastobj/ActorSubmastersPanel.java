@@ -123,7 +123,7 @@ public class ActorSubmastersPanel
     viewer.getTable().setLinesVisible( true );
 
     TableViewerColumn nameColumn = new TableViewerColumn( viewer, SWT.NONE );
-    nameColumn.getColumn().setText( "Название свойства" );
+    nameColumn.getColumn().setText( "Тип свойства" );
     nameColumn.getColumn().setWidth( 150 );
     nameColumn.setLabelProvider( new CellLabelProvider() {
 
@@ -136,7 +136,7 @@ public class ActorSubmastersPanel
     } );
 
     TableViewerColumn dataColumn = new TableViewerColumn( viewer, SWT.NONE );
-    dataColumn.getColumn().setText( "Данное" );
+    dataColumn.getColumn().setText( "Значение свойства" );
     dataColumn.getColumn().setWidth( 230 );
     dataColumn.setLabelProvider( new CellLabelProvider() {
 

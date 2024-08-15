@@ -43,8 +43,9 @@ public class PanelSkObjectPropertySelector
     ugwiKindId = aUgwiKind;
     setData( AWTLayout.KEY_PREFERRED_SIZE, new Dimension( 400, 600 ) );
     m5Panel = switch( ugwiKindId ) {
-      case UgwiKindSkRtdata.KIND_ID -> SkGuiUtils.getClassPorpertySelectionPanel( ESkClassPropKind.RTDATA, aContext );
       case UgwiKindSkAttr.KIND_ID -> SkGuiUtils.getClassPorpertySelectionPanel( ESkClassPropKind.ATTR, aContext );
+      case UgwiKindSkRtdata.KIND_ID -> SkGuiUtils.getClassPorpertySelectionPanel( ESkClassPropKind.RTDATA, aContext );
+      case UgwiKindSkCmd.KIND_ID -> SkGuiUtils.getClassPorpertySelectionPanel( ESkClassPropKind.CMD, aContext );
       default -> throw new TsNotAllEnumsUsedRtException();
     };
     if( m5Panel != null ) {

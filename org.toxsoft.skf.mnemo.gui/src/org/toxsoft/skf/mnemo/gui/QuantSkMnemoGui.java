@@ -63,6 +63,7 @@ public class QuantSkMnemoGui
     actFact.register( SkActorRtdataValue.FACTORY );
     actFact.register( SkActorRtBooleanValue.FACTORY );
     actFact.register( SkActorCmdButton.FACTORY );
+    actFact.register( SkActorCmdCheckbox.FACTORY );
     actFact.register( SkActorColorDecorator.FACTORY );
     actFact.register( SkActorRtdataImage.FACTORY );
     actFact.register( SkActorInputField.FACTORY );
@@ -105,6 +106,7 @@ public class QuantSkMnemoGui
     resolversRegistry.register( DirectAttrResolver.FACTORY );
     resolversRegistry.register( DirectRriAttrResolver.FACTORY );
     resolversRegistry.register( DirectRtDataResolver.FACTORY );
+    resolversRegistry.register( DirectCmdResolver.FACTORY );
     resolversRegistry.register( LinkInfoResolver.FACTORY );
     resolversRegistry.register( RivetInfoResolver.FACTORY );
   }

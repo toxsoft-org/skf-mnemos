@@ -97,7 +97,7 @@ public class PanelActorPropertyResolverConfig
     }
     if( environ().ugwiKingId.equals( UgwiKindSkRtdata.KIND_ID ) ) {
       String dataId = UgwiKindSkRtDataInfo.getRtDataId( ugwi );
-      propCfg = DirectAttrResolver.createResolverConfig( classId, dataId );
+      propCfg = DirectRtDataResolver.createResolverConfig( classId, dataId );
     }
     if( environ().ugwiKingId.equals( UgwiKindSkCmd.KIND_ID ) ) {
       String cmdId = UgwiKindSkCmdInfo.getCmdId( ugwi );

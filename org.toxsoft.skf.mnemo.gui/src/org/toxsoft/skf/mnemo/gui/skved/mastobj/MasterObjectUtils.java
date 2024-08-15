@@ -150,14 +150,19 @@ public class MasterObjectUtils {
     }
     if( simpleCfg.params().hasKey( PROPID_UGWI ) ) {
       Ugwi ugwi = simpleCfg.params().getValobj( PROPID_UGWI );
-      switch( ugwi.kindId() ) {
-        case UgwiKindSkAttrInfo.KIND_ID:
-          return UgwiKindSkAttrInfo.getClassId( ugwi );
-        case UgwiKindSkAttr.KIND_ID:
-          return UgwiKindSkAttr.getClassId( ugwi );
-        default:
-          break;
-      }
+      return switch( ugwi.kindId() ) {
+        case UgwiKindSkAttrInfo.KIND_ID -> UgwiKindSkAttrInfo.getClassId( ugwi );
+        case UgwiKindSkAttr.KIND_ID -> UgwiKindSkAttr.getClassId( ugwi );
+        default -> throw new TsNotAllEnumsUsedRtException();
+      };
+    }
+    if( simpleCfg.params().hasKey( PROPID_CMD_UGWI ) ) {
+      Ugwi ugwi = simpleCfg.params().getValobj( PROPID_CMD_UGWI );
+      return switch( ugwi.kindId() ) {
+        case UgwiKindSkCmdInfo.KIND_ID -> UgwiKindSkCmdInfo.getClassId( ugwi );
+        case UgwiKindSkCmd.KIND_ID -> UgwiKindSkCmd.getClassId( ugwi );
+        default -> throw new TsNotAllEnumsUsedRtException();
+      };
     }
     return TsLibUtils.EMPTY_STRING;
   }
@@ -189,6 +194,17 @@ public class MasterObjectUtils {
           return UgwiKindSkAttrInfo.getAttrId( ugwi );
         case UgwiKindSkAttr.KIND_ID:
           return UgwiKindSkAttr.getAttrId( ugwi );
+        default:
+          break;
+      }
+    }
+    if( simpleCfg.params().hasKey( PROPID_CMD_UGWI ) ) {
+      Ugwi ugwi = simpleCfg.params().getValobj( PROPID_CMD_UGWI );
+      switch( ugwi.kindId() ) {
+        case UgwiKindSkCmdInfo.KIND_ID:
+          return UgwiKindSkCmdInfo.getCmdId( ugwi );
+        case UgwiKindSkCmd.KIND_ID:
+          return UgwiKindSkCmd.getCmdId( ugwi );
         default:
           break;
       }
