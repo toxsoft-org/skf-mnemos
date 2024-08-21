@@ -7,10 +7,16 @@ import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.panels.*;
+import org.toxsoft.core.tslib.bricks.events.change.*;
 import org.toxsoft.skf.rri.lib.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
+/**
+ * Панель выбора НСИ секции.
+ *
+ * @author vs
+ */
 public class RriSectionSelector
     extends TsPanel {
 
@@ -21,6 +27,15 @@ public class RriSectionSelector
   private Text   fldSectionId;
   private Button btnBrowseSection;
 
+  private final GenericChangeEventer eventer;
+
+  /**
+   * Constructor.
+   *
+   * @param aParent {@link Composite} - родительская панель
+   * @param aRriSectionId String - ИД НСИ секции
+   * @param aContext {@link ITsGuiContext} - соответствующий контекст
+   */
   public RriSectionSelector( Composite aParent, String aRriSectionId, ITsGuiContext aContext ) {
     super( aParent, aContext );
     coreApi = aContext.get( ISkConnectionSupplier.class ).defConn().coreApi();
@@ -30,6 +45,16 @@ public class RriSectionSelector
       fldSectionId.setText( aRriSectionId );
       rriSection = rriServ.findSection( aRriSectionId );
     }
+    eventer = new GenericChangeEventer( this );
+  }
+
+  /**
+   * Возвращает НСИ секцию или <code>null</code> если секция не выбрана.
+   *
+   * @return {@link ISkRriSection} - НСИ секция или <code>null</code> если секция не выбрана
+   */
+  public ISkRriSection rriSection() {
+    return rriSection;
   }
 
   /**
@@ -56,7 +81,7 @@ public class RriSectionSelector
     fldSectionId.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
 
     btnBrowseSection = new Button( aParent, SWT.PUSH );
-    btnBrowseSection.setText( "..." );
+    btnBrowseSection.setText( "..." ); //$NON-NLS-1$
     btnBrowseSection.addSelectionListener( new SelectionAdapter() {
 
       @Override
@@ -65,9 +90,19 @@ public class RriSectionSelector
         if( sectionId != null ) {
           fldSectionId.setText( sectionId );
           rriSection = rriServ.findSection( sectionId );
+          eventer.fireChangeEvent();
         }
       }
     } );
+  }
+
+  /**
+   * Возвращает помощник для работы с событиями типа {@link IGenericChangeEventer}.
+   *
+   * @return {@link IGenericChangeEventer} - помощник для работы с событиями типа {@link IGenericChangeEventer}
+   */
+  public IGenericChangeEventer eventer() {
+    return eventer;
   }
 
 }

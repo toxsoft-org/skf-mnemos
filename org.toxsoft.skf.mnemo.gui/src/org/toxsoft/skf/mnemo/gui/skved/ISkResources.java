@@ -114,4 +114,11 @@ interface ISkResources {
   String STR_CLMN_NAME  = "Наименование";
   String STR_CLMN_DESCR = "Описание";
 
+  /**
+   * {@link SkActorCmdCheckbox}
+   */
+  String STR_N_CMD_ON        = "Команда (on)";
+  String STR_N_CMD_OFF       = "Команда (off)";
+  String STR_N_VALUE         = "Значение";
+  String STR_N_INVERSE_VALUE = "Инвертировать значение";
 }

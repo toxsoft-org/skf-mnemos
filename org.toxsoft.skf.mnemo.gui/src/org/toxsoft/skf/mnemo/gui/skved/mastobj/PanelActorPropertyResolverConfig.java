@@ -23,6 +23,7 @@ import org.toxsoft.skf.mnemo.gui.skved.mastobj.PanelActorPropertyResolverConfig.
 import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.table.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
+import org.toxsoft.skf.rri.lib.ugwi.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
@@ -102,6 +103,9 @@ public class PanelActorPropertyResolverConfig
     if( environ().ugwiKingId.equals( UgwiKindSkCmd.KIND_ID ) ) {
       String cmdId = UgwiKindSkCmdInfo.getCmdId( ugwi );
       propCfg = DirectCmdResolver.createResolverConfig( classId, cmdId );
+    }
+    if( environ().ugwiKingId.equals( UgwiKindRriAttr.KIND_ID ) ) {
+      propCfg = DirectRriAttrResolver.createResolverConfig( ugwi );
     }
     IListEdit<SimpleResolverCfg> configs = new ElemArrayList<>( cfg.left().cfgs() );
     configs.add( propCfg );

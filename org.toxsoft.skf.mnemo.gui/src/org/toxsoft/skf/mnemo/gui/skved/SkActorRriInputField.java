@@ -19,8 +19,12 @@ import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.gw.skid.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.*;
+import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.rri.lib.*;
+import org.toxsoft.skf.rri.lib.ugwi.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.utils.*;
@@ -69,11 +73,9 @@ public class SkActorRriInputField
 
   };
 
+  private Ugwi   ugwi   = null;
   private String oldStr = TsLibUtils.EMPTY_STRING;
-  private RriId  rriId  = null;
   private String fmtStr = null;
-
-  private IGwidList sourceGwidList = IGwidList.EMPTY;
 
   private IAtomicValue lastValue = IAtomicValue.NULL;
 
@@ -90,24 +92,27 @@ public class SkActorRriInputField
 
   @Override
   protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
-    if( aChangedValues.hasKey( PROPID_RRI_ID ) ) {
-      rriId = props().getValobj( PROP_RRI_ID );
-      ISkRegRefInfoService rriServ = coreApi().getService( ISkRegRefInfoService.SERVICE_ID );
-      if( rriId != null ) {
-        section = rriServ.findSection( rriId.sectionId() );
+    if( aChangedValues.hasKey( TFI_RRI_ATTR_UGWI.id() ) ) {
+      IAtomicValue av = aChangedValues.getValue( TFI_RRI_ATTR_UGWI.id() );
+      if( av.isAssigned() ) {
+        ugwi = av.asValobj();
+        String sectId = UgwiKindRriAttr.getSectionId( ugwi );
+        section = ((ISkRegRefInfoService)coreApi().getService( ISkRegRefInfoService.SERVICE_ID )).findSection( sectId );
       }
     }
-    if( aChangedValues.hasKey( PROPID_FORMAT_STRING ) ) {
-      fmtStr = props().getStr( PROP_FORMAT_STRING );
+    if( aChangedValues.hasKey( TFI_FORMAT_STRING.id() ) ) {
+      fmtStr = props().getStr( TFI_FORMAT_STRING.id() );
       if( fmtStr.isBlank() ) {
         fmtStr = null;
-        ISkClassInfo classInfo = skSysdescr().findClassInfo( rriId.gwid().classId() );
-        if( classInfo != null ) {
-          IDtoAttrInfo attrInfo = classInfo.attrs().list().findByKey( rriId.gwid().propId() );
-          if( attrInfo != null ) {
-            IAtomicValue avFmtStr = SkHelperUtils.getConstraint( attrInfo, TSID_FORMAT_STRING );
-            if( avFmtStr != null ) {
-              fmtStr = avFmtStr.asString();
+        if( ugwi != null && ugwi != Ugwi.NONE ) {
+          ISkClassInfo classInfo = skSysdescr().findClassInfo( UgwiKindRriAttrInfo.getClassId( ugwi ) );
+          if( classInfo != null ) {
+            IDtoAttrInfo attrInfo = classInfo.attrs().list().findByKey( UgwiKindRriAttrInfo.getAttrId( ugwi ) );
+            if( attrInfo != null ) {
+              IAtomicValue avFmtStr = SkHelperUtils.getConstraint( attrInfo, TSID_FORMAT_STRING );
+              if( avFmtStr != null ) {
+                fmtStr = avFmtStr.asString();
+              }
             }
           }
         }
@@ -124,7 +129,7 @@ public class SkActorRriInputField
 
   @Override
   protected IGwidList doListUsedGwids() {
-    return sourceGwidList;
+    return IGwidList.EMPTY;
   }
 
   // ------------------------------------------------------------------------------------
@@ -167,11 +172,20 @@ public class SkActorRriInputField
   //
 
   IAtomicValue getRriAttrValue() {
-    return section.getAttrParamValue( rriId.gwid().skid(), rriId.gwid().propId() );
+    if( ugwi == null || ugwi == Ugwi.NONE ) {
+      return IAtomicValue.NULL;
+    }
+    return section.getAttrParamValue( UgwiKindRriAttr.getSkid( ugwi ), UgwiKindRriAttr.getAttrId( ugwi ) );
   }
 
   void setRriAttrValue( String aText ) {
-    IAtomicValue value = section.getAttrParamValue( rriId.gwid().skid(), rriId.gwid().propId() );
+    if( ugwi == null || ugwi == Ugwi.NONE ) {
+      LoggerUtils.errorLogger().error( "Attempt to set RRI attribute for null or NONE Ugwi" ); //$NON-NLS-1$
+      return;
+    }
+    Skid skid = UgwiKindRriAttr.getSkid( ugwi );
+    String attrId = UgwiKindRriAttr.getAttrId( ugwi );
+    IAtomicValue value = section.getAttrParamValue( skid, attrId );
     switch( value.atomicType() ) {
       case BOOLEAN:
         Boolean bv = Boolean.valueOf( Boolean.parseBoolean( aText ) );
@@ -195,7 +209,7 @@ public class SkActorRriInputField
       default:
         throw new IllegalArgumentException( "Unexpected value: " + value.atomicType() ); //$NON-NLS-1$
     }
-    section.setAttrParamValue( rriId.gwid().skid(), rriId.gwid().propId(), value, TsLibUtils.EMPTY_STRING );
+    section.setAttrParamValue( skid, attrId, value, TsLibUtils.EMPTY_STRING );
   }
 
 }

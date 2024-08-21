@@ -86,21 +86,14 @@ public class SkActorAttrText
   @Override
   protected void doInterceptPropsChange( IOptionSet aNewValues, IOptionSetEdit aValuesToSet ) {
     // check and don't allow to set invalid UGWI
-    removeWrongUgwi( PROPID_ATTR_UGWI, UgwiKindSkAttr.KIND_ID, aValuesToSet, coreApi() );
+    removeWrongUgwi( TFI_ATTR_UGWI.id(), UgwiKindSkAttr.KIND_ID, aValuesToSet, coreApi() );
   }
 
   @Override
   protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
     try {
-      if( aChangedValues.hasKey( PROPID_ATTR_UGWI ) ) {
-        IAtomicValue v = props().getValue( PROPID_ATTR_UGWI );
-        if( v.isAssigned() ) {
-          ugwi = v.asValobj();
-          ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
-        }
-      }
-      if( aChangedValues.hasKey( PROPID_ATTR_UGWI ) ) {
-        IAtomicValue av = aChangedValues.getValue( PROPID_ATTR_UGWI );
+      if( aChangedValues.hasKey( TFI_ATTR_UGWI.id() ) ) {
+        IAtomicValue av = aChangedValues.getValue( TFI_ATTR_UGWI.id() );
         if( av.isAssigned() ) {
           ugwi = av.asValobj();
           if( ugwi != null && ugwi != Ugwi.NONE ) {
@@ -111,8 +104,8 @@ public class SkActorAttrText
           }
         }
       }
-      if( aChangedValues.hasKey( PROPID_FORMAT_STRING ) ) {
-        fmtStr = props().getStr( PROP_FORMAT_STRING );
+      if( aChangedValues.hasKey( TFI_FORMAT_STRING.id() ) ) {
+        fmtStr = props().getStr( TFI_FORMAT_STRING.id() );
         if( fmtStr.isBlank() && ugwi != null && ugwi != Ugwi.NONE ) {
           fmtStr = null;
           ISkClassInfo classInfo = skSysdescr().findClassInfo( UgwiKindSkAttr.getClassId( ugwi ) );

@@ -71,7 +71,7 @@ public class SkActorRtdataImage
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_VISEL_PROP_ID );
-      fields.add( TFI_RTD_GWID );
+      fields.add( TFI_RTD_UGWI );
       fields.add( TFI_IMAGE_SET );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRtdataImage.class );
     }

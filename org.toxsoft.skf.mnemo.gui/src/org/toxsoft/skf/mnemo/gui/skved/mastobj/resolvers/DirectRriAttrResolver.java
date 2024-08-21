@@ -79,6 +79,18 @@ public class DirectRriAttrResolver
   /**
    * Возвращает конфигурацию для {@link DirectRriAttrResolver}.
    *
+   * @param aUgwi Ugwi - ugwi типа {@link UgwiKindRriAttrInfo} или {@link UgwiKindRriAttr}
+   * @return {@link SimpleResolverCfg} - конфигурацию для {@link DirectRriAttrResolver}
+   */
+  public static SimpleResolverCfg createResolverConfig( Ugwi aUgwi ) {
+    IOptionSetEdit opSet = new OptionSet();
+    opSet.setValobj( PROPID_UGWI, aUgwi );
+    return new SimpleResolverCfg( FACTORY_ID, opSet );
+  }
+
+  /**
+   * Возвращает конфигурацию для {@link DirectRriAttrResolver}.
+   *
    * @param aGwid Gwid - Gwid объекта м.б. абстрактным
    * @return {@link ICompoundResolverConfig} - конфигурацию для {@link DirectRriAttrResolver}
    */

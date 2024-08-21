@@ -125,7 +125,9 @@ public interface ISkVedConstants {
   String PROPID_CMD_UGWI      = SKVED_ID + ".prop.CmdUgwi";     //$NON-NLS-1$
 
   IDataDef PROP_UGWI = DataDef.create( PROPID_UGWI, VALOBJ, //
-      TSID_KEEPER_ID, Ugwi.KEEPER_ID //
+      TSID_KEEPER_ID, Ugwi.KEEPER_ID, //
+      OPDEF_EDITOR_FACTORY_NAME, ValedAvUgwiSelector.FACTORY_NAME, //
+      TSID_DEFAULT_VALUE, IAtomicValue.NULL //
   );
 
   IDataDef PROP_ATTR_UGWI = DataDef.create( PROPID_ATTR_UGWI, VALOBJ, //

@@ -2,7 +2,7 @@ package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 
 import java.awt.*;
 
-import org.eclipse.swt.layout.*;
+import org.eclipse.swt.widgets.*;
 import org.eclipse.swt.widgets.Composite;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.bricks.stdevents.*;
@@ -10,11 +10,15 @@ import org.toxsoft.core.tsgui.m5.gui.panels.*;
 import org.toxsoft.core.tsgui.m5.model.impl.*;
 import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
+import org.toxsoft.core.tsgui.utils.layout.BorderLayout;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
+import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
+import org.toxsoft.skf.rri.lib.*;
+import org.toxsoft.skf.rri.lib.ugwi.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
@@ -37,21 +41,34 @@ public class PanelSkObjectPropertySelector
 
   private ISkClassInfo classInfo = null;
 
+  private RriSectionSelector rriSectionSelector;
+  private ISkRriSection      rriSection = null;
+
   public PanelSkObjectPropertySelector( String aUgwiKind, Composite aParent, ITsGuiContext aContext, int aStyle ) {
     super( aParent, aContext, aStyle );
-    setLayout( new FillLayout() );
+    setLayout( new BorderLayout() );
     ugwiKindId = aUgwiKind;
     setData( AWTLayout.KEY_PREFERRED_SIZE, new Dimension( 400, 600 ) );
     m5Panel = switch( ugwiKindId ) {
       case UgwiKindSkAttr.KIND_ID -> SkGuiUtils.getClassPorpertySelectionPanel( ESkClassPropKind.ATTR, aContext );
       case UgwiKindSkRtdata.KIND_ID -> SkGuiUtils.getClassPorpertySelectionPanel( ESkClassPropKind.RTDATA, aContext );
       case UgwiKindSkCmd.KIND_ID -> SkGuiUtils.getClassPorpertySelectionPanel( ESkClassPropKind.CMD, aContext );
+      case UgwiKindRriAttr.KIND_ID -> SkGuiUtils.getRriAttrSelectionPanel( aContext );
       default -> throw new TsNotAllEnumsUsedRtException();
     };
     if( m5Panel != null ) {
       propItemsProvider.items().setAll( IStridablesList.EMPTY );
       m5Panel.setItemsProvider( propItemsProvider );
-      m5Panel.createControl( this );
+      Control ctrl = m5Panel.createControl( this );
+      ctrl.setLayoutData( BorderLayout.CENTER );
+    }
+    if( ugwiKindId.equals( UgwiKindRriAttr.KIND_ID ) ) {
+      rriSectionSelector = new RriSectionSelector( this, TsLibUtils.EMPTY_STRING, aContext );
+      rriSectionSelector.setLayoutData( BorderLayout.NORTH );
+      rriSectionSelector.eventer().addListener( aSource -> {
+        rriSection = rriSectionSelector.rriSection();
+        refreshRriAttrsPanel();
+      } );
     }
   }
 
@@ -75,6 +92,10 @@ public class PanelSkObjectPropertySelector
         propItemsProvider.items().addAll( aClassInfo.props( ESkClassPropKind.CMD ).list() );
         break;
       }
+      case UgwiKindRriAttr.KIND_ID: {
+        refreshRriAttrsPanel();
+        break;
+      }
       default:
         throw new TsNotAllEnumsUsedRtException( ugwiKindId );
     }
@@ -94,6 +115,11 @@ public class PanelSkObjectPropertySelector
     if( m5Panel != null ) {
       IDtoClassPropInfoBase propInfo = m5Panel.selectedItem();
       if( propInfo != null ) {
+        if( ugwiKindId.equals( UgwiKindRriAttr.KIND_ID ) ) {
+          if( rriSection != null ) {
+            return UgwiKindRriAttrInfo.makeUgwi( rriSection.id(), classInfo.id(), propInfo.id() );
+          }
+        }
         return switch( propInfo.kind() ) {
           case ATTR -> UgwiKindSkAttrInfo.makeUgwi( classInfo.id(), propInfo.id() );
           case RTDATA -> UgwiKindSkRtDataInfo.makeUgwi( classInfo.id(), propInfo.id() );
@@ -122,5 +148,22 @@ public class PanelSkObjectPropertySelector
   // int style = SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.H_SCROLL;
   // attrsViewer = new StridableTableViewer( aParent, style, 80, 200, -1 );
   // }
+
+  // ------------------------------------------------------------------------------------
+  // Implementation
+  //
+
+  void refreshRriAttrsPanel() {
+    if( classInfo != null ) {
+      rriSection = rriSectionSelector.rriSection();
+      IStridablesList<IDtoRriParamInfo> paramInfoes = rriSection.listParamInfoes( classInfo.id() );
+      for( IDtoRriParamInfo pi : paramInfoes ) {
+        if( !pi.isLink() ) {
+          propItemsProvider.items().add( pi.attrInfo() );
+        }
+      }
+      m5Panel.refresh();
+    }
+  }
 
 }

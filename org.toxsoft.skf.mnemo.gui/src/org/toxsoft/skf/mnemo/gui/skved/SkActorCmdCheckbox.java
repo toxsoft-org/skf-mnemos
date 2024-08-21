@@ -46,17 +46,26 @@ public class SkActorCmdCheckbox
    */
   public static final String FACTORY_ID = SKVED_ID + ".actor.CmdCheckbox"; //$NON-NLS-1$
 
-  public static final ITinFieldInfo TFI_CHECK_CMD_UGWI = new TinFieldInfo( "cmdCheck", TTI_CMD_UGWI, //
-      TSID_NAME, "Команда (on)" );
+  /**
+   * ИД команды перевода в состояние "On"
+   */
+  public static final ITinFieldInfo TFI_CHECK_CMD_UGWI = new TinFieldInfo( "cmdCheck", TTI_CMD_UGWI, // //$NON-NLS-1$
+      TSID_NAME, STR_N_CMD_ON );
 
-  public static final ITinFieldInfo TFI_UNCHECK_CMD_UGWI = new TinFieldInfo( "cmdUncheck", TTI_CMD_UGWI, //
-      TSID_NAME, "Команда (off)" );
+  /**
+   * ИД команды перевода в состояние "Off"
+   */
+  public static final ITinFieldInfo TFI_UNCHECK_CMD_UGWI = new TinFieldInfo( "cmdUncheck", TTI_CMD_UGWI, // //$NON-NLS-1$
+      TSID_NAME, STR_N_CMD_OFF );
 
-  public static final ITinFieldInfo TFI_INVERSE_VALUE = new TinFieldInfo( "inverseValue", TTI_AT_BOOLEAN, //
-      TSID_NAME, "Инвертировать значение" );
+  /**
+   * ИД свойства "Инвертировать значение"
+   */
+  public static final ITinFieldInfo TFI_INVERSE_VALUE = new TinFieldInfo( "inverseValue", TTI_AT_BOOLEAN, // //$NON-NLS-1$
+      TSID_NAME, STR_N_INVERSE_VALUE );
 
   public static final ITinFieldInfo TFI_VALUE = TinFieldInfo.makeCopy( TFI_RTD_UGWI, //
-      TSID_NAME, "Значение" );
+      TSID_NAME, STR_N_VALUE );
 
   static final String PROPID_INVERSE_BOOLEAN = "inverse.boolean"; //$NON-NLS-1$
 

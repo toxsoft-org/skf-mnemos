@@ -66,9 +66,6 @@ public class SkGuiUtils {
     IM5Model<ISkClassInfo> model = m5.getModel( ISgwM5Constants.MID_SGW_CLASS_INFO, ISkClassInfo.class );
     IM5LifecycleManager<ISkClassInfo> lm = model.getLifecycleManager( conn );
 
-    // IM5CollectionPanel<ISkClassInfo> panel;
-    // panel = model.panelCreator().createCollViewerPanel( aTsContext, lm.itemsProvider() );
-
     ITsDialogInfo dlgInfo;
     dlgInfo = new TsDialogInfo( aTsContext, "Выбор класса", "Выберите соответствующий класс и нажмите \"ОК\"" );
     return M5GuiUtils.askSelectItem( dlgInfo, model, aSelectedClass, lm.itemsProvider(), null );
@@ -108,6 +105,21 @@ public class SkGuiUtils {
     // тут получаем KM5 модель ISkClassInfo
     IM5Domain m5 = conn.scope().get( IM5Domain.class );
     String propModelId = sgwGetClassPropModelId( aPropKind );
+    IM5Model<IDtoClassPropInfoBase> modelProps = m5.getModel( propModelId, IDtoClassPropInfoBase.class );
+    return modelProps.panelCreator().createCollViewerPanel( aTsContext, IM5ItemsProvider.EMPTY );
+  }
+
+  /**
+   * Возвращает панель для выбора НСИ атрибута.<br>
+   *
+   * @param aTsContext {@link ITsGuiContext} - соответствующий контекст
+   * @return IM5CollectionPanel&lt;IDtoClassPropInfoBase> - панель выбора НСИ атибута
+   */
+  public static IM5CollectionPanel<IDtoClassPropInfoBase> getRriAttrSelectionPanel( ITsGuiContext aTsContext ) {
+    ISkConnection conn = getConnection( aTsContext );
+    // тут получаем KM5 модель ISkClassInfo
+    IM5Domain m5 = conn.scope().get( IM5Domain.class );
+    String propModelId = sgwGetClassPropModelId( ESkClassPropKind.ATTR );
     IM5Model<IDtoClassPropInfoBase> modelProps = m5.getModel( propModelId, IDtoClassPropInfoBase.class );
     return modelProps.panelCreator().createCollViewerPanel( aTsContext, IM5ItemsProvider.EMPTY );
   }
