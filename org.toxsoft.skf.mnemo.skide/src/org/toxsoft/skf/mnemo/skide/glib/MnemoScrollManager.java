@@ -17,7 +17,7 @@ import org.toxsoft.core.tslib.bricks.geometry.impl.*;
  */
 public class MnemoScrollManager {
 
-  private final IViewportCalculator vpCalc = new ViewportCalculator( new CalculationStrategySettings( //
+  private final IViewportCalculator vpCalc = ViewportCalculator.create( new CalculationStrategySettings( //
       ETsFulcrum.LEFT_TOP, //
       EVpFulcrumUsageStartegy.INSIDE, //
       // EVpBoundingStrategy.NONE, //
