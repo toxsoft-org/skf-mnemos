@@ -19,4 +19,7 @@ public interface ISkidePluginMnemoSharedResources {
 
   String STR_ASK_ACCEPT_MNEMO_CORRECTIONS = Messages.getString( "STR_ASK_ACCEPT_MNEMO_CORRECTIONS" ); //$NON-NLS-1$
 
+  String STR_CLEAR_MNEMOS_BEFORE_UPLOAD   = Messages.getString( "STR_CLEAR_MNEMOS_BEFORE_UPLOAD" );   //$NON-NLS-1$
+  String STR_CLEAR_MNEMOS_BEFORE_UPLOAD_D = Messages.getString( "STR_CLEAR_MNEMOS_BEFORE_UPLOAD_D" ); //$NON-NLS-1$
+
 }
