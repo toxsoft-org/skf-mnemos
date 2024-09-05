@@ -1,11 +1,19 @@
 package org.toxsoft.skf.mnemo.skide.tasks.upload;
 
+import static org.toxsoft.core.tslib.av.EAtomicType.*;
+import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
+import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.core.tslib.bricks.gentask.IGenericTaskConstants.*;
 import static org.toxsoft.skf.mnemo.skide.ISkidePluginMnemoSharedResources.*;
+import static org.toxsoft.skide.core.ISkideCoreConstants.*;
 
+import org.toxsoft.core.tslib.av.impl.*;
+import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.bricks.ctx.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.bricks.validator.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.lib.*;
@@ -23,6 +31,14 @@ import org.toxsoft.uskat.core.connection.*;
 public class TaskMnemosUpload
     extends AbstractSkideUnitTaskSync {
 
+  static final String OPID_CLEAR_MNEMOS_BEFORE_UPLOAD = SKIDE_FULL_ID + ".ClearMnemosBeforeUpload"; //$NON-NLS-1$
+
+  static final IDataDef OPDEF_CLEAR_MNEMOS_BEFORE_UPLOAD = DataDef.create( OPID_CLEAR_MNEMOS_BEFORE_UPLOAD, BOOLEAN, //
+      TSID_NAME, STR_CLEAR_MNEMOS_BEFORE_UPLOAD, //
+      TSID_DESCRIPTION, STR_CLEAR_MNEMOS_BEFORE_UPLOAD_D, //
+      TSID_DEFAULT_VALUE, AV_FALSE //
+  );
+
   /**
    * Constructor.
    *
@@ -30,7 +46,11 @@ public class TaskMnemosUpload
    * @throws TsNullArgumentRtException any argument = <code>null</code>
    */
   public TaskMnemosUpload( AbstractSkideUnit aOwnerUnit ) {
-    super( aOwnerUnit, UploadToServerTaskProcessor.INSTANCE.taskInfo(), IStridablesList.EMPTY );
+    super( aOwnerUnit, UploadToServerTaskProcessor.INSTANCE.taskInfo(),
+        // configuration options
+        new StridablesList<>( //
+            OPDEF_CLEAR_MNEMOS_BEFORE_UPLOAD //
+        ) );
   }
 
   // ------------------------------------------------------------------------------------
@@ -48,6 +68,14 @@ public class TaskMnemosUpload
     ISkMnemosService srcMnemosService = coreApi().getService( ISkMnemosService.SERVICE_ID );
     ISkConnection destConn = UploadToServerTaskProcessor.REFDEF_IN_OPEN_SK_CONN.getRef( aInput );
     ISkMnemosService destMnemosService = destConn.coreApi().getService( ISkMnemosService.SERVICE_ID );
+    // if configured, remove all mnemos from server
+    if( OPDEF_CLEAR_MNEMOS_BEFORE_UPLOAD.getValue( getCfgOptionValues() ).asBool() ) {
+      IStringList mnemoIds = destMnemosService.listMnemosIds();
+      for( String mid : mnemoIds ) {
+        destMnemosService.removeMnemo( mid );
+      }
+    }
+    // upload mnemos from SkIDE
     IStridablesList<ISkMnemoCfg> srcMnemosList = srcMnemosService.listMnemosCfgs();
     for( ISkMnemoCfg srcMnemo : srcMnemosList ) {
       ISkMnemoCfg destMnemo = destMnemosService.findMnemo( srcMnemo.strid() );
