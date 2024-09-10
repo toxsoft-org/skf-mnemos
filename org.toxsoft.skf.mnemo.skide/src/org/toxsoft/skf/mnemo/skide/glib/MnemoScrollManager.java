@@ -4,7 +4,8 @@ import org.eclipse.swt.events.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.graphics.*;
-import org.toxsoft.core.tsgui.graphics.vpcalc.*;
+import org.toxsoft.core.tsgui.graphics.vpcalc2.*;
+import org.toxsoft.core.tsgui.graphics.vpcalc2.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.bricks.geometry.*;
@@ -17,16 +18,18 @@ import org.toxsoft.core.tslib.bricks.geometry.impl.*;
  */
 public class MnemoScrollManager {
 
-  private final IViewportCalculator vpCalc = ViewportCalculator.create( new CalculationStrategySettings( //
-      ETsFulcrum.LEFT_TOP, //
-      EVpFulcrumUsageStartegy.INSIDE, //
-      // EVpBoundingStrategy.NONE, //
-      // EVpBoundingStrategy.CONTENT, //
-      EVpBoundingStrategy.VIEWPORT, //
-      // new TsPoint( 10, 10 ), //
-      new TsPoint( 0, 0 ), //
-      false //
-  ) );
+  private final IVpCalc vpCalc = new VpCalc();
+
+  // private final IViewportCalculator vpCalc = ViewportCalculator.create( new CalculationStrategySettings( //
+  // ETsFulcrum.LEFT_TOP, //
+  // EVpFulcrumUsageStartegy.INSIDE, //
+  // // EVpBoundingStrategy.NONE, //
+  // // EVpBoundingStrategy.CONTENT, //
+  // EVpBoundingStrategy.VIEWPORT, //
+  // // new TsPoint( 10, 10 ), //
+  // new TsPoint( 0, 0 ), //
+  // false //
+  // ) );
 
   private final IVedScreen vedScreen;
 
@@ -42,6 +45,9 @@ public class MnemoScrollManager {
   boolean verPositive = true;
 
   MnemoScrollManager( IVedScreen aVedScreen ) {
+
+    vpCalc.cfg().setFulcrum( ETsFulcrum.LEFT_TOP );
+
     vedScreen = aVedScreen;
     vedView = vedScreen.view();
     canvas = (Canvas)vedView.getControl();
@@ -54,8 +60,12 @@ public class MnemoScrollManager {
       if( r.width > 0 && r.height > 0 ) {
         vpCalc.setViewportBounds( new TsRectangle( r.x, r.y, r.width, r.height ) );
       }
-      vpCalc.queryConversionChange( d2conv );
-      vpCalc.queryToChangeOrigin( 0, 0 );
+      // GOGA vpCalc.queryConversionChange( d2conv );
+      vpCalc.setAngle( d2conv.rotation() );
+      vpCalc.setDesiredZoom( d2conv.zoomFactor() );
+
+      // GOGA vpCalc.queryToChangeOrigin( 0, 0 );
+      vpCalc.setDesiredOrigin( ITsPoint.ZERO );
     } );
 
     hBar = canvas.getHorizontalBar();
@@ -65,7 +75,7 @@ public class MnemoScrollManager {
 
       @Override
       public void widgetSelected( SelectionEvent aE ) {
-        vpCalc.queryToChangeOriginByScrollBars( hBar.getSelection(), vBar.getSelection() );
+        // GOGA FIXME vpCalc.queryToChangeOriginByScrollBars( hBar.getSelection(), vBar.getSelection() );
       }
 
     } );
@@ -75,7 +85,7 @@ public class MnemoScrollManager {
 
       @Override
       public void widgetSelected( SelectionEvent aE ) {
-        vpCalc.queryToChangeOriginByScrollBars( hBar.getSelection(), vBar.getSelection() );
+        // GOGA FIXME vpCalc.queryToChangeOriginByScrollBars( hBar.getSelection(), vBar.getSelection() );
       }
 
     } );
@@ -104,15 +114,20 @@ public class MnemoScrollManager {
   }
 
   public void setOrigin( int aX, int aY ) {
-    vpCalc.queryToChangeOrigin( aX, aY );
+    // GOGA vpCalc.queryToChangeOrigin( aX, aY );
+    vpCalc.setDesiredOrigin( new TsPoint( aX, aY ) );
   }
 
   private void whenCalculatorOutputChanges() {
-    vpCalc.output().horBarSettings().applyTo( hBar );
-    hBar.setSelection( vpCalc.output().horBarSettings().selection() );
-    vpCalc.output().verBarSettings().applyTo( vBar );
+    // GOGA vpCalc.output().horBarSettings().applyTo( hBar );
+    ScrollBarCfg.applyTo( vpCalc.output().horBar(), hBar );
+
+    // GOGA hBar.setSelection( vpCalc.output().horBarSettings().selection() );
+    // GOGA vpCalc.output().verBarSettings().applyTo( vBar );
+    ScrollBarCfg.applyTo( vpCalc.output().verBar(), vBar );
+
     vedView.configChangeEventer().pauseFiring();
-    vedView.setConversion( vpCalc.output().conversion() );
+    vedView.setConversion( vpCalc.output().d2Conv() );
 
     vedView.redraw();
     vedView.configChangeEventer().resumeFiring( false );
