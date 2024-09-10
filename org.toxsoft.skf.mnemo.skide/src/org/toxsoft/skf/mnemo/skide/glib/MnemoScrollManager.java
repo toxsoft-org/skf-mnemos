@@ -6,6 +6,8 @@ import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.graphics.*;
 import org.toxsoft.core.tsgui.graphics.vpcalc2.*;
 import org.toxsoft.core.tsgui.graphics.vpcalc2.impl.*;
+import org.toxsoft.core.tsgui.utils.margins.*;
+import org.toxsoft.core.tsgui.utils.rectfit.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.bricks.geometry.*;
@@ -44,9 +46,13 @@ public class MnemoScrollManager {
   boolean horPositive = true;
   boolean verPositive = true;
 
+  private TsMargins margins = new TsMargins( 8, 8, 8, 8 );
+
   MnemoScrollManager( IVedScreen aVedScreen ) {
 
     vpCalc.cfg().setFulcrum( ETsFulcrum.LEFT_TOP );
+    vpCalc.cfg().setFitMode( ERectFitMode.FIT_NONE );
+    vpCalc.cfg().setBoundingStrategy( EVpBoundingStrategy.CONTENT );
 
     vedScreen = aVedScreen;
     vedView = vedScreen.view();
@@ -55,10 +61,11 @@ public class MnemoScrollManager {
     vedView.configChangeEventer().addListener( aSource -> {
       ID2Point size = vedView.canvasConfig().size();
       ID2Conversion d2conv = vedView.getConversion();
-      vpCalc.setContentSize( new D2Size( size.x(), size.y() ) );
+      vpCalc.setContentSize( new D2Size( Math.max( 1, size.x() ), Math.max( 1, size.y() ) ) );
       Rectangle r = canvas.getClientArea();
       if( r.width > 0 && r.height > 0 ) {
-        vpCalc.setViewportBounds( new TsRectangle( r.x, r.y, r.width, r.height ) );
+        vpCalc.setViewportBounds( new TsRectangle( r.x + margins.left(), r.y + margins.top(),
+            r.width - +margins.left() - margins.right(), r.height - margins.top() - margins.bottom() ) );
       }
       // GOGA vpCalc.queryConversionChange( d2conv );
       vpCalc.setAngle( d2conv.rotation() );

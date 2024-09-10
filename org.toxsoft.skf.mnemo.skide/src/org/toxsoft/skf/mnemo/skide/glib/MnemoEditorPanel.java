@@ -13,7 +13,6 @@ import org.toxsoft.core.tsgui.bricks.actions.asp.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.graphics.icons.*;
-import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tsgui.panels.toolbar.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.ved.editor.*;
@@ -45,14 +44,15 @@ import org.toxsoft.uskat.core.api.objserv.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.gui.conn.*;
+import org.toxsoft.uskat.core.gui.glib.*;
 
 /**
  * The mnemoscheme editor panel.
  *
- * @author hazard157
+ * @author hazard157, vs
  */
 public class MnemoEditorPanel
-    extends TsPanel
+    extends SkPanel
     implements IMnemoEditorPanel {
 
   /**
@@ -107,14 +107,13 @@ public class MnemoEditorPanel
       oldConfig = VedScreenUtils.getVedScreenConfig( vedScreen );
       String masterClassId = MasterObjectUtils.findMainMasterClassId( resolverConfig );
       if( masterClassId != null ) { // у мнемосхемы есть мастер-объект
-        ISkObject masterObj = SkGuiUtils.selectObject( masterClassId, tsContext() );
+        ISkObject masterObj = SkGuiUtils.selectObject( masterClassId, skConn(), tsContext() );
         if( masterObj != null ) {
-          ISkConnection skConn = SkGuiUtils.getConnection( tsContext() );
           ISimpleResolverFactoriesRegistry resRegistry = tsContext().get( ISimpleResolverFactoriesRegistry.class );
-          MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn, resRegistry );
+          MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn(), resRegistry );
           Ugwi ugwi = UgwiKindSkSkid.makeUgwi( masterObj.classId(), masterObj.strid() );
           IVedScreenCfg scrCfg = VedScreenUtils.getVedScreenConfig( vedScreen );
-          IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, scrCfg, skConn );
+          IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, scrCfg, skConn() );
           VedScreenUtils.setVedScreenConfig( vedScreen, newCfg );
         }
       }
@@ -174,7 +173,7 @@ public class MnemoEditorPanel
       for( IVedItem actor : actors ) {
         System.out.println( "Висячий актор: " + actor.id() );
       }
-      actors = MnemoUtils.listWrongUgwiActors( vedScr );
+      actors = MnemoUtils.listWrongUgwiActors( vedScr, coreApi() );
       for( IVedItem actor : actors ) {
         System.out.println( "Wrong UGWI actor: " + actor.id() );
       }
@@ -558,9 +557,8 @@ public class MnemoEditorPanel
 
   @Override
   public void setCurrentConfig( IVedScreenCfg aCfg ) {
-    ISkConnection skConn = SkGuiUtils.getConnection( tsContext() );
     ISimpleResolverFactoriesRegistry resRegistry = tsContext().get( ISimpleResolverFactoriesRegistry.class );
-    MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn, resRegistry );
+    MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn(), resRegistry );
     Ugwi ugwi = UgwiKindSkSkid.makeUgwi( "gbh.TurboCompressor", "turboCompressor1" );
     // IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, aCfg, skConn );
     // VedScreenUtils.setVedScreenConfig( vedScreen, newCfg );

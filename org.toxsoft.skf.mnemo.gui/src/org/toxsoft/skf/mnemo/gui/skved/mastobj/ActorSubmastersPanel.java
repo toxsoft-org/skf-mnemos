@@ -28,9 +28,6 @@ import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.mastobj.PanelActorPropertyResolverConfig.*;
-import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
-import org.toxsoft.uskat.core.*;
-import org.toxsoft.uskat.core.api.ugwis.*;
 
 /**
  * Панель содержащая информацию о значениях свойств актора в зависимости от "мастер-объекта".
@@ -66,9 +63,6 @@ public class ActorSubmastersPanel
 
   private IVedActor actor;
 
-  private final ISkUgwiService ugwiService;
-
-  // private final IVedScreen vedScreen;
   private IVedScreen vedScreen;
 
   SubMastersCombo smCombo;
@@ -186,8 +180,6 @@ public class ActorSubmastersPanel
       }
     } );
 
-    ISkCoreApi coreApi = SkGuiUtils.getCoreApi( tsContext() );
-    ugwiService = coreApi.ugwiService();
   }
 
   // ------------------------------------------------------------------------------------

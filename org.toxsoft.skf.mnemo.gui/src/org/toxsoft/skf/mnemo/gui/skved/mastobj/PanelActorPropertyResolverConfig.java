@@ -22,11 +22,11 @@ import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.skved.mastobj.PanelActorPropertyResolverConfig.*;
 import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.table.*;
-import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
 import org.toxsoft.skf.rri.lib.ugwi.*;
-import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
+import org.toxsoft.uskat.core.connection.*;
+import org.toxsoft.uskat.core.gui.utils.*;
 
 /**
  * Панель создания/редактирования конфигурации составного "разрешителя" {@link Ugwi}.
@@ -35,7 +35,8 @@ import org.toxsoft.uskat.core.api.ugwis.kinds.*;
  * @author vs
  */
 public class PanelActorPropertyResolverConfig
-    extends AbstractTsDialogPanel<ICompoundResolverConfig, PanelContext> {
+    extends AbstractTsDialogPanel<ICompoundResolverConfig, PanelContext>
+    implements ISkGuiContextable {
 
   public static class PanelContext {
 
@@ -127,6 +128,16 @@ public class PanelActorPropertyResolverConfig
   }
 
   // ------------------------------------------------------------------------------------
+  // ISkGuiContextable
+  //
+
+  @Override
+  public ISkConnection skConn() {
+    ISkVedEnvironment vedEnv = environ().vedScreen.tsContext().get( ISkVedEnvironment.class );
+    return vedEnv.skConn();
+  }
+
+  // ------------------------------------------------------------------------------------
   // Implementation
   //
 
@@ -147,20 +158,11 @@ public class PanelActorPropertyResolverConfig
     viewer.viewer.addSelectionChangedListener( aEvent -> {
       IMasterPathNode node = viewer.selectedNode();
       if( node.isObject() ) {
-        // ICompoundResolverConfig cfg = node.resolverConfig();
-        ISkCoreApi coreApi = SkGuiUtils.getCoreApi( tsContext() );
-        ISkClassInfo clsInfo = coreApi.sysdescr().findClassInfo( node.classId() );
-        // if( environ().ugwiKingId.equals( UgwiKindSkAttr.KIND_ID ) ) {
-        // propsViewer.viewer().setInput( clsInfo.attrs().list().toArray() );
-        // }
-        // if( environ().ugwiKingId.equals( UgwiKindSkRtdata.KIND_ID ) ) {
-        // propsViewer.viewer().setInput( clsInfo.rtdata().list().toArray() );
-        // }
+        ISkClassInfo clsInfo = skSysdescr().findClassInfo( node.classId() );
         propSelector.setClassInfo( clsInfo );
       }
       else {
         propSelector.clear();
-        // propsViewer.viewer().setInput( null );
       }
       fireContentChangeEvent();
     } );

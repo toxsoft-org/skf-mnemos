@@ -20,6 +20,7 @@ import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.txtproj.lib.storage.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
+import org.toxsoft.skf.rri.lib.ugwi.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
@@ -153,6 +154,8 @@ public class MasterObjectUtils {
       return switch( ugwi.kindId() ) {
         case UgwiKindSkAttrInfo.KIND_ID -> UgwiKindSkAttrInfo.getClassId( ugwi );
         case UgwiKindSkAttr.KIND_ID -> UgwiKindSkAttr.getClassId( ugwi );
+        case UgwiKindRriAttrInfo.KIND_ID -> UgwiKindRriAttrInfo.getClassId( ugwi );
+        case UgwiKindRriAttr.KIND_ID -> UgwiKindRriAttr.getClassId( ugwi );
         default -> throw new TsNotAllEnumsUsedRtException();
       };
     }

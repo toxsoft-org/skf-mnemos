@@ -21,9 +21,9 @@ import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
-import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
-import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
+import org.toxsoft.uskat.core.connection.*;
+import org.toxsoft.uskat.core.gui.utils.*;
 
 /**
  * Панель с редактируемым списком sub-мастеров всей мнемосхемы.
@@ -33,7 +33,7 @@ import org.toxsoft.uskat.core.api.sysdescr.*;
  */
 public class PanelSubmastersList
     extends TsPanel
-    implements ITsActionHandler {
+    implements ITsActionHandler, ISkGuiContextable {
 
   TsToolbar toolBar;
 
@@ -83,8 +83,7 @@ public class PanelSubmastersList
           TsDialogUtils.warn( getShell(), "Задайте \"мастер-объект\" мнемосхемы" );
           return;
         }
-        ISkCoreApi coreApi = SkGuiUtils.getCoreApi( vedScreen.tsContext() );
-        ISkClassInfo clsInfo = MasterObjectUtils.findMainMasterClassInfo( mnemoResolerConfig, coreApi );
+        ISkClassInfo clsInfo = MasterObjectUtils.findMainMasterClassInfo( mnemoResolerConfig, coreApi() );
         if( clsInfo == null ) {
           viewer.viewer().setInput( null );
           MasterObjectUtils.updateSubmastersList( IStridablesList.EMPTY, vedScreen );
@@ -114,6 +113,16 @@ public class PanelSubmastersList
       default:
         throw new TsNotAllEnumsUsedRtException( "%s", aActionId ); //$NON-NLS-1$
     }
+  }
+
+  // ------------------------------------------------------------------------------------
+  // ISkGuiContextable
+  //
+
+  @Override
+  public ISkConnection skConn() {
+    ISkVedEnvironment vedEnv = vedScreen.tsContext().get( ISkVedEnvironment.class );
+    return vedEnv.skConn();
   }
 
   // ------------------------------------------------------------------------------------

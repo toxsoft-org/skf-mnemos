@@ -20,7 +20,7 @@ import org.toxsoft.core.tslib.bricks.validator.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
+import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.objserv.*;
 
@@ -102,7 +102,8 @@ public class ConfigRecognizerPanel
   private final IMapEdit<String, ISkoRecognizerCfgPanel> panels = new ElemMap<>();
 
   void init() {
-    coreApi = SkGuiUtils.getCoreApi( tsContext() );
+    ISkVedEnvironment vedEnv = tsContext().get( ISkVedEnvironment.class );
+    coreApi = vedEnv.skConn().coreApi();
     setLayout( new BorderLayout() );
     this.setData( AWTLayout.KEY_PREFERRED_SIZE, new Dimension( 600, 400 ) );
 
@@ -123,7 +124,7 @@ public class ConfigRecognizerPanel
           ESkoRecognizerKind kind = kindCombo.getValue();
           ISkoRecognizerCfgPanel cfgP;
           if( !panels.hasKey( kind.id() ) ) {
-            cfgP = kind.getCfgEditPanel( environ(), tsContext() );
+            cfgP = kind.getCfgEditPanel( environ(), coreApi, tsContext() );
             panels.put( kind.id(), cfgP );
             cfgP.genericChangeEventer().addListener( panelListener );
           }

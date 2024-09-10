@@ -16,7 +16,7 @@ import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 
 public class VedViselsDeleteManager
-    implements IVedViselsDeleteManager {
+    implements IVedViselsDeleteManager, ITsGuiContextable {
 
   class DeleteActionProvider
       extends MethodPerActionTsActionSetProvider {
@@ -90,19 +90,19 @@ public class VedViselsDeleteManager
     vedScreen.model().actors().eventer().resumeFiring( !actorIds.isEmpty() );
   }
 
-  @Override
-  public void deleteVisel( String aViselId ) {
-    vedScreen.model().visels().remove( aViselId );
-  }
+  // @Override
+  // public void deleteVisel( String aViselId ) {
+  // vedScreen.model().visels().remove( aViselId );
+  // }
 
-  @Override
+  // @Override
   public void deleteVisels( IStringList aViselIds ) {
     for( String id : aViselIds ) {
       vedScreen.model().visels().remove( id );
     }
   }
 
-  @Override
+  // @Override
   public void deleteActors( IStringList aActorIds ) {
     for( String id : aActorIds ) {
       vedScreen.model().actors().remove( id );

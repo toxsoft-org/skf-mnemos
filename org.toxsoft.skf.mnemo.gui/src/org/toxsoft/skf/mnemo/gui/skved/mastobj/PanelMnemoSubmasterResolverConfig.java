@@ -17,10 +17,11 @@ import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
+import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.table.*;
-import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
-import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
+import org.toxsoft.uskat.core.connection.*;
+import org.toxsoft.uskat.core.gui.utils.*;
 
 /**
  * Панель создания/редактирования конфигурации составного "разрешителя" для объекта являющимся подмастером для
@@ -33,7 +34,8 @@ import org.toxsoft.uskat.core.api.sysdescr.*;
  * @author vs
  */
 public class PanelMnemoSubmasterResolverConfig
-    extends AbstractTsDialogPanel<Pair<SubmasterConfig, String>, IVedScreen> {
+    extends AbstractTsDialogPanel<Pair<SubmasterConfig, String>, IVedScreen>
+    implements ISkGuiContextable {
 
   private static final IStridGenerator idGen = new SimpleStridGenerator( "submaster", System.currentTimeMillis(), 0 ); //$NON-NLS-1$
 
@@ -101,8 +103,7 @@ public class PanelMnemoSubmasterResolverConfig
     fldName.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
 
     MnemoResolverConfig mnemoResolverCfg = MasterObjectUtils.readMnemoResolverConfig( environ() );
-    ISkCoreApi coreApi = SkGuiUtils.getCoreApi( environ().tsContext() );
-    ISkClassInfo clsInfo = MasterObjectUtils.findMainMasterClassInfo( mnemoResolverCfg, coreApi );
+    ISkClassInfo clsInfo = MasterObjectUtils.findMainMasterClassInfo( mnemoResolverCfg, coreApi() );
 
     viewer = new MasterPathViewer( this, clsInfo.id(), tsContext() );
     viewer.setLayoutData( BorderLayout.CENTER );
@@ -129,6 +130,16 @@ public class PanelMnemoSubmasterResolverConfig
     dlgInfo = new TsDialogInfo( aVedScreen.tsContext(), "DLG_T_SELECT_MASTER_PATH", "STR_MSG_SELECT_MASTER_PATH" );
     TsDialog<Pair<SubmasterConfig, String>, IVedScreen> d = new TsDialog<>( dlgInfo, aData, aVedScreen, creator );
     return d.execData();
+  }
+
+  // ------------------------------------------------------------------------------------
+  // ISkGuiContextable
+  //
+
+  @Override
+  public ISkConnection skConn() {
+    ISkVedEnvironment vedEnv = environ().tsContext().get( ISkVedEnvironment.class );
+    return vedEnv.skConn();
   }
 
 }

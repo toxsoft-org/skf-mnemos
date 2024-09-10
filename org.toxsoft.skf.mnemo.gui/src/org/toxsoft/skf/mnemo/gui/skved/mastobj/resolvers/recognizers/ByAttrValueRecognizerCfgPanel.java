@@ -18,7 +18,6 @@ import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
-import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.objserv.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
@@ -32,8 +31,6 @@ public class ByAttrValueRecognizerCfgPanel
 
   StridableTableViewer attrsViewer;
 
-  // IList<ISkObject> objects;
-
   ListViewer valuesViewer;
 
   private final Skid       objSkid;
@@ -43,12 +40,13 @@ public class ByAttrValueRecognizerCfgPanel
 
   // public ByAttrValueRecognizerCfgPanel( Skid aObjSkid, IStridablesList<ISkObject> aObjects, ITsGuiContext aContext )
   // {
-  public ByAttrValueRecognizerCfgPanel( IStridablesList<ISkObject> aObjects, ITsGuiContext aContext ) {
+  public ByAttrValueRecognizerCfgPanel( IStridablesList<ISkObject> aObjects, ISkCoreApi aCoreApi,
+      ITsGuiContext aContext ) {
     super( aContext, false );
     objects = aObjects;
     objSkid = aObjects.first().skid();
     // objSkid = aObjSkid;
-    coreApi = SkGuiUtils.getCoreApi( aContext );
+    coreApi = aCoreApi;
   }
 
   // ------------------------------------------------------------------------------------

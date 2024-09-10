@@ -21,8 +21,8 @@ import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.skf.mnemo.gui.utils.*;
 import org.toxsoft.uskat.core.api.cmdserv.*;
-import org.toxsoft.uskat.core.api.ugwis.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.api.users.*;
 import org.toxsoft.uskat.core.gui.conn.*;
@@ -80,7 +80,7 @@ public class SkActorCmdButton
       ISkConnectionSupplier conn = aVedScreen.tsContext().get( ISkConnectionSupplier.class );
       ISkUser user = conn.defConn().coreApi().userService().findUser( "root" );
 
-      Ugwi ugwi = SkUgwiUtils.findUgwi( TFI_CMD_UGWI.id(), props() );
+      Ugwi ugwi = MnemoUtils.findUgwi( TFI_CMD_UGWI.id(), props() );
       if( ugwi != null && ugwi != Ugwi.NONE ) {
         Gwid cmdGwid = UgwiKindSkCmd.getGwid( ugwi );
         currCommand = vedEnv.sendCommand( cmdGwid, user.skid(), IOptionSet.NULL );
@@ -139,7 +139,7 @@ public class SkActorCmdButton
   @Override
   protected IGwidList doListUsedGwids() {
     // TODO может быть для команды всегда возвращать пустой список?
-    Ugwi ugwi = SkUgwiUtils.findUgwi( TFI_CMD_UGWI.id(), props() );
+    Ugwi ugwi = MnemoUtils.findUgwi( TFI_CMD_UGWI.id(), props() );
     if( ugwi != null && ugwi != Ugwi.NONE ) {
       return new GwidList( UgwiKindSkCmd.getGwid( ugwi ) );
     }

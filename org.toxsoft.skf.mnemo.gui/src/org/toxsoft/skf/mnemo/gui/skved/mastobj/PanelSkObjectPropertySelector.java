@@ -1,5 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.skved.mastobj;
 
+import static org.toxsoft.uskat.core.api.sysdescr.ESkClassPropKind.*;
+
 import java.awt.*;
 
 import org.eclipse.swt.widgets.*;
@@ -22,6 +24,8 @@ import org.toxsoft.skf.rri.lib.ugwi.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
+import org.toxsoft.uskat.core.connection.*;
+import org.toxsoft.uskat.core.gui.utils.*;
 
 /**
  * Панель выбора свойства sk-объекта.
@@ -29,7 +33,8 @@ import org.toxsoft.uskat.core.api.ugwis.kinds.*;
  * @author vs
  */
 public class PanelSkObjectPropertySelector
-    extends TsPanel {
+    extends TsPanel
+    implements ISkGuiContextable {
 
   StridableTableViewer attrsViewer;
 
@@ -50,10 +55,10 @@ public class PanelSkObjectPropertySelector
     ugwiKindId = aUgwiKind;
     setData( AWTLayout.KEY_PREFERRED_SIZE, new Dimension( 400, 600 ) );
     m5Panel = switch( ugwiKindId ) {
-      case UgwiKindSkAttr.KIND_ID -> SkGuiUtils.getClassPorpertySelectionPanel( ESkClassPropKind.ATTR, aContext );
-      case UgwiKindSkRtdata.KIND_ID -> SkGuiUtils.getClassPorpertySelectionPanel( ESkClassPropKind.RTDATA, aContext );
-      case UgwiKindSkCmd.KIND_ID -> SkGuiUtils.getClassPorpertySelectionPanel( ESkClassPropKind.CMD, aContext );
-      case UgwiKindRriAttr.KIND_ID -> SkGuiUtils.getRriAttrSelectionPanel( aContext );
+      case UgwiKindSkAttr.KIND_ID -> SkGuiUtils.getClassPorpertySelectionPanel( ATTR, skConn(), aContext );
+      case UgwiKindSkRtdata.KIND_ID -> SkGuiUtils.getClassPorpertySelectionPanel( RTDATA, skConn(), aContext );
+      case UgwiKindSkCmd.KIND_ID -> SkGuiUtils.getClassPorpertySelectionPanel( CMD, skConn(), aContext );
+      case UgwiKindRriAttr.KIND_ID -> SkGuiUtils.getRriAttrSelectionPanel( skConn(), aContext );
       default -> throw new TsNotAllEnumsUsedRtException();
     };
     if( m5Panel != null ) {
@@ -71,6 +76,20 @@ public class PanelSkObjectPropertySelector
       } );
     }
   }
+
+  // ------------------------------------------------------------------------------------
+  // ISkGuiContextable
+  //
+
+  @Override
+  public ISkConnection skConn() {
+    ISkVedEnvironment vedEnv = tsContext().get( ISkVedEnvironment.class );
+    return vedEnv.skConn();
+  }
+
+  // ------------------------------------------------------------------------------------
+  // API
+  //
 
   public void setClassInfo( ISkClassInfo aClassInfo ) {
     propItemsProvider.items().clear();
@@ -156,11 +175,16 @@ public class PanelSkObjectPropertySelector
   void refreshRriAttrsPanel() {
     if( classInfo != null ) {
       rriSection = rriSectionSelector.rriSection();
-      IStridablesList<IDtoRriParamInfo> paramInfoes = rriSection.listParamInfoes( classInfo.id() );
-      for( IDtoRriParamInfo pi : paramInfoes ) {
-        if( !pi.isLink() ) {
-          propItemsProvider.items().add( pi.attrInfo() );
+      if( rriSection != null ) {
+        IStridablesList<IDtoRriParamInfo> paramInfoes = rriSection.listParamInfoes( classInfo.id() );
+        for( IDtoRriParamInfo pi : paramInfoes ) {
+          if( !pi.isLink() ) {
+            propItemsProvider.items().add( pi.attrInfo() );
+          }
         }
+      }
+      else {
+        propItemsProvider.items().clear();
       }
       m5Panel.refresh();
     }

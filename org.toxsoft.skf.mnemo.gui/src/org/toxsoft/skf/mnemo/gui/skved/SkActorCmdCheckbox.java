@@ -27,8 +27,8 @@ import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.skf.mnemo.gui.utils.*;
 import org.toxsoft.uskat.core.api.cmdserv.*;
-import org.toxsoft.uskat.core.api.ugwis.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.api.users.*;
 import org.toxsoft.uskat.core.gui.conn.*;
@@ -210,8 +210,8 @@ public class SkActorCmdCheckbox
         }
       }
     }
-    cmdOnUgwi = SkUgwiUtils.findUgwi( TFI_CHECK_CMD_UGWI.id(), aChangedValues );
-    cmdOffUgwi = SkUgwiUtils.findUgwi( TFI_UNCHECK_CMD_UGWI.id(), aChangedValues );
+    cmdOnUgwi = MnemoUtils.findUgwi( TFI_CHECK_CMD_UGWI.id(), aChangedValues );
+    cmdOffUgwi = MnemoUtils.findUgwi( TFI_UNCHECK_CMD_UGWI.id(), aChangedValues );
   }
 
   @Override

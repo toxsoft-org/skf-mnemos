@@ -8,6 +8,7 @@ import org.toxsoft.core.tslib.bricks.strid.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.objserv.*;
 
 /**
@@ -106,9 +107,10 @@ public enum ESkoRecognizerKind
   }
 
   // ISkoRecognizerCfgPanel getCfgEditPanel( Skid aObjSkid, ITsGuiContext aContext ) {
-  public ISkoRecognizerCfgPanel getCfgEditPanel( IStridablesList<ISkObject> aObjects, ITsGuiContext aContext ) {
+  public ISkoRecognizerCfgPanel getCfgEditPanel( IStridablesList<ISkObject> aObjects, ISkCoreApi aCoreApi,
+      ITsGuiContext aContext ) {
     return switch( this ) {
-      case ATTR -> new ByAttrValueRecognizerCfgPanel( aObjects, aContext );
+      case ATTR -> new ByAttrValueRecognizerCfgPanel( aObjects, aCoreApi, aContext );
       case RRI_ATTR -> throw new TsUnderDevelopmentRtException();
       case LINK -> throw new TsUnderDevelopmentRtException();
       case RRI_LINK -> throw new TsUnderDevelopmentRtException();

@@ -30,12 +30,12 @@ import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.utils.*;
 
 /**
- * Обработчик поля ввода для чения/записи значения параметра НСИ.
+ * Обработчик checkbox'a для чения/записи значения булевого параметра НСИ.
  * <p>
  *
  * @author vs
  */
-public class SkActorRriInputField
+public class SkActorRriCheckbox
     extends AbstractSkActorInputField {
 
   /**
@@ -63,12 +63,12 @@ public class SkActorRriInputField
       // fields.add( TFI_RRI_ID );
       fields.add( TFI_RRI_ATTR_UGWI );
       fields.add( TFI_FORMAT_STRING );
-      return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRriInputField.class );
+      return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRriCheckbox.class );
     }
 
     @Override
     protected VedAbstractActor doCreate( IVedItemCfg aCfg, VedScreen aVedScreen ) {
-      return new SkActorRriInputField( aCfg, propDefs(), aVedScreen );
+      return new SkActorRriCheckbox( aCfg, propDefs(), aVedScreen );
     }
 
   };
@@ -81,7 +81,7 @@ public class SkActorRriInputField
 
   private ISkRriSection section = null;
 
-  protected SkActorRriInputField( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
+  protected SkActorRriCheckbox( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
     // TODO Auto-generated constructor stub
   }
