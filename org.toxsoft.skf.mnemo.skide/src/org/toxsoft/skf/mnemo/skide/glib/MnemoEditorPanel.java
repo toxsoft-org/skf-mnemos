@@ -570,7 +570,7 @@ public class MnemoEditorPanel
 
     undoManager.reset();
     setChanged( false );
-    scrollManager.setOrigin( 300, 300 );
+    scrollManager.setOrigin( 0, 0 );
   }
 
   @Override

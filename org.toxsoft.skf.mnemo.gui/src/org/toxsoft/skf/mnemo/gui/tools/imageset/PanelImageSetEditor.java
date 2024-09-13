@@ -1,5 +1,6 @@
 package org.toxsoft.skf.mnemo.gui.tools.imageset;
 
+import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.tools.ITsResources.*;
 
 import java.io.*;
@@ -15,8 +16,8 @@ import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.graphics.image.*;
 import org.toxsoft.core.tsgui.graphics.image.impl.*;
-import org.toxsoft.core.tsgui.rcp.graphics.images.*;
 import org.toxsoft.core.tsgui.utils.layout.BorderLayout;
+import org.toxsoft.core.tsgui.valed.controls.graphics.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.idgen.*;
@@ -187,21 +188,29 @@ public class PanelImageSetEditor
 
       @Override
       public void widgetSelected( SelectionEvent aEvent ) {
-        FileDialog fd = new FileDialog( getShell(), SWT.OPEN | SWT.MULTI );
-        String result = fd.open();
-        if( result != null ) {
-          int idx = result.lastIndexOf( '\\' ) + 1;
-          String filePath = result.substring( 0, idx );
-          String[] fileNames = fd.getFileNames();
-          for( int i = 0; i < fileNames.length; i++ ) {
-            if( isImage( filePath + fileNames[i] ) ) {
-              TsImageDescriptor imd = TsImageSourceKindFile.createImageDescriptor( filePath + fileNames[i] );
-              ImageEntryInfo imageInfo = new ImageEntryInfo( getUniqueName( fileNames[i] ), imd );
-              imgInfoList.add( imageInfo );
-            }
-          }
+        TsImageDescriptor imd = PanelTsImageDescriptorEditor.editImageDescriptor( TsImageDescriptor.NONE, tsContext() );
+        if( imd != null ) {
+          ImageEntryInfo imageInfo =
+              new ImageEntryInfo( getUniqueName( imd.params().getStr( TSID_ID ), imgInfoList ), imd );
+          imgInfoList.add( imageInfo );
           imgViewer.setInput( imgInfoList.toArray() );
         }
+
+        // FileDialog fd = new FileDialog( getShell(), SWT.OPEN | SWT.MULTI );
+        // String result = fd.open();
+        // if( result != null ) {
+        // int idx = result.lastIndexOf( '\\' ) + 1;
+        // String filePath = result.substring( 0, idx );
+        // String[] fileNames = fd.getFileNames();
+        // for( int i = 0; i < fileNames.length; i++ ) {
+        // if( isImage( filePath + fileNames[i] ) ) {
+        // TsImageDescriptor imd = TsImageSourceKindFile.createImageDescriptor( filePath + fileNames[i] );
+        // ImageEntryInfo imageInfo = new ImageEntryInfo( getUniqueName( fileNames[i] ), imd );
+        // imgInfoList.add( imageInfo );
+        // }
+        // }
+        // imgViewer.setInput( imgInfoList.toArray() );
+        // }
       }
     } );
 
@@ -269,6 +278,10 @@ public class PanelImageSetEditor
         }
       }
     } );
+  }
+
+  String getUniqueName( String aName, IStridablesList<IImageEntryInfo> aInfoes ) {
+    return aName;
   }
 
   String getUniqueName( String aFileName ) {

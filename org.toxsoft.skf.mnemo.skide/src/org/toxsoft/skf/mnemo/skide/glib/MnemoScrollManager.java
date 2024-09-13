@@ -52,11 +52,15 @@ public class MnemoScrollManager {
 
     vpCalc.cfg().setFulcrum( ETsFulcrum.LEFT_TOP );
     vpCalc.cfg().setFitMode( ERectFitMode.FIT_NONE );
+    vpCalc.cfg().setMargins( margins );
     vpCalc.cfg().setBoundingStrategy( EVpBoundingStrategy.CONTENT );
+    vpCalc.cfg().setFulcrumStartegy( EVpFulcrumStartegy.HINT );
 
     vedScreen = aVedScreen;
     vedView = vedScreen.view();
     canvas = (Canvas)vedView.getControl();
+    hBar = canvas.getHorizontalBar();
+    vBar = canvas.getVerticalBar();
 
     vedView.configChangeEventer().addListener( aSource -> {
       ID2Point size = vedView.canvasConfig().size();
@@ -72,27 +76,30 @@ public class MnemoScrollManager {
       vpCalc.setDesiredZoom( d2conv.zoomFactor() );
 
       // GOGA vpCalc.queryToChangeOrigin( 0, 0 );
-      vpCalc.setDesiredOrigin( ITsPoint.ZERO );
+      // vpCalc.setDesiredOrigin( ITsPoint.ZERO );
+      // ITsPoint p = new TsPoint( hBar.getSelection() + vpCalc.cfg().margins().left(),
+      // vBar.getSelection() + vpCalc.cfg().margins().top() );
+      // vpCalc.setDesiredOrigin( p );
     } );
 
-    hBar = canvas.getHorizontalBar();
     hBar.setMinimum( 0 );
     hBar.setMinimum( 100 );
     hBar.addSelectionListener( new SelectionAdapter() {
 
       @Override
       public void widgetSelected( SelectionEvent aE ) {
-        // GOGA FIXME vpCalc.queryToChangeOriginByScrollBars( hBar.getSelection(), vBar.getSelection() );
+        changeOriginByScrollbars();
       }
 
     } );
 
-    vBar = canvas.getVerticalBar();
+    vBar.setMinimum( 0 );
+    vBar.setMinimum( 100 );
     vBar.addSelectionListener( new SelectionAdapter() {
 
       @Override
       public void widgetSelected( SelectionEvent aE ) {
-        // GOGA FIXME vpCalc.queryToChangeOriginByScrollBars( hBar.getSelection(), vBar.getSelection() );
+        changeOriginByScrollbars();
       }
 
     } );
@@ -103,6 +110,7 @@ public class MnemoScrollManager {
       public void controlResized( ControlEvent aE ) {
         ITsRectangle vpBounds = TsGraphicsUtils.tsFromRect( canvas.getClientArea() );
         // onViewportSizeChanged( vpBounds ); // Sol++
+        TsMarginUtils.applyMargins( vpBounds, margins );
         if( vpCalc.setViewportBounds( vpBounds ) ) {
           vedScreen.view().redraw();
         }
@@ -148,4 +156,19 @@ public class MnemoScrollManager {
     vpCalc.setViewportBounds( aVpBounds );
   }
 
+  /**
+   * Безусловно меняет origin в соответствии со scrollbars, так как при конфигурировании scrollbars все огранияения были
+   * применены и все проверки сделаны.
+   */
+  void changeOriginByScrollbars() {
+    int x = hBar.getSelection();
+    int y = vBar.getSelection();
+    ID2Conversion conv = vedView.getConversion();
+    D2ConversionEdit d2conv = new D2ConversionEdit( conv );
+    d2conv.origin().setPoint( -x + vpCalc.cfg().margins().left(), -y + vpCalc.cfg().margins().top() );
+    vedView.configChangeEventer().pauseFiring();
+    vedView.setConversion( d2conv );
+    vedView.configChangeEventer().resumeFiring( false );
+    vedView.redraw();
+  }
 }
