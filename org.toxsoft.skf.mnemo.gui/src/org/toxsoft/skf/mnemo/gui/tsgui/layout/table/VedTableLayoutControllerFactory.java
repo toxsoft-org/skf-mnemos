@@ -48,7 +48,7 @@ public class VedTableLayoutControllerFactory
 
   @Override
   public IVedViselsLayoutController create( IVedLayoutControllerConfig aCfg, IVedScreen aVedScreen ) {
-    return new VedRowLayoutController( aCfg, aVedScreen );
+    return new VedTableLayoutController( aCfg, aVedScreen );
   }
 
   @Override

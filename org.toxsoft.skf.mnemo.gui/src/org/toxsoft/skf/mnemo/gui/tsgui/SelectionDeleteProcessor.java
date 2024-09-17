@@ -13,6 +13,12 @@ public class SelectionDeleteProcessor
 
   private final IVedScreen vedScreen;
 
+  /**
+   * Constructor.
+   *
+   * @param aVedScreen {@link IVedScreen} - экран редактирования
+   * @param aSelectionManager {@link IVedViselSelectionManager} - менеджер удаления визуальных элементов
+   */
   public SelectionDeleteProcessor( IVedScreen aVedScreen, IVedViselSelectionManager aSelectionManager ) {
     vedScreen = aVedScreen;
     selectionManager = aSelectionManager;
@@ -24,7 +30,7 @@ public class SelectionDeleteProcessor
 
   @Override
   public String id() {
-    return "ved.delete.selection.processor";
+    return "ved.delete.selection.processor"; //$NON-NLS-1$
   }
 
   @Override

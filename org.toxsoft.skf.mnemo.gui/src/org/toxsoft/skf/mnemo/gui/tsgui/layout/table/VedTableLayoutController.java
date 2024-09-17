@@ -8,7 +8,6 @@ import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
-import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 
 /**
@@ -25,7 +24,8 @@ public class VedTableLayoutController
    */
   public static final String LAYOUT_KIND = "ved.layout.table"; //$NON-NLS-1$
 
-  private final VedTableLayoutControllerConfig config;
+  // private final VedTableLayoutControllerConfig config;
+  // private final IVedLayoutControllerConfig config;
 
   private final IVedScreen vedScreen;
 
@@ -43,9 +43,9 @@ public class VedTableLayoutController
    */
   public VedTableLayoutController( IVedLayoutControllerConfig aCfg, IVedScreen aVedScreen ) {
     if( aCfg != null ) {
-      TsIllegalArgumentRtException.checkFalse( aCfg.kindId().equals( LAYOUT_KIND ) );
+      // TsIllegalArgumentRtException.checkFalse( aCfg.kindId().equals( LAYOUT_KIND ) );
     }
-    config = (VedTableLayoutControllerConfig)aCfg;
+    // config = aCfg;
     vedScreen = aVedScreen;
   }
 

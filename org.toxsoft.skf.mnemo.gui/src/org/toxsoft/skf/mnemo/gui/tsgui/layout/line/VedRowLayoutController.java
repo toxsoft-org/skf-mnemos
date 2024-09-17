@@ -25,7 +25,7 @@ public class VedRowLayoutController
    */
   public static final String LAYOUT_KIND = "ved.layout.row"; //$NON-NLS-1$
 
-  private final VedRowLayoutControllerConfig config;
+  // private final VedRowLayoutControllerConfig config;
 
   private final IVedScreen vedScreen;
 
@@ -45,7 +45,7 @@ public class VedRowLayoutController
     if( aCfg != null ) {
       TsIllegalArgumentRtException.checkFalse( aCfg.kindId().equals( LAYOUT_KIND ) );
     }
-    config = (VedRowLayoutControllerConfig)aCfg;
+    // config = (VedRowLayoutControllerConfig)aCfg;
     vedScreen = aVedScreen;
   }
 

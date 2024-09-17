@@ -10,7 +10,7 @@ import org.toxsoft.core.tsgui.valed.impl.*;
 import org.toxsoft.skf.mnemo.gui.tools.rgbaset.*;
 
 /**
- * Редактор атрибутов для рисования линии.
+ * Редактор набора изображений.
  * <p>
  *
  * @author vs

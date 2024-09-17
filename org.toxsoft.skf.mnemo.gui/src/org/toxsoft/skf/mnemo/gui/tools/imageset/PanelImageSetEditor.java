@@ -1,6 +1,5 @@
 package org.toxsoft.skf.mnemo.gui.tools.imageset;
 
-import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.tools.ITsResources.*;
 
 import java.io.*;
@@ -17,7 +16,6 @@ import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.graphics.image.*;
 import org.toxsoft.core.tsgui.graphics.image.impl.*;
 import org.toxsoft.core.tsgui.utils.layout.BorderLayout;
-import org.toxsoft.core.tsgui.valed.controls.graphics.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.idgen.*;
@@ -25,6 +23,7 @@ import org.toxsoft.core.tslib.bricks.strid.impl.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.skf.mnemo.gui.tools.imageset.PanelImageSetEntryEditor.*;
 
 /**
  * Панель редактирования набора описаний изображений.
@@ -43,7 +42,7 @@ public class PanelImageSetEditor
 
   private final IStridablesListEdit<IImageEntryInfo> imgInfoList = new StridablesList<>();
 
-  private static IStridGenerator idGen = new SimpleStridGenerator( "imageSet", 1, 0 );
+  private static IStridGenerator idGen = new SimpleStridGenerator( "imageSet", 1, 0 ); //$NON-NLS-1$
 
   /**
    * Конструктор.<br>
@@ -188,10 +187,9 @@ public class PanelImageSetEditor
 
       @Override
       public void widgetSelected( SelectionEvent aEvent ) {
-        TsImageDescriptor imd = PanelTsImageDescriptorEditor.editImageDescriptor( TsImageDescriptor.NONE, tsContext() );
-        if( imd != null ) {
-          ImageEntryInfo imageInfo =
-              new ImageEntryInfo( getUniqueName( imd.params().getStr( TSID_ID ), imgInfoList ), imd );
+        PanelCtx ctx = new PanelCtx( TsImageDescriptor.NONE, tsContext(), imgInfoList.keys() );
+        ImageEntryInfo imageInfo = PanelImageSetEntryEditor.edit( null, ctx );
+        if( imageInfo != null ) {
           imgInfoList.add( imageInfo );
           imgViewer.setInput( imgInfoList.toArray() );
         }
@@ -280,10 +278,6 @@ public class PanelImageSetEditor
     } );
   }
 
-  String getUniqueName( String aName, IStridablesList<IImageEntryInfo> aInfoes ) {
-    return aName;
-  }
-
   String getUniqueName( String aFileName ) {
     String un = aFileName.replace( '-', '_' );
     int num = 1;
@@ -320,7 +314,7 @@ public class PanelImageSetEditor
   }
 
   // ------------------------------------------------------------------------------------
-  // static method to create or edit Pattern
+  // static method to create or edit IMnemoImageSetInfo
   //
 
   /**

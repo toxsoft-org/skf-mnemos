@@ -332,7 +332,11 @@ public class VedViselsLayoutManager
     if( targetVisel != null ) {
       if( factProvider.factories().hasKey( aKindId ) ) {
         IVedLayoutControllerFactory f = factProvider.factories().getByKey( aKindId );
-        IVedLayoutControllerConfig newCfg = f.editConfig( getLayoutConfig( targetVisel ), vedScreen );
+        IVedLayoutControllerConfig cfg = getLayoutConfig( targetVisel );
+        if( !cfg.kindId().equals( aKindId ) ) {
+          cfg = null;
+        }
+        IVedLayoutControllerConfig newCfg = f.editConfig( cfg, vedScreen );
         if( newCfg != null ) { // конфигурация была изменена
           layoutKindId = aKindId;
           targetVisel.params().setStr( PARAMID_LAYOUT_KIND, layoutKindId );

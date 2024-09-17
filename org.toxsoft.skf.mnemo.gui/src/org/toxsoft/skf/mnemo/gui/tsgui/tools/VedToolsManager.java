@@ -69,7 +69,7 @@ public class VedToolsManager {
     vedScreen = aVedScreen;
 
     // hotKeysManager.addHotKey( new HotKeyInfo( 0, 'o', SWT.CTRL ) );
-    zOrderKey = new HotKeyInfo( 'o', 'o', SWT.CTRL );
+    zOrderKey = new HotKeyInfo( 114, 'r', SWT.CTRL );
 
     hotKeysManager.addHotKey( zOrderKey );
 
