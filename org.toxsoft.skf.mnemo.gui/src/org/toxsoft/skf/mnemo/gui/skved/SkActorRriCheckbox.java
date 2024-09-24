@@ -1,14 +1,15 @@
 package org.toxsoft.skf.mnemo.gui.skved;
 
-import static org.toxsoft.core.tsgui.ved.ITsguiVedConstants.*;
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
+import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
+import org.toxsoft.core.tsgui.ved.comps.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
@@ -36,20 +37,20 @@ import org.toxsoft.uskat.core.utils.*;
  * @author vs
  */
 public class SkActorRriCheckbox
-    extends AbstractSkActorInputField {
+    extends AbstractSkVedButtonActor {
 
   /**
    * The actor factor ID.
    */
-  public static final String FACTORY_ID = SKVED_ID + ".actor.RriInputField"; //$NON-NLS-1$
+  public static final String FACTORY_ID = SKVED_ID + ".actor.RriCheckbox"; //$NON-NLS-1$
 
   /**
    * The VISEL factory singleton.
    */
   public static final IVedActorFactory FACTORY = new VedAbstractActorFactory( FACTORY_ID, //
-      TSID_NAME, STR_ACTOR_RRI_INPUT_FIELD, //
-      TSID_DESCRIPTION, STR_ACTOR_RRI_INPUT_FIELD_D, //
-      TSID_ICON_ID, ICONID_VED_RRI_EDIT_ACTOR //
+      TSID_NAME, STR_ACTOR_RRI_CHECKBOX, //
+      TSID_DESCRIPTION, STR_ACTOR_RRI_CHECKBOX_D, //
+      TSID_ICON_ID, ICONID_VED_RRI_CHECK_ACTOR //
   ) {
 
     @Override
@@ -60,9 +61,7 @@ public class SkActorRriCheckbox
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_VISEL_PROP_ID );
-      // fields.add( TFI_RRI_ID );
       fields.add( TFI_RRI_ATTR_UGWI );
-      fields.add( TFI_FORMAT_STRING );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRriCheckbox.class );
     }
 
@@ -74,7 +73,6 @@ public class SkActorRriCheckbox
   };
 
   private Ugwi   ugwi   = null;
-  private String oldStr = TsLibUtils.EMPTY_STRING;
   private String fmtStr = null;
 
   private IAtomicValue lastValue = IAtomicValue.NULL;
@@ -83,7 +81,21 @@ public class SkActorRriCheckbox
 
   protected SkActorRriCheckbox( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
-    // TODO Auto-generated constructor stub
+    IButtonClickHandler buttonHandler = aVisel -> {
+
+      VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
+      visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+      IAtomicValue value = getRriAttrValue();
+      boolean bVal = false;
+      if( value.isAssigned() ) {
+        bVal = value.asBool();
+      }
+      setRriAttrValue( !bVal );
+      if( visel.props().hasKey( PROPID_ON_OFF_STATE ) ) {
+        visel.props().setBool( PROPID_ON_OFF_STATE, !bVal );
+      }
+    };
+    setButtonClickHandler( buttonHandler );
   }
 
   // ------------------------------------------------------------------------------------
@@ -133,37 +145,16 @@ public class SkActorRriCheckbox
   }
 
   // ------------------------------------------------------------------------------------
-  // AbstractSkActorInputField
+  // IRealTimeSensitive
   //
 
   @Override
   public void whenRealTimePassed( long aRtTime ) {
-    if( inputHandler != null && inputHandler.isEditing() ) {
-      super.whenRealTimePassed( aRtTime );
-      return;
-    }
     IAtomicValue newValue = getRriAttrValue();
     if( !newValue.equals( lastValue ) ) {
       String text = AvUtils.printAv( fmtStr, newValue );
       setStdViselPropValue( avStr( text ) );
       lastValue = newValue;
-    }
-  }
-
-  @Override
-  protected void onStartEdit() {
-    oldStr = getVisel().props().getStr( PROPID_TEXT );
-  }
-
-  @Override
-  protected void onCancelEdit() {
-    getVisel().props().setStr( PROPID_TEXT, oldStr );
-  }
-
-  @Override
-  protected void onFinishEdit() {
-    if( section != null ) {
-      setRriAttrValue( getVisel().props().getStr( PROPID_TEXT ) );
     }
   }
 
@@ -178,38 +169,14 @@ public class SkActorRriCheckbox
     return section.getAttrParamValue( UgwiKindRriAttr.getSkid( ugwi ), UgwiKindRriAttr.getAttrId( ugwi ) );
   }
 
-  void setRriAttrValue( String aText ) {
+  void setRriAttrValue( boolean aValue ) {
     if( ugwi == null || ugwi == Ugwi.NONE ) {
       LoggerUtils.errorLogger().error( "Attempt to set RRI attribute for null or NONE Ugwi" ); //$NON-NLS-1$
       return;
     }
     Skid skid = UgwiKindRriAttr.getSkid( ugwi );
     String attrId = UgwiKindRriAttr.getAttrId( ugwi );
-    IAtomicValue value = section.getAttrParamValue( skid, attrId );
-    switch( value.atomicType() ) {
-      case BOOLEAN:
-        Boolean bv = Boolean.valueOf( Boolean.parseBoolean( aText ) );
-        value = AvUtils.avFromObj( bv );
-        break;
-      case FLOATING:
-        Double dv = Double.valueOf( Double.parseDouble( aText ) );
-        value = AvUtils.avFromObj( dv );
-        break;
-      case INTEGER:
-        Integer iv = Integer.valueOf( Integer.parseInt( aText ) );
-        value = AvUtils.avFromObj( iv );
-        break;
-      case STRING:
-        value = AvUtils.avFromObj( aText );
-        break;
-      case TIMESTAMP:
-      case VALOBJ:
-      case NONE:
-        break;
-      default:
-        throw new IllegalArgumentException( "Unexpected value: " + value.atomicType() ); //$NON-NLS-1$
-    }
-    section.setAttrParamValue( skid, attrId, value, TsLibUtils.EMPTY_STRING );
+    section.setAttrParamValue( skid, attrId, avBool( aValue ), TsLibUtils.EMPTY_STRING );
   }
 
 }

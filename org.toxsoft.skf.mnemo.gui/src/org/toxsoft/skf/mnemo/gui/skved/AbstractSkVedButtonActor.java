@@ -72,7 +72,14 @@ public abstract class AbstractSkVedButtonActor
   @Override
   public boolean onMouseMove( Object aSource, int aState, ITsPoint aCoors, Control aWidget ) {
     boolean retVal = false;
-    VedAbstractVisel visel = vedScreen().model().visels().list().findByKey( props().getStr( PROPID_VISEL_ID ) );
+    String viselId = props().getStr( PROPID_VISEL_ID );
+    if( viselId.isBlank() ) {
+      return false;
+    }
+    VedAbstractVisel visel = vedScreen().model().visels().list().findByKey( viselId );
+    if( visel == null ) {
+      return false;
+    }
     if( visel.props().getValobj( ViselButton.PROPID_STATE ) == EButtonViselState.DISABLED ) {
       restorCursor();
       return false;
@@ -95,18 +102,20 @@ public abstract class AbstractSkVedButtonActor
   @Override
   public boolean onMouseDown( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors, Control aWidget ) {
     VedAbstractVisel visel = vedScreen().model().visels().list().findByKey( props().getStr( PROPID_VISEL_ID ) );
-    if( visel.props().getValobj( ViselButton.PROPID_STATE ) == EButtonViselState.DISABLED ) {
-      return false;
-    }
-    if( aButton == ETsMouseButton.LEFT && aState == 0 ) {
-      visel = findMyVisel( aCoors );
-      if( visel == null || visel.props().getValobj( ViselButton.PROPID_STATE ) == EButtonViselState.DISABLED ) {
-        setActivated( false );
+    if( visel != null ) {
+      if( visel.props().getValobj( ViselButton.PROPID_STATE ) == EButtonViselState.DISABLED ) {
         return false;
       }
-      visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.PRESSED );
-      setActivated( true );
-      return true;
+      if( aButton == ETsMouseButton.LEFT && aState == 0 ) {
+        visel = findMyVisel( aCoors );
+        if( visel == null || visel.props().getValobj( ViselButton.PROPID_STATE ) == EButtonViselState.DISABLED ) {
+          setActivated( false );
+          return false;
+        }
+        visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.PRESSED );
+        setActivated( true );
+        return true;
+      }
     }
     return false;
   }

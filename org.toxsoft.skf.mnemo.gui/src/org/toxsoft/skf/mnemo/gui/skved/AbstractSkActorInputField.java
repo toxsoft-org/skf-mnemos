@@ -63,7 +63,8 @@ public abstract class AbstractSkActorInputField
 
   @Override
   public boolean onMouseDown( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors, Control aWidget ) {
-    VedAbstractVisel visel = getVisel();
+
+    VedAbstractVisel visel = vedScreen().model().visels().list().findByKey( props().getStr( PROPID_VISEL_ID ) );
     if( visel != null ) {
       if( inputHandler == null ) {
         inputHandler = new InputFieldHandler( vedScreen(), visel );
@@ -109,22 +110,34 @@ public abstract class AbstractSkActorInputField
 
   @Override
   public boolean onMouseDragStart( Object aSource, DragOperationInfo aDragInfo ) {
-    return inputHandler.onMouseDragStart( aSource, aDragInfo );
+    if( inputHandler != null ) {
+      return inputHandler.onMouseDragStart( aSource, aDragInfo );
+    }
+    return false;
   }
 
   @Override
   public boolean onMouseDragMove( Object aSource, DragOperationInfo aDragInfo, int aState, ITsPoint aCoors ) {
-    return inputHandler.onMouseDragMove( aSource, aDragInfo, aState, aCoors );
+    if( inputHandler != null ) {
+      return inputHandler.onMouseDragMove( aSource, aDragInfo, aState, aCoors );
+    }
+    return false;
   }
 
   @Override
   public boolean onMouseDragFinish( Object aSource, DragOperationInfo aDragInfo, int aState, ITsPoint aCoors ) {
-    return inputHandler.onMouseDragFinish( aSource, aDragInfo, aState, aCoors );
+    if( inputHandler != null ) {
+      return inputHandler.onMouseDragFinish( aSource, aDragInfo, aState, aCoors );
+    }
+    return false;
   }
 
   @Override
   public boolean onMouseDragCancel( Object aSource, DragOperationInfo aDragInfo ) {
-    return inputHandler.onMouseDragCancel( aSource, aDragInfo );
+    if( inputHandler != null ) {
+      return inputHandler.onMouseDragCancel( aSource, aDragInfo );
+    }
+    return false;
   }
 
   // ------------------------------------------------------------------------------------

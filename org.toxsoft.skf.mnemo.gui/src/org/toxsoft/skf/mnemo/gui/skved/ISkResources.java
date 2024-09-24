@@ -99,6 +99,12 @@ interface ISkResources {
   String STR_ACTOR_RRI_INPUT_FIELD_D = Messages.getString( "STR_ACTOR_RRI_INPUT_FIELD_D" ); //$NON-NLS-1$
 
   /**
+   * {@link SkActorRriCheckbox}
+   */
+  String STR_ACTOR_RRI_CHECKBOX   = "НСИ флажок";                                           //$NON-NLS-1$
+  String STR_ACTOR_RRI_CHECKBOX_D = "Флажок для редактирования значения булевого атрибута"; //$NON-NLS-1$
+
+  /**
    * {@link PanelE4PerspIdSelector}
    */
   String STR_CLMN_NAME_PERSP_ID       = "E4 perspective id";

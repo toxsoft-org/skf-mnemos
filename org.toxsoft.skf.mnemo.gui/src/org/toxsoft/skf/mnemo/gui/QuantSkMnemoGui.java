@@ -68,6 +68,7 @@ public class QuantSkMnemoGui
     actFact.register( SkActorRtdataImage.FACTORY );
     actFact.register( SkActorInputField.FACTORY );
     actFact.register( SkActorRriInputField.FACTORY );
+    actFact.register( SkActorRriCheckbox.FACTORY );
     actFact.register( SkActorRunTimeAction.FACTORY );
 
   }

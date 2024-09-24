@@ -14,14 +14,15 @@ public interface ISkMnemoGuiConstants {
   // ------------------------------------------------------------------------------------
   // Icons
 
-  String PREFIX_OF_ICON_FIELD_NAME = "ICONID_";       //$NON-NLS-1$
-  String ICONID_MNEMO              = "mnemo";         //$NON-NLS-1$
-  String ICONID_MNEMOS_LIST        = "mnemos-list";   //$NON-NLS-1$
-  String ICONID_MNEMO_EDIT         = "mnemo-edit";    //$NON-NLS-1$
-  String ICONID_ENSLAVE            = "enslave";       //$NON-NLS-1$
-  String ICONID_FREE               = "unlink";        //$NON-NLS-1$
-  String ICONID_RT_ACTION_ACTOR    = "actors-dialog"; //$NON-NLS-1$
-  String ICONID_DIAGNOSTICS        = "checklist";     //$NON-NLS-1$
+  String PREFIX_OF_ICON_FIELD_NAME  = "ICONID_";          //$NON-NLS-1$
+  String ICONID_MNEMO               = "mnemo";            //$NON-NLS-1$
+  String ICONID_MNEMOS_LIST         = "mnemos-list";      //$NON-NLS-1$
+  String ICONID_MNEMO_EDIT          = "mnemo-edit";       //$NON-NLS-1$
+  String ICONID_ENSLAVE             = "enslave";          //$NON-NLS-1$
+  String ICONID_FREE                = "unlink";           //$NON-NLS-1$
+  String ICONID_VED_RRI_CHECK_ACTOR = "actors-nsi-check"; //$NON-NLS-1$
+  String ICONID_RT_ACTION_ACTOR     = "actors-dialog";    //$NON-NLS-1$
+  String ICONID_DIAGNOSTICS         = "checklist";        //$NON-NLS-1$
 
   String ICONID_OBJECT  = "box";
   String ICONID_RIVET   = "clip";
