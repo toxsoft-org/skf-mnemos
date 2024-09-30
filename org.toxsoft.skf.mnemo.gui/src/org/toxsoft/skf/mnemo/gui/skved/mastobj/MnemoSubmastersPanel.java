@@ -45,7 +45,7 @@ public class MnemoSubmastersPanel
   /**
    * Конструктор.
    *
-   * @param aParent {@link Composite} - рродительская панель
+   * @param aParent {@link Composite} - родительская панель
    * @param aVedScreen {@link IVedScreen} - экран редактора
    * @param aStyle int - SWT стиль панели
    */

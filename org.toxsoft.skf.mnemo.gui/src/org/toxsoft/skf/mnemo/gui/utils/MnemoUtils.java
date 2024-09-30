@@ -9,14 +9,27 @@ import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.rri.lib.ugwi.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
+import org.toxsoft.uskat.core.connection.*;
 
 /**
  * @author vs
  */
 public class MnemoUtils {
+
+  /**
+   * Возвращает соединение с сервером, с которым работает экран редактирования мнемосхем.
+   *
+   * @param aVedScreen {@link IVedScreen} - экран редактирования мнемосхемы
+   * @return {@link ISkConnection} - соединение с сервером
+   */
+  public static ISkConnection vedScreenConnection( IVedScreen aVedScreen ) {
+    ISkVedEnvironment vedEnv = aVedScreen.tsContext().get( ISkVedEnvironment.class );
+    return vedEnv.skConn();
+  }
 
   /**
    * Возвращает признак существования сущности, на которую указывает {@link Ugwi}.<br>

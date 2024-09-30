@@ -14,7 +14,6 @@ import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.*;
-import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
@@ -152,8 +151,8 @@ public class SkActorRriCheckbox
   public void whenRealTimePassed( long aRtTime ) {
     IAtomicValue newValue = getRriAttrValue();
     if( !newValue.equals( lastValue ) ) {
-      String text = AvUtils.printAv( fmtStr, newValue );
-      setStdViselPropValue( avStr( text ) );
+      // String text = AvUtils.printAv( fmtStr, newValue );
+      setStdViselPropValue( newValue );
       lastValue = newValue;
     }
   }
