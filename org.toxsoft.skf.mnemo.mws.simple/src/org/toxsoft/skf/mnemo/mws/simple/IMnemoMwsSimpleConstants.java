@@ -5,7 +5,6 @@ import org.toxsoft.core.tsgui.graphics.icons.*;
 
 /**
  * The plugin constants.
- * <p>
  *
  * @author hazard157
  */
