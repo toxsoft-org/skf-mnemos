@@ -588,6 +588,15 @@ public class MasterPathViewer
   //
 
   /**
+   * Возвращает SWT дерево.
+   *
+   * @return {@link TreeViewer} - SWT дерево
+   */
+  public TreeViewer viewer() {
+    return viewer;
+  }
+
+  /**
    * Возвращает выделенный узел дерева или <code>null</code>.
    *
    * @return {@link IMasterPathNode} - выделенный узел дерева или <code>null</code>

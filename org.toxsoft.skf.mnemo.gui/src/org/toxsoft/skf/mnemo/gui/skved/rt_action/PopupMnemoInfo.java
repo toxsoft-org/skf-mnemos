@@ -11,14 +11,15 @@ import org.toxsoft.skf.mnemo.lib.*;
  * Parameters for popup mnemo action.
  * <p>
  *
- * @author dima
+ * @author dima, vs
  */
 public class PopupMnemoInfo {
 
   /**
    * Empty info.
    */
-  public static final PopupMnemoInfo EMPTY = new PopupMnemoInfo( Skid.NONE, Skid.NONE, ERtActionMouseButton.LEFT );
+  public static final PopupMnemoInfo EMPTY =
+      new PopupMnemoInfo( Skid.NONE, PopupMnemoResolverConfig.EMPTY, ERtActionMouseButton.LEFT );
 
   /**
    * Value-object registration identifier for {@link TsValobjUtils}.
@@ -36,8 +37,9 @@ public class PopupMnemoInfo {
           // Skid of mnemo
           Skid.KEEPER.write( aSw, aEntity.mnemoSkid() );
           aSw.writeSeparatorChar();
-          // Skid of master object
-          Skid.KEEPER.write( aSw, aEntity.masterObj() );
+          if( aEntity.resolverConfig() != null ) {
+            PopupMnemoResolverConfig.KEEPER.write( aSw, aEntity.resolverConfig() );
+          }
           aSw.writeSeparatorChar();
           // selected mouse button
           ERtActionMouseButton.KEEPER.write( aSw, aEntity.mouseButton() );
@@ -47,10 +49,10 @@ public class PopupMnemoInfo {
         protected PopupMnemoInfo doRead( IStrioReader aSr ) {
           Skid mnemoSkid = Skid.KEEPER.read( aSr );
           aSr.ensureSeparatorChar();
-          Skid masterObj = Skid.KEEPER.read( aSr );
+          PopupMnemoResolverConfig resCfg = PopupMnemoResolverConfig.KEEPER.read( aSr );
           aSr.ensureSeparatorChar();
           ERtActionMouseButton mouseButton = ERtActionMouseButton.KEEPER.read( aSr );
-          return new PopupMnemoInfo( mnemoSkid, masterObj, mouseButton );
+          return new PopupMnemoInfo( mnemoSkid, resCfg, mouseButton );
         }
 
       };
@@ -66,9 +68,9 @@ public class PopupMnemoInfo {
   private final Skid mnemoSkid;
 
   /**
-   * master object {@link Skid} for that mnemo. Can be {Skid#NONE}
+   * Конфигурация разрешителя
    */
-  private final Skid masterObj;
+  private final PopupMnemoResolverConfig resolverCfg;
 
   /**
    * sensitive mouse button {@link ERtActionMouseButton} to run action.
@@ -79,12 +81,12 @@ public class PopupMnemoInfo {
    * Конструктор.<br>
    *
    * @param aMnemoSkid {@link Skid} - mnemo Skid
-   * @param aMasterObj {@link Skid} - master object
+   * @param aResCfg {@link PopupMnemoResolverConfig} - конфигурация разрешителя
    * @param aMouseButton {@link ERtActionMouseButton} - mouse hot bttn
    */
-  public PopupMnemoInfo( Skid aMnemoSkid, Skid aMasterObj, ERtActionMouseButton aMouseButton ) {
+  public PopupMnemoInfo( Skid aMnemoSkid, PopupMnemoResolverConfig aResCfg, ERtActionMouseButton aMouseButton ) {
     mnemoSkid = aMnemoSkid;
-    masterObj = aMasterObj;
+    resolverCfg = aResCfg;
     mouseButton = aMouseButton;
   }
 
@@ -93,10 +95,12 @@ public class PopupMnemoInfo {
   //
 
   /**
-   * @return master object {@link Skid} of mnemo.
+   * Возвращает конфигурацию разрешителя.
+   *
+   * @return {@link PopupMnemoResolverConfig} - конфигурация разрешителя
    */
-  public Skid masterObj() {
-    return masterObj;
+  public PopupMnemoResolverConfig resolverConfig() {
+    return resolverCfg;
   }
 
   /**

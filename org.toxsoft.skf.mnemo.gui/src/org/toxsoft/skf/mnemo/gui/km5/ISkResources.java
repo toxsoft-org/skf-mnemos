@@ -23,11 +23,11 @@ interface ISkResources {
   /**
    * {@link PopupMnemoInfoM5Model}
    */
-  String STR_N_MNEMO_SKID      = "Skid мнемосхемы";
-  String STR_D_MNEMO_SKID      = "Skid мнемосхемы";
-  String STR_N_MASTER_OBJ_SKID = "Skid мастер-объекта";
-  String STR_D_MASTER_OBJ_SKID = "Skid мастер-объекта";
-  String STR_N_HOT_MOUSE_SKID  = "mouse button";
-  String STR_D_HOT_MOUSE_SKID  = "Hot mouse button";
+  String STR_N_MNEMO_SKID      = "Мнемосхема: ";
+  String STR_D_MNEMO_SKID      = "Объект мнемосхемы";
+  String STR_N_MASTER_OBJ_SKID = "Мастер-объект: ";
+  String STR_D_MASTER_OBJ_SKID = "Информация для получения мастер-объекта вызываемой мнемосхемы";
+  String STR_N_HOT_MOUSE_SKID  = "Кнопка мыши: ";
+  String STR_D_HOT_MOUSE_SKID  = "Кнопка мыши по которой вызывается диалог";
 
 }

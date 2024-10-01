@@ -10,6 +10,7 @@ import org.toxsoft.core.tslib.bricks.strid.*;
 import org.toxsoft.core.tslib.bricks.strid.impl.*;
 import org.toxsoft.core.tslib.bricks.strio.*;
 import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.core.tslib.utils.valobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 
 /**
@@ -23,10 +24,21 @@ public final class SubmasterConfig
     implements IStridableParameterized {
 
   /**
+   * Пустая конфигурация
+   */
+  public static final SubmasterConfig EMPTY =
+      new SubmasterConfig( IStridable.NONE_ID, IOptionSet.NULL, CompoundResolverConfig.NONE );
+
+  /**
+   * Value-object registration identifier for {@link TsValobjUtils}.
+   */
+  public static final String KEEPER_ID = "SubmasterConfig"; //$NON-NLS-1$
+
+  /**
    * The keeper singleton.
    */
   public static final IEntityKeeper<SubmasterConfig> KEEPER =
-      new AbstractEntityKeeper<>( SubmasterConfig.class, EEncloseMode.ENCLOSES_BASE_CLASS, null ) {
+      new AbstractEntityKeeper<>( SubmasterConfig.class, EEncloseMode.ENCLOSES_BASE_CLASS, EMPTY ) {
 
         @Override
         protected void doWrite( IStrioWriter aSw, SubmasterConfig aEntity ) {

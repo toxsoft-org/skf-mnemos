@@ -7,8 +7,8 @@ import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tslib.bricks.validator.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
-import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.PanelCompoundResolverConfig.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.table.*;
 
 /**
@@ -18,17 +18,27 @@ import org.toxsoft.skf.mnemo.gui.tsgui.layout.table.*;
  * @author vs
  */
 public class PanelCompoundResolverConfig
-    extends AbstractTsDialogPanel<ICompoundResolverConfig, ITsGuiContext> {
+    extends AbstractTsDialogPanel<ICompoundResolverConfig, PanelCtx> {
 
-  protected PanelCompoundResolverConfig( Composite aParent,
-      TsDialog<ICompoundResolverConfig, ITsGuiContext> aOwnerDialog ) {
+  static class PanelCtx {
+
+    final String        masterClassId;
+    final ITsGuiContext tsContext;
+
+    PanelCtx( String aMasterClassId, ITsGuiContext aTsContext ) {
+      masterClassId = aMasterClassId;
+      tsContext = aTsContext;
+    }
+  }
+
+  protected PanelCompoundResolverConfig( Composite aParent, TsDialog<ICompoundResolverConfig, PanelCtx> aOwnerDialog ) {
     super( aParent, aOwnerDialog );
     init();
   }
 
-  protected PanelCompoundResolverConfig( Composite aParent, ICompoundResolverConfig aData, ITsGuiContext aEnviron,
+  protected PanelCompoundResolverConfig( Composite aParent, ICompoundResolverConfig aData, PanelCtx aEnviron,
       int aFlags ) {
-    super( aParent, aEnviron, aData, aEnviron, aFlags );
+    super( aParent, aEnviron.tsContext, aData, aEnviron, aFlags );
     init();
   }
 
@@ -67,7 +77,8 @@ public class PanelCompoundResolverConfig
   void init() {
     setLayout( new BorderLayout() );
 
-    String moClsId = "SkObject"; //$NON-NLS-1$
+    // String moClsId = "SkObject"; //$NON-NLS-1$
+    String moClsId = environ().masterClassId;
     if( dataRecordInput() != null ) {
       SimpleResolverCfg cfg = dataRecordInput().cfgs().first();
       if( DirectGwidResolver.hasGwid( cfg ) ) {
@@ -76,13 +87,9 @@ public class PanelCompoundResolverConfig
       }
     }
 
-    viewer = new MasterPathViewer( this, moClsId, environ() );
+    viewer = new MasterPathViewer( this, moClsId, environ().tsContext );
     viewer.setLayoutData( BorderLayout.CENTER );
     viewer.viewer.addSelectionChangedListener( aEvent -> {
-      IMasterPathNode node = viewer.selectedNode();
-      // if( node.isObject() ) {
-      // // ICompoundResolverConfig cfg = node.resolverConfig();
-      // }
       fireContentChangeEvent();
     } );
   }
@@ -92,17 +99,19 @@ public class PanelCompoundResolverConfig
   //
 
   /**
-   * Статический метод вызова диалога редактирования параметров выравнивания содержимого ячейки.
+   * Статический метод вызова диалога редактирования параметров составного разрешителя.
    *
-   * @param aData ICompoundResolverConfig - параметры выравнивания содержимого ячейки
-   * @param aTsContext ITsGuiContext - соответствующий контекст
+   * @param aData ICompoundResolverConfig - параметры составного разрешителя
+   * @param aMasterClsId String - ИД класса мастер объекта
+   * @param aTsContext {@link ITsGuiContext}- соответствующий контекст
    * @return {@link VedTableLayoutControllerConfig} - новая отредактированнная конфигурация или <b>null</br>
    */
-  public static final ICompoundResolverConfig edit( ICompoundResolverConfig aData, ITsGuiContext aTsContext ) {
-    TsNullArgumentRtException.checkNull( aTsContext );
-    IDialogPanelCreator<ICompoundResolverConfig, ITsGuiContext> creator = PanelCompoundResolverConfig::new;
-    ITsDialogInfo dlgInfo = new TsDialogInfo( aTsContext, "DLG_T_SELECT_MASTER_PATH", "STR_MSG_SELECT_MASTER_PATH" );
-    TsDialog<ICompoundResolverConfig, ITsGuiContext> d = new TsDialog<>( dlgInfo, aData, aTsContext, creator );
+  public static final ICompoundResolverConfig edit( ICompoundResolverConfig aData, String aMasterClsId,
+      ITsGuiContext aTsContext ) {
+    PanelCtx ctx = new PanelCtx( aMasterClsId, aTsContext );
+    IDialogPanelCreator<ICompoundResolverConfig, PanelCtx> creator = PanelCompoundResolverConfig::new;
+    ITsDialogInfo dlgInfo = new TsDialogInfo( ctx.tsContext, "DLG_T_SELECT_MASTER_PATH", "STR_MSG_SELECT_MASTER_PATH" );
+    TsDialog<ICompoundResolverConfig, PanelCtx> d = new TsDialog<>( dlgInfo, aData, ctx, creator );
     return d.execData();
   }
 

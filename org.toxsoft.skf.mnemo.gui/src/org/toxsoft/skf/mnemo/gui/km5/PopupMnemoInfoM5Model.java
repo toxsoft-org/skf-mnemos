@@ -14,6 +14,7 @@ import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
+import org.toxsoft.skf.mnemo.gui.skved.rt_action.valed.*;
 import org.toxsoft.skf.reports.gui.panels.valed.*;
 
 /**
@@ -34,10 +35,15 @@ public class PopupMnemoInfoM5Model
    */
   public static final String FID_MNEMO_SKID = "mnemoSkid"; //$NON-NLS-1$
 
+  // /**
+  // * Skid field of master object
+  // */
+  // public static final String FID_MASTER_SKID = "masterSkid"; //$NON-NLS-1$
+
   /**
    * Skid field of master object
    */
-  public static final String FID_MASTER_SKID = "masterSkid"; //$NON-NLS-1$
+  public static final String FID_RESOLVER_CFG = "resolverCfg"; //$NON-NLS-1$
 
   /**
    * Sensitive mouse button
@@ -60,18 +66,35 @@ public class PopupMnemoInfoM5Model
 
   };
 
+  // /**
+  // * Attribute {@link PopupMnemoInfo#masterObj() } master
+  // */
+  // public M5AttributeFieldDef<PopupMnemoInfo> MASTER_SKID = new M5AttributeFieldDef<>( FID_MASTER_SKID, VALOBJ, //
+  // TSID_NAME, STR_N_MASTER_OBJ_SKID, //
+  // TSID_DESCRIPTION, STR_D_MASTER_OBJ_SKID, //
+  // TSID_KEEPER_ID, Skid.KEEPER_ID, //
+  // OPID_EDITOR_FACTORY_NAME, ValedAvValobjSkidEditor.FACTORY_NAME //
+  // ) {
+  //
+  // protected IAtomicValue doGetFieldValue( PopupMnemoInfo aEntity ) {
+  // return AvUtils.avValobj( aEntity.masterObj() );
+  // }
+  //
+  // };
+
   /**
    * Attribute {@link PopupMnemoInfo#masterObj() } master
    */
-  public M5AttributeFieldDef<PopupMnemoInfo> MASTER_SKID = new M5AttributeFieldDef<>( FID_MASTER_SKID, VALOBJ, //
+  public M5AttributeFieldDef<PopupMnemoInfo> MASTER_SKID = new M5AttributeFieldDef<>( FID_RESOLVER_CFG, VALOBJ, //
       TSID_NAME, STR_N_MASTER_OBJ_SKID, //
       TSID_DESCRIPTION, STR_D_MASTER_OBJ_SKID, //
-      TSID_KEEPER_ID, Skid.KEEPER_ID, //
-      OPID_EDITOR_FACTORY_NAME, ValedAvValobjSkidEditor.FACTORY_NAME //
+      // TSID_KEEPER_ID, PopupMnemoResolverConfig.KEEPER_ID, //
+      OPID_EDITOR_FACTORY_NAME, ValedAvPopupMnemoResolverConfig.FACTORY_NAME //
   ) {
 
     protected IAtomicValue doGetFieldValue( PopupMnemoInfo aEntity ) {
-      return AvUtils.avValobj( aEntity.masterObj() );
+      // return AvUtils.avValobj( aEntity.masterObj() );
+      return AvUtils.avValobj( aEntity.resolverConfig() );
     }
 
   };
@@ -128,10 +151,12 @@ public class PopupMnemoInfoM5Model
 
     private static PopupMnemoInfo makePopupMnemoInfo( IM5Bunch<PopupMnemoInfo> aValues ) {
       Skid mnemoSkid = aValues.getAsAv( FID_MNEMO_SKID ).asValobj();
-      Skid masterSkid = aValues.getAsAv( FID_MASTER_SKID ).asValobj();
+      // Skid masterSkid = aValues.getAsAv( FID_MASTER_SKID ).asValobj();
+      PopupMnemoResolverConfig resolverCfg = aValues.getAsAv( FID_RESOLVER_CFG ).asValobj();
       ERtActionMouseButton mouseBttn = aValues.getAsAv( FID_MOUSE_BTTN ).asValobj();
 
-      return new PopupMnemoInfo( mnemoSkid, masterSkid, mouseBttn );
+      // return new PopupMnemoInfo( mnemoSkid, masterSkid, mouseBttn );
+      return new PopupMnemoInfo( mnemoSkid, resolverCfg, mouseBttn );
     }
 
     @Override

@@ -50,6 +50,7 @@ public class QuantSkMnemoGui
     TsValobjUtils.registerKeeperIfNone( RunTimeUserActionInfo.KEEPER_ID, RunTimeUserActionInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( ERtActionMouseButton.KEEPER_ID, ERtActionMouseButton.KEEPER );
     TsValobjUtils.registerKeeperIfNone( PopupMnemoInfo.KEEPER_ID, PopupMnemoInfo.KEEPER );
+    TsValobjUtils.registerKeeperIfNone( PopupMnemoResolverConfig.KEEPER_ID, PopupMnemoResolverConfig.KEEPER );
     TsValobjUtils.registerKeeperIfNone( SwitchPerspInfo.KEEPER_ID, SwitchPerspInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( MPerspId.KEEPER_ID, MPerspId.KEEPER );
     TsValobjUtils.registerKeeperIfNone( SkoRecognizerCfg.KEEPER_ID, SkoRecognizerCfg.KEEPER );
@@ -90,6 +91,7 @@ public class QuantSkMnemoGui
     vcfRegistry.registerFactory( ValedAvValobjRtUserActionInfo.FACTORY );
     vcfRegistry.registerFactory( ValedPopupMnemoInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjPopupMnemoInfo.FACTORY );
+    vcfRegistry.registerFactory( ValedAvPopupMnemoResolverConfig.FACTORY );
     vcfRegistry.registerFactory( ValedSwitchPerspInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjSwitchPerspInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjMPerspIdEditor.FACTORY );

@@ -2,29 +2,21 @@ package org.toxsoft.skf.mnemo.gui.skved.rt_action.valed;
 
 import static org.toxsoft.core.tsgui.valed.api.IValedControlConstants.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
-import static org.toxsoft.skf.mnemo.gui.skved.rt_action.valed.ISkResources.*;
 
 import org.toxsoft.core.tsgui.bricks.ctx.*;
-import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
-import org.toxsoft.core.tsgui.dialogs.datarec.*;
-import org.toxsoft.core.tsgui.m5.*;
-import org.toxsoft.core.tsgui.m5.gui.*;
 import org.toxsoft.core.tsgui.valed.api.*;
 import org.toxsoft.core.tsgui.valed.controls.helpers.*;
 import org.toxsoft.core.tsgui.valed.impl.*;
-import org.toxsoft.skf.mnemo.gui.km5.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
-import org.toxsoft.uskat.core.connection.*;
-import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
- * Editor for popup mnemo.
+ * Editor for PopupMnemoResolverConfig.
  * <p>
  *
- * @author dima
+ * @author vs
  */
-public class ValedPopupMnemoInfo
-    extends AbstractValedLabelAndButton<PopupMnemoInfo> {
+public class ValedPopupMnemoResolverConfig
+    extends AbstractValedLabelAndButton<PopupMnemoResolverConfig> {
 
   /**
    * Название фабрики, с которым она зарегистрирована в {@link ValedControlFactoriesRegistry}.
@@ -50,13 +42,13 @@ public class ValedPopupMnemoInfo
 
     @SuppressWarnings( "unchecked" )
     @Override
-    protected IValedControl<PopupMnemoInfo> doCreateEditor( ITsGuiContext aContext ) {
-      return new ValedPopupMnemoInfo( aContext );
+    protected IValedControl<PopupMnemoResolverConfig> doCreateEditor( ITsGuiContext aContext ) {
+      return new ValedPopupMnemoResolverConfig( aContext );
     }
 
     @Override
     protected boolean isSuitableRawEditor( Class<?> aValueClass, ITsGuiContext aEditorContext ) {
-      return aValueClass.equals( PopupMnemoInfo.class );
+      return aValueClass.equals( PopupMnemoResolverConfig.class );
     }
 
   }
@@ -66,9 +58,9 @@ public class ValedPopupMnemoInfo
    */
   public static final AbstractValedControlFactory FACTORY = new Factory();
 
-  PopupMnemoInfo popupMnemoInfo = PopupMnemoInfo.EMPTY;
+  PopupMnemoResolverConfig resolverConfig = null;
 
-  protected ValedPopupMnemoInfo( ITsGuiContext aTsContext ) {
+  protected ValedPopupMnemoResolverConfig( ITsGuiContext aTsContext ) {
     super( aTsContext );
     setParamIfNull( OPDEF_IS_HEIGHT_FIXED, AV_TRUE );
     setParamIfNull( OPDEF_VERTICAL_SPAN, AV_1 );
@@ -80,40 +72,32 @@ public class ValedPopupMnemoInfo
 
   @Override
   protected boolean doProcessButtonPress() {
-    // use m5 technology to edit PopupMnemoInfo entity
-    ISkConnectionSupplier connSup = tsContext().get( ISkConnectionSupplier.class );
-    ISkConnection conn = connSup.defConn();
-
-    ITsGuiContext ctx = new TsGuiContext( tsContext() );
-    ctx.put( ISkConnection.class, conn );
-
-    IM5Model<PopupMnemoInfo> model =
-        conn.scope().get( IM5Domain.class ).getModel( PopupMnemoInfoM5Model.MODEL_ID, PopupMnemoInfo.class );
-    TsDialogInfo cdi = new TsDialogInfo( ctx, null, STR_N_POPUP_MNEMO_INFO, STR_D_POPUP_MNEMO_INFO, 0 );
-
-    // редактируем
-    PopupMnemoInfo tmpPopupMnemoInfo =
-        M5GuiUtils.askEdit( ctx, model, popupMnemoInfo, cdi, model.getLifecycleManager( conn ) );
-    if( tmpPopupMnemoInfo == null ) {
+    PopupMnemoResolverConfig cfg = PanelPopupMnemoResolverConfig.edit( resolverConfig, tsContext() );
+    if( cfg == null ) {
       return false;
     }
-    popupMnemoInfo = tmpPopupMnemoInfo;
+    resolverConfig = cfg;
     return true;
   }
 
   @Override
   protected void doUpdateLabelControl() {
-    // TODO what to write/display in label ?
+    if( resolverConfig == null ) {
+      getLabelControl().setText( "none" ); //$NON-NLS-1$
+    }
+    else {
+      getLabelControl().setText( resolverConfig.toString() );
+    }
   }
 
   @Override
-  protected PopupMnemoInfo doGetUnvalidatedValue() {
-    return popupMnemoInfo;
+  protected PopupMnemoResolverConfig doGetUnvalidatedValue() {
+    return resolverConfig;
   }
 
   @Override
-  protected void doDoSetUnvalidatedValue( PopupMnemoInfo aValue ) {
-    popupMnemoInfo = aValue;
+  protected void doDoSetUnvalidatedValue( PopupMnemoResolverConfig aValue ) {
+    resolverConfig = aValue;
   }
 
 }
