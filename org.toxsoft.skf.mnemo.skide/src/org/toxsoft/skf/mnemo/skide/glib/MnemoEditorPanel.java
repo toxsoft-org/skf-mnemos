@@ -278,6 +278,7 @@ public class MnemoEditorPanel
     mnemoChangedEventer = new GenericChangeEventer( this );
     this.setLayout( new BorderLayout() );
     SashForm sfMain = new SashForm( this, SWT.HORIZONTAL );
+    sfMain.setSashWidth( 8 );
     sfMain.setLayoutData( BorderLayout.CENTER );
     //
     vedScreen = new VedScreen( aContext );
@@ -346,6 +347,7 @@ public class MnemoEditorPanel
     tiObjTree.setText( STR_TAB_OBJ_TREE );
     tiObjTree.setToolTipText( STR_TAB_OBJ_TREE_D );
     SashForm sfObjTree = new SashForm( westFolder, SWT.VERTICAL );
+    sfObjTree.setSashWidth( 8 );
     panelVisels = new VedPanelViselsList( sfObjTree, new TsGuiContext( tsContext() ), vedScreen );
     panelActors = new VedPanelActorsList( sfObjTree, new TsGuiContext( tsContext() ), vedScreen, selectionManager );
     sfObjTree.setWeights( 5500, 4500 );
@@ -368,6 +370,7 @@ public class MnemoEditorPanel
     vedScreen.attachTo( theCanvas );
     // EAST
     SashForm eastPanel = new SashForm( sfMain, SWT.VERTICAL );
+    eastPanel.setSashWidth( 8 );
 
     eastPanel.setLayout( new BorderLayout() );
     submastersPanel = new MnemoSubmastersPanel( eastPanel, vedScreen, SWT.BORDER );
@@ -390,7 +393,7 @@ public class MnemoEditorPanel
     // Composite actMasterComp = new Composite( eastFolder, SWT.NONE );
     SashForm actMasterComp = new SashForm( eastFolder, SWT.VERTICAL );
     // actMasterComp.setLayout( new BorderLayout() );
-
+    actMasterComp.setSashWidth( 8 );
     actorSubmasters = new ActorSubmastersPanel( actMasterComp, vedScreen, SWT.BORDER );
     eastPanel.setWeights( 3, 10 );
 

@@ -152,6 +152,7 @@ public class PanelActorPropertyResolverConfig
     this.setData( AWTLayout.KEY_PREFERRED_SIZE, new Dimension( 800, 600 ) );
     setLayout( new FillLayout() );
     SashForm sash = new SashForm( this, SWT.VERTICAL );
+    sash.setSashWidth( 8 );
 
     viewer = new MasterPathViewer( sash, environ().submasterClassId, tsContext() );
     viewer.setLayoutData( BorderLayout.CENTER );
