@@ -70,6 +70,9 @@ public final class CompoundResolverConfig
 
   @Override
   public String toString() {
+    if( this == NONE ) {
+      return "none"; //$NON-NLS-1$
+    }
     if( cfgsList.isEmpty() ) {
       return super.toString();
     }

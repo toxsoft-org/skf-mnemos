@@ -91,6 +91,22 @@ public class SkGuiUtils {
   /**
    * Возвращает панель для выбора свойства класса.<br>
    *
+   * @param aSkConn {@link ISkConnection} - соединение с сервером
+   * @param aTsContext {@link ITsGuiContext} - соответствующий контекст
+   * @return IM5CollectionPanel&lt;IDtoClassPropInfoBase> - панель выбора свойства к класса
+   */
+  public static IM5CollectionPanel<ISkObject> getSkObjectSelectionPanel( ISkConnection aSkConn,
+      ITsGuiContext aTsContext ) {
+    // тут получаем KM5 модель ISkClassInfo
+    IM5Domain m5 = aSkConn.scope().get( IM5Domain.class );
+    String propModelId = sgwGetClassPropModelId( null );
+    IM5Model<IDtoClassPropInfoBase> modelProps = m5.getModel( propModelId, IDtoClassPropInfoBase.class );
+    return modelProps.panelCreator().createCollViewerPanel( aTsContext, IM5ItemsProvider.EMPTY );
+  }
+
+  /**
+   * Возвращает панель для выбора свойства класса.<br>
+   *
    * @param aPropKind {@link ESkClassPropKind} - тип свойства класса
    * @param aSkConn {@link ISkConnection} - соединение с сервером
    * @param aTsContext {@link ITsGuiContext} - соответствующий контекст

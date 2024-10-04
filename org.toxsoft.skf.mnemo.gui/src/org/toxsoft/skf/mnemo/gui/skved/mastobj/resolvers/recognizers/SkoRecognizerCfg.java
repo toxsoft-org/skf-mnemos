@@ -62,8 +62,6 @@ public final class SkoRecognizerCfg
 
   private final ESkoRecognizerKind kind;
 
-  // private final String factoryId;
-
   private final IOptionSetEdit opSet;
 
   /**
@@ -71,14 +69,11 @@ public final class SkoRecognizerCfg
    *
    * @param aId String - ИД конфигурации
    * @param aKind {@link ESkoRecognizerKind} - тип "распознавателя"
-   * @param aFactoryId String - ИД фабрики создания
    * @param aProps {@link IOptionSet} - значения свойств "раcпознавателя"
    */
-  // public SkoRecognizerCfg( String aId, ESkoRecognizerKind aKind, String aFactoryId, IOptionSet aProps ) {
   public SkoRecognizerCfg( String aId, ESkoRecognizerKind aKind, IOptionSet aProps ) {
     id = aId;
     kind = aKind;
-    // factoryId = aFactoryId;
     opSet = new OptionSet( aProps );
   }
 
@@ -109,11 +104,6 @@ public final class SkoRecognizerCfg
   public ESkoRecognizerKind kind() {
     return kind;
   }
-
-  // @Override
-  // public String factoryId() {
-  // return factoryId;
-  // }
 
   @Override
   public IOptionSet propValues() {

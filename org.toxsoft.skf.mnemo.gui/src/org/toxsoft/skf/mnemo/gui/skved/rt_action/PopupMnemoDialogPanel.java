@@ -11,6 +11,7 @@ import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tslib.bricks.geometry.impl.*;
+import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.skf.mnemo.gui.glib.*;
 import org.toxsoft.skf.mnemo.lib.*;
 
@@ -20,12 +21,12 @@ import org.toxsoft.skf.mnemo.lib.*;
  * @author dima
  */
 public class PopupMnemoDialogPanel
-    extends AbstractTsDialogPanel<ISkMnemoCfg, Object> {
+    extends AbstractTsDialogPanel<ISkMnemoCfg, Skid> {
 
   private IRuntimeMnemoPanel mnemoPanel;
   private ISkMnemoCfg        mnemoCfg;
 
-  PopupMnemoDialogPanel( Composite aParent, TsDialog<ISkMnemoCfg, Object> aOwnerDialog ) {
+  PopupMnemoDialogPanel( Composite aParent, TsDialog<ISkMnemoCfg, Skid> aOwnerDialog ) {
     super( aParent, aOwnerDialog );
     this.setLayout( new BorderLayout() );
     // создаем мнемосхему
@@ -65,14 +66,14 @@ public class PopupMnemoDialogPanel
    * @param aMnemoCfg - mnemo configuarion
    */
   public static final void showPopMnemo( IEclipseContext aAppContext, ISkMnemoCfg aMnemoCfg ) {
-    IDialogPanelCreator<ISkMnemoCfg, Object> creator = PopupMnemoDialogPanel::new;
+    IDialogPanelCreator<ISkMnemoCfg, Skid> creator = PopupMnemoDialogPanel::new;
     ISkMnemoCfg appInfo = aMnemoCfg;
     ITsGuiContext ctx = new TsGuiContext( aAppContext );
     TsDialogInfo cdi =
-        // TODO pass master object, show mnemo name and description
+        // TODO pass master Skid, show mnemo name and description
         new TsDialogInfo( ctx, ctx.get( Shell.class ), DLG_C_POPUP_MNEMO, DLG_T_POPUP_MNEMO, DF_NO_APPROVE );
     cdi.setMinSize( getInitialSize( aMnemoCfg ) );
-    TsDialog<ISkMnemoCfg, Object> d = new TsDialog<>( cdi, appInfo, null, creator );
+    TsDialog<ISkMnemoCfg, Skid> d = new TsDialog<>( cdi, appInfo, null, creator );
     d.execData();
   }
 

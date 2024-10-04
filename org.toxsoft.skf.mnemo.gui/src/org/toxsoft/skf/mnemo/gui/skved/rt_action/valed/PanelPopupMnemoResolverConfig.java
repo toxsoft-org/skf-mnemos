@@ -56,6 +56,9 @@ public class PanelPopupMnemoResolverConfig
       masterClassId = aData.masterClassId();
       masterObjId = aData.masterObjId();
       resolverCfg = aData.resolverConfig();
+      fldMasterClass.setText( masterClassId );
+      fldDirectObject.setText( masterObjId );
+      fldMasterPath.setText( resolverCfg.toString() );
       if( !masterObjId.isBlank() ) {
         btnDirectObject.setSelection( true );
       }
@@ -142,6 +145,8 @@ public class PanelPopupMnemoResolverConfig
 
       @Override
       public void widgetSelected( SelectionEvent aEvent ) {
+        fldMasterPath.setText( TsLibUtils.EMPTY_STRING );
+        fldDirectObject.setText( masterObjId );
         fireContentChangeEvent();
       }
     } );
@@ -174,6 +179,8 @@ public class PanelPopupMnemoResolverConfig
 
       @Override
       public void widgetSelected( SelectionEvent aEvent ) {
+        fldMasterPath.setText( resolverCfg.toString() );
+        fldDirectObject.setText( TsLibUtils.EMPTY_STRING );
         fireContentChangeEvent();
       }
     } );

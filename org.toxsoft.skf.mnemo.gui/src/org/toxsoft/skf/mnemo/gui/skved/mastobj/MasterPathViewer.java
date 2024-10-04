@@ -167,6 +167,7 @@ public class MasterPathViewer
         Ugwi ugwi = UgwiKindSkLinkInfo.makeUgwi( ln.classId(), li.id() );
         IOptionSetEdit opSet = new OptionSet();
         opSet.setValobj( PROP_UGWI, ugwi );
+        opSet.setStr( MasterObjectUtils.PROPID_RESOLVER_OUTPUT_CLASS_ID, classId() );
         return new SimpleResolverCfg( LinkInfoResolver.FACTORY_ID, opSet );
       }
       if( parent.kind() == EMpvNodeKind.RIVET ) {
@@ -175,6 +176,7 @@ public class MasterPathViewer
         Ugwi ugwi = UgwiKindSkRivetInfo.makeUgwi( rn.classId(), ri.id() );
         IOptionSetEdit opSet = new OptionSet();
         opSet.setValobj( PROP_UGWI, ugwi );
+        opSet.setStr( MasterObjectUtils.PROPID_RESOLVER_OUTPUT_CLASS_ID, classId() );
         return new SimpleResolverCfg( RivetInfoResolver.FACTORY_ID, opSet );
       }
       return null;
@@ -284,6 +286,7 @@ public class MasterPathViewer
         IOptionSetEdit opSet = new OptionSet();
         opSet.setValobj( PROP_UGWI, ugwi );
         opSet.setValobj( LinkInfoResolver.PROPID_RECOGNIZER_CFG, recognizerCfg );
+        opSet.setStr( MasterObjectUtils.PROPID_RESOLVER_OUTPUT_CLASS_ID, classId() );
         return new SimpleResolverCfg( LinkInfoResolver.FACTORY_ID, opSet );
       }
       if( parent.kind() == EMpvNodeKind.RIVET ) {
@@ -293,6 +296,7 @@ public class MasterPathViewer
         IOptionSetEdit opSet = new OptionSet();
         opSet.setValobj( PROP_UGWI, ugwi );
         opSet.setValobj( RivetInfoResolver.PROPID_RECOGNIZER_CFG, recognizerCfg );
+        opSet.setStr( MasterObjectUtils.PROPID_RESOLVER_OUTPUT_CLASS_ID, classId() );
         return new SimpleResolverCfg( RivetInfoResolver.FACTORY_ID, opSet );
       }
       return null;
@@ -619,6 +623,7 @@ public class MasterPathViewer
       simpleConfigs.insert( 0, cfg );
       node = node.parent().parent();
     }
+
     return new Pair<>( new CompoundResolverConfig( simpleConfigs ), selectedNode().classId() );
   }
 

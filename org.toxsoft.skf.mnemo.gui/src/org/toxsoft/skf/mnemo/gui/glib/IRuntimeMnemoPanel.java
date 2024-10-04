@@ -9,7 +9,7 @@ import org.toxsoft.skf.mnemo.lib.*;
 /**
  * Panel to display specified mnemoscheme at runtime.
  *
- * @author hazard157
+ * @author hazard157, vs
  */
 public interface IRuntimeMnemoPanel
     extends IPausableAnimation, IGwTimeFleetable, IRealTimeSensitive {

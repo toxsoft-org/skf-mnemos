@@ -70,7 +70,8 @@ public class QuantSkMnemoGui
     actFact.register( SkActorInputField.FACTORY );
     actFact.register( SkActorRriInputField.FACTORY );
     actFact.register( SkActorRriCheckbox.FACTORY );
-    actFact.register( SkActorRunTimeAction.FACTORY );
+    // actFact.register( SkActorRunTimeAction.FACTORY );
+    actFact.register( SkActorPopupMnemoInvoker.FACTORY );
 
   }
 

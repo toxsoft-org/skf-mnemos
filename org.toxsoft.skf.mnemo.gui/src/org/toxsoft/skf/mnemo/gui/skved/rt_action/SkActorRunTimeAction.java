@@ -23,6 +23,7 @@ import org.toxsoft.core.tslib.bricks.geometry.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.skf.mnemo.gui.glib.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.tti.*;
@@ -70,14 +71,7 @@ public class SkActorRunTimeAction
       fields.add( TFI_NAME );
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
-      fields.add( TFI_RT_USER_ACTION ); // type
-                                        // of
-                                        // action:
-                                        // popup
-                                        // mnemo,
-                                        // switch
-                                        // persp,
-                                        // etc
+      fields.add( TFI_RT_USER_ACTION ); // type of action: popup mnemo, switch persp, etc
       // fields.add( TtiRtActionInfo.TFI_RT_ACTION_TYPE ); // type of action: popup mnemo, switch persp, etc
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRunTimeAction.class );
     }
@@ -178,6 +172,15 @@ public class SkActorRunTimeAction
     ISkMnemosService mnemoService = skConn().coreApi().getService( ISkMnemosService.SERVICE_ID );
     ISkMnemoCfg mnemoCfg = mnemoService.getMnemo( aPopupMnemoInfo.mnemoSkid().strid() );
     // open in Dialog
+    // обработка мастер-объекта
+    if( aPopupMnemoInfo.masterSkid() != Skid.NONE ) {
+      // ISkConnection skConn = vedScreen.v
+      // ISimpleResolverFactoriesRegistry resRegistry = tsContext().get( ISimpleResolverFactoriesRegistry.class );
+      // MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn(), resRegistry );
+      // Ugwi ugwi = UgwiKindSkSkid.makeUgwi( masterObj.classId(), masterObj.strid() );
+      // IVedScreenCfg scrCfg = VedScreenUtils.getVedScreenConfig( vedScreen );
+      // IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, scrCfg, skConn() );
+    }
     PopupMnemoDialogPanel.showPopMnemo( tsContext().eclipseContext(), mnemoCfg );
 
     // open in Shell
@@ -190,13 +193,24 @@ public class SkActorRunTimeAction
    * @param aMnemoCfg - mnemo config
    */
   @SuppressWarnings( "unused" )
-  private void openPopupMnemoShell( ISkMnemoCfg aMnemoCfg ) {
+  private void openPopupMnemoShell( ISkMnemoCfg aMnemoCfg, Skid aMasterSkid ) {
     Shell wnd = new Shell( getShell(), SWT.BORDER | SWT.CLOSE );
     FillLayout layout = new FillLayout();
     wnd.setLayout( layout );
     Composite bkPanel = new Composite( wnd, SWT.NONE );
     bkPanel.setLayout( layout );
     IRuntimeMnemoPanel panel = new RuntimeMnemoPanel( bkPanel, new TsGuiContext( tsContext() ) );
+
+    // // обработка мастер-объекта
+    // if( aMasterObjSkid != Skid.NONE ) {
+    // // ISkConnection skConn = vedScreen.v
+    // // ISimpleResolverFactoriesRegistry resRegistry = tsContext().get( ISimpleResolverFactoriesRegistry.class );
+    // // MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn(), resRegistry );
+    // // Ugwi ugwi = UgwiKindSkSkid.makeUgwi( masterObj.classId(), masterObj.strid() );
+    // // IVedScreenCfg scrCfg = VedScreenUtils.getVedScreenConfig( vedScreen );
+    // // IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, scrCfg, skConn() );
+    // }
+
     panel.setMnemoConfig( aMnemoCfg );
     panel.resume();
     TsPoint p = computeSize( aMnemoCfg );

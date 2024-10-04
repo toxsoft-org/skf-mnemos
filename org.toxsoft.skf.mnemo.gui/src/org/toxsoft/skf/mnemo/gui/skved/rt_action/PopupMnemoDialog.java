@@ -10,6 +10,7 @@ import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
+import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.skf.mnemo.gui.glib.*;
 import org.toxsoft.skf.mnemo.lib.*;
 
@@ -21,17 +22,20 @@ public class PopupMnemoDialog
 
   private final ITsGuiContext context;
   private final ISkMnemoCfg   mnemoCfg;
+  private final Skid          masterSkid;
   private IRuntimeMnemoPanel  mnemoPanel;
 
   /**
    * @param aParentShell parent Shell
    * @param aContext GUI context
    * @param aMnemoCfg mnemo configuraion
+   * @param aMasterObj {@link Skid} - master-object can be <code>null</code>
    */
-  public PopupMnemoDialog( final Shell aParentShell, ITsGuiContext aContext, ISkMnemoCfg aMnemoCfg ) {
+  public PopupMnemoDialog( final Shell aParentShell, ITsGuiContext aContext, ISkMnemoCfg aMnemoCfg, Skid aMasterObj ) {
     super( aParentShell );
     context = aContext;
     mnemoCfg = aMnemoCfg;
+    masterSkid = aMasterObj;
   }
 
   @Override
@@ -40,6 +44,15 @@ public class PopupMnemoDialog
     container.setLayout( new BorderLayout() );
     // открываем мнемосхему
     mnemoPanel = new RuntimeMnemoPanel( container, new TsGuiContext( context ) );
+    // обработка мастер-объекта
+    // if( aMasterObjSkid != Skid.NONE ) {
+    // // ISkConnection skConn = vedScreen.v
+    // // ISimpleResolverFactoriesRegistry resRegistry = tsContext().get( ISimpleResolverFactoriesRegistry.class );
+    // // MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn(), resRegistry );
+    // // Ugwi ugwi = UgwiKindSkSkid.makeUgwi( masterObj.classId(), masterObj.strid() );
+    // // IVedScreenCfg scrCfg = VedScreenUtils.getVedScreenConfig( vedScreen );
+    // // IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, scrCfg, skConn() );
+    // }
     mnemoPanel.setMnemoConfig( mnemoCfg );
     mnemoPanel.resume();
 

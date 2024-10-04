@@ -174,23 +174,7 @@ public class PanelActorPropertyResolverConfig
     propSelector = new PanelSkObjectPropertySelector( environ().ugwiKingId, bottomComp, tsContext(), SWT.NONE );
     propSelector.addTsSelectionChangeListener( ( aSource, aSelectedItem ) -> fireContentChangeEvent() );
 
-    // Composite selectionComp = new Composite( bottomComp, SWT.NONE );
-    // selectionComp.setLayoutData( BorderLayout.NORTH );
-    // selectionComp.setLayout( new GridLayout( 2, false ) );
-    // CLabel l = new CLabel( selectionComp, SWT.CENTER );
-    // l.setText( "Тип свойства sk-объекта" );
-    //
-    // IM5CollectionPanel<IDtoAttrInfo> attrsPanel = SkGuiUtils.getAttrsListPanel( tsContext() );
-    // Control ctrl = attrsPanel.createControl( bottomComp );
-    // ctrl.setLayoutData( BorderLayout.CENTER );
-
-    // int style = SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL | SWT.H_SCROLL;
-    // propsViewer = new StridableTableViewer( bottomComp, style, 80, 200, -1 );
-    // propsViewer.viewer().getControl().setLayoutData( BorderLayout.CENTER );
-    // propsViewer.viewer().addSelectionChangedListener( aEvent -> fireContentChangeEvent() );
-
     sash.setWeights( 40, 60 );
-
   }
 
   // ------------------------------------------------------------------------------------

@@ -138,7 +138,13 @@ public class MasterObjectUtils {
    */
   public static String resolverTargetClassId( ICompoundResolverConfig aResolverCfg ) {
     TsNullArgumentRtException.checkNull( aResolverCfg );
+
     SimpleResolverCfg simpleCfg = aResolverCfg.cfgs().last();
+    if( simpleCfg.params().hasKey( MasterObjectUtils.PROPID_RESOLVER_OUTPUT_CLASS_ID ) ) {
+      System.out.println(
+          "Target classId: " + simpleCfg.params().getStr( MasterObjectUtils.PROPID_RESOLVER_OUTPUT_CLASS_ID ) );
+      return simpleCfg.params().getStr( MasterObjectUtils.PROPID_RESOLVER_OUTPUT_CLASS_ID );
+    }
     if( simpleCfg.params().hasKey( PROPID_RTD_UGWI ) ) {
       Ugwi ugwi = simpleCfg.params().getValobj( PROPID_RTD_UGWI );
       if( ugwi.kindId().equals( UgwiKindSkRtdata.KIND_ID ) ) {
@@ -152,6 +158,7 @@ public class MasterObjectUtils {
     if( simpleCfg.params().hasKey( PROPID_UGWI ) ) {
       Ugwi ugwi = simpleCfg.params().getValobj( PROPID_UGWI );
       return switch( ugwi.kindId() ) {
+        case UgwiKindSkLinkInfo.KIND_ID -> UgwiKindSkLinkInfo.getClassId( ugwi );
         case UgwiKindSkAttrInfo.KIND_ID -> UgwiKindSkAttrInfo.getClassId( ugwi );
         case UgwiKindSkAttr.KIND_ID -> UgwiKindSkAttr.getClassId( ugwi );
         case UgwiKindRriAttrInfo.KIND_ID -> UgwiKindRriAttrInfo.getClassId( ugwi );
@@ -197,6 +204,8 @@ public class MasterObjectUtils {
           return UgwiKindSkAttrInfo.getAttrId( ugwi );
         case UgwiKindSkAttr.KIND_ID:
           return UgwiKindSkAttr.getAttrId( ugwi );
+        case UgwiKindSkLinkInfo.KIND_ID:
+          return UgwiKindSkLinkInfo.getClassId( ugwi );
         default:
           break;
       }

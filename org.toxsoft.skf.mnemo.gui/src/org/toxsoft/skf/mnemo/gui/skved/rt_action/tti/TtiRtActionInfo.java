@@ -36,7 +36,14 @@ public class TtiRtActionInfo
       TSID_KEEPER_ID, ERtActionKind.KEEPER_ID //
   );
 
-  private static final ITinFieldInfo TFI_POPUP_MNEMO = new TinFieldInfo( FID_POPUP_MNEMO, TTI_POPUP_MNEMO_INFO, //
+  // private static final ITinFieldInfo TFI_POPUP_MNEMO = new TinFieldInfo( FID_POPUP_MNEMO, TTI_POPUP_MNEMO_INFO, //
+  // TSID_NAME, STR_POPUP_MNEMO, //
+  // TSID_DESCRIPTION, STR_POPUP_MNEMO_D, //
+  // OPID_EDITOR_FACTORY_NAME, ValedAvValobjPopupMnemoInfo.FACTORY_NAME, //
+  // TSID_KEEPER_ID, PopupMnemoInfo.KEEPER_ID //
+  // );
+
+  private static final ITinFieldInfo TFI_POPUP_MNEMO = new TinFieldInfo( FID_POPUP_MNEMO, TtiPopupMnemoInfo.INSTANCE, //
       TSID_NAME, STR_POPUP_MNEMO, //
       TSID_DESCRIPTION, STR_POPUP_MNEMO_D, //
       OPID_EDITOR_FACTORY_NAME, ValedAvValobjPopupMnemoInfo.FACTORY_NAME, //
@@ -80,20 +87,18 @@ public class TtiRtActionInfo
   @Override
   protected IAtomicValue doCompose( IStringMap<ITinValue> aChildValues ) {
     ERtActionKind kind = extractChildValobj( TFI_RT_ACTION_TYPE, aChildValues );
-    switch( kind ) {
-      case NONE:
-        return avValobj( RunTimeUserActionInfo.NONE );
-      case POPUP_MNEMO: {
+    return switch( kind ) {
+      case NONE -> avValobj( RunTimeUserActionInfo.NONE );
+      case POPUP_MNEMO -> {
         PopupMnemoInfo popupMnemoInfo = extractChildValobj( TFI_POPUP_MNEMO, aChildValues );
-        return avValobj( new RunTimeUserActionInfo( popupMnemoInfo ) );
+        yield avValobj( new RunTimeUserActionInfo( popupMnemoInfo ) );
       }
-      case SWITCH_PERSP: {
+      case SWITCH_PERSP -> {
         SwitchPerspInfo switchPerspInfo = extractChildValobj( TFI_SWITCH_PERSP, aChildValues );
-        return avValobj( new RunTimeUserActionInfo( switchPerspInfo ) );
+        yield avValobj( new RunTimeUserActionInfo( switchPerspInfo ) );
       }
-      default:
-        throw new IllegalArgumentException();
-    }
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   @Override
@@ -127,21 +132,23 @@ public class TtiRtActionInfo
       }
     }
     IStringListEdit result = new StringArrayList();
-    switch( rtUserAction.kind() ) {
-      case NONE:
+    return switch( rtUserAction.kind() ) {
+      case NONE -> {
         result.add( FID_RT_ACTION_TYPE );
-        return result;
-      case POPUP_MNEMO:
+        yield result;
+      }
+      case POPUP_MNEMO -> {
         result.add( FID_RT_ACTION_TYPE );
         result.add( FID_POPUP_MNEMO );
-        return result;
-      case SWITCH_PERSP:
+        yield result;
+      }
+      case SWITCH_PERSP -> {
         result.add( FID_RT_ACTION_TYPE );
         result.add( FID_SWITCH_PERSP );
-        return result;
-      default:
-        throw new IllegalArgumentException( "Unexpected value: " + rtUserAction.kind() ); //$NON-NLS-1$
-    }
+        yield result;
+      }
+      default -> throw new IllegalArgumentException( "Unexpected value: " + rtUserAction.kind() ); //$NON-NLS-1$
+    };
   }
 
 }

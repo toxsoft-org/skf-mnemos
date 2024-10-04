@@ -117,4 +117,21 @@ public class PopupMnemoInfo {
     return mouseButton;
   }
 
+  /**
+   * Возвращает Skid мастер-объекта мнемосхемы.<br>
+   * В случае когда мастер-объект не требуется возвращает {@link Skid#NONE}.
+   *
+   * @return Skid - ИД мастер-объекта
+   */
+  public Skid masterSkid() {
+    if( resolverCfg == PopupMnemoResolverConfig.EMPTY ) {
+      return Skid.NONE;
+    }
+    if( !resolverCfg.masterObjId().isBlank() ) { // объект указан непосредственно
+      return new Skid( resolverCfg.masterClassId(), resolverCfg.masterObjId() );
+    }
+    // resolverCfg.resolverConfig().
+    return Skid.NONE;
+  }
+
 }

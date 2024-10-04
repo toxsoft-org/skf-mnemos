@@ -1,9 +1,15 @@
 package org.toxsoft.skf.mnemo.gui.skved.rt_action.valed;
 
+import static org.toxsoft.core.tsgui.graphics.icons.ITsStdIconIds.*;
 import static org.toxsoft.core.tsgui.valed.api.IValedControlConstants.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 
+import org.eclipse.swt.*;
+import org.eclipse.swt.events.*;
+import org.eclipse.swt.layout.*;
+import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
+import org.toxsoft.core.tsgui.graphics.icons.*;
 import org.toxsoft.core.tsgui.valed.api.*;
 import org.toxsoft.core.tsgui.valed.controls.helpers.*;
 import org.toxsoft.core.tsgui.valed.impl.*;
@@ -58,7 +64,7 @@ public class ValedPopupMnemoResolverConfig
    */
   public static final AbstractValedControlFactory FACTORY = new Factory();
 
-  PopupMnemoResolverConfig resolverConfig = null;
+  PopupMnemoResolverConfig resolverConfig = PopupMnemoResolverConfig.EMPTY;
 
   protected ValedPopupMnemoResolverConfig( ITsGuiContext aTsContext ) {
     super( aTsContext );
@@ -69,6 +75,36 @@ public class ValedPopupMnemoResolverConfig
   // ------------------------------------------------------------------------------------
   //
   //
+
+  @Override
+  protected Composite doCreateControl( Composite aParent ) {
+    Composite comp = super.doCreateControl( aParent );
+    if( comp.getLayout() instanceof GridLayout ) {
+      GridLayout l = (GridLayout)comp.getLayout();
+      GridLayout gl = new GridLayout( 4, false );
+      gl.marginLeft = l.marginLeft;
+      gl.marginTop = l.marginTop;
+      gl.marginRight = l.marginRight;
+      gl.marginBottom = l.marginBottom;
+      gl.verticalSpacing = l.verticalSpacing;
+      gl.horizontalSpacing = l.horizontalSpacing;
+      gl.marginWidth = l.marginWidth;
+      gl.marginHeight = l.marginHeight;
+      comp.setLayout( gl );
+    }
+
+    Button btnClear = new Button( comp, SWT.PUSH );
+    btnClear.setImage( iconManager().loadStdIcon( ICONID_EDIT_CLEAR, EIconSize.IS_16X16 ) );
+    btnClear.addSelectionListener( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( SelectionEvent aEvent ) {
+        resolverConfig = PopupMnemoResolverConfig.EMPTY;
+        setValue( resolverConfig );
+      }
+    } );
+    return comp;
+  }
 
   @Override
   protected boolean doProcessButtonPress() {
@@ -82,7 +118,7 @@ public class ValedPopupMnemoResolverConfig
 
   @Override
   protected void doUpdateLabelControl() {
-    if( resolverConfig == null ) {
+    if( resolverConfig == PopupMnemoResolverConfig.EMPTY ) {
       getLabelControl().setText( "none" ); //$NON-NLS-1$
     }
     else {

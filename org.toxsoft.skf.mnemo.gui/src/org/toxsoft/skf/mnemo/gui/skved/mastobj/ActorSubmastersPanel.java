@@ -28,6 +28,7 @@ import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.mastobj.PanelActorPropertyResolverConfig.*;
+import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 
 /**
  * Панель содержащая информацию о значениях свойств актора в зависимости от "мастер-объекта".
@@ -200,8 +201,14 @@ public class ActorSubmastersPanel
         else {
           smClassId = MasterObjectUtils.outputSubmasterClassId( smCfg );
         }
+        ICompoundResolverConfig cfg = null;
         PanelContext pCtx = new PanelContext( row.ugwiKindId, smClassId, vedScreen );
-        ICompoundResolverConfig cfg = PanelActorPropertyResolverConfig.edit( row.cfg, pCtx );
+        if( row.ugwiKindId.equals( UgwiKindSkSkid.KIND_ID ) ) {
+          cfg = PanelCompoundResolverConfig.edit( null, smClassId, vedScreen.tsContext() );
+        }
+        else {
+          cfg = PanelActorPropertyResolverConfig.edit( row.cfg, pCtx );
+        }
         if( cfg != null ) {
           row.cfg = cfg;
           viewer.update( row, null );

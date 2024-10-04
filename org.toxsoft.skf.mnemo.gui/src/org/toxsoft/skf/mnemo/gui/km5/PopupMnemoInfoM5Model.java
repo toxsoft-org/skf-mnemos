@@ -83,12 +83,12 @@ public class PopupMnemoInfoM5Model
   // };
 
   /**
-   * Attribute {@link PopupMnemoInfo#masterObj() } master
+   * Attribute {@link PopupMnemoInfo#resolverConfig() } master
    */
   public M5AttributeFieldDef<PopupMnemoInfo> MASTER_SKID = new M5AttributeFieldDef<>( FID_RESOLVER_CFG, VALOBJ, //
       TSID_NAME, STR_N_MASTER_OBJ_SKID, //
       TSID_DESCRIPTION, STR_D_MASTER_OBJ_SKID, //
-      // TSID_KEEPER_ID, PopupMnemoResolverConfig.KEEPER_ID, //
+      TSID_KEEPER_ID, PopupMnemoResolverConfig.KEEPER_ID, //
       OPID_EDITOR_FACTORY_NAME, ValedAvPopupMnemoResolverConfig.FACTORY_NAME //
   ) {
 
