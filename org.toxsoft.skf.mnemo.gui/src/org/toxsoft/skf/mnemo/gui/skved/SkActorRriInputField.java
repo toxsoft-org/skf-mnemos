@@ -186,7 +186,8 @@ public class SkActorRriInputField
     Skid skid = UgwiKindRriAttr.getSkid( ugwi );
     String attrId = UgwiKindRriAttr.getAttrId( ugwi );
     IAtomicValue value = section.getAttrParamValue( skid, attrId );
-    switch( value.atomicType() ) {
+    IDtoAttrInfo attrInfo = section.listParamInfoes( skid.classId() ).getByKey( attrId ).attrInfo();
+    switch( attrInfo.dataType().atomicType() ) {
       case BOOLEAN:
         Boolean bv = Boolean.valueOf( Boolean.parseBoolean( aText ) );
         value = AvUtils.avFromObj( bv );
