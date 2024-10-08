@@ -19,6 +19,7 @@ import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.bricks.geometry.*;
 import org.toxsoft.core.tslib.bricks.geometry.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
@@ -89,7 +90,7 @@ public class SkActorRunTimeAction
     setMouseClickHandler( new IMouseClickHandler() {
 
       @Override
-      public void onDoubleClick( VedAbstractVisel aVisel ) {
+      public void onDoubleClick( VedAbstractVisel aVisel, ETsMouseButton aButton, ITsPoint aCoors, int aState ) {
         RunTimeUserActionInfo rtUserAction = props().getValobj( TFI_RT_USER_ACTION.id() );
         ERtActionKind actionKind = rtUserAction.kind();
         switch( actionKind ) {
@@ -99,7 +100,7 @@ public class SkActorRunTimeAction
           case POPUP_MNEMO: {
             PopupMnemoInfo popupMnemoInfo = rtUserAction.popupMnemoInfo();
             ERtActionMouseButton button = popupMnemoInfo.mouseButton();
-            if( button.equals( ERtActionMouseButton.DOUBLE_CLICK ) ) {
+            if( button.equals( popupMnemoInfo.doubleClick() ) ) {
               // open popum mnemo
               openPopupMnemo( popupMnemoInfo );
             }
@@ -108,10 +109,10 @@ public class SkActorRunTimeAction
           case SWITCH_PERSP: {
             SwitchPerspInfo switchPerspInfo = rtUserAction.switchPerspInfo();
             ERtActionMouseButton button = switchPerspInfo.mouseButton();
-            if( button.equals( ERtActionMouseButton.DOUBLE_CLICK ) ) {
-              // switch Eclipse perspective and, optionally, activate view in it
-              switchPersp( switchPerspInfo );
-            }
+            // if( button.equals( popupMnemoInfo.doubleClick() ) ) {
+            // switch Eclipse perspective and, optionally, activate view in it
+            switchPersp( switchPerspInfo );
+            // }
             break;
           }
           default:
@@ -120,7 +121,7 @@ public class SkActorRunTimeAction
       }
 
       @Override
-      public void onClick( VedAbstractVisel aVisel, ETsMouseButton aMouseButton ) {
+      public void onClick( VedAbstractVisel aVisel, ETsMouseButton aMouseButton, ITsPoint aCoors, int aState ) {
         RunTimeUserActionInfo rtUserAction = props().getValobj( TFI_RT_USER_ACTION.id() );
         ERtActionKind actionKind = rtUserAction.kind();
         switch( actionKind ) {

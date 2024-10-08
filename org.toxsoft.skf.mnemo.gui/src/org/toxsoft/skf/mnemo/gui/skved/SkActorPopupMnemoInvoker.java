@@ -1,10 +1,16 @@
 package org.toxsoft.skf.mnemo.gui.skved;
 
+import static org.toxsoft.core.tsgui.bricks.tin.tti.ITtiConstants.*;
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
+import org.eclipse.swt.*;
+import org.eclipse.swt.graphics.*;
+import org.eclipse.swt.layout.*;
+import org.eclipse.swt.widgets.*;
+import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
 import org.toxsoft.core.tsgui.bricks.tin.tti.*;
@@ -14,14 +20,18 @@ import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.bricks.geometry.*;
+import org.toxsoft.core.tslib.bricks.geometry.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
+import org.toxsoft.skf.mnemo.gui.glib.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
+import org.toxsoft.skf.mnemo.gui.skved.rt_action.tti.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 
@@ -32,6 +42,15 @@ public class SkActorPopupMnemoInvoker
    * The actor factor ID.
    */
   public static final String FACTORY_ID = SKVED_ID + ".actor.PopupMnemoInvoker"; //$NON-NLS-1$
+
+  /**
+   * ИД поля "Skid мнемосхемы"
+   */
+  private static final String FID_CAPTION = "mnemoCaption"; //$NON-NLS-1$
+
+  public static final ITinFieldInfo TFI_CAPTION = new TinFieldInfo( FID_CAPTION, TTI_AT_STRING, //
+      TSID_NAME, "Заголовок", //
+      TSID_DESCRIPTION, "Заголовок окна мнемосхемы" );
 
   /**
    * ИД поля "Skid мнемосхемы"
@@ -54,6 +73,28 @@ public class SkActorPopupMnemoInvoker
   );
 
   /**
+   * ИД поля "Двойной щелчок"
+   */
+  private static final String FID_DOUBLE_CLICK = "doubleClick"; //$NON-NLS-1$
+
+  private static final ITinFieldInfo TFI_DOUBLE_CLIK = new TinFieldInfo( FID_DOUBLE_CLICK, TTI_AT_BOOLEAN, //
+      TSID_NAME, "Двойной щелчок", //
+      TSID_DESCRIPTION, "Использовать двойной щелчок мыши для активации", //
+      TSID_KEEPER_ID, ERtActionMouseButton.KEEPER_ID //
+  );
+
+  /**
+   * ИД поля "Кнопка мыши"
+   */
+  private static final String FID_KEY_MASK = "keyMask"; //$NON-NLS-1$
+
+  private static final ITinFieldInfo TFI_KEY_MASK = new TinFieldInfo( FID_KEY_MASK, TtiKeyMask.INSTANCE, //
+      TSID_NAME, "Маска", //
+      TSID_DESCRIPTION, "Маска нажатой управляющей клавиши" //
+  // TSID_KEEPER_ID, ERtActionMouseButton.KEEPER_ID //
+  );
+
+  /**
    * The VISEL factory singleton.
    */
   public static final IVedActorFactory FACTORY = new VedAbstractActorFactory( FACTORY_ID, //
@@ -69,8 +110,11 @@ public class SkActorPopupMnemoInvoker
       fields.add( TFI_NAME );
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
+      fields.add( TFI_CAPTION );
       fields.add( TFI_MNEMO_SKID );
       fields.add( TFI_MOUSE_BUTTON );
+      fields.add( TFI_DOUBLE_CLIK );
+      fields.add( TFI_KEY_MASK );
       fields.add( TFI_SKID_UGWI );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorPopupMnemoInvoker.class );
     }
@@ -87,17 +131,25 @@ public class SkActorPopupMnemoInvoker
     setMouseClickHandler( new IMouseClickHandler() {
 
       @Override
-      public void onClick( VedAbstractVisel aVisel, ETsMouseButton aButton ) {
-        ERtActionMouseButton actionButton = props().getValobj( FID_MOUSE_BUTTON );
-        if( isMyMouseButton( actionButton, aButton ) ) {
-          openPopupMnemo();
+      public void onClick( VedAbstractVisel aVisel, ETsMouseButton aButton, ITsPoint aCoors, int aState ) {
+        if( !props().getBool( FID_DOUBLE_CLICK ) ) {
+          ERtActionMouseButton actionButton = props().getValobj( FID_MOUSE_BUTTON );
+          if( isMyMouseButton( actionButton, aButton, aState ) ) {
+            // openPopupMnemo();
+            openPopupMnemoShell( aCoors );
+          }
         }
       }
 
       @Override
-      public void onDoubleClick( VedAbstractVisel aVisel ) {
-        // TODO Auto-generated method stub
-
+      public void onDoubleClick( VedAbstractVisel aVisel, ETsMouseButton aButton, ITsPoint aCoors, int aState ) {
+        if( props().getBool( FID_DOUBLE_CLICK ) ) {
+          ERtActionMouseButton actionButton = props().getValobj( FID_MOUSE_BUTTON );
+          if( isMyMouseButton( actionButton, aButton, aState ) ) {
+            // openPopupMnemo();
+            openPopupMnemoShell( aCoors );
+          }
+        }
       }
 
     } );
@@ -116,27 +168,70 @@ public class SkActorPopupMnemoInvoker
   // Implementation
   //
 
-  /**
-   * Create popup window with mnemo inside
-   */
-  private void openPopupMnemo() {
+  private ISkMnemoCfg getMnemoConfig() {
     ISkMnemosService mnemoService = skConn().coreApi().getService( ISkMnemosService.SERVICE_ID );
-    // Ugwi mnemoUgwi = props().getValobj( FID_MNEMO_SKID );
-    // Skid mnemoSkid = UgwiKindSkSkid.getSkid( mnemoUgwi );
     Skid mnemoSkid = props().getValobj( FID_MNEMO_SKID );
     ISkMnemoCfg mnemoCfg = mnemoService.getMnemo( mnemoSkid.strid() );
     IAtomicValue value = props().getValue( TFI_SKID_UGWI.id() );
     if( value.isAssigned() ) {
       Ugwi moUgwi = props().getValobj( TFI_SKID_UGWI.id() );
-      Skid moSkid = UgwiKindSkSkid.getSkid( moUgwi );
-      ISimpleResolverFactoriesRegistry resRegistry = tsContext().get( ISimpleResolverFactoriesRegistry.class );
-      MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn(), resRegistry );
-      Ugwi ugwi = UgwiKindSkSkid.makeUgwi( moSkid.classId(), moSkid.strid() );
-      IVedScreenCfg scrCfg = VedScreenCfg.KEEPER.str2ent( mnemoCfg.cfgData() );
-      IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, scrCfg, skConn() );
-      mnemoCfg.setCfgData( VedScreenCfg.KEEPER.ent2str( newCfg ) );
+      if( moUgwi != Ugwi.NONE ) {
+        Skid moSkid = UgwiKindSkSkid.getSkid( moUgwi );
+        ISimpleResolverFactoriesRegistry resRegistry = tsContext().get( ISimpleResolverFactoriesRegistry.class );
+        MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn(), resRegistry );
+        Ugwi ugwi = UgwiKindSkSkid.makeUgwi( moSkid.classId(), moSkid.strid() );
+        IVedScreenCfg scrCfg = VedScreenCfg.KEEPER.str2ent( mnemoCfg.cfgData() );
+        IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, scrCfg, skConn() );
+        mnemoCfg.setCfgData( VedScreenCfg.KEEPER.ent2str( newCfg ) );
+      }
     }
-    PopupMnemoDialogPanel.showPopMnemo( tsContext().eclipseContext(), mnemoCfg );
+    return mnemoCfg;
+  }
+
+  /**
+   * Create popup window with mnemo inside
+   */
+  private void openPopupMnemo() {
+    PopupMnemoDialogPanel.showPopMnemo( tsContext().eclipseContext(), getMnemoConfig() );
+  }
+
+  private static TsPoint computeMnemoSize( ISkMnemoCfg aMnemoCfg ) {
+    IVedScreenCfg vedCfg = VedScreenCfg.KEEPER.str2ent( aMnemoCfg.cfgData() );
+    IVedCanvasCfg canvasCfg = vedCfg.canvasCfg();
+    return new TsPoint( (int)(canvasCfg.size().x()), (int)(canvasCfg.size().y()) );
+  }
+
+  /**
+   * Open mnemo in new Shell
+   */
+  private void openPopupMnemoShell( ITsPoint aCoors ) {
+    ISkMnemoCfg mnemoCfg = getMnemoConfig();
+    Control scrCtrl = vedScreen().view().getControl();
+    Shell wnd = new Shell( scrCtrl.getShell(), SWT.BORDER | SWT.CLOSE );
+    String caption = props().getStr( FID_CAPTION );
+    wnd.setText( caption );
+    FillLayout layout = new FillLayout();
+    wnd.setLayout( layout );
+    Composite bkPanel = new Composite( wnd, SWT.NONE );
+    bkPanel.setLayout( layout );
+    IRuntimeMnemoPanel panel = new RuntimeMnemoPanel( bkPanel, new TsGuiContext( tsContext() ) );
+
+    panel.setMnemoConfig( mnemoCfg );
+    panel.resume();
+    TsPoint p = computeMnemoSize( mnemoCfg );
+    wnd.setSize( p.x(), p.y() );
+    Rectangle clientRect = wnd.getClientArea();
+
+    int dw = p.x() - clientRect.width;
+    int dh = p.y() - clientRect.height;
+    wnd.setSize( p.x() + dw, p.y() + dh );
+
+    // Point ctrlP = scrCtrl.toControl( aCoors.x(), aCoors.y() );
+    Point ctrlP = scrCtrl.toDisplay( aCoors.x(), aCoors.y() );
+    // ctrlP = getShell().toDisplay( ctrlP );
+
+    wnd.setLocation( ctrlP.x, ctrlP.y );
+    wnd.open();
   }
 
   /**
@@ -144,23 +239,25 @@ public class SkActorPopupMnemoInvoker
    *
    * @param aActionButton - designed mouse button
    * @param aMouseButton - real user selected mouse button
+   * @param aState int - SWT код состояния управляющих клавиш Shift, Alt, Ctrl
    * @return true if click on proper mouse button
    */
-  protected boolean isMyMouseButton( ERtActionMouseButton aActionButton, ETsMouseButton aMouseButton ) {
+  protected boolean isMyMouseButton( ERtActionMouseButton aActionButton, ETsMouseButton aMouseButton, int aState ) {
     boolean retVal = false;
+    int keyMask = props().getInt( FID_KEY_MASK );
     switch( aActionButton ) {
       case LEFT:
-        if( aMouseButton.equals( ETsMouseButton.LEFT ) ) {
+        if( aMouseButton.equals( ETsMouseButton.LEFT ) && (keyMask & aState) == keyMask ) {
           retVal = true;
         }
         break;
       case MIDDLE:
-        if( aMouseButton.equals( ETsMouseButton.MIDDLE ) ) {
+        if( aMouseButton.equals( ETsMouseButton.MIDDLE ) && (keyMask & aState) == keyMask ) {
           retVal = true;
         }
         break;
       case RIGHT:
-        if( aMouseButton.equals( ETsMouseButton.RIGHT ) ) {
+        if( aMouseButton.equals( ETsMouseButton.RIGHT ) && (keyMask & aState) == keyMask ) {
           retVal = true;
         }
         break;

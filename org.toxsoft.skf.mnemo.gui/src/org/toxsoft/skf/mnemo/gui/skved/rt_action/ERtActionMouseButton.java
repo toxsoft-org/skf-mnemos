@@ -23,10 +23,10 @@ public enum ERtActionMouseButton
    */
   LEFT( "LEFT", STR_N_LEFT_BTTN, STR_D_LEFT_BTTN ), //$NON-NLS-1$
 
-  /**
-   * Double click left button {@link SWT#BUTTON3}.
-   */
-  DOUBLE_CLICK( "DOUBLE_CLICK", STR_N_DOUBLE_CLICK, STR_D_DOUBLE_CLICK ), //$NON-NLS-1$
+  // /**
+  // * Double click left button {@link SWT#BUTTON3}.
+  // */
+  // DOUBLE_CLICK( "DOUBLE_CLICK", STR_N_DOUBLE_CLICK, STR_D_DOUBLE_CLICK ), //$NON-NLS-1$
 
   /**
    * Middle button {@link SWT#BUTTON2}.

@@ -156,7 +156,7 @@ public class PopupMnemoInfoM5Model
       ERtActionMouseButton mouseBttn = aValues.getAsAv( FID_MOUSE_BTTN ).asValobj();
 
       // return new PopupMnemoInfo( mnemoSkid, masterSkid, mouseBttn );
-      return new PopupMnemoInfo( mnemoSkid, resolverCfg, mouseBttn );
+      return new PopupMnemoInfo( mnemoSkid, "", resolverCfg, mouseBttn, false, 0 );
     }
 
     @Override

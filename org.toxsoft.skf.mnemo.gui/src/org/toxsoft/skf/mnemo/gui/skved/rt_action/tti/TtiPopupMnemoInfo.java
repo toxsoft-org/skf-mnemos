@@ -74,7 +74,7 @@ public class TtiPopupMnemoInfo
   protected IAtomicValue doCompose( IStringMap<ITinValue> aChildValues ) {
     Skid mnemoSkid = extractChildValobj( TFI_MNEMO_SKID, aChildValues );
     ERtActionMouseButton mouseBtn = extractChildValobj( TFI_MOUSE_BUTTON, aChildValues );
-    return avValobj( new PopupMnemoInfo( mnemoSkid, PopupMnemoResolverConfig.EMPTY, mouseBtn ) );
+    return avValobj( new PopupMnemoInfo( mnemoSkid, "", PopupMnemoResolverConfig.EMPTY, mouseBtn, false, 0 ) );
   }
 
   @Override

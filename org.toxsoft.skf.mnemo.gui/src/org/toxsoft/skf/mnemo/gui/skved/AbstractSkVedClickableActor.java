@@ -33,7 +33,7 @@ public abstract class AbstractSkVedClickableActor
   /**
    * Интерфейс обработчика нажатия mouse кнопок
    *
-   * @author dima
+   * @author dima, vs
    */
   public interface IMouseClickHandler {
 
@@ -42,15 +42,20 @@ public abstract class AbstractSkVedClickableActor
      *
      * @param aVisel {@link VedAbstractVisel} - визуальный элемент, на котором был Click
      * @param aButton {@link ETsMouseButton} - the mouse button
+     * @param aCoors {@link ITsPoint} - координаты курсора при нажатии
+     * @param aState int - SWT код состояния управляющих клавиш Shift, Alt, Ctrl
      */
-    void onClick( VedAbstractVisel aVisel, ETsMouseButton aButton );
+    void onClick( VedAbstractVisel aVisel, ETsMouseButton aButton, ITsPoint aCoors, int aState );
 
     /**
      * Вызывается в момент, когда произошел DoubleClick и необходимо произвести соответствующие действия
      *
      * @param aVisel {@link VedAbstractVisel} - визуальный элемент, на котором был DoubleClick
+     * @param aButton {@link ETsMouseButton} - кнопка мыши
+     * @param aCoors {@link ITsPoint} - координаты курсора при нажатии
+     * @param aState int - SWT код состояния управляющих клавиш Shift, Alt, Ctrl
      */
-    void onDoubleClick( VedAbstractVisel aVisel );
+    void onDoubleClick( VedAbstractVisel aVisel, ETsMouseButton aButton, ITsPoint aCoors, int aState );
   }
 
   private boolean activated = false;
@@ -149,7 +154,7 @@ public abstract class AbstractSkVedClickableActor
         retVal = true;
         setActivated( false );
         if( clickHandler != null ) {
-          clickHandler.onClick( visel, aButton );
+          clickHandler.onClick( visel, aButton, aCoors, aState );
         }
         // TsDialogUtils.info( vedScreen().view().getControl().getShell(), "Ти нажяль!" );
       }
@@ -185,7 +190,7 @@ public abstract class AbstractSkVedClickableActor
         retVal = true;
         setActivated( false );
         if( clickHandler != null ) {
-          clickHandler.onDoubleClick( visel );
+          clickHandler.onDoubleClick( visel, aButton, aCoors, aState );
         }
         // TsDialogUtils.info( vedScreen().view().getControl().getShell(), "Ти быстро дважды нажяль!" );
       }
