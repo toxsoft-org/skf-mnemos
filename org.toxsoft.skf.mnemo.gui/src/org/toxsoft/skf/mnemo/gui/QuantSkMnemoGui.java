@@ -72,6 +72,7 @@ public class QuantSkMnemoGui
     actFact.register( SkActorRriCheckbox.FACTORY );
     // actFact.register( SkActorRunTimeAction.FACTORY );
     actFact.register( SkActorPopupMnemoInvoker.FACTORY );
+    actFact.register( SkActorRtdataRefbook.FACTORY );
 
   }
 
@@ -96,6 +97,7 @@ public class QuantSkMnemoGui
     vcfRegistry.registerFactory( ValedSwitchPerspInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjSwitchPerspInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjMPerspIdEditor.FACTORY );
+    vcfRegistry.registerFactory( ValedAvValobjRtdataRefbookAttrInfo.FACTORY );
 
     // ------------------------------------------------------------------------------------
     // Регистрация резолверов

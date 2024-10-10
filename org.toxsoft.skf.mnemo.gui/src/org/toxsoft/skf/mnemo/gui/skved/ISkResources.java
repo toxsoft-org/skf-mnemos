@@ -38,6 +38,8 @@ interface ISkResources {
   String STR_PROP_CMD_UGWI   = Messages.getString( "STR_PROP_CMD_UGWI" );   //$NON-NLS-1$
   String STR_PROP_CMD_UGWI_D = Messages.getString( "STR_PROP_CMD_UGWI_D" ); //$NON-NLS-1$
 
+  String STR_L_RRI_SECTION = Messages.getString( "STR_L_RRI_SECTION" ); //$NON-NLS-1$
+
   /**
    * {@link SkActorCmdButton}
    */
@@ -129,4 +131,21 @@ interface ISkResources {
   String STR_N_CMD_OFF       = "Команда (off)";
   String STR_N_VALUE         = "Значение";
   String STR_N_INVERSE_VALUE = "Инвертировать значение";
+
+  /**
+   * {@link SkActorPopupMnemoInvoker}
+   */
+  String STR_CAPTION        = Messages.getString( "STR_CAPTION" );        //$NON-NLS-1$
+  String STR_CAPTION_D      = Messages.getString( "STR_CAPTION_D" );      //$NON-NLS-1$
+  String STR_MNEMOSCHEMA    = Messages.getString( "STR_MNEMOSCHEMA" );    //$NON-NLS-1$
+  String STR_MNEMOSCHEMA_D  = Messages.getString( "STR_MNEMOSCHEMA_D" );  //$NON-NLS-1$
+  String STR_MOUSE_BUTTON   = Messages.getString( "STR_MOUSE_BUTTON" );   //$NON-NLS-1$
+  String STR_MOUSE_BUTTON_D = Messages.getString( "STR_MOUSE_BUTTON_D" ); //$NON-NLS-1$
+  String STR_DOUBLE_CLICK   = Messages.getString( "STR_DOUBLE_CLICK" );   //$NON-NLS-1$
+  String STR_DOUBLE_CLICK_D = Messages.getString( "STR_DOUBLE_CLICK_D" ); //$NON-NLS-1$
+  String STR_KEY_MASK       = Messages.getString( "STR_KEY_MASK" );       //$NON-NLS-1$
+  String STR_KEY_MASK_D     = Messages.getString( "STR_KEY_MASK_D" );     //$NON-NLS-1$
+  String STR_SHOW_MNEMO     = Messages.getString( "STR_SHOW_MNEMO" );     //$NON-NLS-1$
+  String STR_SHOW_MNEMO_D   = Messages.getString( "STR_SHOW_MNEMO_D" );   //$NON-NLS-1$
+
 }

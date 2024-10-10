@@ -4,6 +4,7 @@ import static org.toxsoft.core.tsgui.bricks.tin.tti.ITtiConstants.*;
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
+import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
 import org.eclipse.swt.*;
@@ -35,6 +36,12 @@ import org.toxsoft.skf.mnemo.gui.skved.rt_action.tti.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 
+/**
+ * Actor, который по щелчку мыши вызывает всплывающее окно, содержимое которого является мнемосхемой.
+ * <p>
+ *
+ * @author vs
+ */
 public class SkActorPopupMnemoInvoker
     extends AbstractSkVedClickableActor {
 
@@ -48,18 +55,18 @@ public class SkActorPopupMnemoInvoker
    */
   private static final String FID_CAPTION = "mnemoCaption"; //$NON-NLS-1$
 
-  public static final ITinFieldInfo TFI_CAPTION = new TinFieldInfo( FID_CAPTION, TTI_AT_STRING, //
-      TSID_NAME, "Заголовок", //
-      TSID_DESCRIPTION, "Заголовок окна мнемосхемы" );
+  private static final ITinFieldInfo TFI_CAPTION = new TinFieldInfo( FID_CAPTION, TTI_AT_STRING, //
+      TSID_NAME, STR_CAPTION, //
+      TSID_DESCRIPTION, STR_CAPTION_D );
 
   /**
    * ИД поля "Skid мнемосхемы"
    */
   private static final String FID_MNEMO_SKID = "mnemoSkid"; //$NON-NLS-1$
 
-  public static final ITinFieldInfo TFI_MNEMO_SKID = new TinFieldInfo( FID_MNEMO_SKID, TTI_SKID, //
-      TSID_NAME, "Мнемосхема", //
-      TSID_DESCRIPTION, "ИД объекта мнемосхемы" );
+  private static final ITinFieldInfo TFI_MNEMO_SKID = new TinFieldInfo( FID_MNEMO_SKID, TTI_SKID, //
+      TSID_NAME, STR_MNEMOSCHEMA, //
+      TSID_DESCRIPTION, STR_MNEMOSCHEMA_D );
 
   /**
    * ИД поля "Кнопка мыши"
@@ -67,8 +74,8 @@ public class SkActorPopupMnemoInvoker
   private static final String FID_MOUSE_BUTTON = "mouseButton"; //$NON-NLS-1$
 
   private static final ITinFieldInfo TFI_MOUSE_BUTTON = new TinFieldInfo( FID_MOUSE_BUTTON, TtiAvEnum.INSTANCE, //
-      TSID_NAME, "Кнопка мыши", //
-      TSID_DESCRIPTION, "Кнопка мыши для вызова всплывающего окна мнемосхемы", //
+      TSID_NAME, STR_MOUSE_BUTTON, //
+      TSID_DESCRIPTION, STR_MOUSE_BUTTON_D, //
       TSID_KEEPER_ID, ERtActionMouseButton.KEEPER_ID //
   );
 
@@ -78,8 +85,8 @@ public class SkActorPopupMnemoInvoker
   private static final String FID_DOUBLE_CLICK = "doubleClick"; //$NON-NLS-1$
 
   private static final ITinFieldInfo TFI_DOUBLE_CLIK = new TinFieldInfo( FID_DOUBLE_CLICK, TTI_AT_BOOLEAN, //
-      TSID_NAME, "Двойной щелчок", //
-      TSID_DESCRIPTION, "Использовать двойной щелчок мыши для активации", //
+      TSID_NAME, STR_DOUBLE_CLICK, //
+      TSID_DESCRIPTION, STR_DOUBLE_CLICK_D, //
       TSID_KEEPER_ID, ERtActionMouseButton.KEEPER_ID //
   );
 
@@ -89,17 +96,16 @@ public class SkActorPopupMnemoInvoker
   private static final String FID_KEY_MASK = "keyMask"; //$NON-NLS-1$
 
   private static final ITinFieldInfo TFI_KEY_MASK = new TinFieldInfo( FID_KEY_MASK, TtiKeyMask.INSTANCE, //
-      TSID_NAME, "Маска", //
-      TSID_DESCRIPTION, "Маска нажатой управляющей клавиши" //
-  // TSID_KEEPER_ID, ERtActionMouseButton.KEEPER_ID //
+      TSID_NAME, STR_KEY_MASK, //
+      TSID_DESCRIPTION, STR_KEY_MASK_D //
   );
 
   /**
    * The VISEL factory singleton.
    */
   public static final IVedActorFactory FACTORY = new VedAbstractActorFactory( FACTORY_ID, //
-      TSID_NAME, "Показ мнемосхемы", //
-      TSID_DESCRIPTION, "Вызов диалогового окна с указанной мнемосхемой", //
+      TSID_NAME, STR_SHOW_MNEMO, //
+      TSID_DESCRIPTION, STR_SHOW_MNEMO_D, //
       TSID_ICON_ID, ICONID_RT_ACTION_ACTOR //
   ) {
 
@@ -191,6 +197,7 @@ public class SkActorPopupMnemoInvoker
   /**
    * Create popup window with mnemo inside
    */
+  @SuppressWarnings( "unused" )
   private void openPopupMnemo() {
     PopupMnemoDialogPanel.showPopMnemo( tsContext().eclipseContext(), getMnemoConfig() );
   }

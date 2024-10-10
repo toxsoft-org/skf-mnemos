@@ -1,5 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.skved;
 
+import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
+
 import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
 import org.eclipse.swt.events.*;
@@ -74,7 +76,7 @@ public class RriSectionSelector
     aParent.setLayout( gl );
 
     CLabel l = new CLabel( aParent, SWT.CENTER );
-    l.setText( "Секция НСИ: " );
+    l.setText( STR_L_RRI_SECTION );
 
     fldSectionId = new Text( aParent, SWT.BORDER );
     fldSectionId.setEditable( false );

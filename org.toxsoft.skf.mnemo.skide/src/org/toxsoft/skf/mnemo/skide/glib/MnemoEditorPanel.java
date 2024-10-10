@@ -286,6 +286,7 @@ public class MnemoEditorPanel
     ISkConnection skConn = skConnSupp.getConn( suppliedConnectionId );
     skVedEnvironment = new SkVedEnvironment( skConn );
     vedScreen.tsContext().put( ISkVedEnvironment.class, skVedEnvironment );
+    vedScreen.tsContext().put( ISkConnection.class, skConn );
     setCtxSkConnKey( tsContext(), aSuppliedConnectionId );
 
     hotKeysManager = new VedHotKeysManager( vedScreen );

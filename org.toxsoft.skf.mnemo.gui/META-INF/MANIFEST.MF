@@ -24,6 +24,7 @@ Require-Bundle: jakarta.inject.jakarta.inject-api,
  org.toxsoft.uskat.core.gui,
  org.toxsoft.skf.reports.gui,
  org.toxsoft.skf.rri.lib;bundle-version="1.0.0",
+ org.toxsoft.skf.refbooks.lib;bundle-version="1.0.0",
  org.toxsoft.skf.mnemo.lib
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.toxsoft.skf.mnemo.gui

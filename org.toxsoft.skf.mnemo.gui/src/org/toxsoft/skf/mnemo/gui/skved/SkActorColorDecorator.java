@@ -26,8 +26,6 @@ import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
-import org.toxsoft.core.tslib.gw.gwid.*;
-import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.skf.mnemo.gui.tools.rgbaset.*;
 
 /**
@@ -86,11 +84,7 @@ public class SkActorColorDecorator
 
   };
 
-  private Gwid         gwid      = null;
-  private Ugwi         ugwi      = null;
-  private IUgwiList    ugwiList  = IUgwiList.EMPTY;
-  private IAtomicValue lastValue = null;
-  private IRgbaSet     rgbaSet   = new RgbaSet();
+  private IRgbaSet rgbaSet = new RgbaSet();
 
   SkActorColorDecorator( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );

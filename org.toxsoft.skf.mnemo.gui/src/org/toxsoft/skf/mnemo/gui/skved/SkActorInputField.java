@@ -28,6 +28,12 @@ import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.impl.dto.*;
 import org.toxsoft.uskat.core.utils.*;
 
+/**
+ * Актор реализующий функциональность "поля ввода" (Swt control Text).
+ * <p>
+ *
+ * @author vs
+ */
 public class SkActorInputField
     extends AbstractSkActorInputField {
 
@@ -46,7 +52,7 @@ public class SkActorInputField
       TSID_DESCRIPTION, STR_PROP_SOURCE_GWID_D, //
       TSID_KEEPER_ID, Gwid.KEEPER_ID, //
       OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjAnyGwidEditor.FACTORY_NAME, //
-      TSID_DEFAULT_VALUE, avValobj( Gwid.of( "classId[*]" ) ) //
+      TSID_DEFAULT_VALUE, avValobj( Gwid.of( "classId[*]" ) ) // //$NON-NLS-1$
   );
 
   private final static ITinFieldInfo TFI_SOURCE_GWID = new TinFieldInfo( PROP_SOURCE_GWID, TTI_GWID );
