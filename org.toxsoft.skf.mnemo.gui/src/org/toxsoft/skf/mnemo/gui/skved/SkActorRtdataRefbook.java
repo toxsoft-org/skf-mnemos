@@ -124,10 +124,12 @@ public class SkActorRtdataRefbook
       IAtomicValue av = aChangedValues.getValue( PROP_REFBOOK_INFO.id() );
       if( av.isAssigned() ) {
         rbChain = av.asValobj();
-        ISkRefbookService rbServ = coreApi().getService( ISkRefbookService.SERVICE_ID );
-        refbook = rbServ.findRefbook( rbChain.get( 0 ) );
-        if( refbook == null ) {
-          LoggerUtils.errorLogger().warning( "Refbook %s not found", rbChain.get( 0 ) ); //$NON-NLS-1$
+        if( rbChain != IdChain.NULL ) {
+          ISkRefbookService rbServ = coreApi().getService( ISkRefbookService.SERVICE_ID );
+          refbook = rbServ.findRefbook( rbChain.get( 0 ) );
+          if( refbook == null ) {
+            LoggerUtils.errorLogger().warning( "Refbook %s not found", rbChain.get( 0 ) ); //$NON-NLS-1$
+          }
         }
       }
       else {
