@@ -21,7 +21,6 @@ import org.toxsoft.core.tslib.bricks.strid.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
-import org.toxsoft.core.tslib.utils.*;
 
 /**
  * Реализация интерфейса {@link IVedViselsMasterSlaveRelationsManager}.
@@ -69,8 +68,8 @@ public class VedViselsMasterSlaveRelationsManager
       if( clickedVisel != null ) {
         if( aActionDef.id().equals( ACTID_ENSLAVE ) ) {
           if( clickedVisel.params().hasKey( PARAMID_MASTER_ID ) ) {
-            String masterId = clickedVisel.params().getStr( PARAMID_MASTER_ID );
-            if( masterId.isBlank() ) {
+            IAtomicValue val = clickedVisel.params().getValue( PARAMID_MASTER_ID );
+            if( val == IAtomicValue.NULL ) {
               return true;
             }
             return false;
@@ -78,11 +77,11 @@ public class VedViselsMasterSlaveRelationsManager
           return true;
         }
         if( aActionDef.id().equals( ACTID_FREE ) ) {
-          String masterId = TsLibUtils.EMPTY_STRING;
+          IAtomicValue masterId = IAtomicValue.NULL;
           if( clickedVisel.params().hasKey( PARAMID_MASTER_ID ) ) {
-            masterId = clickedVisel.params().getStr( PARAMID_MASTER_ID );
+            masterId = clickedVisel.params().getValue( PARAMID_MASTER_ID );
           }
-          return !masterId.isBlank();
+          return masterId != IAtomicValue.NULL;
         }
       }
       return false;
@@ -223,7 +222,6 @@ public class VedViselsMasterSlaveRelationsManager
     visel.params().setValobj( PARAMID_SLAVE_IDS, ids );
     visel = VedScreenUtils.findVisel( aSubId, vedScreen );
     if( visel != null ) {
-      // visel.params().setStr( PARAMID_MASTER_ID, TsLibUtils.EMPTY_STRING );
       visel.params().setValue( PARAMID_MASTER_ID, IAtomicValue.NULL );
     }
     VedAbstractVisel subVisel = VedScreenUtils.findVisel( aSubId, vedScreen );

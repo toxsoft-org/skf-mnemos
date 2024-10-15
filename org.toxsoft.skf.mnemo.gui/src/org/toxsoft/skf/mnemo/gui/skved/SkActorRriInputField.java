@@ -96,8 +96,11 @@ public class SkActorRriInputField
       IAtomicValue av = aChangedValues.getValue( TFI_RRI_ATTR_UGWI.id() );
       if( av.isAssigned() && av.asValobj() != null && av.asValobj() != IAtomicValue.NULL ) {
         ugwi = av.asValobj();
-        String sectId = UgwiKindRriAttr.getSectionId( ugwi );
-        section = ((ISkRegRefInfoService)coreApi().getService( ISkRegRefInfoService.SERVICE_ID )).findSection( sectId );
+        if( ugwi != Ugwi.NONE ) {
+          String sectId = UgwiKindRriAttr.getSectionId( ugwi );
+          section =
+              ((ISkRegRefInfoService)coreApi().getService( ISkRegRefInfoService.SERVICE_ID )).findSection( sectId );
+        }
       }
     }
     if( aChangedValues.hasKey( TFI_FORMAT_STRING.id() ) ) {

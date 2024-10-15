@@ -46,6 +46,7 @@ public class TableLayoutDataPanel
     }
     else {
       controllerConfig = new VedTableLayoutControllerConfig();
+      controllerConfig.init( 6, 4 );
     }
     previewPanel.setLayoutConfig( controllerConfig );
     colCount = controllerConfig.columnCount();
@@ -56,7 +57,9 @@ public class TableLayoutDataPanel
 
   @Override
   protected IVedLayoutControllerConfig doGetDataRecord() {
-    return controllerConfig.config();
+    // return controllerConfig.config();
+    VedTableLayoutControllerConfig cfg = previewPanel.layoutConfig();
+    return cfg.config();
   }
 
   // ------------------------------------------------------------------------------------
@@ -106,9 +109,9 @@ public class TableLayoutDataPanel
       }
     } );
 
-    Composite previewComp = new Composite( topComp, SWT.NONE );
+    Composite previewComp = new Composite( this, SWT.NONE );
     previewComp.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 4, 1 ) );
-    previewPanel = new TableLayoutPreviewPanel( previewComp );
+    previewPanel = new TableLayoutPreviewPanel( previewComp, tsContext() );
   }
 
   void onColumnCountChanged( Integer aValue ) {

@@ -110,6 +110,9 @@ public class VedViselsLayoutManager
       if( targetVisel == null ) {
         return false;
       }
+      if( aActionDef.id().equals( ACTID_SHOW_GRID ) ) {
+        return !layoutKindId.isBlank();
+      }
       if( aActionDef.id().equals( ACTID_DO_LAYOUT ) || aActionDef.id().equals( ACTID_LAYOUT_SETTINGS ) ) {
         return !layoutKindId.isBlank();
       }
@@ -333,7 +336,7 @@ public class VedViselsLayoutManager
       if( factProvider.factories().hasKey( aKindId ) ) {
         IVedLayoutControllerFactory f = factProvider.factories().getByKey( aKindId );
         IVedLayoutControllerConfig cfg = getLayoutConfig( targetVisel );
-        if( !cfg.kindId().equals( aKindId ) ) {
+        if( cfg != null && !cfg.kindId().equals( aKindId ) ) {
           cfg = null;
         }
         IVedLayoutControllerConfig newCfg = f.editConfig( cfg, vedScreen );

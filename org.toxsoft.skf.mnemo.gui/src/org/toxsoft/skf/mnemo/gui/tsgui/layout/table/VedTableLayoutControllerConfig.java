@@ -46,7 +46,7 @@ public class VedTableLayoutControllerConfig {
 
   IListEdit<TableColumnLayoutData> columnDatas;
 
-  IList<CellLayoutData> cellDatas;
+  IListEdit<CellLayoutData> cellDatas;
 
   double hGap = 0;
 
@@ -61,6 +61,24 @@ public class VedTableLayoutControllerConfig {
     rowDatas = new ElemArrayList<>();
     rowDatas.add( new TableRowLayoutData() );
     cellDatas = new ElemArrayList<>();
+  }
+
+  /**
+   * Constructor со всеми инвариантами.<br>
+   *
+   * @param aCellDatas IList&lt;CellLayoutData>
+   * @param aRowDatas IList&lt;TableRowLayoutData>
+   * @param aColumnDatas IList&lt;TableColumnLayoutData>
+   * @param aVGap double - зазор между ячейками по горизонтали
+   * @param aHGap double - зазор между ячейками по вертикали
+   */
+  public VedTableLayoutControllerConfig( IList<CellLayoutData> aCellDatas, IList<TableRowLayoutData> aRowDatas,
+      IList<TableColumnLayoutData> aColumnDatas, double aVGap, double aHGap ) {
+    cellDatas = new ElemArrayList<>( aCellDatas );
+    rowDatas = new ElemArrayList<>( aRowDatas );
+    columnDatas = new ElemArrayList<>( aColumnDatas );
+    vGap = aVGap;
+    hGap = aHGap;
   }
 
   /**
@@ -98,6 +116,22 @@ public class VedTableLayoutControllerConfig {
     is = new CharInputStreamString( aCfg.propValues().getStr( PARAMID_CELL_DATAS ) );
     sr = new StrioReader( is );
     cellDatas = StrioUtils.readCollection( sr, KW_CELLS, CellLayoutData.KEEPER );
+
+  }
+
+  public void init( int aColCount, int aRowCount ) {
+    columnDatas = new ElemArrayList<>();
+    for( int i = 0; i < aColCount; i++ ) {
+      columnDatas.add( new TableColumnLayoutData() );
+    }
+    rowDatas = new ElemArrayList<>();
+    for( int i = 0; i < aRowCount; i++ ) {
+      rowDatas.add( new TableRowLayoutData() );
+    }
+    cellDatas = new ElemArrayList<>();
+    for( int i = 0; i < aColCount * aRowCount; i++ ) {
+      cellDatas.add( new CellLayoutData() );
+    }
   }
 
   /**
@@ -192,9 +226,9 @@ public class VedTableLayoutControllerConfig {
   /**
    * Вовзращает конфигурации ячеек.
    *
-   * @return IList&lt;CellLayoutData> - срисок конфигураций ячеек
+   * @return IListEdit&lt;CellLayoutData> - срисок конфигураций ячеек
    */
-  public IList<CellLayoutData> cellDatas() {
+  public IListEdit<CellLayoutData> cellDatas() {
     return cellDatas;
   }
 
@@ -243,6 +277,18 @@ public class VedTableLayoutControllerConfig {
       columnDatas.removeByIndex( columnDatas.size() - 1 );
     }
   }
+
+  // // ------------------------------------------------------------------------------------
+  // // API пакета
+  // //
+  //
+  // void setHGap( int aHGap ) {
+  // hGap = aHGap;
+  // }
+  //
+  // void setVGap( int aVGap ) {
+  // vGap = aVGap;
+  // }
 
   // ------------------------------------------------------------------------------------
   // Implementation

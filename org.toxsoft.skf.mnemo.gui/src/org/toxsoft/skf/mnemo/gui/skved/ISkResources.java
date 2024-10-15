@@ -45,6 +45,8 @@ interface ISkResources {
    */
   String STR_ACTOR_CMD_BUTTON   = Messages.getString( "STR_ACTOR_CMD_BUTTON" );   //$NON-NLS-1$
   String STR_ACTOR_CMD_BUTTON_D = Messages.getString( "STR_ACTOR_CMD_BUTTON_D" ); //$NON-NLS-1$
+  String STR_TOGGLE             = Messages.getString( "STR_TOGGLE" );             //$NON-NLS-1$
+  String STR_TOGGLE_D           = Messages.getString( "STR_TOGGLE_D" );           //$NON-NLS-1$
 
   /**
    * {@link SkActorRtdataText}
