@@ -222,7 +222,7 @@ public class SkActorCmdButton
       if( aNewValue.atomicType() == EAtomicType.BOOLEAN ) {
         VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
         if( aNewValue.asBool() ) {
-          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.PRESSED );
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.SELECTED );
         }
         else {
           visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
@@ -235,7 +235,7 @@ public class SkActorCmdButton
     if( toggle && currCommand == null ) {
       VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
       if( selected.isAssigned() && selected.asBool() ) {
-        visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.PRESSED );
+        visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.SELECTED );
       }
       else {
         visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
