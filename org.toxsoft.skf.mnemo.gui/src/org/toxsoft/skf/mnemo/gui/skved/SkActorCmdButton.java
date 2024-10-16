@@ -114,8 +114,9 @@ public class SkActorCmdButton
   private IUgwiList ugwiList = IUgwiList.EMPTY;
 
   boolean      toggle        = false;
-  IAtomicValue selected      = IAtomicValue.NULL;
+  IAtomicValue currValue     = IAtomicValue.NULL;
   IAtomicValue feedbackValue = IAtomicValue.NULL; // значение для сравнения
+  boolean      selected      = false;
 
   protected SkActorCmdButton( IVedItemCfg aCfg, IStridablesList<IDataDef> aDataDefs, VedScreen aVedScreen ) {
     super( aCfg, aDataDefs, aVedScreen );
@@ -128,7 +129,8 @@ public class SkActorCmdButton
       ISkUser user = conn.defConn().coreApi().userService().findUser( "root" );
 
       Ugwi cmdUgwi = MnemoUtils.findUgwi( TFI_CMD_UGWI.id(), props() );
-      if( toggle && selected.isAssigned() && selected.asBool() ) {
+      // if( toggle && selected.isAssigned() && selected.asBool() ) {
+      if( toggle && selected ) {
         cmdUgwi = MnemoUtils.findUgwi( PROPID_OFF_CMD, props() );
       }
       if( cmdUgwi != null && cmdUgwi != Ugwi.NONE ) {
@@ -218,9 +220,9 @@ public class SkActorCmdButton
   public final void whenRealTimePassed( long aRtTime ) {
     if( gwid != null ) {
       IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
-      if( !newValue.equals( selected ) ) {
-        selected = newValue;
-        doOnValueChanged( selected );
+      if( newValue.isAssigned() && !newValue.equals( currValue ) ) {
+        currValue = newValue;
+        doOnValueChanged( newValue );
       }
     }
   }
@@ -239,33 +241,25 @@ public class SkActorCmdButton
   //
 
   protected void doOnValueChanged( IAtomicValue aNewValue ) {
-    if( aNewValue.isAssigned() && feedbackValue.isAssigned() ) {
-      VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
-      if( aNewValue.equals( feedbackValue ) ) {
-        visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.SELECTED );
-      }
-      else {
-        visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-      }
-      // if( aNewValue.atomicType() == EAtomicType.BOOLEAN ) {
-      // VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
-      // if( aNewValue.asBool() ) {
-      // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.SELECTED );
-      // }
-      // else {
-      // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-      // }
-      // }
-    }
+    // VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
+    // if( aNewValue.equals( feedbackValue ) ) {
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.SELECTED );
+    // }
+    // else {
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+    // }
+    updateButtonState();
   }
 
   void updateButtonState() {
     if( toggle && currCommand == null ) {
       VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
-      if( selected.isAssigned() && selected.asBool() ) {
+      if( currValue.isAssigned() && currValue.equals( feedbackValue ) ) {
+        selected = true;
         visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.SELECTED );
       }
       else {
+        selected = false;
         visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
       }
     }

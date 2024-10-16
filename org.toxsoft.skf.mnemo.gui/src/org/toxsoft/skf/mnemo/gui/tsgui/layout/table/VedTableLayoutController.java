@@ -108,6 +108,21 @@ public class VedTableLayoutController
       widthList.add( Double.valueOf( w ) );
     }
 
+    double freeWidth = r.width() - fullWidth;
+    IIntListEdit colIdxes = new IntArrayList();
+    for( int i = 0; i < config.columnCount(); i++ ) {
+      if( shouldOccupyFreeWidth( i, visels ) ) {
+        colIdxes.add( i );
+      }
+    }
+    if( colIdxes.size() > 0 ) {
+      double extraWidth = freeWidth / colIdxes.size();
+      for( Integer cIdx : colIdxes ) {
+        double newW = widthList.removeByIndex( cIdx.intValue() ).doubleValue() + extraWidth;
+        widthList.insert( cIdx.intValue(), Double.valueOf( newW ) );
+      }
+    }
+
     IListEdit<Double> heightList = new ElemArrayList<>();
     double fullHeight = 0;
     for( int i = 0; i < config.rowCount(); i++ ) {
@@ -239,7 +254,7 @@ public class VedTableLayoutController
     return height / aCellData.verSpan() + aCellData.margins().top() + aCellData.margins().bottom();
   }
 
-  double calcSingleRowHeight( int aRow, IStridablesList<IVedVisel> aVisels ) {
+  IStridablesListEdit<IVedVisel> listRowVisels( int aRow, IStridablesList<IVedVisel> aVisels ) {
     IStridablesListEdit<IVedVisel> visels = new StridablesList<>();
     for( int i = 0; i < config.columnCount(); i++ ) {
       int idx = cells[aRow][i];
@@ -247,7 +262,12 @@ public class VedTableLayoutController
         visels.add( aVisels.get( idx ) );
       }
     }
+    return visels;
+  }
 
+  double calcSingleRowHeight( int aRow, IStridablesList<IVedVisel> aVisels ) {
+
+    IStridablesListEdit<IVedVisel> visels = listRowVisels( aRow, aVisels );
     double rowHeight = 0.;
     for( IVedVisel visel : visels ) {
       CellLayoutData cld = config.cellDatas().get( aVisels.indexOf( visel ) );
@@ -259,6 +279,41 @@ public class VedTableLayoutController
     return rowHeight;
   }
 
+  boolean shouldOccupyFreeWidth( int aColumn, IStridablesList<IVedVisel> aVisels ) {
+    for( IVedVisel visel : listColumnVisels( aColumn, aVisels ) ) {
+      int cellIdx = aVisels.indexOf( visel );
+      CellLayoutData cld = config.cellDatas().get( cellIdx );
+      if( !cld.fillCellWidth() ) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  boolean shouldOccupyFreeHight( IStridablesList<IVedVisel> aVisels ) {
+    for( IVedVisel visel : aVisels ) {
+      CellLayoutData cld = config.cellDatas().get( aVisels.indexOf( visel ) );
+      if( !cld.fillCellHeight() ) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  IStridablesList<IVedVisel> listColumnVisels( int aColumn, IStridablesList<IVedVisel> aVisels ) {
+    IStridablesListEdit<IVedVisel> visels = new StridablesList<>();
+    for( int i = 0; i < config.rowCount(); i++ ) {
+      int idx = cells[i][aColumn];
+      if( idx != -1 && idx < aVisels.size() ) {
+        IVedVisel v = aVisels.get( idx );
+        if( !visels.hasElem( v ) ) {
+          visels.add( aVisels.get( idx ) );
+        }
+      }
+    }
+    return visels;
+  }
+
   double calcSingleColumnWidth( int aColumn, IStridablesList<IVedVisel> aVisels ) {
     // TableColumnLayoutData cld = config.columnDatas().get( aColumnIdx );
     // double minWidth = cld.widthRange().left().doubleValue();
@@ -267,13 +322,7 @@ public class VedTableLayoutController
     // return minWidth;
     // }
 
-    IStridablesListEdit<IVedVisel> visels = new StridablesList<>();
-    for( int i = 0; i < config.rowCount(); i++ ) {
-      int idx = cells[i][aColumn];
-      if( idx != -1 && idx < aVisels.size() ) {
-        visels.add( aVisels.get( idx ) );
-      }
-    }
+    IStridablesList<IVedVisel> visels = listColumnVisels( aColumn, aVisels );
 
     double columnWidth = 0.;
     for( IVedVisel visel : visels ) {

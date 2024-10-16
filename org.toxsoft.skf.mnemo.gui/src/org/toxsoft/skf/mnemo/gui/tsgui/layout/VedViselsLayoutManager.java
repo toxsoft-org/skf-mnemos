@@ -288,7 +288,9 @@ public class VedViselsLayoutManager
       IVedViselsLayoutController lc = layoutController( targetVisel.id() );
       if( lc != null ) {
         layoutKindId = lc.kindId();
-        lc.doLayout( targetVisel.id(), msManager.listSlaveViselIds( targetVisel.id() ) );
+        IStringList sortedIds;
+        sortedIds = VedScreenUtils.sortViselIdsByZorder( msManager.listSlaveViselIds( targetVisel.id() ), vedScreen );
+        lc.doLayout( targetVisel.id(), sortedIds );
       }
     }
   }
