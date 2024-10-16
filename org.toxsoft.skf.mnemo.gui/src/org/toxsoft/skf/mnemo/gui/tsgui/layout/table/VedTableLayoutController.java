@@ -118,20 +118,56 @@ public class VedTableLayoutController
 
     // ID2Margins d2m = config.margins();
 
-    // разместим визуальные элементы
-    int idx = 0;
-    for( IVedVisel visel : visels ) {
-      int colIdx = idx % config.columnCount();
-      int rowIdx = idx / config.columnCount();
-      // visel.setLocation( r.x1() + xList.get( colIdx ).doubleValue(), d2m.top() + r.y1() + rowIdx * rowHeight );
-      double cellX = r.x1() + colIdx * widthList.get( colIdx ).doubleValue();
-      double cellY = r.y1() + rowIdx * (heightList.get( rowIdx ).doubleValue() + config.verticalGap());
-      double cellW = widthList.get( colIdx ).doubleValue();
-      double cellH = heightList.get( rowIdx ).doubleValue();
-      ID2Rectangle cellRect = new D2Rectangle( cellX, cellY, cellW, cellH );
-      layoutCellContent( cellRect, config.columnDatas.get( colIdx ).cellData(), visel );
-      idx++;
+    IListEdit<Double> xList = new ElemArrayList<>();
+    double x = 0;
+    xList.add( Double.valueOf( x ) );
+    for( int i = 0; i < config.columnCount(); i++ ) {
+      x += widthList.get( i ).doubleValue() + config.horizontalGap();
+      xList.add( Double.valueOf( x ) );
     }
+
+    IListEdit<Double> yList = new ElemArrayList<>();
+    double y = 0;
+    yList.add( Double.valueOf( y ) );
+    for( int i = 0; i < config.rowCount(); i++ ) {
+      y += heightList.get( i ).doubleValue() + config.verticalGap();
+      yList.add( Double.valueOf( y ) );
+    }
+
+    // разместим визуальные элементы
+    IStringListEdit viselIds = new StringArrayList(); // ИДы размещенных визелей
+    for( int i = 0; i < config.rowCount(); i++ ) {
+      for( int j = 0; j < config.columnCount(); j++ ) {
+        int viselIdx = cells[i][j];
+        if( viselIdx >= 0 && viselIdx < visels.size() ) {
+          IVedVisel visel = visels.get( viselIdx );
+          if( !viselIds.hasElem( visel.id() ) ) { // проверим не был ли visel уже размещен
+            viselIds.add( visel.id() );
+            double cellX = r.x1() + xList.get( j ).doubleValue();
+            double cellY = r.y1() + yList.get( i ).doubleValue();
+            CellLayoutData cld = config.cellDatas.get( viselIdx );
+            double cellW = xList.get( j + cld.horSpan() ).doubleValue() - xList.get( j ).doubleValue();
+            double cellH = yList.get( i + cld.verSpan() ).doubleValue() - yList.get( i ).doubleValue();
+            ID2Rectangle cellRect = new D2Rectangle( cellX, cellY, cellW, cellH );
+            layoutCellContent( cellRect, cld, visel );
+          }
+        }
+      }
+    }
+
+    // int idx = 0;
+    // for( IVedVisel visel : visels ) {
+    // int colIdx = idx % config.columnCount();
+    // int rowIdx = idx / config.columnCount();
+    // // visel.setLocation( r.x1() + xList.get( colIdx ).doubleValue(), d2m.top() + r.y1() + rowIdx * rowHeight );
+    // double cellX = r.x1() + colIdx * widthList.get( colIdx ).doubleValue();
+    // double cellY = r.y1() + rowIdx * (heightList.get( rowIdx ).doubleValue() + config.verticalGap());
+    // double cellW = widthList.get( colIdx ).doubleValue();
+    // double cellH = heightList.get( rowIdx ).doubleValue();
+    // ID2Rectangle cellRect = new D2Rectangle( cellX, cellY, cellW, cellH );
+    // layoutCellContent( cellRect, config.columnDatas.get( colIdx ).cellData(), visel );
+    // idx++;
+    // }
 
   }
 
@@ -193,12 +229,14 @@ public class VedTableLayoutController
 
   double calcCellWidth( IVedVisel aVisel, CellLayoutData aCellData ) {
     double mw = aCellData.margins().left() + aCellData.margins().right();
-    return mw + aVisel.bounds().width() / aCellData.horSpan();
+    return mw + ((VedAbstractVisel)aVisel).getPackedSize( 0, 0 ).x() / aCellData.horSpan();
+    // return mw + aVisel.bounds().width() / aCellData.horSpan();
   }
 
   double calcCellHeight( IVedVisel aVisel, CellLayoutData aCellData ) {
-    ID2Rectangle r = aVisel.bounds();
-    return r.height() / aCellData.verSpan() + aCellData.margins().top() + aCellData.margins().bottom();
+    // ID2Rectangle r = aVisel.bounds();
+    double height = ((VedAbstractVisel)aVisel).getPackedSize( 0, 0 ).y();
+    return height / aCellData.verSpan() + aCellData.margins().top() + aCellData.margins().bottom();
   }
 
   double calcSingleRowHeight( int aRow, IStridablesList<IVedVisel> aVisels ) {
@@ -211,14 +249,12 @@ public class VedTableLayoutController
     }
 
     double rowHeight = 0.;
-    for( int i = 0; i < aVisels.size(); i++ ) {
-      IVedVisel visel = aVisels.get( i );
-      CellLayoutData cld = config.cellDatas().get( i );
+    for( IVedVisel visel : visels ) {
+      CellLayoutData cld = config.cellDatas().get( aVisels.indexOf( visel ) );
       double height = calcCellHeight( visel, cld );
       if( height > rowHeight ) {
         rowHeight = height;
       }
-      i++;
     }
     return rowHeight;
   }
@@ -240,9 +276,8 @@ public class VedTableLayoutController
     }
 
     double columnWidth = 0.;
-    for( int i = 0; i < visels.size(); i++ ) {
-      IVedVisel visel = visels.get( i );
-      CellLayoutData cld = config.cellDatas().get( i );
+    for( IVedVisel visel : visels ) {
+      CellLayoutData cld = config.cellDatas().get( aVisels.indexOf( visel ) );
       double width = calcCellWidth( visel, cld );
       if( width > columnWidth ) {
         columnWidth = width;

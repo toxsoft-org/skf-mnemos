@@ -19,12 +19,14 @@ import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.av.misc.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
+import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.mnemo.gui.utils.*;
@@ -51,8 +53,8 @@ public class SkActorCmdButton
 
   static final String PROPID_TOGGLE = "cmdButton.toggle"; //$NON-NLS-1$
 
-  public static final ITinFieldInfo TFI_VALUE = TinFieldInfo.makeCopy( TFI_RTD_UGWI, //
-      TSID_NAME, STR_N_VALUE );
+  static final ITinFieldInfo TFI_VALUE_UGWI = TinFieldInfo.makeCopy( TFI_RTD_UGWI, //
+      TSID_NAME, STR_VALUE_UGWI, TSID_DESCRIPTION, STR_VALUE_UGWI_D );
 
   static final IDataDef PROP_TOGGLE = DataDef.create( PROPID_TOGGLE, BOOLEAN, //
       TSID_NAME, STR_TOGGLE, //
@@ -61,6 +63,16 @@ public class SkActorCmdButton
   );
 
   static final ITinFieldInfo TFI_TOGGLE = new TinFieldInfo( PROP_TOGGLE, TTI_AT_BOOLEAN );
+
+  static final String PROPID_FEEDBACK_VALUE = "cmdButton.feedbackValue"; //$NON-NLS-1$
+
+  static final IDataDef PROP_FEEDBACK_VALUE = DataDef.create( PROPID_FEEDBACK_VALUE, STRING, //
+      TSID_NAME, STR_FEEDBACK_VALUE, //
+      TSID_DESCRIPTION, STR_FEEDBACK_VALUE_D, //
+      TSID_DEFAULT_VALUE, avStr( TsLibUtils.EMPTY_STRING ) //
+  );
+
+  static final ITinFieldInfo TFI_FEEDBACK_VALUE = new TinFieldInfo( PROP_FEEDBACK_VALUE, TTI_AT_STRING );
 
   static final String PROPID_OFF_CMD = "command.Off"; //$NON-NLS-1$
 
@@ -77,7 +89,8 @@ public class SkActorCmdButton
     protected ITinTypeInfo doCreateTypeInfo() {
       IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
       fields.add( TFI_TOGGLE );
-      fields.add( TFI_VALUE );
+      fields.add( TFI_VALUE_UGWI );
+      fields.add( TFI_FEEDBACK_VALUE );
       fields.add( TFI_NAME );
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
@@ -100,8 +113,9 @@ public class SkActorCmdButton
   private Gwid      gwid     = null;
   private IUgwiList ugwiList = IUgwiList.EMPTY;
 
-  boolean      toggle   = false;
-  IAtomicValue selected = IAtomicValue.NULL;
+  boolean      toggle        = false;
+  IAtomicValue selected      = IAtomicValue.NULL;
+  IAtomicValue feedbackValue = IAtomicValue.NULL; // значение для сравнения
 
   protected SkActorCmdButton( IVedItemCfg aCfg, IStridablesList<IDataDef> aDataDefs, VedScreen aVedScreen ) {
     super( aCfg, aDataDefs, aVedScreen );
@@ -167,6 +181,8 @@ public class SkActorCmdButton
   @Override
   protected void doInterceptPropsChange( IOptionSet aNewValues, IOptionSetEdit aValuesToSet ) {
     removeWrongUgwi( TFI_CMD_UGWI.id(), UgwiKindSkCmd.KIND_ID, aValuesToSet, coreApi() );
+    removeWrongUgwi( PROPID_OFF_CMD, UgwiKindSkCmd.KIND_ID, aValuesToSet, coreApi() );
+    removeWrongUgwi( TFI_VALUE_UGWI.id(), UgwiKindSkRtdata.KIND_ID, aValuesToSet, coreApi() );
   }
 
   @Override
@@ -178,11 +194,11 @@ public class SkActorCmdButton
         toggle = val.asBool();
       }
     }
-    if( aChangedValues.hasKey( TFI_VALUE.id() ) ) {
+    if( aChangedValues.hasKey( TFI_VALUE_UGWI.id() ) ) {
       gwid = null;
       Ugwi ugwi = Ugwi.NONE;
       ugwiList = IUgwiList.EMPTY;
-      IAtomicValue av = aChangedValues.getValue( TFI_VALUE.id() );
+      IAtomicValue av = aChangedValues.getValue( TFI_VALUE_UGWI.id() );
       if( av.isAssigned() ) {
         ugwi = av.asValobj();
         if( ugwi != null && ugwi != Ugwi.NONE ) {
@@ -190,6 +206,11 @@ public class SkActorCmdButton
           ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
         }
       }
+    }
+    if( aChangedValues.hasKey( TFI_FEEDBACK_VALUE.id() ) ) {
+      String str = aChangedValues.getStr( TFI_FEEDBACK_VALUE.id() );
+      AvTextParser textParser = new AvTextParser();
+      feedbackValue = textParser.parse( str );
     }
   }
 
@@ -218,16 +239,23 @@ public class SkActorCmdButton
   //
 
   protected void doOnValueChanged( IAtomicValue aNewValue ) {
-    if( aNewValue.isAssigned() ) {
-      if( aNewValue.atomicType() == EAtomicType.BOOLEAN ) {
-        VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
-        if( aNewValue.asBool() ) {
-          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.SELECTED );
-        }
-        else {
-          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-        }
+    if( aNewValue.isAssigned() && feedbackValue.isAssigned() ) {
+      VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
+      if( aNewValue.equals( feedbackValue ) ) {
+        visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.SELECTED );
       }
+      else {
+        visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+      }
+      // if( aNewValue.atomicType() == EAtomicType.BOOLEAN ) {
+      // VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
+      // if( aNewValue.asBool() ) {
+      // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.SELECTED );
+      // }
+      // else {
+      // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+      // }
+      // }
     }
   }
 
