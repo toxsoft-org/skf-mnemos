@@ -10,7 +10,6 @@ import org.toxsoft.core.tslib.bricks.strio.chario.impl.*;
 import org.toxsoft.core.tslib.bricks.strio.impl.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
-import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 
@@ -25,6 +24,8 @@ public class VedTableLayoutControllerConfig {
    * ИД типа контроллера размещения
    */
   private final static String LAYOUT_TABLE = "layoutTable"; //$NON-NLS-1$
+
+  private final static String PARAMID_MARGINS = "margins"; //$NON-NLS-1$
 
   private final static String PARAMID_H_GAP = "hGap"; //$NON-NLS-1$
 
@@ -48,6 +49,8 @@ public class VedTableLayoutControllerConfig {
 
   IListEdit<CellLayoutData> cellDatas;
 
+  ID2Margins margins = new D2Margins();
+
   double hGap = 0;
 
   double vGap = 0;
@@ -57,28 +60,36 @@ public class VedTableLayoutControllerConfig {
    */
   public VedTableLayoutControllerConfig() {
     columnDatas = new ElemArrayList<>();
-    columnDatas.add( new TableColumnLayoutData() );
+    for( int i = 0; i < 2; i++ ) {
+      columnDatas.add( new TableColumnLayoutData() );
+    }
     rowDatas = new ElemArrayList<>();
-    rowDatas.add( new TableRowLayoutData() );
+    for( int i = 0; i < 2; i++ ) {
+      rowDatas.add( new TableRowLayoutData() );
+    }
     cellDatas = new ElemArrayList<>();
+    for( int i = 0; i < 2 * 2; i++ ) {
+      cellDatas.add( new CellLayoutData() );
+    }
   }
 
   /**
    * Constructor со всеми инвариантами.<br>
    *
-   * @param aCellDatas IList&lt;CellLayoutData>
-   * @param aRowDatas IList&lt;TableRowLayoutData>
-   * @param aColumnDatas IList&lt;TableColumnLayoutData>
-   * @param aVGap double - зазор между ячейками по горизонтали
-   * @param aHGap double - зазор между ячейками по вертикали
+   * @param aSrc {@link VedTableLayoutControllerConfig} - конфигурация для копирования
+   * @param aColDatas IList&lt;TableColumnLayoutData> - список информации о размещении колонок
+   * @param aRowDatas IList&lt;TableRowLayoutData> - список информации о размещении строк
+   * @param aCellDatas IList&lt;CellLayoutData> - список информации о размещении ячеек
    */
-  public VedTableLayoutControllerConfig( IList<CellLayoutData> aCellDatas, IList<TableRowLayoutData> aRowDatas,
-      IList<TableColumnLayoutData> aColumnDatas, double aVGap, double aHGap ) {
-    cellDatas = new ElemArrayList<>( aCellDatas );
+  public VedTableLayoutControllerConfig( VedTableLayoutControllerConfig aSrc, IList<TableColumnLayoutData> aColDatas,
+      IList<TableRowLayoutData> aRowDatas, IList<CellLayoutData> aCellDatas ) {
+    columnDatas = new ElemArrayList<>( aColDatas );
     rowDatas = new ElemArrayList<>( aRowDatas );
-    columnDatas = new ElemArrayList<>( aColumnDatas );
-    vGap = aVGap;
-    hGap = aHGap;
+    cellDatas = new ElemArrayList<>( aCellDatas );
+    ID2Margins m = aSrc.margins;
+    margins = new D2Margins( m.left(), m.top(), m.right(), m.bottom() );
+    vGap = aSrc.vGap;
+    hGap = aSrc.hGap;
   }
 
   /**
@@ -102,16 +113,37 @@ public class VedTableLayoutControllerConfig {
    */
   public VedTableLayoutControllerConfig( IVedLayoutControllerConfig aCfg ) {
     TsNullArgumentRtException.checkNull( aCfg );
+    if( aCfg.propValues().hasKey( PARAMID_MARGINS ) ) {
+      margins = aCfg.propValues().getValobj( PARAMID_MARGINS );
+    }
     hGap = aCfg.propValues().getDouble( PARAMID_H_GAP );
     vGap = aCfg.propValues().getDouble( PARAMID_V_GAP );
 
-    ICharInputStream is = new CharInputStreamString( aCfg.propValues().getStr( PARAMID_ROW_DATAS ) );
-    IStrioReader sr = new StrioReader( is );
-    rowDatas = StrioUtils.readCollection( sr, KW_ROWS, TableRowLayoutData.KEEPER );
+    ICharInputStream is;
+    IStrioReader sr;
+    if( aCfg.propValues().hasKey( PARAMID_COLUMN_DATAS ) ) {
+      is = new CharInputStreamString( aCfg.propValues().getStr( PARAMID_ROW_DATAS ) );
+      sr = new StrioReader( is );
+      rowDatas = StrioUtils.readCollection( sr, KW_ROWS, TableRowLayoutData.KEEPER );
+    }
+    else {
+      rowDatas = new ElemArrayList<>();
+      for( int i = 0; i < 2; i++ ) {
+        rowDatas.add( new TableRowLayoutData() );
+      }
+    }
 
-    is = new CharInputStreamString( aCfg.propValues().getStr( PARAMID_COLUMN_DATAS ) );
-    sr = new StrioReader( is );
-    columnDatas = StrioUtils.readCollection( sr, KW_COLUMNS, TableColumnLayoutData.KEEPER );
+    if( aCfg.propValues().hasKey( PARAMID_ROW_DATAS ) ) {
+      is = new CharInputStreamString( aCfg.propValues().getStr( PARAMID_COLUMN_DATAS ) );
+      sr = new StrioReader( is );
+      columnDatas = StrioUtils.readCollection( sr, KW_COLUMNS, TableColumnLayoutData.KEEPER );
+    }
+    else {
+      columnDatas = new ElemArrayList<>();
+      for( int i = 0; i < 2; i++ ) {
+        columnDatas.add( new TableColumnLayoutData() );
+      }
+    }
 
     is = new CharInputStreamString( aCfg.propValues().getStr( PARAMID_CELL_DATAS ) );
     sr = new StrioReader( is );
@@ -143,6 +175,7 @@ public class VedTableLayoutControllerConfig {
     IOptionSetEdit props = new OptionSet();
     props.setDouble( PARAMID_H_GAP, hGap );
     props.setDouble( PARAMID_V_GAP, vGap );
+    props.setValobj( PARAMID_MARGINS, margins );
 
     CharArrayWriter writer = new CharArrayWriter();
     IStrioWriter sw = new StrioWriter( new CharOutputStreamWriter( writer ) );
@@ -188,6 +221,15 @@ public class VedTableLayoutControllerConfig {
   }
 
   /**
+   * Возвращает размеры полей области для размещения контролей.
+   *
+   * @return {@link ID2Margins} - размеры полей области для размещения контролей
+   */
+  public ID2Margins margins() {
+    return margins;
+  }
+
+  /**
    * Взвращает количество столбцов.
    *
    * @return int - количество столбцов
@@ -210,7 +252,7 @@ public class VedTableLayoutControllerConfig {
    *
    * @return IList&lt;TableRowLayoutData> - срисок конфигураций строк
    */
-  public IList<TableRowLayoutData> rowDatas() {
+  public IListEdit<TableRowLayoutData> rowDatas() {
     return rowDatas;
   }
 
@@ -219,7 +261,7 @@ public class VedTableLayoutControllerConfig {
    *
    * @return IList&lt;TableColumnLayoutData> - срисок конфигураций стролбцов
    */
-  public IList<TableColumnLayoutData> columnDatas() {
+  public IListEdit<TableColumnLayoutData> columnDatas() {
     return columnDatas;
   }
 
@@ -239,9 +281,10 @@ public class VedTableLayoutControllerConfig {
    * @param aCount int - кол-во добавляемых строк
    */
   public void addRows( int aCount ) {
-    for( int i = 0; i < aCount; i++ ) {
-      rowDatas.add( new TableRowLayoutData() );
-    }
+    init( columnCount(), rowCount() + aCount );
+    // for( int i = 0; i < aCount; i++ ) {
+    // rowDatas.add( new TableRowLayoutData() );
+    // }
   }
 
   /**
@@ -250,9 +293,14 @@ public class VedTableLayoutControllerConfig {
    * @param aCount int - кол-во удаляемых строк
    */
   public void removeRows( int aCount ) {
-    for( int i = 0; i < aCount; i++ ) {
-      rowDatas.removeByIndex( rowDatas.size() - 1 );
+    int count = rowCount() - aCount;
+    if( count <= 0 ) {
+      count = 1;
     }
+    init( columnCount(), count );
+    // for( int i = 0; i < aCount; i++ ) {
+    // rowDatas.removeByIndex( rowDatas.size() - 1 );
+    // }
   }
 
   /**
@@ -262,9 +310,7 @@ public class VedTableLayoutControllerConfig {
    * @param aCount int - кол-во добавляемых колонок
    */
   public void addColumns( int aCount ) {
-    for( int i = 0; i < aCount; i++ ) {
-      columnDatas.add( new TableColumnLayoutData() );
-    }
+    init( columnCount() + aCount, rowCount() );
   }
 
   /**
@@ -273,32 +319,38 @@ public class VedTableLayoutControllerConfig {
    * @param aCount int - кол-во удаляемых колонок
    */
   public void removeColumns( int aCount ) {
-    for( int i = 0; i < aCount; i++ ) {
-      columnDatas.removeByIndex( columnDatas.size() - 1 );
+    int count = columnCount() - aCount;
+    if( count <= 0 ) {
+      count = 1;
     }
+    init( count, rowCount() );
   }
 
-  // // ------------------------------------------------------------------------------------
-  // // API пакета
-  // //
+  // ------------------------------------------------------------------------------------
+  // API
   //
-  // void setHGap( int aHGap ) {
-  // hGap = aHGap;
-  // }
-  //
-  // void setVGap( int aVGap ) {
-  // vGap = aVGap;
-  // }
+
+  public void setMargins( ID2Margins aMargins ) {
+    margins = aMargins;
+  }
+
+  public void setHGap( int aHGap ) {
+    hGap = aHGap;
+  }
+
+  public void setVGap( int aVGap ) {
+    vGap = aVGap;
+  }
 
   // ------------------------------------------------------------------------------------
   // Implementation
   //
 
-  Pair<Integer, Integer> cellIndex2RowColumn( int aCellIndex ) {
-
-    int row = aCellIndex / rowDatas.size();
-    int column = aCellIndex - row * rowDatas.size();
-    return new Pair<>( Integer.valueOf( row ), Integer.valueOf( column ) );
-  }
+  // Pair<Integer, Integer> cellIndex2RowColumn( int aCellIndex ) {
+  //
+  // int row = aCellIndex / rowDatas.size();
+  // int column = aCellIndex - row * rowDatas.size();
+  // return new Pair<>( Integer.valueOf( row ), Integer.valueOf( column ) );
+  // }
 
 }

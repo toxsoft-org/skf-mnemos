@@ -108,4 +108,19 @@ public class TableColumnLayoutData {
   public CellLayoutData cellData() {
     return cellData;
   }
+
+  /**
+   * Возвращает фиксированную ширину колонки, если заданная минимальная ширина равна максимальной. В противном случае
+   * возвращает значение < 0.
+   *
+   * @return double фиксированную ширину колонки или отрицательное значение если фиксированная ширина не задана
+   */
+  public double fixedWidth() {
+    double min = minMaxWidth.left().doubleValue();
+    double max = minMaxWidth.right().doubleValue();
+    if( minMaxWidth != null && Double.compare( min, max ) == 0 ) {
+      return minMaxWidth.left().doubleValue();
+    }
+    return -1;
+  }
 }

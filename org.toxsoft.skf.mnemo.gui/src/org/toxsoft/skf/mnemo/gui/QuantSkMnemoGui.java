@@ -73,6 +73,7 @@ public class QuantSkMnemoGui
     // actFact.register( SkActorRunTimeAction.FACTORY );
     actFact.register( SkActorPopupMnemoInvoker.FACTORY );
     actFact.register( SkActorRtdataRefbook.FACTORY );
+    actFact.register( SkActorNameAndTooltip.FACTORY );
 
   }
 

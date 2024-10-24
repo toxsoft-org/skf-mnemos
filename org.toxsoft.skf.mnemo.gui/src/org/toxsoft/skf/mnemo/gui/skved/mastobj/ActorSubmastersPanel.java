@@ -270,13 +270,15 @@ public class ActorSubmastersPanel
       IListEdit<ViewerRow> rows = new ElemArrayList<>();
       for( IDataDef dd : propDefs ) {
         if( dd.keeperId() != null && dd.keeperId().equals( Ugwi.KEEPER_ID ) ) { // свойство является Ugwi
-          String ugwiKindId = dd.params().getStr( PROPID_UGWI_KIND );
-          if( actorResolvers != null && actorResolvers.hasKey( dd.id() ) ) {
-            ICompoundResolverConfig resCfg = actorResolvers.getByKey( dd.id() );
-            rows.add( new ViewerRow( dd.id(), ugwiKindId, resCfg ) );
-          }
-          else {
-            rows.add( new ViewerRow( dd.id(), ugwiKindId ) );
+          if( dd.params().hasKey( PROPID_UGWI_KIND ) ) {
+            String ugwiKindId = dd.params().getStr( PROPID_UGWI_KIND );
+            if( actorResolvers != null && actorResolvers.hasKey( dd.id() ) ) {
+              ICompoundResolverConfig resCfg = actorResolvers.getByKey( dd.id() );
+              rows.add( new ViewerRow( dd.id(), ugwiKindId, resCfg ) );
+            }
+            else {
+              rows.add( new ViewerRow( dd.id(), ugwiKindId ) );
+            }
           }
         }
       }

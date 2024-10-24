@@ -182,6 +182,7 @@ public interface ISkVedConstants {
       TSID_DEFAULT_VALUE, IAtomicValue.NULL //
   );
 
+  ITinTypeInfo TTI_UGWI          = new TinAtomicTypeInfo.TtiValobj<>( PROP_UGWI, Ugwi.class );
   ITinTypeInfo TTI_SKID_UGWI     = new TinAtomicTypeInfo.TtiValobj<>( PROP_SKID_UGWI, Ugwi.class );
   ITinTypeInfo TTI_ATTR_UGWI     = new TinAtomicTypeInfo.TtiValobj<>( PROP_ATTR_UGWI, Ugwi.class );
   ITinTypeInfo TTI_RRI_ATTR_UGWI = new TinAtomicTypeInfo.TtiValobj<>( PROP_RRI_ATTR_UGWI, Ugwi.class );

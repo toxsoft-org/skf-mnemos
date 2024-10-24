@@ -6,6 +6,7 @@ import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.layout.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
+import org.toxsoft.core.tsgui.utils.layout.BorderLayout;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
@@ -13,7 +14,9 @@ import org.toxsoft.skf.mnemo.gui.tsgui.layout.table.*;
 
 class TableLayoutPreviewPanel {
 
-  private static final String DID_CELL_LAYOUT = "cellLayout"; //$NON-NLS-1$
+  private static final String DID_CELL_LAYOUT   = "cellLayout";   //$NON-NLS-1$
+  private static final String DID_COLUMN_LAYOUT = "columnLayout"; //$NON-NLS-1$
+  private static final String DID_ROW_LAYOUT    = "rowLayout";    //$NON-NLS-1$
 
   private final Composite bkPanel;
 
@@ -25,7 +28,9 @@ class TableLayoutPreviewPanel {
 
   int cellCount = 0;
 
-  final IListEdit<Button> buttons = new ElemArrayList<>();
+  final IListEdit<Button> rowButtons = new ElemArrayList<>();
+  final IListEdit<Button> colButtons = new ElemArrayList<>();
+  final IListEdit<Button> buttons    = new ElemArrayList<>();
 
   TableLayoutPreviewPanel( Composite aBkPanel, ITsGuiContext aTsContext ) {
     bkPanel = aBkPanel;
@@ -35,7 +40,7 @@ class TableLayoutPreviewPanel {
 
   void setLayoutConfig( VedTableLayoutControllerConfig aLayoutCfg ) {
     layoutCfg = aLayoutCfg;
-    update();
+    init();
   }
 
   // ------------------------------------------------------------------------------------
@@ -53,17 +58,24 @@ class TableLayoutPreviewPanel {
       CellLayoutData cld = (CellLayoutData)btn.getData( DID_CELL_LAYOUT );
       cellCfgs.add( cld );
     }
-
-    double hGap = layoutCfg.horizontalGap();
-    double vGap = layoutCfg.verticalGap();
-    return new VedTableLayoutControllerConfig( cellCfgs, layoutCfg.rowDatas(), layoutCfg.columnDatas(), vGap, hGap );
+    IListEdit<TableColumnLayoutData> colCfgs = new ElemArrayList<>();
+    for( Button btn : colButtons ) {
+      TableColumnLayoutData cld = (TableColumnLayoutData)btn.getData( DID_COLUMN_LAYOUT );
+      colCfgs.add( cld );
+    }
+    IListEdit<TableRowLayoutData> rowCfgs = new ElemArrayList<>();
+    for( Button btn : rowButtons ) {
+      TableRowLayoutData cld = (TableRowLayoutData)btn.getData( DID_ROW_LAYOUT );
+      rowCfgs.add( cld );
+    }
+    return new VedTableLayoutControllerConfig( layoutCfg, colCfgs, rowCfgs, cellCfgs );
   }
 
   // ------------------------------------------------------------------------------------
   // Implementation
   //
 
-  void update() {
+  void init() {
     clear();
     int colCount = layoutCfg.columnCount();
     int rowCount = layoutCfg.rowCount();
@@ -73,8 +85,30 @@ class TableLayoutPreviewPanel {
 
     Composite columnPanel = new Composite( bkPanel, SWT.BORDER );
     columnPanel.setLayoutData( org.toxsoft.core.tsgui.utils.layout.BorderLayout.NORTH );
+    columnPanel.setLayout( new BorderLayout() );
+    Composite leftComp = new Composite( columnPanel, SWT.NONE );
+    leftComp.setLayoutData( BorderLayout.WEST );
+    Composite columnComp = new Composite( columnPanel, SWT.NONE );
+    columnComp.setLayoutData( BorderLayout.CENTER );
+    columnComp.setLayout( new GridLayout( colCount, true ) );
+    for( int i = 0; i < colCount; i++ ) {
+      Button btn = new Button( columnComp, SWT.PUSH );
+      btn.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
+      btn.setText( "Column" + i );
+      btn.setData( DID_COLUMN_LAYOUT, layoutCfg.columnDatas().get( i ) );
+      colButtons.add( btn );
+    }
+
     Composite rowPanel = new Composite( bkPanel, SWT.BORDER );
     rowPanel.setLayoutData( org.toxsoft.core.tsgui.utils.layout.BorderLayout.WEST );
+    rowPanel.setLayout( new GridLayout( 1, false ) );
+    for( int i = 0; i < rowCount; i++ ) {
+      Button btn = new Button( rowPanel, SWT.PUSH );
+      btn.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
+      btn.setText( "Row" + i );
+      btn.setData( DID_ROW_LAYOUT, layoutCfg.rowDatas().get( i ) );
+      rowButtons.add( btn );
+    }
 
     for( int i = 0; i < layoutCfg.cellDatas().size(); i++ ) {
       Button btn = new Button( cellsPanel, SWT.PUSH );
@@ -89,10 +123,10 @@ class TableLayoutPreviewPanel {
         @Override
         public void widgetSelected( SelectionEvent aEvent ) {
           CellLayoutData oldCld = (CellLayoutData)btn.getData( DID_CELL_LAYOUT );
-          CellLayoutData cld = CellLayoutDataPanel.edit( (CellLayoutData)btn.getData( DID_CELL_LAYOUT ), tsContext );
-          if( cld != null ) {
+          CellLayoutData newCld = CellLayoutDataPanel.edit( (CellLayoutData)btn.getData( DID_CELL_LAYOUT ), tsContext );
+          if( newCld != null ) {
             int oldOcupiedCells = oldCld.horSpan() * oldCld.verSpan();
-            int newOcupiedCells = cld.horSpan() * cld.verSpan();
+            int newOcupiedCells = newCld.horSpan() * newCld.verSpan();
             int delta = newOcupiedCells - oldOcupiedCells;
             if( delta > 0 ) {
               for( int ii = 0; ii < delta; ii++ ) {
@@ -101,8 +135,20 @@ class TableLayoutPreviewPanel {
                 buttons.removeByIndex( buttons.indexOf( b ) );
               }
             }
-            btn.setData( DID_CELL_LAYOUT, cld );
-            btn.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, cld.horSpan(), cld.verSpan() ) );
+            else {
+              int idx = buttons.indexOf( btn );
+              delta = -delta;
+              for( int ii = 0; ii < delta; ii++ ) {
+                Button b = new Button( cellsPanel, SWT.PUSH );
+                b.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 1, 1 ) );
+                buttons.add( b );
+                CellLayoutData cd = new CellLayoutData();
+                btn.setData( DID_CELL_LAYOUT, cd );
+                buttons.insertAll( idx + 1, b );
+              }
+            }
+            btn.setData( DID_CELL_LAYOUT, newCld );
+            btn.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, newCld.horSpan(), newCld.verSpan() ) );
             bkPanel.layout();
           }
         }
@@ -111,54 +157,10 @@ class TableLayoutPreviewPanel {
     bkPanel.layout();
   }
 
-  // void update() {
-  // clear();
-  // int colCount = layoutCfg.columnCount();
-  // int rowCount = layoutCfg.rowCount();
-  // bkPanel.setLayout( new GridLayout( colCount + 1, false ) );
-  // CLabel l = new CLabel( bkPanel, SWT.NONE );
-  // GridData gd = new GridData();
-  // gd.minimumWidth = 50;
-  // gd.widthHint = 50;
-  // l.setLayoutData( gd );
-  //
-  // for( int i = 0; i < colCount; i++ ) {
-  // Button btn = new Button( bkPanel, SWT.PUSH );
-  // btn.setText( "Col" + (i + 1) );
-  // btn.addSelectionListener( new SelectionAdapter() {
-  //
-  // @Override
-  // public void widgetSelected( SelectionEvent aE ) {
-  //
-  // }
-  //
-  // } );
-  // }
-  //
-  // for( int i = 0; i < rowCount; i++ ) {
-  // Button btn = new Button( bkPanel, SWT.PUSH );
-  // btn.setText( "Row" + (i + 1) );
-  // for( int j = 0; j < colCount; j++ ) {
-  // Button btn1 = new Button( bkPanel, SWT.PUSH );
-  // btn1.setText( "Cell" + (i + 1) + "" + (j + 1) );
-  // btn1.setBackground( colorWhite );
-  // btn1.addSelectionListener( new SelectionAdapter() {
-  //
-  // @Override
-  // public void widgetSelected( SelectionEvent aEvent ) {
-  // CellLayoutData cld = CellLayoutDataPanel.edit( (CellLayoutData)btn1.getData( "layoutData" ), tsContext );
-  // if( cld != null ) {
-  // btn1.setData( "layoutData", cld );
-  // }
-  // }
-  // } );
-  // }
-  // }
-  // bkPanel.layout();
-  // }
-
   void clear() {
     buttons.clear();
+    colButtons.clear();
+    rowButtons.clear();
     for( Control ctrl : bkPanel.getChildren() ) {
       ctrl.dispose();
     }
