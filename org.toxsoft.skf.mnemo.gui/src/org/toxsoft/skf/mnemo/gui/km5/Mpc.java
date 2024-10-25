@@ -1,6 +1,8 @@
 package org.toxsoft.skf.mnemo.gui.km5;
 
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
+import static org.toxsoft.core.tsgui.bricks.actions.TsActionDef.*;
+import static org.toxsoft.core.tsgui.graphics.icons.ITsStdIconIds.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
@@ -39,6 +41,17 @@ class Mpc
       TSID_ICON_ID, ICONID_MNEMO_EDIT //
   );
 
+  /**
+   * ID of action {@link #ACDEF_ADD_COPY_MNEMO}.
+   */
+  static final String ACTID_ADD_COPY_MNEMO = STD_ACTION_DEF_PREFIX + ".add_copy_mnemo"; //$NON-NLS-1$
+
+  /**
+   * Action: add an mnemo created from current mnemo.
+   */
+  ITsActionDef ACDEF_ADD_COPY_MNEMO = ofPush2( ACTID_ADD_COPY_MNEMO, //
+      STR_T_ADD_COPY_MNEMO, STR_P_ADD_COPY_MNEMO, ICONID_LIST_ADD_COPY );
+
   public Mpc( ITsGuiContext aContext, IM5Model<ISkMnemoCfg> aModel, IM5ItemsProvider<ISkMnemoCfg> aItemsProvider,
       IM5LifecycleManager<ISkMnemoCfg> aLifecycleManager ) {
     super( aContext, aModel, aItemsProvider, aLifecycleManager );
@@ -48,9 +61,9 @@ class Mpc
   @Override
   protected ITsToolbar doCreateToolbar( ITsGuiContext aContext, String aName, EIconSize aIconSize,
       IListEdit<ITsActionDef> aActs ) {
-    // add func create copy
+    // add func create copy of mnemo
     int index = 1 + aActs.indexOf( ACDEF_ADD );
-    aActs.insert( index, ACDEF_ADD_COPY );
+    aActs.insert( index, ACDEF_ADD_COPY_MNEMO );
     aActs.add( ACDEF_EDIT_MNEMO );
     return super.doCreateToolbar( aContext, aName, aIconSize, aActs );
   }
@@ -66,7 +79,7 @@ class Mpc
         }
         break;
       }
-      case ACTID_ADD_COPY: {
+      case ACTID_ADD_COPY_MNEMO: {
         ISkMnemoCfg selected = tree().selectedItem();
         ITsDialogInfo cdi = doCreateDialogInfoToAddItem();
         IM5BunchEdit<ISkMnemoCfg> initVals = new M5BunchEdit<>( model() );
