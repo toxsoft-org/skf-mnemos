@@ -12,6 +12,7 @@ import org.toxsoft.core.tsgui.bricks.tin.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
+import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.d2.*;
@@ -88,7 +89,10 @@ public class SkActorNameAndTooltip
   @Override
   protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
     if( aChangedValues.hasKey( TFI_UGWI.id() ) ) {
-      ugwi = aChangedValues.getValobj( TFI_UGWI.id() );
+      IAtomicValue v = aChangedValues.getValue( TFI_UGWI.id() );
+      if( v.isAssigned() ) {
+        ugwi = v.asValobj();
+      }
     }
     if( ugwi != null && ugwi != Ugwi.NONE ) {
       ISkUgwiService ugwiServ = coreApi().getService( ISkUgwiService.SERVICE_ID );
