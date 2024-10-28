@@ -98,8 +98,11 @@ public class ColumnLayoutDataPanel
     colSpin.createControl( topComp );
     colSpin.eventer().addListener( ( aSource, aEditFinished ) -> {
       if( aEditFinished ) {
-        onColumnCountChanged( (Integer)aSource.getValue() );
-        layout();
+        int newVal = ((Integer)aSource.getValue()).intValue();
+        if( newVal != colCount ) {
+          onColumnCountChanged( (Integer)aSource.getValue() );
+          layout();
+        }
       }
     } );
 
