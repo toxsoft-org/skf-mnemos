@@ -221,6 +221,7 @@ public class MnemoEditorPanel
   private final VedViselVertexSetManager              vertexSetManager;
   private final VedViselContextMenuManager            viselCtxMenuManager;
   private final PaletteSelectionManager               paletteSelectionManager;
+  private final VedViselsEditManager                  editManager;
   private final VedViselsCopyPasteManager             copyPasteManager;
   private final VedViselsLayoutManager                layoutManager;
   private final VedViselsDeleteManager                deleteManager;
@@ -301,6 +302,8 @@ public class MnemoEditorPanel
 
     toolsManager.addTool( new ZOrdererTool( selectionManager, vedScreen ) );
 
+    editManager = new VedViselsEditManager( vedScreen, selectionManager );
+
     copyPasteManager.addProcessor( new SelectionCopyPasteProcessor( vedScreen, selectionManager ) );
     copyPasteManager.addProcessor( new MasterObjectCopyPasteProcessor( vedScreen ) );
 
@@ -327,6 +330,7 @@ public class MnemoEditorPanel
     vedScreen.model().screenDecoratorsAfter().add( selectionDecorator );
 
     viselCtxMenuManager = new VedViselContextMenuManager( vedScreen, selectionManager );
+    viselCtxMenuManager.addCustomMenuCreator( editManager );
     viselCtxMenuManager.addCustomMenuCreator( copyPasteManager );
     viselCtxMenuManager.addCustomMenuCreator( masterSlaveManager );
     viselCtxMenuManager.addCustomMenuCreator( layoutManager );

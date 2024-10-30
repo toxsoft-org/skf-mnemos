@@ -3,6 +3,7 @@ package org.toxsoft.skf.mnemo.gui.tsgui;
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
 
 import org.eclipse.swt.widgets.*;
+import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.bricks.actions.asp.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
@@ -23,6 +24,14 @@ public class VedViselsDeleteManager
 
     DeleteActionProvider() {
       defineAction( ACDEF_REMOVE, VedViselsDeleteManager.this::deleteRelevant );
+    }
+
+    @Override
+    protected boolean doIsActionEnabled( ITsActionDef aActionDef ) {
+      if( clickedVisel == null && !hasIds4delete() ) {
+        return false;
+      }
+      return true;
     }
 
   }
@@ -77,6 +86,9 @@ public class VedViselsDeleteManager
     IStringListEdit viselIds = new StringArrayList();
     IStringListEdit actorIds = new StringArrayList();
 
+    if( clickedVisel != null ) {
+      viselIds.add( clickedVisel.id() );
+    }
     for( IDeleteProcessor p : processors ) {
       p.editIdsForDelete( viselIds, actorIds, params );
     }
@@ -116,10 +128,20 @@ public class VedViselsDeleteManager
     }
   }
 
-  // // ------------------------------------------------------------------------------------
-  // // Implementation
-  // //
+  // ------------------------------------------------------------------------------------
+  // Implementation
   //
+
+  boolean hasIds4delete() {
+    IStringListEdit viselIds = new StringArrayList();
+    IStringListEdit actorIds = new StringArrayList();
+
+    for( IDeleteProcessor p : processors ) {
+      p.editIdsForDelete( viselIds, actorIds, params );
+    }
+    return viselIds.size() > 0;
+  }
+
   // void doRemove() {
   // vedScreen.model().visels().eventer().pauseFiring();
   // vedScreen.model().actors().eventer().pauseFiring();
