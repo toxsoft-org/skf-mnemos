@@ -28,12 +28,14 @@ import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
+import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.skf.mnemo.gui.glib.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.tti.*;
 import org.toxsoft.skf.mnemo.lib.*;
+import org.toxsoft.uskat.core.api.objserv.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 
 /**
@@ -51,7 +53,7 @@ public class SkActorPopupMnemoInvoker
   public static final String FACTORY_ID = SKVED_ID + ".actor.PopupMnemoInvoker"; //$NON-NLS-1$
 
   /**
-   * ИД поля "Skid мнемосхемы"
+   * ИД поля "Заголовок окна"
    */
   private static final String FID_CAPTION = "mnemoCaption"; //$NON-NLS-1$
 
@@ -117,6 +119,7 @@ public class SkActorPopupMnemoInvoker
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_CAPTION );
+      // fields.add( TinFieldInfo.makeCopy( TFI_ATTR_UGWI, TSID_NAME, "Название объекта" ) );
       fields.add( TFI_MNEMO_SKID );
       fields.add( TFI_MOUSE_BUTTON );
       fields.add( TFI_DOUBLE_CLIK );
@@ -215,7 +218,8 @@ public class SkActorPopupMnemoInvoker
     ISkMnemoCfg mnemoCfg = getMnemoConfig();
     Control scrCtrl = vedScreen().view().getControl();
     Shell wnd = new Shell( scrCtrl.getShell(), SWT.BORDER | SWT.CLOSE );
-    String caption = props().getStr( FID_CAPTION );
+    // String caption = props().getStr( FID_CAPTION );
+    String caption = getCaption();
     wnd.setText( caption );
     FillLayout layout = new FillLayout();
     wnd.setLayout( layout );
@@ -274,6 +278,23 @@ public class SkActorPopupMnemoInvoker
 
     }
     return retVal;
+  }
+
+  private String getCaption() {
+    String str = props().getStr( TFI_CAPTION.id() );
+    if( !str.isBlank() ) {
+      return str;
+    }
+
+    Ugwi moUgwi = props().getValobj( TFI_SKID_UGWI.id() );
+    if( moUgwi != null && moUgwi != Ugwi.NONE ) {
+      Skid moSkid = UgwiKindSkSkid.getSkid( moUgwi );
+      ISkObject skObj = skVedEnv().skConn().coreApi().objService().find( moSkid );
+      if( skObj != null ) {
+        return skObj.attrs().getValue( TSID_NAME ).asString();
+      }
+    }
+    return TsLibUtils.EMPTY_STRING;
   }
 
 }
