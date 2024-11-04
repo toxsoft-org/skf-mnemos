@@ -227,8 +227,11 @@ public abstract class AbstractSkVedClickableActor
   }
 
   private void setHandCursor() {
-    prevCursor = vedScreen().view().getControl().getCursor();
-    vedScreen().view().getControl().setCursor( handCursor );
+    Cursor cur = vedScreen().view().getControl().getCursor();
+    if( cur == null || !cur.equals( handCursor ) ) {
+      prevCursor = vedScreen().view().getControl().getCursor();
+      vedScreen().view().getControl().setCursor( handCursor );
+    }
   }
 
   private void restorCursor() {

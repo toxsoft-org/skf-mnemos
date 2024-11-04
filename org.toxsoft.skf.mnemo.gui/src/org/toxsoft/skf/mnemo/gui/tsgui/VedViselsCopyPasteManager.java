@@ -67,6 +67,17 @@ public class VedViselsCopyPasteManager
       defineAction( ACDEF_COPY, VedViselsCopyPasteManager.this::copy );
       defineAction( ACDEF_PASTE, VedViselsCopyPasteManager.this::paste );
     }
+
+    @Override
+    protected boolean doIsActionEnabled( ITsActionDef aActionDef ) {
+      if( aActionDef.id().equals( ACTID_COPY ) ) {
+        if( clickedVisel == null && !hasIds4copy() ) {
+          return false;
+        }
+      }
+      return true;
+    }
+
   }
 
   private static Clipboard clipboard;
@@ -164,6 +175,9 @@ public class VedViselsCopyPasteManager
     params.clear();
 
     IStringListEdit viselIds = new StringArrayList();
+    if( clickedVisel != null ) {
+      viselIds.add( clickedVisel.id() );
+    }
     IStringListEdit actorIds = new StringArrayList();
 
     for( ICopyPasteProcessor p : processors ) {
@@ -333,6 +347,16 @@ public class VedViselsCopyPasteManager
     }
 
     return new D2Point( dx, dy );
+  }
+
+  boolean hasIds4copy() {
+    IStringListEdit viselIds = new StringArrayList();
+    IStringListEdit actorIds = new StringArrayList();
+
+    for( ICopyPasteProcessor p : processors ) {
+      p.editIdsForCopy( viselIds, actorIds, params );
+    }
+    return viselIds.size() > 0;
   }
 
 }

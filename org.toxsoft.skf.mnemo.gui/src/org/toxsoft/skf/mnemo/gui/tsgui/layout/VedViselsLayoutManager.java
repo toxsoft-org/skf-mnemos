@@ -222,9 +222,11 @@ public class VedViselsLayoutManager
     String masterId = msManager.viselMasterId( targetVisel.id() );
     if( masterId != null ) {
       VedAbstractVisel masterVisel = VedScreenUtils.findVisel( masterId, vedScreen );
-      String lki = getLayoutKindId( masterVisel );
-      if( !lki.isBlank() ) {
-        createEditViselLayoutDataMenuItem( submenu );
+      if( masterVisel != null ) {
+        String lki = getLayoutKindId( masterVisel );
+        if( !lki.isBlank() ) {
+          createEditViselLayoutDataMenuItem( submenu );
+        }
       }
     }
 

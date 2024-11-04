@@ -51,7 +51,7 @@ class ColumnLayoutPreviewPanel {
     bkPanel.setLayout( gl );
 
     for( int i = 0; i < colCount; i++ ) {
-      Button btn = new Button( bkPanel, SWT.PUSH );
+      final Button btn = new Button( bkPanel, SWT.PUSH );
       btn.setImage( imgEdit );
       btn.setText( "Column" + (i + 1) + " ..." );
       btn.setData( layoutCfg.columnDatas().get( i ) );
@@ -75,7 +75,7 @@ class ColumnLayoutPreviewPanel {
 
     for( int i = 0; i < 5; i++ ) {
       for( int j = 0; j < colCount; j++ ) {
-        CLabel l = new CLabel( bkPanel, SWT.BORDER );
+        final CLabel l = new CLabel( bkPanel, SWT.BORDER );
         l.setBackground( colorWhite );
         l.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
       }

@@ -9,6 +9,8 @@ interface ISkResources {
 
   String STR_ACT_EDIT_MNEMO   = Messages.getString( "STR_ACT_EDIT_MNEMO" );   //$NON-NLS-1$
   String STR_ACT_EDIT_MNEMO_D = Messages.getString( "STR_ACT_EDIT_MNEMO_D" ); //$NON-NLS-1$
+  String STR_T_ADD_COPY_MNEMO = "Copy mnemo";
+  String STR_P_ADD_COPY_MNEMO = "Make copy of selected mnemoschema";
 
   /**
    * {@link SwitchPerspInfoM5Model}

@@ -51,9 +51,15 @@ public class SelectionCopyPasteProcessor
 
   @Override
   public void editIdsForCopy( IStringListEdit aViselIds, IStringListEdit aActorIds, IOptionSetEdit aParams ) {
-    IStringList visIds = selectionManager.selectedViselIds();
-    aViselIds.addAll( visIds );
-    for( String vid : visIds ) {
+    IStringList selIds = selectionManager.selectedViselIds();
+    if( !aViselIds.isEmpty() && selIds.hasElem( aViselIds.first() ) ) {
+      aViselIds.clear();
+    }
+    if( aViselIds.isEmpty() ) {
+      aViselIds.addAll( selIds );
+    }
+
+    for( String vid : aViselIds ) {
       IStringList actIds = VedScreenUtils.viselActorIds( vid, vedScreen );
       aActorIds.addAll( actIds );
     }

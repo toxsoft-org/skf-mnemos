@@ -49,7 +49,13 @@ public class SelectionDeleteProcessor
 
   @Override
   public void editIdsForDelete( IStringListEdit aViselIds, IStringListEdit aActorIds, IOptionSetEdit aParams ) {
-    aViselIds.addAll( selectionManager.selectedViselIds() );
+    IStringList selIds = selectionManager.selectedViselIds();
+    if( !aViselIds.isEmpty() && selIds.hasElem( aViselIds.first() ) ) {
+      aViselIds.clear();
+    }
+    if( aViselIds.isEmpty() ) {
+      aViselIds.addAll( selIds );
+    }
     for( String viselId : aViselIds ) {
       aActorIds.addAll( VedScreenUtils.viselActorIds( viselId, vedScreen ) );
     }

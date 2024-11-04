@@ -1,7 +1,5 @@
 package org.toxsoft.skf.mnemo.gui.tsgui.layout.table;
 
-import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
-
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
@@ -96,9 +94,10 @@ public class VedTableLayoutController
 
     VedAbstractVisel masterVisel = VedScreenUtils.findVisel( aMasterId, vedScreen );
     ID2Rectangle r = masterVisel.bounds();
+    r = calcClientRect( r, config.margins() );
 
-    double currX = masterVisel.props().getDouble( PROPID_X ) + margins.left();
-    double currY = masterVisel.props().getDouble( PROPID_Y ) + margins.top();
+    // double currX = masterVisel.props().getDouble( PROPID_X ) + margins.left();
+    // double currY = masterVisel.props().getDouble( PROPID_Y ) + margins.top();
 
     IListEdit<Double> widthList = new ElemArrayList<>();
     double fullWidth = 0;
@@ -352,11 +351,16 @@ public class VedTableLayoutController
 
   void layoutCellContent( ID2Rectangle aCellBounds, CellLayoutData aLayoutData, IVedVisel aVisel ) {
     ID2Rectangle clientRect = calcClientRect( aCellBounds, aLayoutData.margins() );
-    if( aLayoutData.fillCellWidth() ) {
-      aVisel.setSize( clientRect.width(), aVisel.height() );
+    if( aLayoutData.fillCellWidth() && aLayoutData.fillCellHeight() ) {
+      aVisel.setSize( clientRect.width(), clientRect.height() );
     }
-    if( aLayoutData.fillCellHeight() ) {
-      aVisel.setSize( aVisel.width(), clientRect.height() );
+    else {
+      if( aLayoutData.fillCellWidth() ) {
+        aVisel.setSize( clientRect.width(), aVisel.height() );
+      }
+      if( aLayoutData.fillCellHeight() ) {
+        aVisel.setSize( aVisel.width(), clientRect.height() );
+      }
     }
 
     double viselX;
