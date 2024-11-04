@@ -27,7 +27,7 @@ public interface ISkMnemosServiceSharedResources {
   // ------------------------------------------------------------------------------------
   // USkat entities are defined only in English, l10n done via USkat localization service
 
-  String STR_MNEMOSCHEME_CLASS   = "Mnemoscheme";                                                                   //$NON-NLS-1$
-  String STR_MNEMOSCHEME_CLASS_D = "Mnomoscheme - the screen for real-time data visualization and command sending"; //$NON-NLS-1$
+  String STR_MNEMOSCHEME_CLASS   = Messages.getString( "STR_MNEMOSCHEME_CLASS" );   //$NON-NLS-1$
+  String STR_MNEMOSCHEME_CLASS_D = Messages.getString( "STR_MNEMOSCHEME_CLASS_D" ); //$NON-NLS-1$
 
 }
