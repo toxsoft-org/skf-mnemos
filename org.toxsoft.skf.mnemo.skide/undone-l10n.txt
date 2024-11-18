@@ -1,0 +1,1 @@
+--- org.toxsoft.skf.mnemo.skide.glib.MnemoEditorPanel (не вынесены константы и присутствует println)
