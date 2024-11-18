@@ -9,27 +9,27 @@ interface ISkResources {
 
   String STR_ACT_EDIT_MNEMO   = Messages.getString( "STR_ACT_EDIT_MNEMO" );   //$NON-NLS-1$
   String STR_ACT_EDIT_MNEMO_D = Messages.getString( "STR_ACT_EDIT_MNEMO_D" ); //$NON-NLS-1$
-  String STR_T_ADD_COPY_MNEMO = "Copy mnemo";
-  String STR_P_ADD_COPY_MNEMO = "Make copy of selected mnemoschema";
+  String STR_T_ADD_COPY_MNEMO = Messages.getString( "STR_T_ADD_COPY_MNEMO" ); //$NON-NLS-1$
+  String STR_P_ADD_COPY_MNEMO = Messages.getString( "STR_P_ADD_COPY_MNEMO" ); //$NON-NLS-1$
 
   /**
    * {@link SwitchPerspInfoM5Model}
    */
-  String STR_N_PERSP_ID   = "persp id";
-  String STR_D_PERSP_ID   = "Eclipse perspective id";
-  String STR_N_VIEW_ID    = "view id";
-  String STR_D_VIEW_ID    = "Eclipse perspective id";
-  String STR_N_MOUSE_BTTN = "mouse button";
-  String STR_D_MOUSE_BTTN = "Hot mouse button";
+  String STR_PERSP_ID     = Messages.getString( "STR_PERSP_ID" );     //$NON-NLS-1$
+  String STR_PERSP_ID_D   = Messages.getString( "STR_PERSP_ID_D" );   //$NON-NLS-1$
+  String STR_VIEW_ID      = Messages.getString( "STR_VIEW_ID" );      //$NON-NLS-1$
+  String STR_VIEW_ID_D    = Messages.getString( "STR_VIEW_ID_D" );    //$NON-NLS-1$
+  String STR_MOUSE_BTTN   = Messages.getString( "STR_MOUSE_BTTN" );   //$NON-NLS-1$
+  String STR_MOUSE_BTTN_D = Messages.getString( "STR_MOUSE_BTTN_D" ); //$NON-NLS-1$
 
   /**
    * {@link PopupMnemoInfoM5Model}
    */
-  String STR_N_MNEMO_SKID      = "Мнемосхема: ";
-  String STR_D_MNEMO_SKID      = "Объект мнемосхемы";
-  String STR_N_MASTER_OBJ_SKID = "Мастер-объект: ";
-  String STR_D_MASTER_OBJ_SKID = "Информация для получения мастер-объекта вызываемой мнемосхемы";
-  String STR_N_HOT_MOUSE_SKID  = "Кнопка мыши: ";
-  String STR_D_HOT_MOUSE_SKID  = "Кнопка мыши по которой вызывается диалог";
+  String STR_MNEMO_SKID        = Messages.getString( "STR_MNEMO_SKID" );        //$NON-NLS-1$
+  String STR_MNEMO_SKID_D      = Messages.getString( "STR_MNEMO_SKID_D" );      //$NON-NLS-1$
+  String STR_MASTER_OBJ_SKID   = Messages.getString( "STR_MASTER_OBJ_SKID" );   //$NON-NLS-1$
+  String STR_MASTER_OBJ_SKID_D = Messages.getString( "STR_MASTER_OBJ_SKID_D" ); //$NON-NLS-1$
+  String STR_HOT_MOUSE_SKID    = Messages.getString( "STR_HOT_MOUSE_SKID" );    //$NON-NLS-1$
+  String STR_HOT_MOUSE_SKID_D  = Messages.getString( "STR_HOT_MOUSE_SKID_D" );  //$NON-NLS-1$
 
 }

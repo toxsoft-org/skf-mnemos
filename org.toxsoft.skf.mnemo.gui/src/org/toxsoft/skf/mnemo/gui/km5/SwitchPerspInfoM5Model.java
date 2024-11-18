@@ -51,7 +51,7 @@ public class SwitchPerspInfoM5Model
 
     @Override
     protected void doInit() {
-      setNameAndDescription( STR_N_PERSP_ID, STR_D_PERSP_ID );
+      setNameAndDescription( STR_PERSP_ID, STR_PERSP_ID_D );
       setDefaultValue( AV_STR_EMPTY );
       setFlags( M5FF_COLUMN );
     }
@@ -69,7 +69,7 @@ public class SwitchPerspInfoM5Model
 
     @Override
     protected void doInit() {
-      setNameAndDescription( STR_N_VIEW_ID, STR_D_VIEW_ID );
+      setNameAndDescription( STR_VIEW_ID, STR_VIEW_ID_D );
       setDefaultValue( AV_STR_EMPTY );
       setFlags( M5FF_COLUMN );
     }
@@ -84,8 +84,8 @@ public class SwitchPerspInfoM5Model
    * Attribute {@link SwitchPerspInfo#mouseButton() } hot mouse button
    */
   public M5AttributeFieldDef<SwitchPerspInfo> MOUSE_BTTN = new M5AttributeFieldDef<>( FID_MOUSE_BTTN, VALOBJ, //
-      TSID_NAME, STR_N_MOUSE_BTTN, //
-      TSID_DESCRIPTION, STR_D_MOUSE_BTTN, //
+      TSID_NAME, STR_MOUSE_BTTN, //
+      TSID_DESCRIPTION, STR_MOUSE_BTTN_D, //
       TSID_KEEPER_ID, ERtActionMouseButton.KEEPER_ID, //
       TSID_DEFAULT_VALUE, avValobj( ERtActionMouseButton.LEFT ) ) {
 

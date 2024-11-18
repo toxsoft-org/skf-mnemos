@@ -89,7 +89,7 @@ public class ValedPopupMnemoInfo
 
     IM5Model<PopupMnemoInfo> model =
         conn.scope().get( IM5Domain.class ).getModel( PopupMnemoInfoM5Model.MODEL_ID, PopupMnemoInfo.class );
-    TsDialogInfo cdi = new TsDialogInfo( ctx, null, STR_N_POPUP_MNEMO_INFO, STR_D_POPUP_MNEMO_INFO, 0 );
+    TsDialogInfo cdi = new TsDialogInfo( ctx, null, STR_POPUP_MNEMO_INFO, STR_POPUP_MNEMO_INFO_D, 0 );
 
     // редактируем
     PopupMnemoInfo tmpPopupMnemoInfo =

@@ -18,11 +18,11 @@ import org.toxsoft.core.tslib.utils.errors.*;
 public enum ERtActionKind
     implements IStridable {
 
-  NONE( "none", STR_N_EMPTY_ACTION, STR_D_EMPTY_ACTION ), //$NON-NLS-1$
+  NONE( "none", STR_EMPTY_ACTION, STR_EMPTY_ACTION_D ), //$NON-NLS-1$
 
-  POPUP_MNEMO( "popup_mnemo", STR_N_POPUP_MNEMO, STR_D_POPUP_MNEMO ), //$NON-NLS-1$
+  POPUP_MNEMO( "popup_mnemo", STR_POPUP_MNEMO, STR_POPUP_MNEMO_D ), //$NON-NLS-1$
 
-  SWITCH_PERSP( "switch_persp", STR_N_SWITCH_PERSP, STR_D_SWITCH_PERSP ); //$NON-NLS-1$
+  SWITCH_PERSP( "switch_persp", STR_SWITCH_PERSP, STR_SWITCH_PERSP_D ); //$NON-NLS-1$
 
   /**
    * The registered keeper ID.

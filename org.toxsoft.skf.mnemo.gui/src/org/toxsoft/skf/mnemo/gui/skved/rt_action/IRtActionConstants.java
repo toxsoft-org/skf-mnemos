@@ -34,8 +34,8 @@ public interface IRtActionConstants {
    * Data type: {@link PopupMnemoInfo} as {@link EAtomicType#VALOBJ}.
    */
   IDataType DT_POPUP_MNEEMO_INFO = DataType.create( VALOBJ, //
-      TSID_NAME, STR_N_POPUP_MNEMO, //
-      TSID_DESCRIPTION, STR_D_POPUP_MNEMO, //
+      TSID_NAME, STR_POPUP_MNEMO, //
+      TSID_DESCRIPTION, STR_POPUP_MNEMO_D, //
       TSID_KEEPER_ID, PopupMnemoInfo.KEEPER_ID, //
       OPID_EDITOR_FACTORY_NAME, ValedAvValobjPopupMnemoInfo.FACTORY.factoryName(), //
       TSID_DEFAULT_VALUE, avValobj( PopupMnemoInfo.EMPTY ) //
@@ -45,8 +45,8 @@ public interface IRtActionConstants {
    * Data type: {@link SwitchPerspInfo} as {@link EAtomicType#VALOBJ}.
    */
   IDataType DT_SWITCH_PERSP_INFO = DataType.create( VALOBJ, //
-      TSID_NAME, STR_N_SWITCH_PERSP, //
-      TSID_DESCRIPTION, STR_D_SWITCH_PERSP, //
+      TSID_NAME, STR_SWITCH_PERSP, //
+      TSID_DESCRIPTION, STR_SWITCH_PERSP_D, //
       TSID_KEEPER_ID, SwitchPerspInfo.KEEPER_ID, //
       OPID_EDITOR_FACTORY_NAME, ValedAvValobjSwitchPerspInfo.FACTORY.factoryName(), //
       TSID_DEFAULT_VALUE, avValobj( SwitchPerspInfo.EMPTY ) //

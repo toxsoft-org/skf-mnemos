@@ -13,30 +13,28 @@ public interface ITsResources {
   /**
    * {@link PanelRgbaSetEditor}
    */
-  String DLG_T_RGBA_SET    = "Набор цветов";
-  String STR_MSG_RGBA_SET  = "Отредактируйте набор цветов и нажмите ОК";
-  String STR_L_IDENTIFIER  = "Идентификатор: ";
-  String STR_L_NAME        = "Наименование: ";
-  String STR_L_DESCRIPTION = "Описание: ";
-
-  String STR_B_ADD    = "Добавить...";
-  String STR_B_REMOVE = "Удалить";
-  String STR_B_UP     = "Вверх";
-  String STR_B_DOWN   = "Вниз";
-
-  String STR_ERR_WRONG_SET_ID = "Недопустимый идентификатор набора";
+  String DLG_T_RGBA_SET       = Messages.getString( "DLG_T_RGBA_SET" );       //$NON-NLS-1$
+  String STR_MSG_RGBA_SET     = Messages.getString( "STR_MSG_RGBA_SET" );     //$NON-NLS-1$
+  String STR_L_IDENTIFIER     = Messages.getString( "STR_L_IDENTIFIER" );     //$NON-NLS-1$
+  String STR_L_NAME           = Messages.getString( "STR_L_NAME" );           //$NON-NLS-1$
+  String STR_L_DESCRIPTION    = Messages.getString( "STR_L_DESCRIPTION" );    //$NON-NLS-1$
+  String STR_B_ADD            = Messages.getString( "STR_B_ADD" );            //$NON-NLS-1$
+  String STR_B_REMOVE         = Messages.getString( "STR_B_REMOVE" );         //$NON-NLS-1$
+  String STR_B_UP             = Messages.getString( "STR_B_UP" );             //$NON-NLS-1$
+  String STR_B_DOWN           = Messages.getString( "STR_B_DOWN" );           //$NON-NLS-1$
+  String STR_ERR_WRONG_SET_ID = Messages.getString( "STR_ERR_WRONG_SET_ID" ); //$NON-NLS-1$
 
   /**
    * {@link PanelImageSetEditor}
    */
-  String STR_C_IMGAGE         = "Изображение";
-  String DLG_T_IMG_SET_INFO   = "Набор изображений";
-  String STR_MSG_IMG_SET_INFO = "Отредактируйте необходимые параметры и нажмите ОК";
+  String STR_C_IMGAGE         = Messages.getString( "STR_C_IMGAGE" );         //$NON-NLS-1$
+  String DLG_T_IMG_SET_INFO   = Messages.getString( "DLG_T_IMG_SET_INFO" );   //$NON-NLS-1$
+  String STR_MSG_IMG_SET_INFO = Messages.getString( "STR_MSG_IMG_SET_INFO" ); //$NON-NLS-1$
 
   /**
    * {@link PanelImageSetEntryEditor}
    */
-  String DLG_T_IMG_SET_ENTRY_INFO   = "Элемент набора изображений";
-  String STR_MSG_IMG_SET_ENTRY_INFO = "Выберите и нажмите ОК";
+  String DLG_T_IMG_SET_ENTRY_INFO   = Messages.getString( "DLG_T_IMG_SET_ENTRY_INFO" );   //$NON-NLS-1$
+  String STR_MSG_IMG_SET_ENTRY_INFO = Messages.getString( "STR_MSG_IMG_SET_ENTRY_INFO" ); //$NON-NLS-1$
 
 }

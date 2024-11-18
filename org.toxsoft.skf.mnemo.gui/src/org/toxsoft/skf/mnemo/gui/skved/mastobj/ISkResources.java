@@ -7,5 +7,5 @@ package org.toxsoft.skf.mnemo.gui.skved.mastobj;
  */
 public interface ISkResources {
 
-  String STR_L_MASTER_OBJECT_CLASS = "Класс мастер-объекта: ";
+  String STR_L_MASTER_OBJECT_CLASS = Messages.getString( "STR_L_MASTER_OBJECT_CLASS" ); //$NON-NLS-1$
 }

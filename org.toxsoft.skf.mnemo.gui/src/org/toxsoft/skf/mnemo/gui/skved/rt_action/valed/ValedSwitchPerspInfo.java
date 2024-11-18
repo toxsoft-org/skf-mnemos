@@ -85,7 +85,7 @@ public class ValedSwitchPerspInfo
 
     IM5Model<SwitchPerspInfo> model =
         conn.scope().get( IM5Domain.class ).getModel( SwitchPerspInfoM5Model.MODEL_ID, SwitchPerspInfo.class );
-    TsDialogInfo cdi = new TsDialogInfo( tsContext(), null, SWITCH_N_MNEMO_INFO, SWITCH_D_MNEMO_INFO, 0 );
+    TsDialogInfo cdi = new TsDialogInfo( tsContext(), null, SWITCH_MNEMO_INFO, SWITCH_MNEMO_INFO_D, 0 );
 
     // редактируем
     SwitchPerspInfo tmpSwitchPerspInfo =
