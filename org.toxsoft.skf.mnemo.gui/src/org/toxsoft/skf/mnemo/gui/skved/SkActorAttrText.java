@@ -131,7 +131,7 @@ public class SkActorAttrText
 
   @Override
   public void whenRealTimePassed( long aRtTime ) {
-    if( ugwi != null && UgwiKindSkAttr.getSkid( ugwi ) != null ) {
+    if( ugwi != null && ugwi != Ugwi.NONE && UgwiKindSkAttr.getSkid( ugwi ) != null ) {
       ISkObject skObj = skVedEnv().skConn().coreApi().objService().find( UgwiKindSkAttr.getSkid( ugwi ) );
       IAtomicValue newValue = IAtomicValue.NULL;
       if( skObj != null ) {
