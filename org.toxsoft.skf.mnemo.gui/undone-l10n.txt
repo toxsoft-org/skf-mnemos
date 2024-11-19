@@ -1,0 +1,26 @@
+--- org.toxsoft.skf.mnemo.gui.km5
+--- org.toxsoft.skf.mnemo.gui.skved (присутствует русский язык в коде)
+--- org.toxsoft.skf.mnemo.gui.skved.mastobj
+--- org.toxsoft.skf.mnemo.gui.skved.rt_action
+--- org.toxsoft.skf.mnemo.gui.skved.rt_action.valed
+--- org.toxsoft.skf.mnemo.gui.skved.rt_action.tti
+--- org.toxsoft.skf.mnemo.gui.tools
+org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants (не делал локализацию)
+
+пакеты с русским языком в коде:
+    org.toxsoft.skf.mnemo.gui.skved.mastobj
+    org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers
+    org.toxsoft.skf.mnemo.gui.skved.rt_action.tti
+    org.toxsoft.skf.mnemo.gui.skved.rt_action.valed
+    org.toxsoft.skf.mnemo.gui.tsgui
+    org.toxsoft.skf.mnemo.gui.tsgui.asp
+    org.toxsoft.skf.mnemo.gui.tsgui.comps
+    org.toxsoft.skf.mnemo.gui.tsgui.layout
+    org.toxsoft.skf.mnemo.gui.tsgui.layout.column
+    org.toxsoft.skf.mnemo.gui.tsgui.layout.dialogs
+    org.toxsoft.skf.mnemo.gui.tsgui.layout.line
+    org.toxsoft.skf.mnemo.gui.tsgui.layout.table
+    org.toxsoft.skf.mnemo.gui.tsgui.tools
+    org.toxsoft.skf.mnemo.gui.tsgui.utils
+    org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants (не делал локализацию)
+    

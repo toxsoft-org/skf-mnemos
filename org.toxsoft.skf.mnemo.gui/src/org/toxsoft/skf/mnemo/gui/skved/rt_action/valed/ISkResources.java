@@ -1,7 +1,5 @@
 package org.toxsoft.skf.mnemo.gui.skved.rt_action.valed;
 
-import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
-
 /**
  * Localizable resources.
  *
@@ -9,16 +7,9 @@ import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
  */
 interface ISkResources {
 
-  /**
-   * {@link ValedPopupMnemoInfo}
-   */
-  String STR_N_POPUP_MNEMO_INFO = "Popup Mnemo Info";
-  String STR_D_POPUP_MNEMO_INFO = "Edit info to run-time popup mnemo ";
-
-  /**
-   * {@link PopupMnemoDialogPanel}
-   */
-  String SWITCH_N_MNEMO_INFO = "Switch persp info";
-  String SWITCH_D_MNEMO_INFO = "Edit info to switch Eclipse perspective";
+  String STR_POPUP_MNEMO_INFO   = Messages.getString( "STR_POPUP_MNEMO_INFO" );   //$NON-NLS-1$
+  String STR_POPUP_MNEMO_INFO_D = Messages.getString( "STR_POPUP_MNEMO_INFO_D" ); //$NON-NLS-1$
+  String SWITCH_MNEMO_INFO      = Messages.getString( "SWITCH_MNEMO_INFO" );      //$NON-NLS-1$
+  String SWITCH_MNEMO_INFO_D    = Messages.getString( "SWITCH_MNEMO_INFO_D" );    //$NON-NLS-1$
 
 }

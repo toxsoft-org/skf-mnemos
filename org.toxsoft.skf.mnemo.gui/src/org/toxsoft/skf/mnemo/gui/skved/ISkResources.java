@@ -81,18 +81,18 @@ interface ISkResources {
   /**
    * {@link SkActorColorDecorator}
    */
-  String STR_RGBA_SET                = "Набор цветов";
-  String STR_RGBA_SET_D              = "Набор цветов в виде RGBA";
-  String STR_ACTOR_COLOR_DECORATOR   = "Декоратор цветом";
-  String STR_ACTOR_COLOR_DECORATOR_D = "В зависимости от значения данного задает цвет указанного свойства";
+  String STR_RGBA_SET                = Messages.getString( "STR_RGBA_SET" );                //$NON-NLS-1$
+  String STR_RGBA_SET_D              = Messages.getString( "STR_RGBA_SET_D" );              //$NON-NLS-1$
+  String STR_ACTOR_COLOR_DECORATOR   = Messages.getString( "STR_ACTOR_COLOR_DECORATOR" );   //$NON-NLS-1$
+  String STR_ACTOR_COLOR_DECORATOR_D = Messages.getString( "STR_ACTOR_COLOR_DECORATOR_D" ); //$NON-NLS-1$
 
   /**
    * {@link SkActorRtdataImage}
    */
-  String STR_IMAGE_SET            = "Набор изображений";
-  String STR_IMAGE_SET_D          = "Набор изображений в виде их описаний";
-  String STR_ACTOR_RTDATA_IMAGE   = "Отображение значения изображением";
-  String STR_ACTOR_RTDATA_IMAGE_D = "Выбирает одно изображение из набора, используя значение РВ_данного как индекс";
+  String STR_IMAGE_SET            = Messages.getString( "STR_IMAGE_SET" );            //$NON-NLS-1$
+  String STR_IMAGE_SET_D          = Messages.getString( "STR_IMAGE_SET_D" );          //$NON-NLS-1$
+  String STR_ACTOR_RTDATA_IMAGE   = Messages.getString( "STR_ACTOR_RTDATA_IMAGE" );   //$NON-NLS-1$
+  String STR_ACTOR_RTDATA_IMAGE_D = Messages.getString( "STR_ACTOR_RTDATA_IMAGE_D" ); //$NON-NLS-1$
 
   /**
    * {@link SkActorInputField}
@@ -111,32 +111,32 @@ interface ISkResources {
   /**
    * {@link SkActorRriCheckbox}
    */
-  String STR_ACTOR_RRI_CHECKBOX   = "НСИ флажок";                                           //$NON-NLS-1$
-  String STR_ACTOR_RRI_CHECKBOX_D = "Флажок для редактирования значения булевого атрибута"; //$NON-NLS-1$
+  String STR_ACTOR_RRI_CHECKBOX   = Messages.getString( "STR_ACTOR_RRI_CHECKBOX" );   //$NON-NLS-1$
+  String STR_ACTOR_RRI_CHECKBOX_D = Messages.getString( "STR_ACTOR_RRI_CHECKBOX_D" ); //$NON-NLS-1$
 
   /**
    * {@link PanelE4PerspIdSelector}
    */
-  String STR_CLMN_NAME_PERSP_ID       = "E4 perspective id";
-  String STR_CLMN_NAME_PERSP_LABEL    = "Название";
-  String STR_SELECT_PERSP             = "Необходимо выбрать перспективу";
-  String STR_SELECT_PERSP_DLG_CAPTION = "Выбор E4 перспективы";
-  String STR_SELECT_PERSP_DLG_TITLE   = "Выберите перспективу и нажмите Ok";
+  String STR_CLMN_NAME_PERSP_ID       = Messages.getString( "STR_CLMN_NAME_PERSP_ID" );       //$NON-NLS-1$
+  String STR_CLMN_NAME_PERSP_LABEL    = Messages.getString( "STR_CLMN_NAME_PERSP_LABEL" );    //$NON-NLS-1$
+  String STR_SELECT_PERSP             = Messages.getString( "STR_SELECT_PERSP" );             //$NON-NLS-1$
+  String STR_SELECT_PERSP_DLG_CAPTION = Messages.getString( "STR_SELECT_PERSP_DLG_CAPTION" ); //$NON-NLS-1$
+  String STR_SELECT_PERSP_DLG_TITLE   = Messages.getString( "STR_SELECT_PERSP_DLG_TITLE" );   //$NON-NLS-1$
 
   /**
    * {@link StridableTableViewer}
    */
-  String STR_CLMN_ID    = "ИД";
-  String STR_CLMN_NAME  = "Наименование";
-  String STR_CLMN_DESCR = "Описание";
+  String STR_CLMN_ID    = Messages.getString( "STR_CLMN_ID" );    //$NON-NLS-1$
+  String STR_CLMN_NAME  = Messages.getString( "STR_CLMN_NAME" );  //$NON-NLS-1$
+  String STR_CLMN_DESCR = Messages.getString( "STR_CLMN_DESCR" ); //$NON-NLS-1$
 
   /**
    * {@link SkActorCmdCheckbox}
    */
-  String STR_N_CMD_ON        = "Команда (on)";
-  String STR_N_CMD_OFF       = "Команда (off)";
-  String STR_N_VALUE         = "Значение";
-  String STR_N_INVERSE_VALUE = "Инвертировать значение";
+  String STR_N_CMD_ON        = Messages.getString( "STR_N_CMD_ON" );        //$NON-NLS-1$
+  String STR_N_CMD_OFF       = Messages.getString( "STR_N_CMD_OFF" );       //$NON-NLS-1$
+  String STR_N_VALUE         = Messages.getString( "STR_N_VALUE" );         //$NON-NLS-1$
+  String STR_N_INVERSE_VALUE = Messages.getString( "STR_N_INVERSE_VALUE" ); //$NON-NLS-1$
 
   /**
    * {@link SkActorPopupMnemoInvoker}

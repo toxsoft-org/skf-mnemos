@@ -21,7 +21,7 @@ public enum ERtActionMouseButton
   /**
    * Left button {@link SWT#BUTTON1}.
    */
-  LEFT( "LEFT", STR_N_LEFT_BTTN, STR_D_LEFT_BTTN ), //$NON-NLS-1$
+  LEFT( "LEFT", STR_LEFT_BTTN, STR_LEFT_BTTN_D ), //$NON-NLS-1$
 
   // /**
   // * Double click left button {@link SWT#BUTTON3}.
@@ -31,12 +31,12 @@ public enum ERtActionMouseButton
   /**
    * Middle button {@link SWT#BUTTON2}.
    */
-  MIDDLE( "MIDDLE", STR_N_MIDDLE_BTTN, STR_D_MIDDLE_BTTN ), //$NON-NLS-1$
+  MIDDLE( "MIDDLE", STR_MIDDLE_BTTN, STR_MIDDLE_BTTN_D ), //$NON-NLS-1$
 
   /**
    * Right button {@link SWT#BUTTON3}.
    */
-  RIGHT( "RIGHT", STR_N_RIGHT_BTTN, STR_D_RIGHT_BTTN ); //$NON-NLS-1$
+  RIGHT( "RIGHT", STR_RIGHT_BTTN, STR_RIGHT_BTTN_D ); //$NON-NLS-1$
 
   /**
    * The keeper ID.

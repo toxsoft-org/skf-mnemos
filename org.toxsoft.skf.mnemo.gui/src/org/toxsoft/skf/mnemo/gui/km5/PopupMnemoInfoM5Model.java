@@ -54,8 +54,8 @@ public class PopupMnemoInfoM5Model
    * Attribute {@link PopupMnemoInfo#masterObj() } master
    */
   public M5AttributeFieldDef<PopupMnemoInfo> MNEMO_SKID = new M5AttributeFieldDef<>( FID_MNEMO_SKID, VALOBJ, //
-      TSID_NAME, STR_N_MNEMO_SKID, //
-      TSID_DESCRIPTION, STR_D_MNEMO_SKID, //
+      TSID_NAME, STR_MNEMO_SKID, //
+      TSID_DESCRIPTION, STR_MNEMO_SKID_D, //
       TSID_KEEPER_ID, Skid.KEEPER_ID, //
       OPID_EDITOR_FACTORY_NAME, ValedAvValobjSkidEditor.FACTORY_NAME //
   ) {
@@ -86,8 +86,8 @@ public class PopupMnemoInfoM5Model
    * Attribute {@link PopupMnemoInfo#resolverConfig() } master
    */
   public M5AttributeFieldDef<PopupMnemoInfo> MASTER_SKID = new M5AttributeFieldDef<>( FID_RESOLVER_CFG, VALOBJ, //
-      TSID_NAME, STR_N_MASTER_OBJ_SKID, //
-      TSID_DESCRIPTION, STR_D_MASTER_OBJ_SKID, //
+      TSID_NAME, STR_MASTER_OBJ_SKID, //
+      TSID_DESCRIPTION, STR_MASTER_OBJ_SKID_D, //
       TSID_KEEPER_ID, PopupMnemoResolverConfig.KEEPER_ID, //
       OPID_EDITOR_FACTORY_NAME, ValedAvPopupMnemoResolverConfig.FACTORY_NAME //
   ) {
@@ -103,8 +103,8 @@ public class PopupMnemoInfoM5Model
    * Attribute {@link PopupMnemoInfo#mouseButton() } sensitive mouse button
    */
   public M5AttributeFieldDef<PopupMnemoInfo> MOUSE_BTTN = new M5AttributeFieldDef<>( FID_MOUSE_BTTN, VALOBJ, //
-      TSID_NAME, STR_N_HOT_MOUSE_SKID, //
-      TSID_DESCRIPTION, STR_D_HOT_MOUSE_SKID, //
+      TSID_NAME, STR_HOT_MOUSE_SKID, //
+      TSID_DESCRIPTION, STR_HOT_MOUSE_SKID_D, //
       TSID_KEEPER_ID, ERtActionMouseButton.KEEPER_ID, //
       TSID_DEFAULT_VALUE, avValobj( ERtActionMouseButton.LEFT ) ) {
 
@@ -156,7 +156,7 @@ public class PopupMnemoInfoM5Model
       ERtActionMouseButton mouseBttn = aValues.getAsAv( FID_MOUSE_BTTN ).asValobj();
 
       // return new PopupMnemoInfo( mnemoSkid, masterSkid, mouseBttn );
-      return new PopupMnemoInfo( mnemoSkid, "", resolverCfg, mouseBttn, false, 0 );
+      return new PopupMnemoInfo( mnemoSkid, "", resolverCfg, mouseBttn, false, 0 ); //$NON-NLS-1$
     }
 
     @Override
