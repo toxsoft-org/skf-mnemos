@@ -96,6 +96,16 @@ public class RuntimeMnemoPanel
   }
 
   // ------------------------------------------------------------------------------------
+  // Control
+  //
+
+  @Override
+  public void setBackground( Color aColor ) {
+    super.setBackground( aColor );
+    theCanvas.setBackground( aColor );
+  }
+
+  // ------------------------------------------------------------------------------------
   // IPausableAnimation
   //
 
