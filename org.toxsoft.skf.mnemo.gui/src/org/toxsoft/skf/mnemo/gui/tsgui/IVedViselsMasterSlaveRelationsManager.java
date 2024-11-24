@@ -56,6 +56,16 @@ public interface IVedViselsMasterSlaveRelationsManager
   IStringList listAllSlaveViselIds( String aMasterId );
 
   /**
+   * Возвращает признак того, что все визуальные элементы имеют одного родителя.<br>
+   * <code>null</code> - может являться родителем, т.е если у всех визуальных элементов <code>masterId == null</code>,
+   * то результат будет <b>true</b>.
+   *
+   * @param aIds {@link IStringList} - ИДы визуальных элементов
+   * @return <b>true</b> - если у всех визуальных элемнтов одинаковый masterId, даже если он <code>null</code>
+   */
+  boolean areTheySiblings( IStringList aIds );
+
+  /**
    * Подчиняет визуальный элемент указанному "мастеру".
    *
    * @param aSubId String - ИД подчиненного визуального элемента

@@ -12,6 +12,7 @@ import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.bricks.actions.asp.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
+import org.toxsoft.core.tsgui.bricks.tstree.tmm.*;
 import org.toxsoft.core.tsgui.graphics.icons.*;
 import org.toxsoft.core.tsgui.panels.toolbar.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
@@ -27,6 +28,7 @@ import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.more.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
@@ -300,8 +302,6 @@ public class MnemoEditorPanel
     undoManager = new VedUndoManager( vedScreen );
     selectionManager = new VedViselSelectionManager( vedScreen );
 
-    toolsManager.addTool( new ZOrdererTool( selectionManager, vedScreen ) );
-
     editManager = new VedViselsEditManager( vedScreen, selectionManager );
 
     copyPasteManager.addProcessor( new SelectionCopyPasteProcessor( vedScreen, selectionManager ) );
@@ -310,6 +310,8 @@ public class MnemoEditorPanel
     masterSlaveManager = new VedViselsMasterSlaveRelationsManager( vedScreen, selectionManager );
     layoutManager = new VedViselsLayoutManager( vedScreen, IVedLayoutFactoriesProvider.DEFAULT, selectionManager,
         masterSlaveManager );
+    toolsManager.addTool( new ZOrdererTool( selectionManager, masterSlaveManager, vedScreen ) );
+
     copyPasteManager.addProcessor( new MasterSlaveCopyPasteProcessor( vedScreen, masterSlaveManager ) );
 
     deleteManager.addProcessor( new SelectionDeleteProcessor( vedScreen, selectionManager ) );
@@ -353,7 +355,14 @@ public class MnemoEditorPanel
     tiObjTree.setToolTipText( STR_TAB_OBJ_TREE_D );
     SashForm sfObjTree = new SashForm( westFolder, SWT.VERTICAL );
     sfObjTree.setSashWidth( 8 );
-    panelVisels = new VedPanelViselsList( sfObjTree, new TsGuiContext( tsContext() ), vedScreen );
+
+    VedViselsParentChildTreeMaker treeMaker = new VedViselsParentChildTreeMaker( vedScreen, masterSlaveManager );
+    TreeModeInfo<IVedVisel> tmi = new TreeModeInfo<IVedVisel>( "tmi", "name", "descr", null, treeMaker );
+    IStridablesList<TreeModeInfo<IVedVisel>> modesList = new StridablesList<>( tmi );
+    panelVisels = new VedPanelViselsList( sfObjTree, new TsGuiContext( tsContext() ), vedScreen, modesList );
+    VVParentChildReorderer vvReorderer = new VVParentChildReorderer( vedScreen, masterSlaveManager );
+    panelVisels.setParentChildReorderer( vvReorderer );
+
     panelActors = new VedPanelActorsList( sfObjTree, new TsGuiContext( tsContext() ), vedScreen, selectionManager );
     sfObjTree.setWeights( 5500, 4500 );
     tiObjTree.setControl( sfObjTree );

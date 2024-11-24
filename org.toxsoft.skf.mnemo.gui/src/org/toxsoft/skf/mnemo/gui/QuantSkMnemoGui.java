@@ -3,10 +3,12 @@ package org.toxsoft.skf.mnemo.gui;
 import org.eclipse.e4.core.contexts.*;
 import org.toxsoft.core.tsgui.bricks.quant.*;
 import org.toxsoft.core.tsgui.graphics.patterns.*;
+import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.valed.api.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.utils.valobj.*;
 import org.toxsoft.skf.mnemo.gui.km5.*;
+import org.toxsoft.skf.mnemo.gui.m51.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.*;
@@ -116,6 +118,13 @@ public class QuantSkMnemoGui
     resolversRegistry.register( DirectCmdResolver.FACTORY );
     resolversRegistry.register( LinkInfoResolver.FACTORY );
     resolversRegistry.register( RivetInfoResolver.FACTORY );
+
+    // ------------------------------------------------------------------------------------
+    // M5
+    //
+    IM5Domain m5 = aWinContext.get( IM5Domain.class );
+    m5.addModel( new M5BaseFieldDefModel<>() );
+
   }
 
 }

@@ -4,6 +4,7 @@ import org.eclipse.swt.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.uievents.*;
+import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.graphics.cursors.*;
 import org.toxsoft.core.tsgui.graphics.gc.*;
 import org.toxsoft.core.tsgui.graphics.icons.impl.*;
@@ -18,6 +19,7 @@ import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.*;
+import org.toxsoft.skf.mnemo.gui.tsgui.*;
 
 /**
  * Инструмент задания Z-порядка среди выделенных элементов.
@@ -126,6 +128,8 @@ public class ZOrdererTool
 
   private final IVedViselSelectionManager selectionManager;
 
+  private final IVedViselsMasterSlaveRelationsManager msManager;
+
   private Cursor cursor = null;
 
   private Cursor currCursor = null;
@@ -138,9 +142,11 @@ public class ZOrdererTool
    * @param aSelectionManager {@link IVedViselSelectionManager} - менеджер выделения
    * @param aVedScreen {@link IVedScreen} - экран редактора
    */
-  public ZOrdererTool( IVedViselSelectionManager aSelectionManager, IVedScreen aVedScreen ) {
+  public ZOrdererTool( IVedViselSelectionManager aSelectionManager, IVedViselsMasterSlaveRelationsManager aMsManager,
+      IVedScreen aVedScreen ) {
     super( TOOLID, "Z-Orderer", "", aVedScreen );
     selectionManager = aSelectionManager;
+    msManager = aMsManager;
     inputHandler = new InputHandler( aVedScreen );
     ITsCursorManager cursorManager = cursorManager();
     if( !cursorManager.hasCursor( CURSOR_NAME ) ) {
@@ -172,7 +178,14 @@ public class ZOrdererTool
 
   @Override
   protected boolean doCanActivate() {
-    return selectionManager.selectedViselIds().size() > 1;
+    if( selectionManager.selectedViselIds().size() > 2 ) {
+      if( !msManager.areTheySiblings( selectionManager.selectedViselIds() ) ) {
+        TsDialogUtils.warn( getShell(), "Изменение z-порядка недопустимо. Элементы принадлежат разным родителям!" );
+        return false;
+      }
+      return true;
+    }
+    return false;
   }
 
   @Override

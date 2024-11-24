@@ -3,12 +3,16 @@ package org.toxsoft.skf.mnemo.gui.tsgui.utils;
 import static org.toxsoft.uskat.core.gui.km5.sgw.ISgwM5Constants.*;
 
 import org.toxsoft.core.tsgui.bricks.ctx.*;
+import org.toxsoft.core.tsgui.bricks.gw.*;
 import org.toxsoft.core.tsgui.dialogs.datarec.*;
 import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.m5.gui.*;
 import org.toxsoft.core.tsgui.m5.gui.panels.*;
 import org.toxsoft.core.tsgui.m5.model.*;
-import org.toxsoft.core.tslib.utils.errors.*;
+import org.toxsoft.core.tslib.coll.*;
+import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.core.tslib.gw.gwid.*;
+import org.toxsoft.skf.mnemo.gui.m51.*;
 import org.toxsoft.uskat.core.api.objserv.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
@@ -76,16 +80,36 @@ public class SkGuiUtils {
    * @return {@link ISkClassInfo} - описание класса
    */
   public static ISkObject selectObject( String aClassId, ISkConnection aSkConn, ITsGuiContext aTsContext ) {
-    TsNullArgumentRtException.checkNull( aClassId );
+    // TsNullArgumentRtException.checkNull( aClassId );
+    // // тут получаем KM5 модель ISkClassInfo
+    // IM5Domain m5 = aSkConn.scope().get( IM5Domain.class );
+    // IM5Model<ISkObject> model = m5.getModel( ISgwM5Constants.MID_SGW_SK_OBJECT, ISkObject.class );
+    //
+    // IM5ItemsProvider<ISkObject> ip = () -> aSkConn.coreApi().objService().listObjs( aClassId, true );
+    //
+    // ITsDialogInfo dlgInfo;
+    // dlgInfo = new TsDialogInfo( aTsContext, "Выбор объекта", "Выберите соответствующий объект и нажмите \"ОК\"" );
+    // return M5GuiUtils.askSelectItem( dlgInfo, model, null, ip, null );
+
     // тут получаем KM5 модель ISkClassInfo
     IM5Domain m5 = aSkConn.scope().get( IM5Domain.class );
-    IM5Model<ISkObject> model = m5.getModel( ISgwM5Constants.MID_SGW_SK_OBJECT, ISkObject.class );
+    M5BaseFieldDefModel model = (M5BaseFieldDefModel)m5.getModel( M5BaseFieldDefModel.MODEL_ID, IM5FieldDef.class );
+    IM5Model<Gwid> model1 = m5.getModel( IGwM5Constants.MID_GWID, Gwid.class );
 
-    IM5ItemsProvider<ISkObject> ip = () -> aSkConn.coreApi().objService().listObjs( aClassId, true );
+    // IM5ItemsProvider<ISkObject> ip = () -> aSkConn.coreApi().objService().listObjs( "SkObject", true );
+
+    IListEdit<IM5FieldDef> fl = new ElemArrayList<>();
+    for( IM5FieldDef fd : model1.fieldDefs() ) {
+      fl.add( fd );
+    }
+    IM5ItemsProvider<IM5FieldDef> ip = () -> fl;
+
+    // IM5ItemsProvider<IM5FieldDef> ip = () -> model.fieldDefs();
 
     ITsDialogInfo dlgInfo;
     dlgInfo = new TsDialogInfo( aTsContext, "Выбор объекта", "Выберите соответствующий объект и нажмите \"ОК\"" );
-    return M5GuiUtils.askSelectItem( dlgInfo, model, null, ip, null );
+    M5GuiUtils.askSelectItem( dlgInfo, model, null, ip, null );
+    return null;
   }
 
   /**

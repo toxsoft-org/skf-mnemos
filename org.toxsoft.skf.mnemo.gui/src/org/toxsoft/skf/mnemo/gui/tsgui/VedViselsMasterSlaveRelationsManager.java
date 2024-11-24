@@ -1,9 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.tsgui;
 
-import static org.toxsoft.core.tsgui.bricks.actions.TsActionDef.*;
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
-import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
 
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.actions.*;
@@ -33,31 +31,31 @@ public class VedViselsMasterSlaveRelationsManager
   class MasterSlaveActionsProvider
       extends MethodPerActionTsActionSetProvider {
 
-    /**
-     * ID of action {@link #ACDEF_ENSLAVE}.
-     */
-    public static final String ACTID_ENSLAVE = "ved.enslave"; //$NON-NLS-1$
-
-    /**
-     * ID of action {@link #ACDEF_FREE}.
-     */
-    public static final String ACTID_FREE = "ved.free"; //$NON-NLS-1$
-
-    /**
-     * Action: copy selected visels and associated actors to the internal buffer.
-     */
-    public static final ITsActionDef ACDEF_ENSLAVE = ofPush2( ACTID_ENSLAVE, //
-        "Усыновить", "Делает родителем элемент на котором находится данный элемент", ICONID_ENSLAVE );
-
-    /**
-     * Action: paste selected visels and associated actors from the internal buffer.
-     */
-    public static final ITsActionDef ACDEF_FREE = ofPush2( ACTID_FREE, //
-        "Осиротить", "Лишает родителя родительских прав, делая элемент сиротой", ICONID_FREE );
+    // /**
+    // * ID of action {@link #ACDEF_ENSLAVE}.
+    // */
+    // public static final String ACTID_ENSLAVE = "ved.enslave"; //$NON-NLS-1$
+    //
+    // /**
+    // * ID of action {@link #ACDEF_FREE}.
+    // */
+    // public static final String ACTID_FREE = "ved.free"; //$NON-NLS-1$
+    //
+    // /**
+    // * Action: copy selected visels and associated actors to the internal buffer.
+    // */
+    // public static final ITsActionDef ACDEF_ENSLAVE = ofPush2( ACTID_ENSLAVE, //
+    // "Усыновить", "Делает родителем элемент на котором находится данный элемент", ICONID_ENSLAVE );
+    //
+    // /**
+    // * Action: paste selected visels and associated actors from the internal buffer.
+    // */
+    // public static final ITsActionDef ACDEF_FREE = ofPush2( ACTID_FREE, //
+    // "Осиротить", "Лишает родителя родительских прав, делая элемент сиротой", ICONID_FREE );
 
     MasterSlaveActionsProvider() {
-      defineAction( ACDEF_ENSLAVE, VedViselsMasterSlaveRelationsManager.this::enslave );
-      defineAction( ACDEF_FREE, VedViselsMasterSlaveRelationsManager.this::freeSlave );
+      // defineAction( ACDEF_ENSLAVE, VedViselsMasterSlaveRelationsManager.this::enslave );
+      // defineAction( ACDEF_FREE, VedViselsMasterSlaveRelationsManager.this::freeSlave );
     }
 
     @Override
@@ -66,23 +64,23 @@ public class VedViselsMasterSlaveRelationsManager
         return true;
       }
       if( clickedVisel != null ) {
-        if( aActionDef.id().equals( ACTID_ENSLAVE ) ) {
-          if( clickedVisel.params().hasKey( PARAMID_MASTER_ID ) ) {
-            IAtomicValue val = clickedVisel.params().getValue( PARAMID_MASTER_ID );
-            if( val == IAtomicValue.NULL ) {
-              return true;
-            }
-            return false;
-          }
-          return true;
-        }
-        if( aActionDef.id().equals( ACTID_FREE ) ) {
-          IAtomicValue masterId = IAtomicValue.NULL;
-          if( clickedVisel.params().hasKey( PARAMID_MASTER_ID ) ) {
-            masterId = clickedVisel.params().getValue( PARAMID_MASTER_ID );
-          }
-          return masterId != IAtomicValue.NULL;
-        }
+        // if( aActionDef.id().equals( ACTID_ENSLAVE ) ) {
+        // if( clickedVisel.params().hasKey( PARAMID_MASTER_ID ) ) {
+        // IAtomicValue val = clickedVisel.params().getValue( PARAMID_MASTER_ID );
+        // if( val == IAtomicValue.NULL ) {
+        // return true;
+        // }
+        // return false;
+        // }
+        // return true;
+        // }
+        // if( aActionDef.id().equals( ACTID_FREE ) ) {
+        // IAtomicValue masterId = IAtomicValue.NULL;
+        // if( clickedVisel.params().hasKey( PARAMID_MASTER_ID ) ) {
+        // masterId = clickedVisel.params().getValue( PARAMID_MASTER_ID );
+        // }
+        // return masterId != IAtomicValue.NULL;
+        // }
       }
       return false;
     }
@@ -191,8 +189,23 @@ public class VedViselsMasterSlaveRelationsManager
   @Override
   public IStringList listAllSlaveViselIds( String aMasterId ) {
     IStringListEdit result = new StringArrayList();
-    addSlaveViselIds( aMasterId, result );
+    addSlaveViselIds( aMasterId, result, new StringArrayList() );
     return result;
+  }
+
+  @Override
+  public boolean areTheySiblings( IStringList aIds ) {
+    String masterId = viselMasterId( aIds.first() );
+    for( String id : aIds ) {
+      String mi = viselMasterId( id );
+      if( mi != null && !mi.equals( masterId ) ) {
+        return false;
+      }
+      if( mi == null && masterId != null ) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @Override
@@ -209,7 +222,7 @@ public class VedViselsMasterSlaveRelationsManager
     visel.params().setStr( PARAMID_MASTER_ID, aMasterId );
 
     int masterIdx = vedScreen.model().visels().list().ids().indexOf( aMasterId );
-    vedScreen.model().visels().reorderer().move( visel, masterIdx + 1 );
+    // vedScreen.model().visels().reorderer().move( visel, masterIdx + 1 );
 
     System.out.println( "К мастеру: " + aMasterId + " добавлен " + aSubId );
   }
@@ -363,12 +376,20 @@ public class VedViselsMasterSlaveRelationsManager
     return null;
   }
 
-  void addSlaveViselIds( String aMasterId, IStringListEdit aViselIds ) {
+  boolean addSlaveViselIds( String aMasterId, IStringListEdit aViselIds, IStringListEdit aProcessedIds ) {
+    if( aProcessedIds.hasElem( aMasterId ) ) {
+      System.out.println( "Циклическая ссылка!!!: " + aMasterId );
+      return false;
+    }
+    aProcessedIds.add( aMasterId );
     IStringList slaveIds = listSlaveViselIds( aMasterId );
     aViselIds.addAll( slaveIds );
     for( String id : slaveIds ) {
-      addSlaveViselIds( id, aViselIds );
+      if( !addSlaveViselIds( id, aViselIds, aProcessedIds ) ) {
+        return false;
+      }
     }
+    return true;
   }
 
   void onXZdeleted() {
@@ -413,6 +434,7 @@ public class VedViselsMasterSlaveRelationsManager
         enslaveVisel( id, owner.id() );
       }
     }
+    // vedScreen.model().visels().eventer().fi
   }
 
   void freeSlave() {
