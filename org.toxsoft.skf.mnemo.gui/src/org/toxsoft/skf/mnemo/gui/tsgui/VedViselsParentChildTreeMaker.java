@@ -12,6 +12,7 @@ import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
 
 public class VedViselsParentChildTreeMaker
     implements ITsTreeMaker<IVedVisel> {
@@ -81,9 +82,11 @@ public class VedViselsParentChildTreeMaker
     IVedVisel visel = aParentNode.entity();
     if( visel != null ) {
       IStridablesList<IVedVisel> visels;
-      visels = VedScreenUtils.listVisels( msManager.listSlaveViselIds( visel.id() ), vedScreen );
-      for( IVedVisel v : visels ) {
-        nodes.add( createNode( aParentNode, v ) );
+      IStringList slaveIds = msManager.listSlaveViselIds( visel.id() );
+      for( String id : slaveIds ) {
+        if( VedScreenUtils.findVisel( id, vedScreen ) == null ) {
+          msManager.freeVisel( id );
+        }
       }
     }
     return nodes;
@@ -91,7 +94,7 @@ public class VedViselsParentChildTreeMaker
 
   private static final ITsNodeKind<IVedVisel> NK_VISEL = new TsNodeKind<>( "nodeKindVisel", IVedVisel.class, true ); //$NON-NLS-1$
 
-  private DefaultTsNode<IVedVisel> createNode( ITsNode aParentNode, IVedVisel aVisel) {
+  private DefaultTsNode<IVedVisel> createNode( ITsNode aParentNode, IVedVisel aVisel ) {
     DefaultTsNode<IVedVisel> node = new DefaultTsNode<>( NK_VISEL, aParentNode, aVisel );
     node.setName( aVisel.nmName() );
 

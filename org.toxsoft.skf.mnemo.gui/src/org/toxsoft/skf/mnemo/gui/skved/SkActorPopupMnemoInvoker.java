@@ -186,6 +186,7 @@ public class SkActorPopupMnemoInvoker
       Ugwi moUgwi = props().getValobj( TFI_SKID_UGWI.id() );
       if( moUgwi != Ugwi.NONE ) {
         Skid moSkid = UgwiKindSkSkid.getSkid( moUgwi );
+        // prepare (resolve) popup mnemo config for #moSkid master object
         ISimpleResolverFactoriesRegistry resRegistry = tsContext().get( ISimpleResolverFactoriesRegistry.class );
         MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn(), resRegistry );
         Ugwi ugwi = UgwiKindSkSkid.makeUgwi( moSkid.classId(), moSkid.strid() );

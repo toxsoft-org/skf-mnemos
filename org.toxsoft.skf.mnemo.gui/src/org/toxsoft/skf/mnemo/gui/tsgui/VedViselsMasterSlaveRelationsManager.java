@@ -241,6 +241,13 @@ public class VedViselsMasterSlaveRelationsManager
     }
     VedAbstractVisel subVisel = VedScreenUtils.findVisel( aSubId, vedScreen );
     subVisel.params().setValue( PARAMID_MASTER_ID, IAtomicValue.NULL );
+
+    IStridablesList<VedAbstractVisel> visels = vedScreen.model().visels().list();
+    for( VedAbstractVisel v : visels ) {
+      StringArrayList subIds = new StringArrayList( listSlaveViselIds( v.id() ) );
+      subIds.remove( aSubId );
+      v.params().setValobj( PARAMID_SLAVE_IDS, subIds );
+    }
   }
 
   @Override
@@ -254,13 +261,6 @@ public class VedViselsMasterSlaveRelationsManager
       }
     }
   }
-
-  // private void freeSlaves(IVedVisel aMaster, IStringList aSlaveIds ) {
-  // IStringListEdit slaveIds = new StringArrayList();
-  // if( aMasterCfg.params().hasKey( PARAMID_SLAVE_IDS ) ) {
-  // slaveIds.addAll( (IStringList)aMasterCfg.params().getValobj( PARAMID_SLAVE_IDS ) );
-  // }
-  // }
 
   @Override
   public void setMasterId( VedItemCfg aCfg, String aMasterId ) {
