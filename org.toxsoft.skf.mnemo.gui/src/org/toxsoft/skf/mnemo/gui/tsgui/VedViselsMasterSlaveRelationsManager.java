@@ -2,6 +2,7 @@ package org.toxsoft.skf.mnemo.gui.tsgui;
 
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
+import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
 
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.actions.*;
@@ -35,27 +36,27 @@ public class VedViselsMasterSlaveRelationsManager
     // * ID of action {@link #ACDEF_ENSLAVE}.
     // */
     // public static final String ACTID_ENSLAVE = "ved.enslave"; //$NON-NLS-1$
-    //
-    // /**
-    // * ID of action {@link #ACDEF_FREE}.
-    // */
-    // public static final String ACTID_FREE = "ved.free"; //$NON-NLS-1$
-    //
+
+    /**
+     * ID of action {@link #ACDEF_FREE}.
+     */
+    public static final String ACTID_FREE = "ved.free"; //$NON-NLS-1$
+
     // /**
     // * Action: copy selected visels and associated actors to the internal buffer.
     // */
     // public static final ITsActionDef ACDEF_ENSLAVE = ofPush2( ACTID_ENSLAVE, //
     // "Усыновить", "Делает родителем элемент на котором находится данный элемент", ICONID_ENSLAVE );
-    //
-    // /**
-    // * Action: paste selected visels and associated actors from the internal buffer.
-    // */
-    // public static final ITsActionDef ACDEF_FREE = ofPush2( ACTID_FREE, //
-    // "Осиротить", "Лишает родителя родительских прав, делая элемент сиротой", ICONID_FREE );
+
+    /**
+     * Action: paste selected visels and associated actors from the internal buffer.
+     */
+    public static final ITsActionDef ACDEF_FREE = TsActionDef.ofPush2( ACTID_FREE, //
+        "Осиротить", "Лишает родителя родительских прав, делая элемент сиротой", ICONID_FREE );
 
     MasterSlaveActionsProvider() {
       // defineAction( ACDEF_ENSLAVE, VedViselsMasterSlaveRelationsManager.this::enslave );
-      // defineAction( ACDEF_FREE, VedViselsMasterSlaveRelationsManager.this::freeSlave );
+      defineAction( ACDEF_FREE, VedViselsMasterSlaveRelationsManager.this::freeSlave );
     }
 
     @Override
@@ -74,13 +75,13 @@ public class VedViselsMasterSlaveRelationsManager
         // }
         // return true;
         // }
-        // if( aActionDef.id().equals( ACTID_FREE ) ) {
-        // IAtomicValue masterId = IAtomicValue.NULL;
-        // if( clickedVisel.params().hasKey( PARAMID_MASTER_ID ) ) {
-        // masterId = clickedVisel.params().getValue( PARAMID_MASTER_ID );
-        // }
-        // return masterId != IAtomicValue.NULL;
-        // }
+        if( aActionDef.id().equals( ACTID_FREE ) ) {
+          IAtomicValue masterId = IAtomicValue.NULL;
+          if( clickedVisel.params().hasKey( PARAMID_MASTER_ID ) ) {
+            masterId = clickedVisel.params().getValue( PARAMID_MASTER_ID );
+          }
+          return masterId != IAtomicValue.NULL;
+        }
       }
       return false;
     }

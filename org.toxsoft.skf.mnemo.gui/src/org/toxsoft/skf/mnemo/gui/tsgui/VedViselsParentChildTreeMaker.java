@@ -84,8 +84,12 @@ public class VedViselsParentChildTreeMaker
       IStridablesList<IVedVisel> visels;
       IStringList slaveIds = msManager.listSlaveViselIds( visel.id() );
       for( String id : slaveIds ) {
-        if( VedScreenUtils.findVisel( id, vedScreen ) == null ) {
+        IVedVisel v = VedScreenUtils.findVisel( id, vedScreen );
+        if( v == null ) {
           msManager.freeVisel( id );
+        }
+        else {
+          nodes.add( createNode( aParentNode, v ) );
         }
       }
     }
