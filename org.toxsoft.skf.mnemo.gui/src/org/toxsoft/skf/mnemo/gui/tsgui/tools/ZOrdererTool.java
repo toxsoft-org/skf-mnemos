@@ -178,7 +178,7 @@ public class ZOrdererTool
 
   @Override
   protected boolean doCanActivate() {
-    if( selectionManager.selectedViselIds().size() > 2 ) {
+    if( selectionManager.selectedViselIds().size() > 1 ) {
       if( !msManager.areTheySiblings( selectionManager.selectedViselIds() ) ) {
         TsDialogUtils.warn( getShell(), "Изменение z-порядка недопустимо. Элементы принадлежат разным родителям!" );
         return false;
