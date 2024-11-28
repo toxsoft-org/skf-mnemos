@@ -9,24 +9,24 @@
     <elements xsi:type="application:Addon" xmi:id="_7MrMoIuMEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.addon.0" contributionURI="bundleclass://org.toxsoft.skf.mnemo.mws.simple/org.toxsoft.skf.mnemo.mws.simple.e4.addons.AddonMnemoMwsSimple"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_o3XpQIuMEe6MbcF9qfHl9w" featurename="children" parentElementId="org.toxsoft.mws.perspectivestack.main">
-    <elements xsi:type="advanced:Perspective" xmi:id="_ADQhEIuNEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.persp.main" label="%Persp_MnemoSimple" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.gui/icons/is24x24/mnemos-list.png" tooltip="%Persp_MnemoSimple_D">
+    <elements xsi:type="advanced:Perspective" xmi:id="_ADQhEIuNEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.persp.main" label="%Persp_MnemoSimple" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.gui/icons/is24x24/app-mnemoshema-editor.png" tooltip="%Persp_MnemoSimple_D">
       <children xsi:type="basic:PartStack" xmi:id="_IRqF4IuNEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.partstack.main">
         <tags>NoAutoCollapse</tags>
       </children>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_pIl8IIuMEe6MbcF9qfHl9w" featurename="children" parentElementId="org.toxsoft.mws.menu.main.perspectives">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_ZnH84IuNEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.handledmenuitem.persp_mnemosimple" label="%Persp_MnemoSimple" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.gui/icons/is24x24/mnemos-list.png" tooltip="%Persp_MnemoSimple_D" type="Radio" command="_WY8mIIuMEe6MbcF9qfHl9w">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_ZnH84IuNEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.handledmenuitem.persp_mnemosimple" label="%Persp_MnemoSimple" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.gui/icons/is24x24/app-mnemoshema-editor.png" tooltip="%Persp_MnemoSimple_D" type="Radio" command="_WY8mIIuMEe6MbcF9qfHl9w">
       <parameters xmi:id="_phuYYIuNEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.parameter.0" name="org.toxsoft.mws.cmd.switch_persp.arg.perspId" value="org.toxsoft.skf.mnemo.mws.simple.persp.main"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_pbRAgIuMEe6MbcF9qfHl9w" featurename="children" parentElementId="org.toxsoft.mws.toolbar.perspectives">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_jlXusIuNEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.handledtoolitem.persp_mnemosimple" label="%Persp_MnemoSimple" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.gui/icons/is24x24/mnemos-list.png" tooltip="%Persp_MnemoSimple_D" type="Radio" command="_WY8mIIuMEe6MbcF9qfHl9w">
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_jlXusIuNEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.handledtoolitem.persp_mnemosimple" label="%Persp_MnemoSimple" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.gui/icons/is24x24/app-mnemoshema-editor.png" tooltip="%Persp_MnemoSimple_D" type="Radio" command="_WY8mIIuMEe6MbcF9qfHl9w">
       <parameters xmi:id="_rR0dAIuNEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.parameter.1" name="org.toxsoft.mws.cmd.switch_persp.arg.perspId" value="org.toxsoft.skf.mnemo.mws.simple.persp.main"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_ppitEIuMEe6MbcF9qfHl9w" featurename="children" parentElementId="org.toxsoft.mws.menu.main" positionInList="before:org.toxsoft.mws.menu.main.service">
-    <elements xsi:type="menu:Menu" xmi:id="_P9qvUIuNEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.mmenu.mnemos_list" label="%MMenu_MnemosList" tooltip="%MMenu_MnemosList_D" mnemonics=""/>
+    <elements xsi:type="menu:Menu" xmi:id="_P9qvUIuNEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.mmenu.mnemos_list" label="%MMenu_MnemosList" iconURI="platform:/plugin/org.toxsoft.skf.mnemo.gui/icons/is24x24/app-mnemoshema-editor.png" tooltip="%MMenu_MnemosList_D" mnemonics=""/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Ju3CsIuYEe6MbcF9qfHl9w" featurename="commands" parentElementId="org.toxsoft.mws.app.main">
     <elements xsi:type="commands:Command" xmi:id="_LRZMcIuYEe6MbcF9qfHl9w" elementId="org.toxsoft.skf.mnemo.mws.simple.cmd.open_mnemo_by_id" commandName="WARNINGL No command name specified because for each Mnemo name will be generated" category="_VJ71UIuMEe6MbcF9qfHl9w">
