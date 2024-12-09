@@ -23,4 +23,10 @@ org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants (не делал локализа
     org.toxsoft.skf.mnemo.gui.tsgui.tools
     org.toxsoft.skf.mnemo.gui.tsgui.utils
     org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants (не делал локализацию)
+    org.toxsoft.skf.mnemo.gui.m51.M5BaseFieldDefModel
+    org.toxsoft.skf.mnemo.gui.skved
+    org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers
+    org.toxsoft.skf.mnemo.gui.skved.rt_action
+    org.toxsoft.skf.mnemo.gui.skved.rt_action.tti
+    org.toxsoft.skf.mnemo.gui.skved.rt_action.valed
     
