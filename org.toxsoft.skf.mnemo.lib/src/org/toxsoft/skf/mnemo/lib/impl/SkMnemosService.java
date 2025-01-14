@@ -245,6 +245,9 @@ public class SkMnemosService
     clobService().svs().addValidator( claimingValidator );
     // listen to the mnemo content changes
     clobService().eventer().addListener( this::whenClobChanged );
+    // register builtin abilities
+    userService().abilityManager().defineKind( ABKIND_MNEMO );
+    userService().abilityManager().defineAbility( ABILITY_MNEMO_EDIT_PARAMS );
   }
 
   @Override

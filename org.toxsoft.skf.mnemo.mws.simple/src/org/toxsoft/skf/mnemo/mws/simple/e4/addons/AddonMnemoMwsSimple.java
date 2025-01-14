@@ -1,5 +1,8 @@
 package org.toxsoft.skf.mnemo.mws.simple.e4.addons;
 
+import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
+import static org.toxsoft.skf.mnemo.mws.simple.IMnemoMwsSimpleConstants.*;
+
 import org.eclipse.e4.core.contexts.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.mws.bases.*;
@@ -8,6 +11,7 @@ import org.toxsoft.skf.mnemo.mws.simple.*;
 import org.toxsoft.skf.mnemo.mws.simple.e4.main.*;
 import org.toxsoft.uskat.core.connection.*;
 import org.toxsoft.uskat.core.gui.conn.*;
+import org.toxsoft.uskat.core.gui.utils.*;
 import org.toxsoft.uskat.core.impl.*;
 
 /**
@@ -51,7 +55,12 @@ public class AddonMnemoMwsSimple
     IMnemoschemesPerspectiveController pc =
         new MnemoschemesPerspectiveController( conn, new TsGuiContext( aWinContext ) );
     aWinContext.set( IMnemoschemesPerspectiveController.class, pc );
-
+    // implement access rights
+    GuiE4ElementsToAbilitiesBinder binder = new GuiE4ElementsToAbilitiesBinder( new TsGuiContext( aWinContext ) );
+    binder.bindPerspective( ABILITYID_ACCESS_MNEMOS, PERSPID_MENMOS_MAIN );
+    binder.bindMenuElement( ABILITYID_ACCESS_MNEMOS, MMENUID_MNEMOS_LIST );
+    // binder.bindToolItem( ABILITYID_ACCESS_MNEMOS, E4_VISUAL_ELEM_ID_TOOL_ITEEM_MNEMOS );
+    SkCoreUtils.registerCoreApiHandler( binder );
   }
 
 }

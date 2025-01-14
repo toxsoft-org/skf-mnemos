@@ -19,6 +19,8 @@ import org.toxsoft.skf.mnemo.gui.tools.imageset.*;
 import org.toxsoft.skf.mnemo.gui.tools.rgbaset.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 import org.toxsoft.skf.mnemo.lib.impl.*;
+import org.toxsoft.uskat.core.api.*;
+import org.toxsoft.uskat.core.devapi.*;
 import org.toxsoft.uskat.core.gui.km5.*;
 import org.toxsoft.uskat.core.impl.*;
 
@@ -28,7 +30,8 @@ import org.toxsoft.uskat.core.impl.*;
  * @author hazard157, vs, dima
  */
 public class QuantSkMnemoGui
-    extends AbstractQuant {
+    extends AbstractQuant
+    implements ISkCoreExternalHandler {
 
   /**
    * Constructor.
@@ -37,6 +40,7 @@ public class QuantSkMnemoGui
     super( QuantSkMnemoGui.class.getSimpleName() );
     SkCoreUtils.registerSkServiceCreator( SkMnemosService.CREATOR );
     KM5Utils.registerContributorCreator( KM5MnemosContributor.CREATOR );
+    SkCoreUtils.registerCoreApiHandler( this );
   }
 
   @Override
@@ -125,6 +129,12 @@ public class QuantSkMnemoGui
     IM5Domain m5 = aWinContext.get( IM5Domain.class );
     m5.addModel( new M5BaseFieldDefModel<>() );
 
+  }
+
+  @Override
+  public void processSkCoreInitialization( IDevCoreApi aCoreApi ) {
+    // register abilities
+    aCoreApi.userService().abilityManager().defineAbility( ISkMnemoGuiConstants.ABILITY_ACCESS_MNEMOS );
   }
 
 }

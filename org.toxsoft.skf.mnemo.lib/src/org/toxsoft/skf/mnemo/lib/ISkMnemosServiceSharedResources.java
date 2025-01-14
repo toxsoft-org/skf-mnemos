@@ -13,8 +13,12 @@ public interface ISkMnemosServiceSharedResources {
   /**
    * {@link ISkMnemosServiceHardConstants}
    */
-  String STR_CLB_MNEMO_CFG_DATA   = Messages.getString( "STR_CLB_MNEMO_CFG_DATA" );   //$NON-NLS-1$
-  String STR_CLB_MNEMO_CFG_DATA_D = Messages.getString( "STR_CLB_MNEMO_CFG_DATA_D" ); //$NON-NLS-1$
+  String STR_CLB_MNEMO_CFG_DATA          = Messages.getString( "STR_CLB_MNEMO_CFG_DATA" );          //$NON-NLS-1$
+  String STR_CLB_MNEMO_CFG_DATA_D        = Messages.getString( "STR_CLB_MNEMO_CFG_DATA_D" );        //$NON-NLS-1$
+  String STR_ABKIND_MNEMO                = Messages.getString( "STR_ABKIND_MNEMO" );                //$NON-NLS-1$
+  String STR_ABKIND_MNEMO_D              = Messages.getString( "STR_ABKIND_MNEMO_D" );              //$NON-NLS-1$
+  String STR_ABILITY_MNEMO_EDIT_PARAMS   = Messages.getString( "STR_ABILITY_MNEMO_EDIT_PARAMS" );   //$NON-NLS-1$
+  String STR_ABILITY_MNEMO_EDIT_PARAMS_D = Messages.getString( "STR_ABILITY_MNEMO_EDIT_PARAMS_D" ); //$NON-NLS-1$
 
   /**
    * {@link SkMnemosService}
