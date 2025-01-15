@@ -14,17 +14,25 @@ import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 
+/**
+ * Создает дерево визуальных элементов редактора {@link IVedVisel} в соотвествии с отношениями master-slave и
+ * соответствующим z-order'ом.
+ *
+ * @author vs
+ */
 public class VedViselsParentChildTreeMaker
     implements ITsTreeMaker<IVedVisel> {
 
-  // private static final ITsNodeKind<IVedVisel> NK_PARENT =
-  // new TsNodeKind<IVedVisel>( "P", IVedVisel.class, true, ITsStdIconIds.ICONID_ARROW_DOWN_DOUBLE );
-  // private static final ITsNodeKind<IVedVisel> NK_LEAF =
-  // new TsNodeKind<IVedVisel>( "L", IVedVisel.class, true, ITsStdIconIds.ICONID_ARROW_RIGHT );
+  private final IVedScreen vedScreen;
 
-  private final IVedScreen                            vedScreen;
   private final IVedViselsMasterSlaveRelationsManager msManager;
 
+  /**
+   * Constructor.
+   *
+   * @param aVedScreen {@link IVedScreen} - экран редактора
+   * @param aMsManager {@link IVedViselsMasterSlaveRelationsManager} - менеджер отношений
+   */
   public VedViselsParentChildTreeMaker( IVedScreen aVedScreen, IVedViselsMasterSlaveRelationsManager aMsManager ) {
     vedScreen = aVedScreen;
     msManager = aMsManager;
@@ -36,14 +44,13 @@ public class VedViselsParentChildTreeMaker
 
   @Override
   public IList<ITsNode> makeRoots( ITsNode aRootNode, IList<IVedVisel> aItems ) {
+    sort(); // отсортируем визели так, чтобы z-order соответствовал отношениям master-slave
     IListEdit<DefaultTsNode<IVedVisel>> nodes = new ElemArrayList<>();
-    IStridablesListEdit<IVedVisel> visels = new StridablesList<>( aItems );
     if( aRootNode.parent() == null ) { // самый корневой узел
       for( IVedVisel v : aItems ) {
         String masterId = msManager.viselMasterId( v.id() );
-        if( masterId == null || masterId.isBlank() ) {
+        if( masterId == null ) {
           nodes.add( createNode( aRootNode, v ) );
-          visels.remove( v );
         }
       }
       for( DefaultTsNode<IVedVisel> vn : nodes ) {
@@ -81,7 +88,6 @@ public class VedViselsParentChildTreeMaker
     IListEdit<DefaultTsNode<IVedVisel>> nodes = new ElemArrayList<>();
     IVedVisel visel = aParentNode.entity();
     if( visel != null ) {
-      IStridablesList<IVedVisel> visels;
       IStringList slaveIds = msManager.listSlaveViselIds( visel.id() );
       for( String id : slaveIds ) {
         IVedVisel v = VedScreenUtils.findVisel( id, vedScreen );
@@ -107,6 +113,41 @@ public class VedViselsParentChildTreeMaker
     node.setIconId( iconId );
 
     return node;
+  }
+
+  private void sort() {
+    try {
+      vedScreen.model().visels().eventer().pauseFiring();
+      IStridablesListEdit<VedAbstractVisel> dest = new StridablesList<>();
+      addChildren( null, vedScreen.model().visels().list(), dest );
+      int idx = 0;
+      for( VedAbstractVisel v : dest ) {
+        vedScreen.model().visels().reorderer().move( v, idx );
+        idx++;
+      }
+    }
+    finally {
+      vedScreen.model().visels().eventer().resumeFiring( false );
+    }
+  }
+
+  private void addChildren( String aParentId, IList<VedAbstractVisel> aItems,
+      IStridablesListEdit<VedAbstractVisel> aDest ) {
+    // для всех детей добавим их в z-порядке
+    for( VedAbstractVisel v : aItems ) {
+      if( isChild( aParentId, v.id() ) ) {
+        aDest.add( v );
+        addChildren( v.id(), aItems, aDest );
+      }
+    }
+  }
+
+  private boolean isChild( String aParentId, String aViselId ) {
+    String masterId = msManager.viselMasterId( aViselId );
+    if( aParentId == null ) {
+      return masterId == null;
+    }
+    return aParentId.equals( masterId );
   }
 
 }

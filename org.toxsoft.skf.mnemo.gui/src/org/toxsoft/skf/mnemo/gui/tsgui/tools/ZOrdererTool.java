@@ -70,6 +70,10 @@ public class ZOrdererTool
     public ID2Rectangle bounds() {
       return null;
     }
+
+    VedAbstractVisel visel() {
+      return visel;
+    }
   }
 
   class InputHandler
@@ -140,6 +144,7 @@ public class ZOrdererTool
    * Конструктор.
    *
    * @param aSelectionManager {@link IVedViselSelectionManager} - менеджер выделения
+   * @param aMsManager {@link IVedViselsMasterSlaveRelationsManager} - менеджер отношений master-slave
    * @param aVedScreen {@link IVedScreen} - экран редактора
    */
   public ZOrdererTool( IVedViselSelectionManager aSelectionManager, IVedViselsMasterSlaveRelationsManager aMsManager,
@@ -215,24 +220,48 @@ public class ZOrdererTool
   }
 
   void reorderVisels() {
-    if( decorators.size() > 1 ) {
-      IListReorderer<VedAbstractVisel> reorderer = vedScreen().model().visels().reorderer();
-      int maxIdx = vedScreen().model().visels().list().keys().indexOf( decorators.keys().first() );
-      for( String id : decorators.keys() ) {
-        int currIdx = vedScreen().model().visels().list().keys().indexOf( id );
-        if( currIdx > maxIdx ) {
-          maxIdx = currIdx;
+    try {
+      vedScreen().model().visels().eventer().pauseFiring();
+      if( decorators.size() > 1 ) {
+        IListReorderer<VedAbstractVisel> reorderer = vedScreen().model().visels().reorderer();
+        int minIdx = vedScreen().model().visels().list().keys().indexOf( decorators.keys().first() );
+        for( String id : decorators.keys() ) {
+          int currIdx = vedScreen().model().visels().list().keys().indexOf( id );
+          if( currIdx < minIdx ) {
+            minIdx = currIdx;
+          }
+        }
+        int idx = minIdx;
+        for( String id : decorators.keys() ) {
+          int oldIdx = vedScreen().model().visels().list().keys().indexOf( id );
+          int zNumber = decorators.getByKey( id ).zNumber;
+          reorderer.move( oldIdx, idx + zNumber );
         }
       }
-      int idx = maxIdx;
-      for( String id : decorators.keys() ) {
-        int oldIdx = vedScreen().model().visels().list().keys().indexOf( id );
-        int zNumber = decorators.getByKey( id ).zNumber;
-        reorderer.move( oldIdx, idx + zNumber );
-        idx--;
-      }
     }
-
+    finally {
+      vedScreen().model().visels().eventer().resumeFiring( true );
+    }
   }
+
+  // void reorderVisels() {
+  // if( decorators.size() > 1 ) {
+  // IListReorderer<VedAbstractVisel> reorderer = vedScreen().model().visels().reorderer();
+  // int maxIdx = vedScreen().model().visels().list().keys().indexOf( decorators.keys().first() );
+  // for( String id : decorators.keys() ) {
+  // int currIdx = vedScreen().model().visels().list().keys().indexOf( id );
+  // if( currIdx > maxIdx ) {
+  // maxIdx = currIdx;
+  // }
+  // }
+  // int idx = maxIdx;
+  // for( String id : decorators.keys() ) {
+  // int oldIdx = vedScreen().model().visels().list().keys().indexOf( id );
+  // int zNumber = decorators.getByKey( id ).zNumber;
+  // reorderer.move( oldIdx, idx + zNumber );
+  // idx--;
+  // }
+  // }
+  // }
 
 }

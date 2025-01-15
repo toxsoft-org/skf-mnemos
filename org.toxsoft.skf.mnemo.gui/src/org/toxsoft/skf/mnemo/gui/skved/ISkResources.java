@@ -154,4 +154,11 @@ interface ISkResources {
   String STR_SHOW_MNEMO     = Messages.getString( "STR_SHOW_MNEMO" );     //$NON-NLS-1$
   String STR_SHOW_MNEMO_D   = Messages.getString( "STR_SHOW_MNEMO_D" );   //$NON-NLS-1$
 
+  /**
+   * {@link SkActorUserAction}
+   */
+  String STR_USER_ACTION_CFG   = Messages.getString( "STR_USER_ACTION_CFG" );   //$NON-NLS-1$
+  String STR_USER_ACTION_CFG_D = Messages.getString( "STR_USER_ACTION_CFG_D" ); //$NON-NLS-1$
+  String STR_USER_ACTION       = Messages.getString( "STR_USER_ACTION" );       //$NON-NLS-1$
+  String STR_USER_ACTION_D     = Messages.getString( "STR_USER_ACTION_D" );     //$NON-NLS-1$
 }

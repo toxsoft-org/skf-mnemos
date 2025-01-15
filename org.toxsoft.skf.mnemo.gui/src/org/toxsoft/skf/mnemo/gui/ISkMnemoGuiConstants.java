@@ -23,6 +23,7 @@ public interface ISkMnemoGuiConstants {
   String ICONID_VED_RRI_CHECK_ACTOR = "actors-nsi-check"; //$NON-NLS-1$
   String ICONID_RT_ACTION_ACTOR     = "actors-dialog";    //$NON-NLS-1$
   String ICONID_DIAGNOSTICS         = "checklist";        //$NON-NLS-1$
+  String ICONID_USER_ACTION         = "user-action";      //$NON-NLS-1$
 
   String ICONID_OBJECT  = "box";
   String ICONID_RIVET   = "clip";

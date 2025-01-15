@@ -98,6 +98,7 @@ public class MnemoMasterObjectManager
       }
       cfg.actorCfgs().add( destCfg );
     }
+    cfg.extraData().writeItem( VED_SCREEN_MAIN_MNEMO_MASTER_UGWI, aMasterObject, Ugwi.KEEPER );
     return cfg;
   }
 
