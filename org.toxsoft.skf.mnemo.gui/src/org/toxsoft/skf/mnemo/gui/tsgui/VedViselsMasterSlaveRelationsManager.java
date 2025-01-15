@@ -18,6 +18,7 @@ import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.bricks.geometry.*;
 import org.toxsoft.core.tslib.bricks.strid.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 
@@ -346,6 +347,38 @@ public class VedViselsMasterSlaveRelationsManager
       return menuCreator.fillMenu( aMenu );
     }
     return false;
+  }
+
+  // ------------------------------------------------------------------------------------
+  // API
+  //
+
+  /**
+   * Возвращает список визуальных элементов в z-порядке соответствующем отношениям родитель-ребенок.<br>
+   * Так, например, ребенок не может находится ниже родителя.
+   *
+   * @return IStridablesListlt;VedAbstractVisel> - список визуальных элементов в z-порядке
+   */
+  IStridablesList<VedAbstractVisel> listViselsInZorder() {
+    IStridablesList<VedAbstractVisel> visels = vedScreen.model().visels().list();
+    IStridablesListEdit<VedAbstractVisel> source = new StridablesList<>( vedScreen.model().visels().list() );
+    IStridablesListEdit<VedAbstractVisel> result = new StridablesList<>();
+    while( source.size() > 0 ) {
+      VedAbstractVisel visel = source.first();
+      String masterId = viselMasterId( visel.id() );
+      if( masterId == null ) {
+        result.add( visel );
+      }
+      else { // ребенок находится раньше родителя
+        VedAbstractVisel mv = visels.findByKey( masterId );
+        if( mv == null ) { // ошибка - родитель не существует
+          freeVisel( visel.id() );
+          result.add( visel );
+        }
+      }
+      source.remove( visel );
+    }
+    return result;
   }
 
   // ------------------------------------------------------------------------------------

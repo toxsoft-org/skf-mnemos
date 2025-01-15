@@ -36,4 +36,9 @@ public interface IMnemoMasterObjectConstants {
    * ИД "разрешителя" для главного мастер-объекта мнемосхемы.
    */
   String VED_SCREEN_MAIN_MNEMO_RESOLVER_ID = "ved.screen.main.mnemo.resolver.id"; //$NON-NLS-1$
+
+  /**
+   * ИД Ugwi главного мастер-объекта мнемосхемы.
+   */
+  String VED_SCREEN_MAIN_MNEMO_MASTER_UGWI = "ved.screen.main.mnemo.masterUgwi"; //$NON-NLS-1$
 }
