@@ -285,7 +285,13 @@ public class SkActorPopupMnemoInvoker
       return str;
     }
 
-    Ugwi moUgwi = props().getValobj( TFI_SKID_UGWI.id() );
+    Ugwi moUgwi = null;
+    if( props().hasKey( TFI_SKID_UGWI.id() ) ) {
+      IAtomicValue av = props().getValue( TFI_SKID_UGWI.id() );
+      if( av.isAssigned() ) {
+        moUgwi = av.asValobj();
+      }
+    }
     if( moUgwi != null && moUgwi != Ugwi.NONE ) {
       Skid moSkid = UgwiKindSkSkid.getSkid( moUgwi );
       ISkObject skObj = skVedEnv().skConn().coreApi().objService().find( moSkid );
