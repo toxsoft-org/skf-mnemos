@@ -1,6 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.chart;
 
 import org.toxsoft.core.tslib.bricks.geometry.impl.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
 
 /**
  * Information about chart containing several graphics.
@@ -19,5 +20,7 @@ public interface IChartInfo {
   // time information
 
   // X scale information, etc
+
+  IStringMap<IGraphInfo> graphInfos();
 
 }
