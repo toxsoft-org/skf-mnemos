@@ -6,9 +6,11 @@ import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
+import static org.toxsoft.skf.mnemo.lib.ISkMnemosServiceHardConstants.*;
 
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
+import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.ved.comps.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
@@ -25,6 +27,7 @@ import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.rri.lib.*;
 import org.toxsoft.skf.rri.lib.ugwi.*;
+import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.utils.*;
@@ -81,6 +84,13 @@ public class SkActorRriCheckbox
   protected SkActorRriCheckbox( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
     IButtonClickHandler buttonHandler = aVisel -> {
+
+      ISkVedEnvironment vedEnv = aVedScreen.tsContext().get( ISkVedEnvironment.class );
+      ISkCoreApi coreApi = vedEnv.skConn().coreApi();
+      if( !coreApi.userService().abilityManager().isAbilityAllowed( ABILITYID_MNEMO_EDIT_PARAMS ) ) {
+        TsDialogUtils.warn( getShell(), ERR_STR_OPERATION_NOT_ALLOWED );
+        return;
+      }
 
       VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
       visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );

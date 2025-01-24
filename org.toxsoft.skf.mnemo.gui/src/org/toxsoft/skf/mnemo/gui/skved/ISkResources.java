@@ -161,4 +161,11 @@ interface ISkResources {
   String STR_USER_ACTION_CFG_D = Messages.getString( "STR_USER_ACTION_CFG_D" ); //$NON-NLS-1$
   String STR_USER_ACTION       = Messages.getString( "STR_USER_ACTION" );       //$NON-NLS-1$
   String STR_USER_ACTION_D     = Messages.getString( "STR_USER_ACTION_D" );     //$NON-NLS-1$
+
+  /**
+   * {@link SkActorCmdButton}
+   */
+  String STR_N_COMMAND_ON_UNPRESS      = Messages.getString( "STR_N_COMMAND_ON_UNPRESS" );      //$NON-NLS-1$
+  String ERR_STR_OPERATION_NOT_ALLOWED = Messages.getString( "ERR_STR_OPERATION_NOT_ALLOWED" ); //$NON-NLS-1$
+
 }

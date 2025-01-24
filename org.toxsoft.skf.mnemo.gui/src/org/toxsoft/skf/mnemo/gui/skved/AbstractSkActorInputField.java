@@ -1,6 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.skved;
 
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
+import static org.toxsoft.skf.mnemo.lib.ISkMnemosServiceHardConstants.*;
 
 import org.eclipse.swt.*;
 import org.eclipse.swt.widgets.*;
@@ -10,6 +11,7 @@ import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.bricks.geometry.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.uskat.core.*;
 
 /**
  * Базовый класс для акторов, работающих с полем ввода и устанавливающих введенные значения соотвествующим свойствам
@@ -23,9 +25,15 @@ public abstract class AbstractSkActorInputField
 
   InputFieldHandler inputHandler;
 
+  boolean enabled = true;
+
+  private final ISkCoreApi coreApi;
+
   protected AbstractSkActorInputField( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs,
       VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
+    coreApi = aVedScreen.tsContext().get( ISkVedEnvironment.class ).skConn().coreApi();
+    updateEnabled();
   }
 
   // ------------------------------------------------------------------------------------
@@ -63,6 +71,10 @@ public abstract class AbstractSkActorInputField
 
   @Override
   public boolean onMouseDown( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors, Control aWidget ) {
+    updateEnabled();
+    if( !enabled ) {
+      return false;
+    }
 
     VedAbstractVisel visel = vedScreen().model().visels().list().findByKey( props().getStr( PROPID_VISEL_ID ) );
     if( visel != null ) {
@@ -82,6 +94,10 @@ public abstract class AbstractSkActorInputField
   @Override
   public boolean onMouseDoubleClick( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors,
       Control aWidget ) {
+    updateEnabled();
+    if( !enabled ) {
+      return false;
+    }
     if( inputHandler != null ) {
       return inputHandler.onMouseDoubleClick( aSource, aButton, aState, aCoors, aWidget );
     }
@@ -90,6 +106,10 @@ public abstract class AbstractSkActorInputField
 
   @Override
   public boolean onKeyDown( Object aSource, int aCode, char aChar, int aState ) {
+    updateEnabled();
+    if( !enabled ) {
+      return false;
+    }
     if( inputHandler != null ) {
       if( inputHandler.isEditing() ) {
         if( aCode == SWT.CR ) {
@@ -150,4 +170,11 @@ public abstract class AbstractSkActorInputField
 
   protected abstract void onCancelEdit();
 
+  // ------------------------------------------------------------------------------------
+  // Implementation
+  //
+
+  private void updateEnabled() {
+    enabled = coreApi.userService().abilityManager().isAbilityAllowed( ABILITYID_MNEMO_EDIT_PARAMS );
+  }
 }

@@ -1,5 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.skved;
 
+import static org.toxsoft.skf.mnemo.lib.ISkMnemosServiceHardConstants.*;
+
 import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
@@ -99,7 +101,10 @@ public class SkVedEnvironment
   @Override
   public ISkCommand sendCommand( Gwid aCmdGwid, Skid aAuthorSkid, IOptionSet aArgs ) {
     TsNullArgumentRtException.checkNulls( aCmdGwid, aAuthorSkid, aArgs );
-    return skCmdServ().sendCommand( aCmdGwid, aAuthorSkid, aArgs );
+    if( coreApi().userService().abilityManager().isAbilityAllowed( ABILITYID_MNEMO_SEND_COMMANDS ) ) {
+      return skCmdServ().sendCommand( aCmdGwid, aAuthorSkid, aArgs );
+    }
+    return null;
   }
 
   @Override

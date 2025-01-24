@@ -8,6 +8,7 @@ import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
+import static org.toxsoft.skf.mnemo.lib.ISkMnemosServiceHardConstants.*;
 
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
@@ -30,10 +31,10 @@ import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.mnemo.gui.utils.*;
+import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.cmdserv.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.api.users.*;
-import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
  * Actor: process push button so that on click send command.
@@ -96,7 +97,7 @@ public class SkActorCmdButton
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_CMD_UGWI );
       fields.add( new TinFieldInfo( PROPID_OFF_CMD, TFI_CMD_UGWI.typeInfo(), //
-          TSID_NAME, "Команда при отжатии" ) );
+          TSID_NAME, STR_N_COMMAND_ON_UNPRESS ) );
       fields.add( TFI_IS_ACTIVE );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorCmdButton.class );
     }
@@ -124,9 +125,15 @@ public class SkActorCmdButton
       VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
       visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
       ISkVedEnvironment vedEnv = aVedScreen.tsContext().get( ISkVedEnvironment.class );
+      ISkCoreApi coreApi = vedEnv.skConn().coreApi();
 
-      ISkConnectionSupplier conn = aVedScreen.tsContext().get( ISkConnectionSupplier.class );
-      ISkUser user = conn.defConn().coreApi().userService().findUser( "root" );
+      ISkLoggedUserInfo userInfo = coreApi.getCurrentUserInfo();
+      ISkUser user = vedEnv.skConn().coreApi().userService().findUser( userInfo.userSkid().strid() );
+
+      if( !coreApi.userService().abilityManager().isAbilityAllowed( ABILITYID_MNEMO_SEND_COMMANDS ) ) {
+        TsDialogUtils.warn( getShell(), ERR_STR_OPERATION_NOT_ALLOWED );
+        return;
+      }
 
       Ugwi cmdUgwi = MnemoUtils.findUgwi( TFI_CMD_UGWI.id(), props() );
       // if( toggle && selected.isAssigned() && selected.asBool() ) {
@@ -240,14 +247,8 @@ public class SkActorCmdButton
   // Implementation
   //
 
+  @SuppressWarnings( "unused" )
   protected void doOnValueChanged( IAtomicValue aNewValue ) {
-    // VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
-    // if( aNewValue.equals( feedbackValue ) ) {
-    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.SELECTED );
-    // }
-    // else {
-    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-    // }
     updateButtonState();
   }
 
