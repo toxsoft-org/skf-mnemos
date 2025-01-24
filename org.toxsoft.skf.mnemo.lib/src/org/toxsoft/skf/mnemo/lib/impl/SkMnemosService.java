@@ -248,6 +248,7 @@ public class SkMnemosService
     // register builtin abilities
     userService().abilityManager().defineKind( ABKIND_MNEMO );
     userService().abilityManager().defineAbility( ABILITY_MNEMO_EDIT_PARAMS );
+    userService().abilityManager().defineAbility( ABILITY_MNEMO_SEND_COMMANDS );
   }
 
   @Override

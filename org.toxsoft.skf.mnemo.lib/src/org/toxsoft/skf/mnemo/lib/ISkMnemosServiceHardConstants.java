@@ -47,22 +47,32 @@ public interface ISkMnemosServiceHardConstants {
   /**
    * id тип возможности «Мнемосхемы»
    */
-  String ABKINDID_MNEMO = SERVICE_ID + ".abkind.mnemos";
+  String ABKINDID_MNEMO = SERVICE_ID + ".abkind.mnemos"; //$NON-NLS-1$
 
   /**
    * id возможности редактирования параметров
    */
-  String ABILITYID_MNEMO_EDIT_PARAMS = SERVICE_ID + ".ability.mnemos.edit_params"; //
+  String ABILITYID_MNEMO_EDIT_PARAMS = SERVICE_ID + ".ability.mnemos.edit_params"; // //$NON-NLS-1$
+
+  /**
+   * id возможности посыла команд
+   */
+  String ABILITYID_MNEMO_SEND_COMMANDS = SERVICE_ID + ".ability.mnemos.send_commands"; // //$NON-NLS-1$
 
   /**
    * создание «своего» типа
    */
   IDtoSkAbilityKind ABKIND_MNEMO = DtoSkAbilityKind.create( ABKINDID_MNEMO, STR_ABKIND_MNEMO, STR_ABKIND_MNEMO_D );
 
-  // создание возможности управления
   /**
-   *
+   * создание возможности управления
    */
   IDtoSkAbility ABILITY_MNEMO_EDIT_PARAMS = DtoSkAbility.create( ABILITYID_MNEMO_EDIT_PARAMS, ABKINDID_MNEMO,
       STR_ABILITY_MNEMO_EDIT_PARAMS, STR_ABILITY_MNEMO_EDIT_PARAMS_D );
+
+  /**
+   * создание возможности посыла команд
+   */
+  IDtoSkAbility ABILITY_MNEMO_SEND_COMMANDS = DtoSkAbility.create( ABILITYID_MNEMO_SEND_COMMANDS, ABKINDID_MNEMO,
+      STR_ABILITY_MNEMO_SEND_COMMANDS, STR_ABILITY_MNEMO_SEND_COMMANDS_D );
 }
