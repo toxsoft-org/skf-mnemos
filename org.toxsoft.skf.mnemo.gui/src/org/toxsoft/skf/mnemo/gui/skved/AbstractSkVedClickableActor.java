@@ -92,6 +92,9 @@ public abstract class AbstractSkVedClickableActor
   public boolean onMouseMove( Object aSource, int aState, ITsPoint aCoors, Control aWidget ) {
     boolean retVal = false;
     VedAbstractVisel visel = vedScreen().model().visels().list().findByKey( props().getStr( PROPID_VISEL_ID ) );
+    if( visel == null ) {
+      return retVal;
+    }
     // если visel - кнопка, то отдельная обрабюотка
     if( isViselBttn( visel ) && visel.props().getValobj( ViselButton.PROPID_STATE ) == EButtonViselState.DISABLED ) {
       restorCursor();
@@ -258,7 +261,10 @@ public abstract class AbstractSkVedClickableActor
    * @return true if visel is button
    */
   private static boolean isViselBttn( VedAbstractVisel aVisel ) {
-    return aVisel.props().hasKey( ViselButton.PROPID_STATE );
+    if( aVisel != null ) {
+      return aVisel.props().hasKey( ViselButton.PROPID_STATE );
+    }
+    return false;
   }
 
 }

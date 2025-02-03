@@ -4,6 +4,7 @@ import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.bricks.geometry.*;
 import org.toxsoft.core.tslib.bricks.strid.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
@@ -39,9 +40,10 @@ public interface IMnemoUserAction
    * Выполняет действие.<br>
    *
    * @param aInputValues {@link IOptionSet} - набор значений входных данных, заданных на этапе разработки
+   * @param aCoors {@link ITsPoint} - координаты курсора мыши в момент вызова
    * @param aTsContext {@link ITsGuiContext} - контекст содержащий необходимую информацию
    */
-  void run( IOptionSet aInputValues, ITsGuiContext aTsContext );
+  void run( IOptionSet aInputValues, ITsPoint aCoors, ITsGuiContext aTsContext );
 
   // /**
   // * Возвращает набор значений аргументов.<br>

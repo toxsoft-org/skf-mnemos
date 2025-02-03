@@ -9,10 +9,13 @@ import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
+import org.eclipse.swt.widgets.*;
+import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
 import org.toxsoft.core.tsgui.bricks.tin.tti.*;
 import org.toxsoft.core.tsgui.bricks.uievents.*;
+import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
@@ -32,7 +35,7 @@ import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.tti.*;
 
 public class SkActorUserAction
-    extends AbstractSkVedClickableActor {
+    extends AbstractSkVedActor {
 
   /**
    * The actor factor ID.
@@ -124,29 +127,6 @@ public class SkActorUserAction
 
   SkActorUserAction( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
-    setMouseClickHandler( new IMouseClickHandler() {
-
-      @Override
-      public void onClick( VedAbstractVisel aVisel, ETsMouseButton aButton, ITsPoint aCoors, int aState ) {
-        if( !props().getBool( FID_DOUBLE_CLICK ) ) {
-          ERtActionMouseButton actionButton = props().getValobj( FID_MOUSE_BUTTON );
-          if( isMyMouseButton( actionButton, aButton, aState ) ) {
-            doUserAction();
-          }
-        }
-      }
-
-      @Override
-      public void onDoubleClick( VedAbstractVisel aVisel, ETsMouseButton aButton, ITsPoint aCoors, int aState ) {
-        if( props().getBool( FID_DOUBLE_CLICK ) ) {
-          ERtActionMouseButton actionButton = props().getValobj( FID_MOUSE_BUTTON );
-          if( isMyMouseButton( actionButton, aButton, aState ) ) {
-            doUserAction();
-          }
-        }
-      }
-
-    } );
   }
 
   // ------------------------------------------------------------------------------------
@@ -159,21 +139,58 @@ public class SkActorUserAction
   }
 
   // ------------------------------------------------------------------------------------
+  // ITsUserInputListener
+  //
+
+  @Override
+  public boolean onMouseClick( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors, Control aWidget ) {
+    if( !props().getBool( FID_DOUBLE_CLICK ) ) {
+      ERtActionMouseButton actionButton = props().getValobj( FID_MOUSE_BUTTON );
+      if( isMyMouseButton( actionButton, aButton, aState ) ) {
+        doUserAction( aCoors );
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public boolean onMouseDoubleClick( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors,
+      Control aWidget ) {
+    if( props().getBool( FID_DOUBLE_CLICK ) ) {
+      ERtActionMouseButton actionButton = props().getValobj( FID_MOUSE_BUTTON );
+      if( isMyMouseButton( actionButton, aButton, aState ) ) {
+        doUserAction( aCoors );
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public boolean onMouseMove( Object aSource, int aState, ITsPoint aCoors, Control aWidget ) {
+
+    return false;
+  }
+
+  // ------------------------------------------------------------------------------------
   // Implementation
   //
 
-  void doUserAction() {
+  void doUserAction( ITsPoint aSwtCoors ) {
     IAtomicValue v = props().getValue( PROP_USER_ACTION_CFG );
     if( v.isAssigned() ) {
       VedUserActionCfg cfg = v.asValobj();
       MnemoUserActionsRegistry mcr = tsContext().get( MnemoUserActionsRegistry.class );
       IMnemoUserAction mc = mcr.registeredActions().getByKey( cfg.commanderId() );
       resolve( cfg );
-      mc.run( cfg.propValues(), vedScreen().tsContext() );
+      TsGuiContext ctx = new TsGuiContext( vedScreen().tsContext() );
+      ctx.put( IVedScreen.class, vedScreen() );
+      mc.run( cfg.propValues(), aSwtCoors, ctx );
     }
   }
 
-  void resolve( VedUserActionCfg aCfg ) {
+  private void resolve( VedUserActionCfg aCfg ) {
     String sectionId = VED_ITEM_EXTRA_DATA_ID_PROPERTIES_RESOLVERS;
     if( aCfg.params().hasKey( sectionId ) ) {
       // MnemoResolverConfig mrc = MasterObjectUtils.readMnemoResolverConfig( vedScreen() );
@@ -191,6 +208,14 @@ public class SkActorUserAction
         }
       }
     }
+  }
+
+  private VedAbstractVisel viselUnderCursor( ITsPoint aCoors ) {
+    IStringList ids = vedScreen().view().listViselIdsAtPoint( aCoors );
+    if( !ids.isEmpty() ) {
+      return vedScreen().model().visels().list().findByKey( ids.first() );
+    }
+    return null;
   }
 
   /**
@@ -227,14 +252,5 @@ public class SkActorUserAction
     }
     return retVal;
   }
-
-  // void updateActorSubmaster() {
-  // MnemoResolverConfig mrCfg = MasterObjectUtils.readMnemoResolverConfig( vedScreen() );
-  // String masterClassId = MasterObjectUtils.findMainMasterClassId( mrCfg );
-  // if( masterClassId != null ) {
-  // mrCfg.defineActorSubmaster( id(), smCfg.id() );
-  // MasterObjectUtils.updateMnemoResolverConfig( mrCfg, vedScreen() );
-  // }
-  // }
 
 }

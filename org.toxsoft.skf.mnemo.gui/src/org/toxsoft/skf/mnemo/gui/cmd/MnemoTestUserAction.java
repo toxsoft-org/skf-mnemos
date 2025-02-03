@@ -6,6 +6,7 @@ import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.bricks.geometry.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.impl.*;
 
@@ -34,7 +35,7 @@ public class MnemoTestUserAction
   }
 
   @Override
-  public void run( IOptionSet aInputValues, ITsGuiContext aTsContext ) {
+  public void run( IOptionSet aInputValues, ITsPoint aCoors, ITsGuiContext aTsContext ) {
     TsDialogUtils.info( aTsContext.get( Shell.class ), "Вызвана пользовательская команда" );
   }
 
