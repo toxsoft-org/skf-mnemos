@@ -199,7 +199,7 @@ public class SkActorUserAction
       if( masterUgwi != null ) {
         ISimpleResolverFactoriesRegistry registry = tsContext().get( ISimpleResolverFactoriesRegistry.class );
         IStringMap<ICompoundResolverConfig> resolvers;
-        resolvers = CompoundResolverConfig.KEEPER.str2smap( aCfg.params().getStr( sectionId ) );
+        resolvers = CompoundResolverConfig.KEEPER.str2strmap( aCfg.params().getStr( sectionId ) );
         for( String id : resolvers.keys() ) {
           ICompoundResolverConfig rCfg = resolvers.getByKey( id );
           IUgwiResolver resolver = CompoundResolver.create( rCfg, skConn(), registry );

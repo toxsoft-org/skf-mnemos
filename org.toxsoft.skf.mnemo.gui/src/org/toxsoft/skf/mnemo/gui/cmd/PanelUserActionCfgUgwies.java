@@ -191,14 +191,14 @@ public class PanelUserActionCfgUgwies
           IStringMap<ICompoundResolverConfig> resolvers;
           String sectionId = VED_ITEM_EXTRA_DATA_ID_PROPERTIES_RESOLVERS;
           if( resolversInfo.hasKey( sectionId ) ) {
-            resolvers = CompoundResolverConfig.KEEPER.str2smap( resolversInfo.getStr( sectionId ) );
+            resolvers = CompoundResolverConfig.KEEPER.str2strmap( resolversInfo.getStr( sectionId ) );
           }
           else {
             resolvers = new StringMap<>();
           }
           IStringMapEdit<ICompoundResolverConfig> result = new StringMap<>( resolvers );
           result.put( row.propertyId, cfg );
-          resolversInfo.setStr( sectionId, CompoundResolverConfig.KEEPER.smap2str( result, true ) );
+          resolversInfo.setStr( sectionId, CompoundResolverConfig.KEEPER.strmap2str( result, true ) );
           // actor.extraData().writeStridMap( sectionId, result, );
           // }
           System.out.println( cfg.toString() );
@@ -240,7 +240,7 @@ public class PanelUserActionCfgUgwies
       IStringMap<ICompoundResolverConfig> actorResolvers = null;
       String sectionId = VED_ITEM_EXTRA_DATA_ID_PROPERTIES_RESOLVERS;
       if( resolversInfo.hasKey( sectionId ) ) {
-        actorResolvers = CompoundResolverConfig.KEEPER.str2smap( resolversInfo.getStr( sectionId ) );
+        actorResolvers = CompoundResolverConfig.KEEPER.str2strmap( resolversInfo.getStr( sectionId ) );
       }
 
       IListEdit<ViewerRow> rows = new ElemArrayList<>();
