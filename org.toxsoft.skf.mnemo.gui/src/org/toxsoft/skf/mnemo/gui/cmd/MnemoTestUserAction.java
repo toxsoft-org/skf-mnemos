@@ -14,6 +14,9 @@ public class MnemoTestUserAction
     extends Stridable
     implements IMnemoUserAction {
 
+  /**
+   * Constructor.
+   */
   public MnemoTestUserAction() {
     super( "mnemo.test.commander" );
     setName( "Тестовое действие" );
