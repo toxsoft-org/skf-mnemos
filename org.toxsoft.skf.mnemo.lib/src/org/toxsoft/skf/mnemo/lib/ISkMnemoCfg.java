@@ -1,5 +1,6 @@
 package org.toxsoft.skf.mnemo.lib;
 
+import org.toxsoft.core.tslib.bricks.validator.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.uskat.core.api.objserv.*;
 
@@ -35,6 +36,8 @@ public interface ISkMnemoCfg
    *
    * @param aCfgData String - the mnemoscheme configuration data
    * @throws TsNullArgumentRtException any argument = <code>null</code>
+   * @throws TsValidationFailedRtException failed
+   *           {@link ISkMnemosServiceValidator#canSetMnemoData(String, String, ISkMnemoCfg)}
    */
   void setCfgData( String aCfgData );
 

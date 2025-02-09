@@ -64,8 +64,6 @@ public interface ISkMnemosService
 
   /**
    * Creates new mnemoscheme with an empty config data.
-   * <p>
-   * Note: mnemoscheme ID {@link ISkMnemoCfg#strid()} must be unique across all sections, not just it's own section.
    *
    * @param aMnemoId String - the mnemo ID
    * @param aAttrs {@link IOptionSet} - values of {@link ISkObject#attrs()} of mnemo
@@ -92,7 +90,7 @@ public interface ISkMnemosService
    * @param aMnemoId String - the mnemo ID
    * @param aData String - configuration data is the same as {@link ISkMnemoCfg#cfgData()}
    * @throws TsNullArgumentRtException any argument = <code>null</code>
-   * @throws TsItemNotFoundRtException no mnemo with the specified ID
+   * @throws TsValidationFailedRtException validation failed
    */
   void setMnemoData( String aMnemoId, String aData );
 

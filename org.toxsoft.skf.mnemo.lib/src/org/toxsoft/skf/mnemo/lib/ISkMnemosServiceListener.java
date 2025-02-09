@@ -11,11 +11,11 @@ import org.toxsoft.uskat.core.*;
 public interface ISkMnemosServiceListener {
 
   /**
-   * Called when any change in mnemoCfgs occur.
+   * Called when any change in mnemoCfgs occurs.
    *
    * @param aCoreApi {@link ISkCoreApi} - the event source
    * @param aOp {@link ECrudOp} - the kind of change
-   * @param aMnemoId String - affected mnemoCfg login or <code>null</code> for batch changes {@link ECrudOp#LIST}
+   * @param aMnemoId String - affected mnemo ID or <code>null</code> for batch changes {@link ECrudOp#LIST}
    */
   void onMnemoCfgChanged( ISkCoreApi aCoreApi, ECrudOp aOp, String aMnemoId );
 
