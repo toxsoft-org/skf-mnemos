@@ -9,6 +9,7 @@ import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
+import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
@@ -125,6 +126,12 @@ public class SkActorUserAction
 
   };
 
+  private boolean activated = false;
+
+  private Cursor handCursor;
+
+  private Cursor prevCursor = null;
+
   SkActorUserAction( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
   }
@@ -143,10 +150,28 @@ public class SkActorUserAction
   //
 
   @Override
+  public boolean onMouseDown( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors, Control aWidget ) {
+    if( !isMyMouseButton( aButton, aState ) ) {
+      return false;
+    }
+    setActivated( true );
+    return true;
+  }
+
+  @Override
+  public boolean onMouseUp( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors, Control aWidget ) {
+    if( activated ) {
+      doUserAction( aCoors );
+      setActivated( false );
+      return true;
+    }
+    return false;
+  }
+
+  @Override
   public boolean onMouseClick( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors, Control aWidget ) {
     if( !props().getBool( FID_DOUBLE_CLICK ) ) {
-      ERtActionMouseButton actionButton = props().getValobj( FID_MOUSE_BUTTON );
-      if( isMyMouseButton( actionButton, aButton, aState ) ) {
+      if( isMyMouseButton( aButton, aState ) ) {
         doUserAction( aCoors );
         return true;
       }
@@ -158,8 +183,7 @@ public class SkActorUserAction
   public boolean onMouseDoubleClick( Object aSource, ETsMouseButton aButton, int aState, ITsPoint aCoors,
       Control aWidget ) {
     if( props().getBool( FID_DOUBLE_CLICK ) ) {
-      ERtActionMouseButton actionButton = props().getValobj( FID_MOUSE_BUTTON );
-      if( isMyMouseButton( actionButton, aButton, aState ) ) {
+      if( isMyMouseButton( aButton, aState ) ) {
         doUserAction( aCoors );
         return true;
       }
@@ -221,27 +245,27 @@ public class SkActorUserAction
   /**
    * Test if user click on proper mouse button
    *
-   * @param aActionButton - designed mouse button
    * @param aMouseButton - real user selected mouse button
    * @param aState int - SWT код состояния управляющих клавиш Shift, Alt, Ctrl
    * @return true if click on proper mouse button
    */
-  protected boolean isMyMouseButton( ERtActionMouseButton aActionButton, ETsMouseButton aMouseButton, int aState ) {
+  protected boolean isMyMouseButton( ETsMouseButton aMouseButton, int aState ) {
     boolean retVal = false;
     int keyMask = props().getInt( FID_KEY_MASK );
-    switch( aActionButton ) {
+    ERtActionMouseButton actionButton = props().getValobj( FID_MOUSE_BUTTON );
+    switch( actionButton ) {
       case LEFT:
-        if( aMouseButton.equals( ETsMouseButton.LEFT ) && (keyMask & aState) == keyMask ) {
+        if( aMouseButton.equals( ETsMouseButton.LEFT ) && (keyMask == aState) ) {
           retVal = true;
         }
         break;
       case MIDDLE:
-        if( aMouseButton.equals( ETsMouseButton.MIDDLE ) && (keyMask & aState) == keyMask ) {
+        if( aMouseButton.equals( ETsMouseButton.MIDDLE ) && (keyMask == aState) ) {
           retVal = true;
         }
         break;
       case RIGHT:
-        if( aMouseButton.equals( ETsMouseButton.RIGHT ) && (keyMask & aState) == keyMask ) {
+        if( aMouseButton.equals( ETsMouseButton.RIGHT ) && (keyMask == aState) ) {
           retVal = true;
         }
         break;
@@ -251,6 +275,28 @@ public class SkActorUserAction
 
     }
     return retVal;
+  }
+
+  private void setActivated( boolean aActivated ) {
+    activated = aActivated;
+    if( activated ) {
+      setHandCursor();
+    }
+    else {
+      restorCursor();
+    }
+  }
+
+  private void setHandCursor() {
+    Cursor cur = vedScreen().view().getControl().getCursor();
+    if( cur == null || !cur.equals( handCursor ) ) {
+      prevCursor = vedScreen().view().getControl().getCursor();
+      vedScreen().view().getControl().setCursor( handCursor );
+    }
+  }
+
+  private void restorCursor() {
+    vedScreen().view().getControl().setCursor( prevCursor );
   }
 
 }

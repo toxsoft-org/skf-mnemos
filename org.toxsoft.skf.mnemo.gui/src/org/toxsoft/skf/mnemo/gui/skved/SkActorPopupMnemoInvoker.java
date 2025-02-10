@@ -14,7 +14,6 @@ import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
-import org.toxsoft.core.tsgui.bricks.tin.tti.*;
 import org.toxsoft.core.tsgui.bricks.uievents.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
@@ -33,7 +32,6 @@ import org.toxsoft.skf.mnemo.gui.glib.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
-import org.toxsoft.skf.mnemo.gui.skved.rt_action.tti.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.api.objserv.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
@@ -70,16 +68,16 @@ public class SkActorPopupMnemoInvoker
       TSID_NAME, STR_MNEMOSCHEMA, //
       TSID_DESCRIPTION, STR_MNEMOSCHEMA_D );
 
-  /**
-   * ИД поля "Кнопка мыши"
-   */
-  private static final String FID_MOUSE_BUTTON = "mouseButton"; //$NON-NLS-1$
-
-  private static final ITinFieldInfo TFI_MOUSE_BUTTON = new TinFieldInfo( FID_MOUSE_BUTTON, TtiAvEnum.INSTANCE, //
-      TSID_NAME, STR_MOUSE_BUTTON, //
-      TSID_DESCRIPTION, STR_MOUSE_BUTTON_D, //
-      TSID_KEEPER_ID, ERtActionMouseButton.KEEPER_ID //
-  );
+  // /**
+  // * ИД поля "Кнопка мыши"
+  // */
+  // private static final String FID_MOUSE_BUTTON = "mouseButton"; //$NON-NLS-1$
+  //
+  // private static final ITinFieldInfo TFI_MOUSE_BUTTON = new TinFieldInfo( FID_MOUSE_BUTTON, TtiAvEnum.INSTANCE, //
+  // TSID_NAME, STR_MOUSE_BUTTON, //
+  // TSID_DESCRIPTION, STR_MOUSE_BUTTON_D, //
+  // TSID_KEEPER_ID, ERtActionMouseButton.KEEPER_ID //
+  // );
 
   /**
    * ИД поля "Двойной щелчок"
@@ -92,15 +90,15 @@ public class SkActorPopupMnemoInvoker
       TSID_KEEPER_ID, ERtActionMouseButton.KEEPER_ID //
   );
 
-  /**
-   * ИД поля "Кнопка мыши"
-   */
-  private static final String FID_KEY_MASK = "keyMask"; //$NON-NLS-1$
-
-  private static final ITinFieldInfo TFI_KEY_MASK = new TinFieldInfo( FID_KEY_MASK, TtiKeyMask.INSTANCE, //
-      TSID_NAME, STR_KEY_MASK, //
-      TSID_DESCRIPTION, STR_KEY_MASK_D //
-  );
+  // /**
+  // * ИД поля "Кнопка мыши"
+  // */
+  // private static final String FID_KEY_MASK = "keyMask"; //$NON-NLS-1$
+  //
+  // private static final ITinFieldInfo TFI_KEY_MASK = new TinFieldInfo( FID_KEY_MASK, TtiKeyMask.INSTANCE, //
+  // TSID_NAME, STR_KEY_MASK, //
+  // TSID_DESCRIPTION, STR_KEY_MASK_D //
+  // );
 
   /**
    * The VISEL factory singleton.
@@ -142,20 +140,21 @@ public class SkActorPopupMnemoInvoker
       @Override
       public void onClick( VedAbstractVisel aVisel, ETsMouseButton aButton, ITsPoint aCoors, int aState ) {
         if( !props().getBool( FID_DOUBLE_CLICK ) ) {
-          ERtActionMouseButton actionButton = props().getValobj( FID_MOUSE_BUTTON );
-          if( isMyMouseButton( actionButton, aButton, aState ) ) {
-            openPopupMnemoShell( aCoors );
-          }
+          // ERtActionMouseButton actionButton = props().getValobj( FID_MOUSE_BUTTON );
+          // if( isMyMouseButton( actionButton, aButton, aState ) ) {
+          // if( isMyMouseButton( actionButton, aButton, aState ) ) {
+          openPopupMnemoShell( aCoors );
+          // }
         }
       }
 
       @Override
       public void onDoubleClick( VedAbstractVisel aVisel, ETsMouseButton aButton, ITsPoint aCoors, int aState ) {
         if( props().getBool( FID_DOUBLE_CLICK ) ) {
-          ERtActionMouseButton actionButton = props().getValobj( FID_MOUSE_BUTTON );
-          if( isMyMouseButton( actionButton, aButton, aState ) ) {
-            openPopupMnemoShell( aCoors );
-          }
+          // ERtActionMouseButton actionButton = props().getValobj( FID_MOUSE_BUTTON );
+          // if( isMyMouseButton( actionButton, aButton, aState ) ) {
+          openPopupMnemoShell( aCoors );
+          // }
         }
       }
 
@@ -244,40 +243,41 @@ public class SkActorPopupMnemoInvoker
     wnd.open();
   }
 
-  /**
-   * Test if user click on proper mouse button
-   *
-   * @param aActionButton - designed mouse button
-   * @param aMouseButton - real user selected mouse button
-   * @param aState int - SWT код состояния управляющих клавиш Shift, Alt, Ctrl
-   * @return true if click on proper mouse button
-   */
-  protected boolean isMyMouseButton( ERtActionMouseButton aActionButton, ETsMouseButton aMouseButton, int aState ) {
-    boolean retVal = false;
-    int keyMask = props().getInt( FID_KEY_MASK );
-    switch( aActionButton ) {
-      case LEFT:
-        if( aMouseButton.equals( ETsMouseButton.LEFT ) && (keyMask & aState) == keyMask ) {
-          retVal = true;
-        }
-        break;
-      case MIDDLE:
-        if( aMouseButton.equals( ETsMouseButton.MIDDLE ) && (keyMask & aState) == keyMask ) {
-          retVal = true;
-        }
-        break;
-      case RIGHT:
-        if( aMouseButton.equals( ETsMouseButton.RIGHT ) && (keyMask & aState) == keyMask ) {
-          retVal = true;
-        }
-        break;
-      // $CASES-OMITTED$
-      default:
-        break;
-
-    }
-    return retVal;
-  }
+  // /**
+  // * Test if user click on proper mouse button
+  // *
+  // * @param aActionButton - designed mouse button
+  // * @param aMouseButton - real user selected mouse button
+  // * @param aState int - SWT код состояния управляющих клавиш Shift, Alt, Ctrl
+  // * @return true if click on proper mouse button
+  // */
+  // @Override
+  // protected boolean isMyMouseButton( ERtActionMouseButton aActionButton, ETsMouseButton aMouseButton, int aState ) {
+  // boolean retVal = false;
+  // int keyMask = props().getInt( FID_KEY_MASK );
+  // switch( aActionButton ) {
+  // case LEFT:
+  // if( aMouseButton.equals( ETsMouseButton.LEFT ) && (keyMask & aState) == keyMask ) {
+  // retVal = true;
+  // }
+  // break;
+  // case MIDDLE:
+  // if( aMouseButton.equals( ETsMouseButton.MIDDLE ) && (keyMask & aState) == keyMask ) {
+  // retVal = true;
+  // }
+  // break;
+  // case RIGHT:
+  // if( aMouseButton.equals( ETsMouseButton.RIGHT ) && (keyMask & aState) == keyMask ) {
+  // retVal = true;
+  // }
+  // break;
+  // // $CASES-OMITTED$
+  // default:
+  // break;
+  //
+  // }
+  // return retVal;
+  // }
 
   private String getCaption() {
     String str = props().getStr( TFI_CAPTION.id() );
