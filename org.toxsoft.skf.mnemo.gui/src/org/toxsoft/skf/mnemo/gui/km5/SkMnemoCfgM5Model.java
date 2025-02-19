@@ -5,7 +5,6 @@ import static org.toxsoft.core.tsgui.m5.gui.mpc.IMultiPaneComponentConstants.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 
 import org.toxsoft.core.tsgui.bricks.ctx.*;
-import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.m5.gui.mpc.impl.*;
 import org.toxsoft.core.tsgui.m5.gui.panels.*;
 import org.toxsoft.core.tsgui.m5.gui.panels.impl.*;
@@ -49,8 +48,7 @@ public class SkMnemoCfgM5Model
 
   @Override
   protected IM5LifecycleManager<ISkMnemoCfg> doCreateLifecycleManager( Object aMaster ) {
-    IM5Model<Object> model = skConn().scope().find( IM5Domain.class ).findModel( ISkMnemoCfg.CLASS_ID );
-    return new MnemoM5LifecycleManager( SkMnemoCfgM5Model.class.cast( model ), ISkMnemosService.class.cast( aMaster ) );
+    return new MnemoM5LifecycleManager( this, ISkMnemosService.class.cast( aMaster ) );
   }
 
 }
