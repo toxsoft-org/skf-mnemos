@@ -32,7 +32,7 @@ import org.toxsoft.uskat.core.api.objserv.*;
  * @author vs
  */
 public class ReferencedObjectResolver
-    implements ISkObjectResolver, IUgwiResolver {
+    implements IUgwiResolver {
 
   /**
    * ИД фабрики
@@ -74,7 +74,6 @@ public class ReferencedObjectResolver
   // ISkObjectResolver
   //
 
-  @Override
   public Skid resolve( Skid aSkid ) {
     ISkidList skids = ISkidList.EMPTY;
     if( isRivet( refGwid ) ) { // если ссылка Rivet
