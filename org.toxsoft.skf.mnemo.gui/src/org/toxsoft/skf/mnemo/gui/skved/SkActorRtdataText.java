@@ -19,6 +19,7 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
+import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
@@ -46,6 +47,14 @@ public class SkActorRtdataText
 
   static final ITinFieldInfo TFI_NULL_TEXT = new TinFieldInfo( PROP_NULL_TEXT, TTI_AT_STRING );
 
+  static final String PROPID_RRI_FORMAT_STRING = "rriFormatString"; //$NON-NLS-1$
+
+  static final ITinFieldInfo TFI_RRI_FORMAT_STRING = new TinFieldInfo( PROPID_RRI_FORMAT_STRING, //
+      TFI_RRI_ATTR_UGWI.typeInfo(), //
+      TSID_NAME, "Формат из НСИ", //
+      TSID_DESCRIPTION, "Строка форматирования в НСИ" //
+  );
+
   /**
    * The VISEL factory singleton.
    */
@@ -64,6 +73,7 @@ public class SkActorRtdataText
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_VISEL_PROP_ID );
       fields.add( TFI_FORMAT_STRING );
+      fields.add( TFI_RRI_FORMAT_STRING );
       fields.add( TFI_RTD_UGWI );
       fields.add( TFI_NULL_TEXT );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRtdataText.class );
@@ -76,8 +86,10 @@ public class SkActorRtdataText
 
   };
 
-  private String fmtStr       = null;
-  private String nullValueStr = TsLibUtils.EMPTY_STRING;
+  private String fmtStr         = null;
+  private String fixedFormatStr = null;                   // строка форматирования введенная вручную
+  private String rriFormatStr   = null;                   // строка форматирования в НСИ параметрах
+  private String nullValueStr   = TsLibUtils.EMPTY_STRING;
 
   SkActorRtdataText( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
@@ -89,25 +101,41 @@ public class SkActorRtdataText
 
   @Override
   protected void doDoUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
+    Ugwi rriUgwi = SkVedUtils.getRriAttributeUgwi( PROPID_RRI_FORMAT_STRING, aChangedValues );
+    if( rriUgwi != null && rriUgwi != Ugwi.NONE ) {
+      IAtomicValue av = SkVedUtils.getRriValue( rriUgwi, coreApi() );
+      if( av != null && av.isAssigned() ) {
+        rriFormatStr = av.asString();
+      }
+    }
     if( aChangedValues.hasKey( PROPID_FORMAT_STRING ) ) {
-      fmtStr = aChangedValues.getStr( PROP_FORMAT_STRING );
-      if( fmtStr.isBlank() && ugwi() != null ) {
-        fmtStr = null;
-        ISkClassInfo classInfo = skSysdescr().findClassInfo( UgwiKindSkRtdata.getClassId( ugwi() ) );
-        if( classInfo != null ) {
-          IDtoRtdataInfo rtdInfo = classInfo.rtdata().list().findByKey( UgwiKindSkRtdata.getRtdataId( ugwi() ) );
-          if( rtdInfo != null ) {
-            IAtomicValue avFmtStr = SkHelperUtils.getConstraint( rtdInfo, TSID_FORMAT_STRING );
-            if( avFmtStr != null ) {
-              fmtStr = avFmtStr.asString();
-            }
+      fixedFormatStr = aChangedValues.getStr( PROP_FORMAT_STRING );
+    }
+
+    if( fixedFormatStr != null && !fixedFormatStr.isBlank() ) {
+      fmtStr = fixedFormatStr;
+    }
+    else {
+      fmtStr = rriFormatStr;
+    }
+
+    if( fmtStr == null || fmtStr.isBlank() ) {
+      ISkClassInfo classInfo = skSysdescr().findClassInfo( UgwiKindSkRtdata.getClassId( ugwi() ) );
+      if( classInfo != null ) {
+        IDtoRtdataInfo rtdInfo = classInfo.rtdata().list().findByKey( UgwiKindSkRtdata.getRtdataId( ugwi() ) );
+        if( rtdInfo != null ) {
+          IAtomicValue avFmtStr = SkHelperUtils.getConstraint( rtdInfo, TSID_FORMAT_STRING );
+          if( avFmtStr != null ) {
+            fmtStr = avFmtStr.asString();
           }
         }
       }
-      if( fmtStr != null && fmtStr.isBlank() ) {
-        fmtStr = null;
-      }
     }
+
+    if( fmtStr != null && fmtStr.isBlank() ) {
+      fmtStr = null;
+    }
+
     if( aChangedValues.hasKey( PROP_NULL_TEXT.id() ) ) {
       nullValueStr = aChangedValues.getStr( PROP_NULL_TEXT );
     }

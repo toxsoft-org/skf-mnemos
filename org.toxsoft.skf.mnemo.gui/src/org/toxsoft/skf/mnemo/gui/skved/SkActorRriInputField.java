@@ -92,17 +92,22 @@ public class SkActorRriInputField
 
   @Override
   protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
-    if( aChangedValues.hasKey( TFI_RRI_ATTR_UGWI.id() ) ) {
-      IAtomicValue av = aChangedValues.getValue( TFI_RRI_ATTR_UGWI.id() );
-      if( av.isAssigned() && av.asValobj() != null && av.asValobj() != IAtomicValue.NULL ) {
-        ugwi = av.asValobj();
-        if( ugwi != Ugwi.NONE ) {
-          String sectId = UgwiKindRriAttr.getSectionId( ugwi );
-          section =
-              ((ISkRegRefInfoService)coreApi().getService( ISkRegRefInfoService.SERVICE_ID )).findSection( sectId );
-        }
-      }
+    ugwi = SkVedUtils.getRriAttributeUgwi( TFI_RRI_ATTR_UGWI.id(), aChangedValues );
+    if( ugwi != null && ugwi != Ugwi.NONE ) {
+      String sectId = UgwiKindRriAttr.getSectionId( ugwi );
+      section = ((ISkRegRefInfoService)coreApi().getService( ISkRegRefInfoService.SERVICE_ID )).findSection( sectId );
     }
+    // if( aChangedValues.hasKey( TFI_RRI_ATTR_UGWI.id() ) ) {
+    // IAtomicValue av = aChangedValues.getValue( TFI_RRI_ATTR_UGWI.id() );
+    // if( av.isAssigned() && av.asValobj() != null && av.asValobj() != IAtomicValue.NULL ) {
+    // ugwi = av.asValobj();
+    // if( ugwi != Ugwi.NONE ) {
+    // String sectId = UgwiKindRriAttr.getSectionId( ugwi );
+    // section =
+    // ((ISkRegRefInfoService)coreApi().getService( ISkRegRefInfoService.SERVICE_ID )).findSection( sectId );
+    // }
+    // }
+    // }
     if( aChangedValues.hasKey( TFI_FORMAT_STRING.id() ) ) {
       fmtStr = props().getStr( TFI_FORMAT_STRING.id() );
       if( fmtStr.isBlank() ) {
