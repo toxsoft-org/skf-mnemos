@@ -109,6 +109,7 @@ public class QuantSkMnemoGui
     vcfRegistry.registerFactory( ValedAvValobjMPerspIdEditor.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjRtdataRefbookAttrInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjVedUserActionCfg.FACTORY );
+    vcfRegistry.registerFactory( ValedAvValobjRefbookValuesInfo.FACTORY );
 
     // ------------------------------------------------------------------------------------
     // Регистрация резолверов

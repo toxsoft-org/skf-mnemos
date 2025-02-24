@@ -22,6 +22,8 @@ import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.more.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
+import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.refbooks.lib.*;
@@ -49,7 +51,8 @@ public class SkActorRtdataRefbook
       TSID_NAME, "Справочник", //
       TSID_DESCRIPTION, "Информация о справочнике", //
       TSID_KEEPER_ID, IdChain.KEEPER_ID, //
-      OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjRtdataRefbookAttrInfo.FACTORY_NAME, //
+      // OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjRtdataRefbookAttrInfo.FACTORY_NAME, //
+      OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjRefbookValuesInfo.FACTORY_NAME, //
       TSID_DEFAULT_VALUE, avValobj( IdChain.NULL ) //
   );
 
@@ -71,8 +74,9 @@ public class SkActorRtdataRefbook
       fields.add( TFI_NAME );
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
-      fields.add( TFI_VISEL_PROP_ID );
-      fields.add( TFI_FORMAT_STRING );
+      // fields.add( TFI_VISEL_PROP_ID );
+      // fields.add( TFI_FORMAT_STRING );
+      fields.add( TinFieldInfo.makeCopy( TFI_VISEL_PROP_ID, ITinWidgetConstants.PRMID_IS_HIDDEN, AV_TRUE ) );
       fields.add( TFI_RTD_UGWI );
       fields.add( new TinFieldInfo( PROP_REFBOOK_INFO, TTI_REFBOOK_INFO ) );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRtdataRefbook.class );
@@ -125,6 +129,13 @@ public class SkActorRtdataRefbook
       if( av.isAssigned() ) {
         rbChain = av.asValobj();
         if( rbChain != IdChain.NULL ) {
+          if( rbChain.branches().size() % 2 != 0 ) {
+            String viselPropId = props().getStr( PROP_VISEL_PROP_ID );
+            IStringListEdit newBranches = new StringArrayList( rbChain.branches() );
+            newBranches.add( viselPropId );
+            rbChain = new IdChain( newBranches );
+            props().setValobj( PROP_REFBOOK_INFO.id(), rbChain );
+          }
           ISkRefbookService rbServ = coreApi().getService( ISkRefbookService.SERVICE_ID );
           refbook = rbServ.findRefbook( rbChain.get( 0 ) );
           if( refbook == null ) {
@@ -140,13 +151,18 @@ public class SkActorRtdataRefbook
 
   @Override
   protected void doOnValueChanged( IAtomicValue aNewValue ) {
-    // String text = AvUtils.printAv( fmtStr, aNewValue );
-    // setStdViselPropValue( avStr( text ) );
     if( refbook != null ) {
       for( ISkRefbookItem item : refbook.listItems() ) {
         IAtomicValue av = item.attrs().getValue( rbChain.get( 1 ) );
         if( av.equals( aNewValue ) ) {
-          setStdViselPropValue( item.attrs().getValue( rbChain.get( 2 ) ) );
+          String viselId = props().getStr( PROP_VISEL_ID );
+          IStringList branches = rbChain.branches();
+          int count = branches.size() - branches.size() % 2;
+          for( int i = 2; i < count - 1; i += 2 ) {
+            IAtomicValue aValue = item.attrs().getValue( rbChain.get( i ) );
+            String viselPropId = rbChain.get( i + 1 );
+            setViselPropValue( viselId, viselPropId, aValue );
+          }
           break;
         }
       }
