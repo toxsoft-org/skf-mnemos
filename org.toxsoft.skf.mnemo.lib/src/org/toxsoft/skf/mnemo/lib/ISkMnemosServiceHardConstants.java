@@ -45,7 +45,7 @@ public interface ISkMnemosServiceHardConstants {
   String CLSID_SWITCH_PERSP_INFO = ISkHardConstants.SK_ID + ".SwitchPerspInfo"; //$NON-NLS-1$
 
   /**
-   * id тип возможности «Мнемосхемы»
+   * id тип возможности «Мнемосхемы».
    */
   String ABKINDID_MNEMO = SERVICE_ID + ".abkind.mnemos"; //$NON-NLS-1$
 
