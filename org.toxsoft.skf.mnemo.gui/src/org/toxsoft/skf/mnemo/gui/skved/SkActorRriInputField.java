@@ -201,7 +201,8 @@ public class SkActorRriInputField
         value = AvUtils.avFromObj( bv );
         break;
       case FLOATING:
-        Double dv = Double.valueOf( Double.parseDouble( aText ) );
+        String text = aText.replace( ',', '.' );
+        Double dv = Double.valueOf( Double.parseDouble( text ) );
         value = AvUtils.avFromObj( dv );
         break;
       case INTEGER:
