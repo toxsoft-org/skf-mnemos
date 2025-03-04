@@ -1,5 +1,6 @@
 package org.toxsoft.skf.mnemo.gui.km5;
 
+import static org.toxsoft.core.tsgui.ITsGuiConstants.*;
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
 import static org.toxsoft.core.tsgui.bricks.actions.TsActionDef.*;
 import static org.toxsoft.core.tsgui.graphics.icons.ITsStdIconIds.*;
@@ -44,7 +45,7 @@ class Mpc
   /**
    * ID of action {@link #ACDEF_ADD_COPY_MNEMO}.
    */
-  static final String ACTID_ADD_COPY_MNEMO = STD_ACTION_DEF_PREFIX + ".add_copy_mnemo"; //$NON-NLS-1$
+  static final String ACTID_ADD_COPY_MNEMO = TSGUI_ACT_ID + ".add_copy_mnemo"; //$NON-NLS-1$
 
   /**
    * Action: add an mnemo created from current mnemo.
