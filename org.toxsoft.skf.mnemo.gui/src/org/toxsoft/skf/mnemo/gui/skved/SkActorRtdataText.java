@@ -119,7 +119,8 @@ public class SkActorRtdataText
       fmtStr = rriFormatStr;
     }
 
-    if( fmtStr == null || fmtStr.isBlank() ) {
+    if( (fmtStr == null || fmtStr.isBlank()) && ugwi() != Ugwi.NONE ) {
+      System.out.println( ugwi() );
       ISkClassInfo classInfo = skSysdescr().findClassInfo( UgwiKindSkRtdata.getClassId( ugwi() ) );
       if( classInfo != null ) {
         IDtoRtdataInfo rtdInfo = classInfo.rtdata().list().findByKey( UgwiKindSkRtdata.getRtdataId( ugwi() ) );
