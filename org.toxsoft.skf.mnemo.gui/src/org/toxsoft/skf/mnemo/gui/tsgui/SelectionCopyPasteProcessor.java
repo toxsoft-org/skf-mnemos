@@ -5,6 +5,7 @@ import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 
@@ -66,7 +67,7 @@ public class SelectionCopyPasteProcessor
   }
 
   @Override
-  public void editConfigsForPaste( IListEdit<VedItemCfg> aVisConfs, IListEdit<VedItemCfg> aActConfs,
+  public void editConfigsForPaste( IStridablesListEdit<VedItemCfg> aVisConfs, IListEdit<VedItemCfg> aActConfs,
       IStringMap<String> aViselsMap, IStringMap<String> aActorsMap, IOptionSet aParams ) {
     // nop - никакие правки не требуются
   }

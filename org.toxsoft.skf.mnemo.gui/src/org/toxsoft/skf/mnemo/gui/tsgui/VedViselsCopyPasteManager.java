@@ -233,7 +233,7 @@ public class VedViselsCopyPasteManager
     double dx = p.x();
     double dy = p.y();
 
-    IListEdit<VedItemCfg> newViselConfigs = new StridablesList<>();
+    IStridablesListEdit<VedItemCfg> newViselConfigs = new StridablesList<>();
     IListEdit<VedItemCfg> newActorConfigs = new StridablesList<>();
 
     IVedViselFactoriesRegistry viselFactoriesRegistry = tsContext().get( IVedViselFactoriesRegistry.class );

@@ -4,6 +4,7 @@ import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
@@ -53,13 +54,17 @@ public class MasterSlaveCopyPasteProcessor
     IStringListEdit viselIds = new StringArrayList( aViselIds ); // копируем, чтобы избежать ConcurrentModification
     for( String vid : viselIds ) {
       addSlaveIds( vid, aViselIds );
+      // IStringList actIds = VedScreenUtils.viselActorIds( vid, vedScreen );
+      // aActorIds.addAll( actIds );
+    }
+    for( String vid : aViselIds ) {
       IStringList actIds = VedScreenUtils.viselActorIds( vid, vedScreen );
       aActorIds.addAll( actIds );
     }
   }
 
   @Override
-  public void editConfigsForPaste( IListEdit<VedItemCfg> aVisConfs, IListEdit<VedItemCfg> aActConfs,
+  public void editConfigsForPaste( IStridablesListEdit<VedItemCfg> aVisConfs, IListEdit<VedItemCfg> aActConfs,
       IStringMap<String> aViselsMap, IStringMap<String> aActorsMap, IOptionSet aParams ) {
     for( VedItemCfg cfg : aVisConfs ) {
       msManager.setSlaveIds( cfg, IStringList.EMPTY ); // очистим список подчиненных элементов
@@ -92,18 +97,5 @@ public class MasterSlaveCopyPasteProcessor
       aViselIds.add( slaveId );
       addSlaveIds( slaveId, aViselIds );
     }
-    //
-    // VedAbstractVisel visel = VedScreenUtils.findVisel( aViselId, vedScreen );
-    // if( visel.params().hasKey( VedViselsMasterSlaveRelationsManager.PARAMID_SLAVE_IDS ) ) {
-    // String idpathStr = visel.params().getStr( VedViselsMasterSlaveRelationsManager.PARAMID_SLAVE_IDS );
-    // if( !idpathStr.isBlank() ) {
-    // IStringList slaveIds = StridUtils.getComponents( idpathStr );
-    // for( String id : slaveIds ) {
-    // aViselIds.add( id );
-    // addSlaveIds( id, aViselIds );
-    // }
-    // }
-    // }
   }
-
 }

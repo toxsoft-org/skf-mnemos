@@ -4,6 +4,7 @@ import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 
@@ -28,12 +29,12 @@ public interface ICopyPasteProcessor
   /**
    * Редактирует, изменяет (если необходимо) список конфигураций элементов редактора.
    *
-   * @param aVisConfs IListEdit&lt;VedItemCfg> - текущий список конфигураций визуальных элементов
+   * @param aVisConfs IStridablesListEdit&lt;VedItemCfg> - текущий список конфигураций визуальных элементов
    * @param aActConfs IListEdit&lt;VedItemCfg> - текущий список конфигураций акторов
    * @param aViselsMap {@link IStringMap} - карта сответствия ИДов Visel'ей ключ - старый, значение - новый
    * @param aActorsMap {@link IStringMap} - карта сответствия ИДов акторов ключ - старый, значение - новый
    * @param aParams {@link IOptionSet} - набор дополнительных параметров
    */
-  void editConfigsForPaste( IListEdit<VedItemCfg> aVisConfs, IListEdit<VedItemCfg> aActConfs, //
+  void editConfigsForPaste( IStridablesListEdit<VedItemCfg> aVisConfs, IListEdit<VedItemCfg> aActConfs, //
       IStringMap<String> aViselsMap, IStringMap<String> aActorsMap, IOptionSet aParams );
 }
