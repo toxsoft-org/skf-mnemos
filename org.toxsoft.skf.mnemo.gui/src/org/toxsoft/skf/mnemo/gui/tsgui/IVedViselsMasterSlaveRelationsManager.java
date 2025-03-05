@@ -121,6 +121,11 @@ public interface IVedViselsMasterSlaveRelationsManager
   void setSlaveIds( VedItemCfg aCfg, IStringList aSlaveIds );
 
   /**
+   * Проверяет целостность данных и в случае необходимости восстанавливает её.
+   */
+  void checkAndFix();
+
+  /**
    * Возвращает признак того, является ли визуальный элемент "мастером".
    *
    * @param aViselId String - ИД визуального элемента

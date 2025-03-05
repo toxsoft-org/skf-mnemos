@@ -349,6 +349,33 @@ public class VedViselsMasterSlaveRelationsManager
     return false;
   }
 
+  @Override
+  public void checkAndFix() {
+    for( VedAbstractVisel visel : vedScreen.model().visels().list() ) {
+      cleanSlaveIds( visel );
+    }
+
+  }
+
+  void cleanSlaveIds( VedAbstractVisel aVisel ) {
+    IStringList slaveIds = IStringList.EMPTY;
+    if( aVisel.params().hasKey( PARAMID_SLAVE_IDS ) ) {
+      slaveIds = _listSlaveIds( aVisel.params() );
+    }
+    if( !slaveIds.isEmpty() ) {
+      IStridablesList<VedAbstractVisel> visels = vedScreen.model().visels().list();
+      IStringListEdit newSlaveIds = new StringArrayList( slaveIds );
+      for( String slaveId : slaveIds ) {
+        if( !visels.hasKey( slaveId ) ) {
+          newSlaveIds.remove( slaveId );
+        }
+      }
+      if( newSlaveIds.size() != slaveIds.size() ) {
+        aVisel.params().setValobj( PARAMID_SLAVE_IDS, newSlaveIds );
+      }
+    }
+  }
+
   // ------------------------------------------------------------------------------------
   // API
   //

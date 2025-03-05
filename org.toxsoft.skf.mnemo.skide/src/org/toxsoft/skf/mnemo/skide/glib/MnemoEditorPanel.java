@@ -585,6 +585,8 @@ public class MnemoEditorPanel
     resolverConfig = MasterObjectUtils.readMnemoResolverConfig( aCfg );
     submastersPanel.setMnemoResolverConfig( resolverConfig );
 
+    masterSlaveManager.checkAndFix();
+
     undoManager.reset();
     setChanged( false );
     scrollManager.setOrigin( 0, 0 );
