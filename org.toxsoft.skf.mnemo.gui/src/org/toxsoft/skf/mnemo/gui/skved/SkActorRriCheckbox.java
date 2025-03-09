@@ -115,7 +115,8 @@ public class SkActorRriCheckbox
   protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
     if( aChangedValues.hasKey( TFI_RRI_ATTR_UGWI.id() ) ) {
       IAtomicValue av = aChangedValues.getValue( TFI_RRI_ATTR_UGWI.id() );
-      if( av.isAssigned() && av.asValobj() != null && av.asValobj() != IAtomicValue.NULL ) {
+      if( av.isAssigned() && av.asValobj() != null && av.asValobj() != IAtomicValue.NULL
+          && av.asValobj() != Ugwi.NONE ) {
         ugwi = av.asValobj();
         String sectId = UgwiKindRriAttr.getSectionId( ugwi );
         section = ((ISkRegRefInfoService)coreApi().getService( ISkRegRefInfoService.SERVICE_ID )).findSection( sectId );
