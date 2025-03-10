@@ -121,6 +121,11 @@ public abstract class AbstractSkVedClickableActor
   @Override
   public boolean onMouseMove( Object aSource, int aState, ITsPoint aCoors, Control aWidget ) {
     boolean retVal = false;
+    IStringList ids = vedScreen().view().listViselIdsAtPoint( aCoors );
+    if( ids.isEmpty() ) {
+      restorCursor();
+      return false;
+    }
     VedAbstractVisel visel = vedScreen().model().visels().list().findByKey( props().getStr( PROPID_VISEL_ID ) );
     if( visel == null ) {
       return retVal;
@@ -134,11 +139,12 @@ public abstract class AbstractSkVedClickableActor
     if( visel.isYours( p ) ) {
       setIfHasProp( visel, ViselButton.PROPID_STATE, true );
       setHandCursor();
+      return false;
     }
-    else {
-      setIfHasProp( visel, ViselButton.PROPID_HOVERED, false );
-      restorCursor();
-    }
+    // else {
+    // setIfHasProp( visel, ViselButton.PROPID_HOVERED, false );
+    // restorCursor();
+    // }
     retVal = false;
     vedScreen().view().redraw();
     return retVal;
