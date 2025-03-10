@@ -134,13 +134,12 @@ public abstract class AbstractSkVedClickableActor
     if( visel.isYours( p ) ) {
       setIfHasProp( visel, ViselButton.PROPID_STATE, true );
       setHandCursor();
-      retVal = true;
     }
     else {
       setIfHasProp( visel, ViselButton.PROPID_HOVERED, false );
       restorCursor();
-      retVal = false;
     }
+    retVal = false;
     vedScreen().view().redraw();
     return retVal;
   }

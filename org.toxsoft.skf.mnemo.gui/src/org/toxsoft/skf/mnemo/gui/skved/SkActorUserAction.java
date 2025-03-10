@@ -193,7 +193,6 @@ public class SkActorUserAction
 
   @Override
   public boolean onMouseMove( Object aSource, int aState, ITsPoint aCoors, Control aWidget ) {
-
     return false;
   }
 

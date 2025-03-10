@@ -83,6 +83,7 @@ public class QuantSkMnemoGui
     actFact.register( SkActorRtdataRefbook.FACTORY );
     actFact.register( SkActorNameAndTooltip.FACTORY );
     actFact.register( SkActorUserAction.FACTORY );
+    actFact.register( ActorViselTooltipAction.FACTORY );
 
   }
 

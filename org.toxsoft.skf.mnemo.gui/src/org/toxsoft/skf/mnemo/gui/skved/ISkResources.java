@@ -171,6 +171,14 @@ interface ISkResources {
   String STR_USER_ACTION_D     = Messages.getString( "STR_USER_ACTION_D" );     //$NON-NLS-1$
 
   /**
+   * {@link ActorViselTooltipAction}
+   */
+  // String STR_USER_ACTION_CFG = Messages.getString( "STR_USER_ACTION_CFG" ); //$NON-NLS-1$
+  // String STR_USER_ACTION_CFG_D = Messages.getString( "STR_USER_ACTION_CFG_D" ); //$NON-NLS-1$
+  String STR_TOOLTIP_ACTION   = Messages.getString( "STR_TOOLTIP_ACTION" );   //$NON-NLS-1$
+  String STR_TOOLTIP_ACTION_D = Messages.getString( "STR_TOOLTIP_ACTION_D" ); //$NON-NLS-1$
+
+  /**
    * {@link SkActorCmdButton}
    */
   String STR_N_COMMAND_ON_UNPRESS      = Messages.getString( "STR_N_COMMAND_ON_UNPRESS" );      //$NON-NLS-1$
