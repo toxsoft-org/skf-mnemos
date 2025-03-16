@@ -7,6 +7,7 @@ import static org.toxsoft.uskat.core.gui.ISkCoreGuiConstants.*;
 
 import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
+import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.bricks.actions.asp.*;
@@ -40,7 +41,6 @@ import org.toxsoft.skf.mnemo.gui.tsgui.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.tools.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
-import org.toxsoft.skf.mnemo.gui.utils.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.api.objserv.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
@@ -171,18 +171,62 @@ public class MnemoEditorPanel
 
     @Override
     public void run() {
-      IStridablesList<IVedItem> actors = VedScreenUtils.listHangedActors( vedScr );
-      for( IVedItem actor : actors ) {
-        System.out.println( "Висячий актор: " + actor.id() );
-      }
-      actors = MnemoUtils.listWrongUgwiActors( vedScr, coreApi() );
-      for( IVedItem actor : actors ) {
-        System.out.println( "Wrong UGWI actor: " + actor.id() );
-      }
+      //
+      // IStridablesList<IVedItem> actors = VedScreenUtils.listHangedActors( vedScr );
+      // for( IVedItem actor : actors ) {
+      // System.out.println( "Висячий актор: " + actor.id() );
+      // }
+      // actors = MnemoUtils.listWrongUgwiActors( vedScr, coreApi() );
+      // for( IVedItem actor : actors ) {
+      // System.out.println( "Wrong UGWI actor: " + actor.id() );
+      // }
+      //
+      // IStridablesList<IVedVisel> visels = VedScreenUtils.listNonlinkedVisels( vedScr );
+      // for( IVedVisel visel : visels ) {
+      // System.out.println( "Не привязанный визель: " + visel.id() );
+      // }
 
-      IStridablesList<IVedVisel> visels = VedScreenUtils.listNonlinkedVisels( vedScr );
-      for( IVedVisel visel : visels ) {
-        System.out.println( "Не привязанный визель: " + visel.id() );
+      VedScreen vScreen = (VedScreen)vedScreen;
+      IVedCanvasCfg canvasCfg = vScreen.view().canvasConfig();
+      Image im = null;
+      GC imageGc = null;
+      try {
+        im = new Image( getDisplay(), canvasCfg.size().intX(), canvasCfg.size().intY() );
+        imageGc = new GC( im );
+
+        ((VedScreen)vedScreen).paint( imageGc );
+
+        ImageData imData = im.getImageData();
+        // ImageData imData2 = new ImageData( ((int)width), (int)height, imData.depth, imData.palette );
+        //
+        // for( int i = 0; i < ((int)width); i++ ) {
+        // for( int j = 0; j < ((int)height); j++ ) {
+        // imData2.setPixel( i, j, imData.getPixel( i, j ) );
+        // }
+        // }
+
+        ImageLoader imageLoader = new ImageLoader();
+        imageLoader.data = new ImageData[] { imData };
+        // imageLoader.data = new ImageData[] { imData2 };
+        // для подддержки костыля TODO by Max
+        // imageLoader.data = new ImageData[] { imData };
+
+        FileDialog dlg = new FileDialog( tsContext().get( Shell.class ), SWT.SAVE );
+        String fileName = dlg.open();
+        // String fileName = dlg.getFileName();
+        // fileName = dlg.getFilterPath() + "//" + fileName; //$NON-NLS-1$
+        if( fileName != null && !fileName.isBlank() ) {
+          // сохранение в файл
+          imageLoader.save( fileName, SWT.IMAGE_PNG );
+        }
+      }
+      finally {
+        if( imageGc != null ) {
+          imageGc.dispose();
+        }
+        if( im != null ) {
+          im.dispose();
+        }
       }
     }
 
