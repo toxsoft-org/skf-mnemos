@@ -5,21 +5,21 @@ package org.toxsoft.skf.mnemo.skide;
  *
  * @author hazard157
  */
-@SuppressWarnings( "javadoc" )
+@SuppressWarnings( { "javadoc", "nls" } )
 public interface ISkidePluginMnemoSharedResources {
 
-  String STR_SKIDE_MNEMOS_UNIT   = Messages.getString( "STR_SKIDE_MNEMOS_UNIT" );   //$NON-NLS-1$
-  String STR_SKIDE_MNEMOS_UNIT_D = Messages.getString( "STR_SKIDE_MNEMOS_UNIT_D" ); //$NON-NLS-1$
+  String STR_SKIDE_MNEMOS_UNIT   = Messages.getString( "STR_SKIDE_MNEMOS_UNIT" );
+  String STR_SKIDE_MNEMOS_UNIT_D = Messages.getString( "STR_SKIDE_MNEMOS_UNIT_D" );
 
-  String STR_OPDEF_GW_MNEMOS_INTERFACE_NAME    = Messages.getString( "STR_OPDEF_GW_MNEMOS_INTERFACE_NAME" );    //$NON-NLS-1$
-  String STR_OPDEF_GW_MNEMOS_INTERFACE_NAME_D  = Messages.getString( "STR_OPDEF_GW_MNEMOS_INTERFACE_NAME_D" );  //$NON-NLS-1$
-  String FMT_INFO_JAVA_INTERFACE_WAS_GENERATED = Messages.getString( "FMT_INFO_JAVA_INTERFACE_WAS_GENERATED" ); //$NON-NLS-1$
+  String STR_OPDEF_GW_MNEMOS_INTERFACE_NAME    = Messages.getString( "STR_OPDEF_GW_MNEMOS_INTERFACE_NAME" );
+  String STR_OPDEF_GW_MNEMOS_INTERFACE_NAME_D  = Messages.getString( "STR_OPDEF_GW_MNEMOS_INTERFACE_NAME_D" );
+  String FMT_INFO_JAVA_INTERFACE_WAS_GENERATED = Messages.getString( "FMT_INFO_JAVA_INTERFACE_WAS_GENERATED" );
 
-  String FMT_INFO_MNEMOSCHEMES_UPLOADED = Messages.getString( "FMT_INFO_MNEMOSCHEMES_UPLOADED" ); //$NON-NLS-1$
+  String FMT_INFO_MNEMOSCHEMES_UPLOADED = Messages.getString( "FMT_INFO_MNEMOSCHEMES_UPLOADED" );
 
-  String STR_ASK_ACCEPT_MNEMO_CORRECTIONS = Messages.getString( "STR_ASK_ACCEPT_MNEMO_CORRECTIONS" ); //$NON-NLS-1$
+  String STR_ASK_ACCEPT_MNEMO_CORRECTIONS = Messages.getString( "STR_ASK_ACCEPT_MNEMO_CORRECTIONS" );
 
-  String STR_CLEAR_MNEMOS_BEFORE_UPLOAD   = Messages.getString( "STR_CLEAR_MNEMOS_BEFORE_UPLOAD" );   //$NON-NLS-1$
-  String STR_CLEAR_MNEMOS_BEFORE_UPLOAD_D = Messages.getString( "STR_CLEAR_MNEMOS_BEFORE_UPLOAD_D" ); //$NON-NLS-1$
+  String STR_CLEAR_MNEMOS_BEFORE_UPLOAD   = Messages.getString( "STR_CLEAR_MNEMOS_BEFORE_UPLOAD" );
+  String STR_CLEAR_MNEMOS_BEFORE_UPLOAD_D = Messages.getString( "STR_CLEAR_MNEMOS_BEFORE_UPLOAD_D" );
 
 }
