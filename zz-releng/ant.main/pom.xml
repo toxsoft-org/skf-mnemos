@@ -41,11 +41,11 @@
 
                 <echo message="call ant task: delete old plugins from ts4-targets" level="info" /> 
                 <delete failonerror="false">
-                   <fileset dir="../../../ts4-targets/ts4-target-skf-mnemo/main/plugins" includes="*.*" />
+                   <fileset dir="../../../ts4-targets/ts4-target-skf-mnemos/main/plugins" includes="*.*" />
                 </delete>
 
                 <echo message="call ant task: copy new plugins to ts4-targets" level="info" /> 
-                <copy todir="../../../ts4-targets/ts4-target-skf-mnemo/main/plugins" failonerror="false">
+                <copy todir="../../../ts4-targets/ts4-target-skf-mnemos/main/plugins" failonerror="false">
                    <fileset file="../p2.main/target/repository/plugins/*.*"/>
                 </copy>    
 
