@@ -20,6 +20,7 @@ import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.txtproj.lib.storage.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.*;
 import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
+import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.*;
 import org.toxsoft.skf.rri.lib.ugwi.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
@@ -256,6 +257,25 @@ public class MasterObjectUtils {
       }
     }
     updateMnemoResolverConfig( mrCfg, aVedScreen );
+  }
+
+  /**
+   * Задает класс главного мастер-объекта мнемосхемы.<br>
+   *
+   * @param aClassId String - ИД класса главного мастер-объекта мнемосхемы
+   * @param aVedScreen {@link IVedScreen} - экран редактирования
+   */
+  public static void setMainMasterClassId( String aClassId, IVedScreen aVedScreen ) {
+    Ugwi ugwi = UgwiKindSkClassInfo.makeUgwi( aClassId );
+    ICompoundResolverConfig resCfg = DirectSkidResolver.createResolverConfig( ugwi );
+    SubmasterConfig smCfg = SubmasterConfig.create( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID, new OptionSet(), resCfg );
+    MnemoResolverConfig resolverConfig = readMnemoResolverConfig( aVedScreen );
+    if( resolverConfig.subMasters().hasKey( VED_SCREEN_MAIN_MNEMO_RESOLVER_ID ) ) {
+      resolverConfig.subMasters().removeByKey( aClassId );
+    }
+    resolverConfig.subMasters().add( smCfg );
+    String itemId = VED_SCREEN_EXTRA_DATA_ID_MNEMO_RESOLVER_CONGIF;
+    aVedScreen.model().extraData().writeItem( itemId, resolverConfig, MnemoResolverConfig.KEEPER );
   }
 
   /**
