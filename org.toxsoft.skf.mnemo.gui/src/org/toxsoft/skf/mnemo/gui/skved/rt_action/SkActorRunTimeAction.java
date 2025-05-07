@@ -182,7 +182,8 @@ public class SkActorRunTimeAction
       // IVedScreenCfg scrCfg = VedScreenUtils.getVedScreenConfig( vedScreen );
       // IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, scrCfg, skConn() );
     }
-    PopupMnemoDialogPanel.showPopMnemo( tsContext().eclipseContext(), mnemoCfg );
+    PopupMnemoDialogPanel.showPopMnemo( tsContext().eclipseContext(),
+        VedScreenCfg.cfgFromString( mnemoCfg.cfgData() ) );
 
     // open in Shell
     // openPopupMnemoShell( mnemoCfg );
@@ -212,7 +213,7 @@ public class SkActorRunTimeAction
     // // IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, scrCfg, skConn() );
     // }
 
-    panel.setMnemoConfig( aMnemoCfg );
+    panel.setMnemoConfig( VedScreenCfg.cfgFromString( aMnemoCfg.cfgData() ) );
     panel.resume();
     TsPoint p = computeSize( aMnemoCfg );
     wnd.setSize( p.x(), p.y() );

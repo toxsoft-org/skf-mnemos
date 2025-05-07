@@ -53,7 +53,7 @@ public class PopupMnemoDialog
     // // IVedScreenCfg scrCfg = VedScreenUtils.getVedScreenConfig( vedScreen );
     // // IVedScreenCfg newCfg = mmoManager.processMasterObject( ugwi, scrCfg, skConn() );
     // }
-    mnemoPanel.setMnemoConfig( mnemoCfg );
+    mnemoPanel.setMnemoConfig( VedScreenCfg.cfgFromString( mnemoCfg.cfgData() ) );
     mnemoPanel.resume();
 
     return container;

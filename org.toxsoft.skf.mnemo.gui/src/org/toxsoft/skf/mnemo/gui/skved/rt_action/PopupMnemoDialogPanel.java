@@ -13,7 +13,6 @@ import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tslib.bricks.geometry.impl.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.skf.mnemo.gui.glib.*;
-import org.toxsoft.skf.mnemo.lib.*;
 
 /**
  * Panel to show popup mnemo
@@ -21,12 +20,12 @@ import org.toxsoft.skf.mnemo.lib.*;
  * @author dima
  */
 public class PopupMnemoDialogPanel
-    extends AbstractTsDialogPanel<ISkMnemoCfg, Skid> {
+    extends AbstractTsDialogPanel<IVedScreenCfg, Skid> {
 
   private IRuntimeMnemoPanel mnemoPanel;
-  private ISkMnemoCfg        mnemoCfg;
+  private IVedScreenCfg      mnemoCfg;
 
-  PopupMnemoDialogPanel( Composite aParent, TsDialog<ISkMnemoCfg, Skid> aOwnerDialog ) {
+  PopupMnemoDialogPanel( Composite aParent, TsDialog<IVedScreenCfg, Skid> aOwnerDialog ) {
     super( aParent, aOwnerDialog );
     this.setLayout( new BorderLayout() );
     // создаем мнемосхему
@@ -34,7 +33,7 @@ public class PopupMnemoDialogPanel
   }
 
   @Override
-  protected void doSetDataRecord( ISkMnemoCfg aData ) {
+  protected void doSetDataRecord( IVedScreenCfg aData ) {
     if( aData != null ) {
       mnemoCfg = aData;
       mnemoPanel.setMnemoConfig( mnemoCfg );
@@ -44,7 +43,7 @@ public class PopupMnemoDialogPanel
   }
 
   @Override
-  protected ISkMnemoCfg doGetDataRecord() {
+  protected IVedScreenCfg doGetDataRecord() {
     return null;
   }
 
@@ -52,9 +51,8 @@ public class PopupMnemoDialogPanel
    * @param aMnemoCfg mnemo config
    * @return initial size of the dialog
    */
-  protected static TsPoint getInitialSize( ISkMnemoCfg aMnemoCfg ) {
-    IVedScreenCfg vedCfg = VedScreenCfg.KEEPER.str2ent( aMnemoCfg.cfgData() );
-    IVedCanvasCfg canvasCfg = vedCfg.canvasCfg();
+  protected static TsPoint getInitialSize( IVedScreenCfg aMnemoCfg ) {
+    IVedCanvasCfg canvasCfg = aMnemoCfg.canvasCfg();
     // TODO как учесть высоту зоны кнопок
     return new TsPoint( (int)(canvasCfg.size().x()) + 10, (int)(canvasCfg.size().y()) + 50 );
   }
@@ -65,15 +63,15 @@ public class PopupMnemoDialogPanel
    * @param aAppContext - app context
    * @param aMnemoCfg - mnemo configuarion
    */
-  public static final void showPopMnemo( IEclipseContext aAppContext, ISkMnemoCfg aMnemoCfg ) {
-    IDialogPanelCreator<ISkMnemoCfg, Skid> creator = PopupMnemoDialogPanel::new;
-    ISkMnemoCfg appInfo = aMnemoCfg;
+  public static final void showPopMnemo( IEclipseContext aAppContext, IVedScreenCfg aMnemoCfg ) {
+    IDialogPanelCreator<IVedScreenCfg, Skid> creator = PopupMnemoDialogPanel::new;
+    IVedScreenCfg appInfo = aMnemoCfg;
     ITsGuiContext ctx = new TsGuiContext( aAppContext );
     TsDialogInfo cdi =
         // TODO pass master Skid, show mnemo name and description
         new TsDialogInfo( ctx, ctx.get( Shell.class ), DLG_C_POPUP_MNEMO, DLG_T_POPUP_MNEMO, DF_NO_APPROVE );
     cdi.setMinSize( getInitialSize( aMnemoCfg ) );
-    TsDialog<ISkMnemoCfg, Skid> d = new TsDialog<>( cdi, appInfo, null, creator );
+    TsDialog<IVedScreenCfg, Skid> d = new TsDialog<>( cdi, appInfo, null, creator );
     d.execData();
   }
 

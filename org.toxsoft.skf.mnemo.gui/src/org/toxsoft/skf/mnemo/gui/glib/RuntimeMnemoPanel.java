@@ -1,13 +1,10 @@
 package org.toxsoft.skf.mnemo.gui.glib;
 
-import static org.toxsoft.skf.mnemo.gui.glib.ISkResources.*;
-
 import org.eclipse.swt.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
-import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.panels.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
@@ -17,7 +14,6 @@ import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
-import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
@@ -31,7 +27,7 @@ public class RuntimeMnemoPanel
 
   private final IVedScreen vedScreen;
 
-  private ISkMnemoCfg mnemoCfg = null;
+  private IVedScreenCfg mnemoCfg = null;
 
   Canvas theCanvas;
 
@@ -150,12 +146,12 @@ public class RuntimeMnemoPanel
   //
 
   @Override
-  public ISkMnemoCfg getMnemoConfig() {
+  public IVedScreenCfg getMnemoConfig() {
     return mnemoCfg;
   }
 
   @Override
-  public void setMnemoConfig( ISkMnemoCfg aCfg ) {
+  public void setMnemoConfig( IVedScreenCfg aCfg ) {
     pause();
     if( mnemoCfg != null ) {
       VedScreenUtils.setVedScreenConfig( vedScreen, IVedScreenCfg.NONE );
@@ -164,17 +160,11 @@ public class RuntimeMnemoPanel
     mnemoCfg = aCfg;
     if( mnemoCfg != null ) {
       try {
-        String cfgStr = mnemoCfg.cfgData();
-        IVedScreenCfg vedCfg = IVedScreenCfg.NONE;
-        if( !cfgStr.isEmpty() ) {
-          vedCfg = VedScreenCfg.KEEPER.str2ent( cfgStr );
-        }
-        VedScreenUtils.setVedScreenConfig( vedScreen, vedCfg );
+        VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
       }
       catch( Exception ex ) {
         LoggerUtils.errorLogger().error( ex );
-        TsDialogUtils.error( getShell(), FMT_ERR_CANT_LOAD_MNEMO_CFG, mnemoCfg.skid().toString(), ex.getMessage() );
-        return;
+        VedScreenUtils.setVedScreenConfig( vedScreen, IVedScreenCfg.NONE );
       }
     }
     resume();

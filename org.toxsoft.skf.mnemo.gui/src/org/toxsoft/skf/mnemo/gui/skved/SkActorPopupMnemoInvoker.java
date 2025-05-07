@@ -200,7 +200,8 @@ public class SkActorPopupMnemoInvoker
    */
   @SuppressWarnings( "unused" )
   private void openPopupMnemo() {
-    PopupMnemoDialogPanel.showPopMnemo( tsContext().eclipseContext(), getMnemoConfig() );
+    PopupMnemoDialogPanel.showPopMnemo( tsContext().eclipseContext(),
+        VedScreenCfg.cfgFromString( getMnemoConfig().cfgData() ) );
   }
 
   private static TsPoint computeMnemoSize( ISkMnemoCfg aMnemoCfg ) {
@@ -225,7 +226,7 @@ public class SkActorPopupMnemoInvoker
     bkPanel.setLayout( layout );
     IRuntimeMnemoPanel panel = new RuntimeMnemoPanel( bkPanel, new TsGuiContext( tsContext() ) );
 
-    panel.setMnemoConfig( mnemoCfg );
+    panel.setMnemoConfig( VedScreenCfg.cfgFromString( mnemoCfg.cfgData() ) );
     panel.resume();
     TsPoint p = computeMnemoSize( mnemoCfg );
     wnd.setSize( p.x(), p.y() );
