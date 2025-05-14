@@ -21,6 +21,7 @@ import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.impl.*;
@@ -31,6 +32,8 @@ import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.mnemo.gui.utils.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.cmdserv.*;
+import org.toxsoft.uskat.core.api.sysdescr.*;
+import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.api.users.*;
 
@@ -112,7 +115,8 @@ public class SkActorCmdCheckbox
 
   };
 
-  private ISkCommand currCommand = null;
+  private ISkCommand  currCommand = null;
+  private IDtoCmdInfo cmdInfo     = null;
 
   private Ugwi         ugwi      = null;
   private Gwid         gwid      = null;
@@ -140,8 +144,14 @@ public class SkActorCmdCheckbox
       }
 
       Ugwi cmdUgwi = null;
+      boolean boolArg = false;
       if( visel.props().hasKey( PROPID_ON_OFF_STATE ) ) {
-        if( visel.props().getBool( PROPID_ON_OFF_STATE ) ) {
+        IAtomicValue v = visel.props().getValue( PROPID_ON_OFF_STATE );
+        if( v != null && v.isAssigned() ) {
+          boolArg = v.asBool();
+        }
+        // if( visel.props().getBool( PROPID_ON_OFF_STATE ) ) {
+        if( boolArg ) {
           cmdUgwi = cmdOffUgwi;
         }
         else {
@@ -150,7 +160,15 @@ public class SkActorCmdCheckbox
       }
       if( cmdUgwi != null && cmdUgwi != Ugwi.NONE ) {
         Gwid cmdGwid = UgwiKindSkCmd.getGwid( cmdUgwi );
-        currCommand = vedEnv.sendCommand( cmdGwid, user.skid(), IOptionSet.NULL );
+
+        IOptionSetEdit args = IOptionSet.NULL;
+        IStridablesList<IDataDef> argDefs = cmdInfo.argDefs();
+        if( argDefs.size() == 1 ) {
+          args = new OptionSet();
+          args.setValue( argDefs.first(), avBool( boolArg ) );
+        }
+
+        currCommand = vedEnv.sendCommand( cmdGwid, user.skid(), args );
         if( currCommand == null ) {
           TsDialogUtils.error( getShell(), "Unexpected NULL command returned" ); //$NON-NLS-1$
         }
@@ -221,6 +239,11 @@ public class SkActorCmdCheckbox
     }
     cmdOnUgwi = MnemoUtils.findUgwi( TFI_CHECK_CMD_UGWI.id(), aChangedValues );
     cmdOffUgwi = MnemoUtils.findUgwi( TFI_UNCHECK_CMD_UGWI.id(), aChangedValues );
+
+    if( cmdOnUgwi != null && cmdOnUgwi != Ugwi.NONE ) {
+      ISkClassInfo clsInfo = coreApi().sysdescr().findClassInfo( UgwiKindSkCmd.getClassId( cmdOnUgwi ) );
+      cmdInfo = clsInfo.cmds().list().findByKey( UgwiKindSkCmd.getCmdId( cmdOnUgwi ) );
+    }
   }
 
   @Override

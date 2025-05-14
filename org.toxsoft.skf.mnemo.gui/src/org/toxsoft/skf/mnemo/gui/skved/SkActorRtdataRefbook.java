@@ -45,7 +45,10 @@ public class SkActorRtdataRefbook
    */
   public static final String FACTORY_ID = SKVED_ID + ".actor.RtdataRefbook"; //$NON-NLS-1$
 
-  private static final String REFBOOK_INFO_ID = "refbookInfo"; //$NON-NLS-1$
+  /**
+   * ИД свойства содержащего информацию о справочнике
+   */
+  public static final String REFBOOK_INFO_ID = "refbookInfo"; //$NON-NLS-1$
 
   private static final IDataDef PROP_REFBOOK_INFO = DataDef.create( REFBOOK_INFO_ID, VALOBJ, //
       TSID_NAME, "Справочник", //
