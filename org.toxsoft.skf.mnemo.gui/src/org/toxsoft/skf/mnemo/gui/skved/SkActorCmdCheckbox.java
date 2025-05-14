@@ -165,7 +165,7 @@ public class SkActorCmdCheckbox
         IStridablesList<IDataDef> argDefs = cmdInfo.argDefs();
         if( argDefs.size() == 1 ) {
           args = new OptionSet();
-          args.setValue( argDefs.first(), avBool( boolArg ) );
+          args.setValue( argDefs.first(), avBool( !boolArg ) );
         }
 
         currCommand = vedEnv.sendCommand( cmdGwid, user.skid(), args );
