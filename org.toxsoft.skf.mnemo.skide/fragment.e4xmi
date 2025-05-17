@@ -15,7 +15,7 @@
     </elements>
     <elements xsi:type="advanced:Perspective" xmi:id="_ctkr4HozEe6hsIafZRUKEQ" elementId="org.toxsoft.skf.mnemo.persp.mnemos_runtime" label="Runtime" iconURI="platform:/plugin/org.toxsoft.core.tsgui/icons/arrow-right.png" tooltip="Mnemos runtime">
       <children xsi:type="basic:PartStack" xmi:id="_5cVrgHo1Ee6hsIafZRUKEQ" elementId="org.toxsoft.skf.mnemo.skide.partstack.0">
-        <children xsi:type="basic:Part" xmi:id="_qejIcHozEe6hsIafZRUKEQ" elementId="org.toxsoft.skf.mnemo.skide.part.runtime" contributionURI="bundleclass://org.toxsoft.skf.mnemo.skide/org.toxsoft.skf.mnemo.skide.e4.uiparts.UipartSkMnemoRuntime" label="&#x41c;&#x43d;&#x435;&#x43c;&#x43e;&#x441;&#x445;&#x435;&#x43c;&#x430;"/>
+        <children xsi:type="basic:Part" xmi:id="_qejIcHozEe6hsIafZRUKEQ" elementId="org.toxsoft.skf.mnemo.skide.part.runtime" contributionURI="bundleclass://org.toxsoft.skf.mnemo.skide/org.toxsoft.skf.mnemo.skide2.e4.uiparts.UipartSkMnemoRuntime" label="&#x41c;&#x43d;&#x435;&#x43c;&#x43e;&#x441;&#x445;&#x435;&#x43c;&#x430;"/>
       </children>
     </elements>
   </fragments>

@@ -111,6 +111,12 @@ interface ISkResources {
   String STR_PROP_SOURCE_GWID_D  = Messages.getString( "STR_PROP_SOURCE_GWID_D" );  //$NON-NLS-1$
 
   /**
+   * {@link SkActorCmdField}
+   */
+  String STR_ACTOR_CMD_FIELD   = Messages.getString( "STR_ACTOR_CMD_FIELD" );   //$NON-NLS-1$
+  String STR_ACTOR_CMD_FIELD_D = Messages.getString( "STR_ACTOR_CMD_FIELD_D" ); //$NON-NLS-1$
+
+  /**
    * {@link SkActorRriInputField}
    */
   String STR_ACTOR_RRI_INPUT_FIELD   = Messages.getString( "STR_ACTOR_RRI_INPUT_FIELD" );   //$NON-NLS-1$
