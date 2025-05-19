@@ -151,8 +151,10 @@ public class SkActorCmdField
       IAtomicValue av = props().getValue( PROPID_RTD_UGWI );
       if( av != null && av.isAssigned() ) {
         ugwi = av.asValobj();
-        gwid = UgwiKindSkRtdata.getGwid( ugwi );
-        sourceGwidList = new GwidList( gwid );
+        if( ugwi != Ugwi.NONE ) {
+          gwid = UgwiKindSkRtdata.getGwid( ugwi );
+          sourceGwidList = new GwidList( gwid );
+        }
       }
     }
     if( aChangedValues.hasKey( PROPID_FORMAT_STRING ) ) {
@@ -243,6 +245,7 @@ public class SkActorCmdField
       IDtoCmdInfo cmdInfo = getCommandInfo();
       IAtomicValue argValue = getFiledValue( cmdInfo );
       opSet.setValue( cmdInfo.argDefs().first().id(), argValue );
+      lastValue = argValue;
       currCommand = vedEnv.sendCommand( cmdGwid, user.skid(), opSet );
       if( currCommand == null ) {
         TsDialogUtils.error( getShell(), "Unexpected NULL command returned" ); //$NON-NLS-1$
