@@ -199,11 +199,13 @@ public class SkActorCmdField
       super.whenRealTimePassed( aRtTime );
       return;
     }
-    IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
-    if( !newValue.equals( lastValue ) ) {
-      String text = AvUtils.printAv( fmtStr, newValue );
-      setStdViselPropValue( avStr( text ) );
-      lastValue = newValue;
+    if( gwid != null ) {
+      IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
+      if( !newValue.equals( lastValue ) ) {
+        String text = AvUtils.printAv( fmtStr, newValue );
+        setStdViselPropValue( avStr( text ) );
+        lastValue = newValue;
+      }
     }
   }
 

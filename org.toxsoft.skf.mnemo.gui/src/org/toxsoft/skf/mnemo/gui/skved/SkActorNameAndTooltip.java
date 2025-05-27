@@ -99,6 +99,7 @@ public class SkActorNameAndTooltip
       Object obj = ugwiServ.findContent( ugwi );
       if( obj instanceof IStridable ) {
         tooltipText = ((IStridable)obj).description();
+        tooltipText = ((IStridable)obj).nmName();
         setStdViselPropValue( avStr( ((IStridable)obj).nmName() ) );
       }
       else {

@@ -47,7 +47,7 @@ public class RuntimeMnemoPanel
   public RuntimeMnemoPanel( Composite aParent, ITsGuiContext aContext ) {
     super( aParent, aContext );
     setLayout( new BorderLayout() );
-    theCanvas = new Canvas( this, SWT.BORDER | SWT.DOUBLE_BUFFERED );
+    theCanvas = new Canvas( this, SWT.DOUBLE_BUFFERED );
     theCanvas.setLayoutData( BorderLayout.CENTER );
     ITsGuiContext ctx = new TsGuiContext( tsContext() );
     vedScreen = new VedScreen( ctx );
@@ -89,6 +89,34 @@ public class RuntimeMnemoPanel
     // } );
     // ---
 
+  }
+
+  /**
+   * Constructor.
+   * <p>
+   * Constructor stores reference to the context, does not creates copy.
+   *
+   * @param aParent {@link Composite} - parent component
+   * @param aContext {@link ITsGuiContext} - the context
+   * @param aStyle int - SWT widget style
+   * @throws TsNullArgumentRtException any argument = <code>null</code>
+   */
+  public RuntimeMnemoPanel( Composite aParent, ITsGuiContext aContext, int aStyle ) {
+    super( aParent, aContext );
+    setLayout( new BorderLayout() );
+    theCanvas = new Canvas( this, aStyle | SWT.DOUBLE_BUFFERED );
+    theCanvas.setLayoutData( BorderLayout.CENTER );
+    ITsGuiContext ctx = new TsGuiContext( tsContext() );
+    vedScreen = new VedScreen( ctx );
+    vedScreen.attachTo( theCanvas );
+    vedScreen.pause();
+    vedScreen.view().getControl().setBackground( new Color( 255, 255, 255 ) );
+
+    vedEnv = new SkVedEnvironment( aContext.get( ISkConnectionSupplier.class ).defConn() );
+    vedScreen.tsContext().put( ISkVedEnvironment.class, vedEnv );
+
+    guiTimersService().quickTimers().addListener( vedScreen );
+    guiTimersService().slowTimers().addListener( vedScreen );
   }
 
   // ------------------------------------------------------------------------------------
