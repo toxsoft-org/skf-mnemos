@@ -10,6 +10,7 @@ import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
+import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
@@ -19,7 +20,7 @@ import org.toxsoft.uskat.core.gui.conn.*;
 /**
  * {@link IRuntimeMnemoPanel} implementation.
  *
- * @author hazard157
+ * @author hazard157, vs
  */
 public class RuntimeMnemoPanel
     extends TsPanel
@@ -203,4 +204,17 @@ public class RuntimeMnemoPanel
     return this;
   }
 
+  @Override
+  public Point computeSize( int aWHint, int aHHint ) {
+    if( mnemoCfg == null ) {
+      return new Point( aWHint, aHHint );
+    }
+    ID2Point d2p = mnemoCfg.canvasCfg().size();
+    return new Point( d2p.intX(), d2p.intY() );
+  }
+
+  @Override
+  public Point computeSize( int aWHint, int aHHint, boolean aChanged ) {
+    return computeSize( aWHint, aHHint );
+  }
 }
