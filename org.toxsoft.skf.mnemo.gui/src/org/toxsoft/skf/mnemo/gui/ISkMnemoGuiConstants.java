@@ -39,7 +39,8 @@ public interface ISkMnemoGuiConstants {
 
   String ICONID_VED_ACTOR_COLOR_DECORATOR = "ved-actor-color-decorator"; //$NON-NLS-1$
 
-  String ICONID_VISEL_PANEL = "visel-panel"; //$NON-NLS-1$
+  String ICONID_VISEL_PANEL     = "visel-panel";           //$NON-NLS-1$
+  String ICONID_IMAGESET_BUTTON = "visel-imageset-button"; //$NON-NLS-1$
 
   /**
    * Create id ability to access mnemos

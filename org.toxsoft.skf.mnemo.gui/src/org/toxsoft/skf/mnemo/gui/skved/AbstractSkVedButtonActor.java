@@ -24,7 +24,7 @@ public abstract class AbstractSkVedButtonActor
     extends AbstractSkVedActor {
 
   /**
-   * Интерфейс оработчика нажатия кнопки
+   * Интерфейс оработчика "клика" кнопки
    *
    * @author vs
    */
@@ -39,13 +39,41 @@ public abstract class AbstractSkVedButtonActor
     void onButtonClick( VedAbstractVisel aVisel );
   }
 
+  /**
+   * Интерфейс оработчика нажатия/отпускания кнопки
+   *
+   * @author vs
+   */
+  public interface IButtonUpDownHandler {
+
+    /**
+     * Вызывается в момент, когда произошло нажатие кнопки (not Click, but Down) и необходимо произвести соответствующие
+     * действия.
+     *
+     * @param aVisel {@link VedAbstractVisel} - визуальный элемент, который был нажат
+     */
+    void onButtonDown( VedAbstractVisel aVisel );
+
+    /**
+     * Вызывается в момент, когда произошло отжатие кнопки (not Click, but Up) и необходимо произвести соответствующие
+     * действия.
+     *
+     * @param aVisel {@link VedAbstractVisel} - визуальный элемент, который был отажат
+     */
+    void onButtonUp( VedAbstractVisel aVisel );
+  }
+
   private boolean activated = false;
 
-  private IButtonClickHandler buttonHandler = null;
+  private IButtonClickHandler clickHandler = null;
+
+  private IButtonUpDownHandler upDownHandler = null;
 
   private Cursor handCursor;
 
   private Cursor prevCursor = null;
+
+  private String tooltipText = null;
 
   protected AbstractSkVedButtonActor( IVedItemCfg aCfg, IStridablesList<IDataDef> aDataDefs, VedScreen aVedScreen ) {
     super( aCfg, aDataDefs, aVedScreen );
@@ -62,12 +90,23 @@ public abstract class AbstractSkVedButtonActor
    * @param aButtonHandler {@link IButtonClickHandler} - обработчик нажатия кнопки м.б. <b>null</b>
    */
   public void setButtonClickHandler( IButtonClickHandler aButtonHandler ) {
-    buttonHandler = aButtonHandler;
+    clickHandler = aButtonHandler;
+  }
+
+  /**
+   * Усанавливает обработчик нажатия/отжатия кнопки.<br>
+   *
+   * @param aButtonHandler {@link IButtonUpDownHandler} - обработчик нажатия/отжатия кнопки м.б. <b>null</b>
+   */
+  public void setButtonUpDownHandler( IButtonUpDownHandler aButtonHandler ) {
+    upDownHandler = aButtonHandler;
   }
 
   // ------------------------------------------------------------------------------------
   // ITsUserInputListener
   //
+
+  VedAbstractVisel currVisel = null;
 
   @Override
   public boolean onMouseMove( Object aSource, int aState, ITsPoint aCoors, Control aWidget ) {
@@ -80,8 +119,9 @@ public abstract class AbstractSkVedButtonActor
     if( visel == null ) {
       return false;
     }
+
     if( visel.props().getValobj( ViselButton.PROPID_STATE ) == EButtonViselState.DISABLED ) {
-      restorCursor();
+      restoreCursor();
       return false;
     }
     ID2Point p = vedScreen().view().coorsConverter().swt2Visel( aCoors, visel );
@@ -89,11 +129,19 @@ public abstract class AbstractSkVedButtonActor
       visel.props().setBool( ViselButton.PROPID_HOVERED, true );
       setHandCursor();
       retVal = true;
+      if( currVisel == null ) {
+        currVisel = visel;
+        onMouseIn();
+      }
     }
     else {
       visel.props().setBool( ViselButton.PROPID_HOVERED, false );
-      restorCursor();
+      restoreCursor();
       retVal = false;
+      if( currVisel != null ) {
+        onMouseOut();
+        currVisel = null;
+      }
     }
     vedScreen().view().redraw();
     return retVal;
@@ -114,6 +162,7 @@ public abstract class AbstractSkVedButtonActor
         }
         visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.PRESSED );
         setActivated( true );
+        notifyDown( visel );
         return true;
       }
     }
@@ -129,10 +178,11 @@ public abstract class AbstractSkVedButtonActor
         visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
         retVal = true;
         setActivated( false );
-        if( buttonHandler != null ) {
-          buttonHandler.onButtonClick( visel );
+        if( clickHandler != null ) {
+          clickHandler.onButtonClick( visel );
         }
         // TsDialogUtils.info( vedScreen().view().getControl().getShell(), "Ти нажяль!" );
+        notifyUp( visel );
       }
       visel = vedScreen().model().visels().list().findByKey( props().getStr( PROPID_VISEL_ID ) );
       visel.props().setBool( ViselButton.PROPID_HOVERED, false );
@@ -147,11 +197,20 @@ public abstract class AbstractSkVedButtonActor
       VedAbstractVisel visel = findMyVisel( aCoors );
       if( visel != null ) {
         visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.PRESSED );
+        if( currVisel == null ) {
+          notifyDown( visel );
+          currVisel = visel;
+          onMouseIn();
+        }
       }
       else {
         visel = vedScreen().model().visels().list().findByKey( props().getStr( PROPID_VISEL_ID ) );
         visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-        // visel.props().setBool( ButtonVisel.PROPID_HOVERED, false );
+        if( currVisel != null ) {
+          notifyUp( visel );
+          onMouseOut();
+          currVisel = null;
+        }
       }
     }
     return activated;
@@ -166,8 +225,8 @@ public abstract class AbstractSkVedButtonActor
         visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
         visel.props().setBool( ViselButton.PROPID_HOVERED, false );
         retVal = true;
-        if( buttonHandler != null ) {
-          buttonHandler.onButtonClick( visel );
+        if( clickHandler != null ) {
+          clickHandler.onButtonClick( visel );
         }
         // TsDialogUtils.info( vedScreen().view().getControl().getShell(), "Ти нажяль!" );
       }
@@ -178,6 +237,26 @@ public abstract class AbstractSkVedButtonActor
     }
     setActivated( false );
     return retVal;
+  }
+
+  // ------------------------------------------------------------------------------------
+  // To use
+  //
+
+  void setTooltipText( String aText ) {
+    tooltipText = aText;
+  }
+
+  // ------------------------------------------------------------------------------------
+  // To override
+  //
+
+  protected void onMouseIn() {
+    vedScreen().view().getControl().setToolTipText( tooltipText );
+  }
+
+  protected void onMouseOut() {
+    vedScreen().view().getControl().setToolTipText( null );
   }
 
   // ------------------------------------------------------------------------------------
@@ -201,17 +280,27 @@ public abstract class AbstractSkVedButtonActor
       setHandCursor();
     }
     else {
-      restorCursor();
+      restoreCursor();
     }
   }
 
   private void setHandCursor() {
-    // prevCursor = vedScreen().view().getControl().getCursor();
     vedScreen().view().getControl().setCursor( handCursor );
   }
 
-  private void restorCursor() {
+  private void restoreCursor() {
     vedScreen().view().getControl().setCursor( prevCursor );
   }
 
+  private void notifyUp( VedAbstractVisel aVisel ) {
+    if( upDownHandler != null ) {
+      upDownHandler.onButtonUp( aVisel );
+    }
+  }
+
+  private void notifyDown( VedAbstractVisel aVisel ) {
+    if( upDownHandler != null ) {
+      upDownHandler.onButtonDown( aVisel );
+    }
+  }
 }

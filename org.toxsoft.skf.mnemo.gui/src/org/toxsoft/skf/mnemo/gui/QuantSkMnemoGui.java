@@ -18,6 +18,7 @@ import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.valed.*;
 import org.toxsoft.skf.mnemo.gui.tools.imageset.*;
 import org.toxsoft.skf.mnemo.gui.tools.rgbaset.*;
+import org.toxsoft.skf.mnemo.gui.tsgui.comps.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 import org.toxsoft.skf.mnemo.lib.impl.*;
 import org.toxsoft.uskat.core.api.*;
@@ -63,8 +64,8 @@ public class QuantSkMnemoGui
     TsValobjUtils.registerKeeperIfNone( SkoRecognizerCfg.KEEPER_ID, SkoRecognizerCfg.KEEPER );
     TsValobjUtils.registerKeeperIfNone( VedUserActionCfg.KEEPER_ID, VedUserActionCfg.KEEPER );
 
-    // IVedViselFactoriesRegistry visFact = aAppContext.get( IVedViselFactoriesRegistry.class );
-    // visFact.register( ViselPanel.FACTORY );
+    IVedViselFactoriesRegistry visFact = aAppContext.get( IVedViselFactoriesRegistry.class );
+    visFact.register( ViselImagesetButton.FACTORY );
 
     IVedActorFactoriesRegistry actFact = aAppContext.get( IVedActorFactoriesRegistry.class );
     actFact.register( SkActorAttrText.FACTORY );
@@ -85,6 +86,7 @@ public class QuantSkMnemoGui
     actFact.register( SkActorNameAndTooltip.FACTORY );
     actFact.register( SkActorUserAction.FACTORY );
     actFact.register( ActorViselTooltipAction.FACTORY );
+    actFact.register( SkActorUpDownCmdButton.FACTORY );
 
   }
 
@@ -112,6 +114,7 @@ public class QuantSkMnemoGui
     vcfRegistry.registerFactory( ValedAvValobjRtdataRefbookAttrInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjVedUserActionCfg.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjRefbookValuesInfo.FACTORY );
+    vcfRegistry.registerFactory( ValedAvValobjRefbookItemSelector.FACTORY );
 
     // ------------------------------------------------------------------------------------
     // Регистрация резолверов
