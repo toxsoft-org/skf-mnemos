@@ -150,29 +150,31 @@ public class ViselImagesetButton
     btnRenderer.update();
     if( aChangedValue.hasKey( PROPID_REFBOOK_ITEM ) ) {
       IdChain idChain = aChangedValue.getValobj( PROPID_REFBOOK_ITEM );
-      ISkConnection skConn = vedScreen().tsContext().get( ISkVedEnvironment.class ).skConn();
-      ISkRefbookService rbServ = skConn.coreApi().getService( ISkRefbookService.SERVICE_ID );
-      ISkRefbook refbook = rbServ.findRefbook( idChain.get( 0 ) );
-      if( refbook == null ) {
-        LoggerUtils.errorLogger().warning( "Refbook %s not found", idChain.get( 0 ) ); //$NON-NLS-1$
-      }
-      else {
-        ISkRefbookItem item = refbook.findItem( idChain.get( 1 ) );
-        if( item == null ) {
-          LoggerUtils.errorLogger().warning( "Refbook item %s not found", idChain.get( 1 ) ); //$NON-NLS-1$
+      if( idChain.branches().size() > 1 ) {
+        ISkConnection skConn = vedScreen().tsContext().get( ISkVedEnvironment.class ).skConn();
+        ISkRefbookService rbServ = skConn.coreApi().getService( ISkRefbookService.SERVICE_ID );
+        ISkRefbook refbook = rbServ.findRefbook( idChain.get( 0 ) );
+        if( refbook == null ) {
+          LoggerUtils.errorLogger().warning( "Refbook %s not found", idChain.get( 0 ) ); //$NON-NLS-1$
         }
         else {
-          IMapEdit<EButtonViselState, TsImageDescriptor> map = new ElemMap<>();
-          for( EButtonViselState state : EButtonViselState.values() ) {
-            IAtomicValue value = item.attrs().findValue( state.id() );
-            if( value != null && value.isAssigned() ) {
-              map.put( state, value.asValobj() );
-            }
-            else {
-              LoggerUtils.errorLogger().warning( "Refbook item attribute %s not found", state.id() ); //$NON-NLS-1$
-            }
+          ISkRefbookItem item = refbook.findItem( idChain.get( 1 ) );
+          if( item == null ) {
+            LoggerUtils.errorLogger().warning( "Refbook item %s not found", idChain.get( 1 ) ); //$NON-NLS-1$
           }
-          btnRenderer.setImages( map, imageManager() );
+          else {
+            IMapEdit<EButtonViselState, TsImageDescriptor> map = new ElemMap<>();
+            for( EButtonViselState state : EButtonViselState.values() ) {
+              IAtomicValue value = item.attrs().findValue( state.id() );
+              if( value != null && value.isAssigned() ) {
+                map.put( state, value.asValobj() );
+              }
+              else {
+                LoggerUtils.errorLogger().warning( "Refbook item attribute %s not found", state.id() ); //$NON-NLS-1$
+              }
+            }
+            btnRenderer.setImages( map, imageManager() );
+          }
         }
       }
     }

@@ -142,9 +142,15 @@ public class SkActorCmdButton
       }
       if( cmdUgwi != null && cmdUgwi != Ugwi.NONE ) {
         Gwid cmdGwid = UgwiKindSkCmd.getGwid( cmdUgwi );
-        currCommand = vedEnv.sendCommand( cmdGwid, user.skid(), IOptionSet.NULL );
+        try {
+          currCommand = vedEnv.sendCommand( cmdGwid, user.skid(), IOptionSet.NULL );
+        }
+        catch( Throwable e ) {
+          // TsDialogUtils.error( getShell(), e.getMessage() );
+          e.printStackTrace();
+        }
         if( currCommand == null ) {
-          TsDialogUtils.error( getShell(), "Unexpected NULL command returned" ); //$NON-NLS-1$
+          TsDialogUtils.error( getShell(), "Unexpected NULL command returned. See stack trace..." ); //$NON-NLS-1$
         }
       }
       else {
@@ -253,8 +259,8 @@ public class SkActorCmdButton
   }
 
   void updateButtonState() {
+    VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
     if( toggle && currCommand == null ) {
-      VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
       if( currValue.isAssigned() && currValue.equals( feedbackValue ) ) {
         selected = true;
         visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.SELECTED );
@@ -263,6 +269,9 @@ public class SkActorCmdButton
         selected = false;
         visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
       }
+    }
+    if( !toggle && currCommand == null ) {
+      visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
     }
   }
 
