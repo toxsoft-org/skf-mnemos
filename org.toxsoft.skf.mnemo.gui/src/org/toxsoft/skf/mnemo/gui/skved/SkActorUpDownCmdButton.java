@@ -145,6 +145,9 @@ public class SkActorUpDownCmdButton
           if( upCommand == null ) {
             TsDialogUtils.error( getShell(), "Unexpected NULL command returned" ); //$NON-NLS-1$
           }
+          else {
+            LoggerUtils.errorLogger().info( "Up command sent: " + upCommand.toString() ); //$NON-NLS-1$
+          }
         }
         else {
           upCommand = null;
@@ -169,6 +172,9 @@ public class SkActorUpDownCmdButton
           downCommand = vedEnv.sendCommand( cmdGwid, user.skid(), argsDown );
           if( downCommand == null ) {
             TsDialogUtils.error( getShell(), "Unexpected NULL command returned" ); //$NON-NLS-1$
+          }
+          else {
+            LoggerUtils.errorLogger().info( "Down command sent: " + downCommand.toString() ); //$NON-NLS-1$
           }
         }
         else {
