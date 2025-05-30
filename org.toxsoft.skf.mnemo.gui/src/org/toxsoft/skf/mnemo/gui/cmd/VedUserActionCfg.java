@@ -21,11 +21,15 @@ public final class VedUserActionCfg
 
   private static final String KW_PARAMS = "params"; //$NON-NLS-1$
 
-  public static final String KEEPER_ID = "VedUserActionCfg";
+  /**
+   * The keeper id
+   */
+  public static final String KEEPER_ID = "VedUserActionCfg"; //$NON-NLS-1$
 
   /**
    * The keeper singleton.
    */
+  @SuppressWarnings( "hiding" )
   public static final IEntityKeeper<VedUserActionCfg> KEEPER =
       new AbstractEntityKeeper<>( VedUserActionCfg.class, EEncloseMode.ENCLOSES_BASE_CLASS, null ) {
 

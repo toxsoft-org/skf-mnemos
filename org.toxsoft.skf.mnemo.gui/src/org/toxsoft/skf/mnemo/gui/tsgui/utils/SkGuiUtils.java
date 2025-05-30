@@ -89,6 +89,27 @@ public class SkGuiUtils {
   }
 
   /**
+   * Вызывает диалог выбора объекта.
+   *
+   * @param aClassId String - ИД класса
+   * @param aSkConn {@link ISkConnection} - соединение с сервером
+   * @param aTsContext {@link ITsGuiContext} - соответствующий контекст
+   * @return {@link ISkClassInfo} - описание класса
+   */
+  public static IDtoCmdInfo selectCmd( String aClassId, ISkConnection aSkConn, ITsGuiContext aTsContext ) {
+    TsNullArgumentRtException.checkNull( aClassId );
+    IM5Domain m5 = aSkConn.scope().get( IM5Domain.class );
+    IM5Model<IDtoCmdInfo> model = m5.getModel( ISgwM5Constants.MID_SGW_CMD_INFO, IDtoCmdInfo.class );
+
+    ISkClassInfo clsInfo = aSkConn.coreApi().sysdescr().findClassInfo( aClassId );
+    IM5ItemsProvider<IDtoCmdInfo> ip = () -> clsInfo.cmds().list();
+
+    ITsDialogInfo dlgInfo;
+    dlgInfo = new TsDialogInfo( aTsContext, "Выбор команды", "Выберите соответствующую команду и нажмите \"ОК\"" );
+    return M5GuiUtils.askSelectItem( dlgInfo, model, null, ip, null );
+  }
+
+  /**
    * Возвращает панель для выбора свойства класса.<br>
    *
    * @param aSkConn {@link ISkConnection} - соединение с сервером

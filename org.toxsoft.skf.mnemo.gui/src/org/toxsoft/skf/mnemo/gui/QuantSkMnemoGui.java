@@ -63,6 +63,7 @@ public class QuantSkMnemoGui
     TsValobjUtils.registerKeeperIfNone( MPerspId.KEEPER_ID, MPerspId.KEEPER );
     TsValobjUtils.registerKeeperIfNone( SkoRecognizerCfg.KEEPER_ID, SkoRecognizerCfg.KEEPER );
     TsValobjUtils.registerKeeperIfNone( VedUserActionCfg.KEEPER_ID, VedUserActionCfg.KEEPER );
+    TsValobjUtils.registerKeeperIfNone( CmdArgValuesSet.KEEPER_ID, CmdArgValuesSet.KEEPER );
 
     IVedViselFactoriesRegistry visFact = aAppContext.get( IVedViselFactoriesRegistry.class );
     visFact.register( ViselImagesetButton.FACTORY );
@@ -113,6 +114,7 @@ public class QuantSkMnemoGui
     vcfRegistry.registerFactory( ValedAvValobjMPerspIdEditor.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjRtdataRefbookAttrInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjVedUserActionCfg.FACTORY );
+    vcfRegistry.registerFactory( ValedAvValobjCmdArgValuesSet.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjRefbookValuesInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjRefbookItemSelector.FACTORY );
 

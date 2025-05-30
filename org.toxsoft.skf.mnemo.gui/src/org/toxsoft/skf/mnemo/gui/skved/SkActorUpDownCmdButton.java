@@ -14,6 +14,7 @@ import org.toxsoft.core.tsgui.ved.comps.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
+import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
@@ -234,6 +235,20 @@ public class SkActorUpDownCmdButton
   protected void doInterceptPropsChange( IOptionSet aNewValues, IOptionSetEdit aValuesToSet ) {
     removeWrongUgwi( PROPID_DOWN_CMD, UgwiKindSkCmd.KIND_ID, aValuesToSet, coreApi() );
     removeWrongUgwi( PROPID_UP_CMD, UgwiKindSkCmd.KIND_ID, aValuesToSet, coreApi() );
+  }
+
+  @Override
+  protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
+    super.doUpdateCachesAfterPropsChange( aChangedValues );
+    if( aChangedValues.hasKey( TSID_DESCRIPTION ) ) {
+      IAtomicValue v = aChangedValues.getValue( TSID_DESCRIPTION );
+      if( v != null && v.isAssigned() ) {
+        setTooltipText( v.asString() );
+      }
+      else {
+        setTooltipText( null );
+      }
+    }
   }
 
   @Override
