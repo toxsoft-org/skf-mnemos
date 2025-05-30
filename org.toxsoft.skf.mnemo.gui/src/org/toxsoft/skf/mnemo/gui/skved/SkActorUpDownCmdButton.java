@@ -3,26 +3,32 @@ package org.toxsoft.skf.mnemo.gui.skved;
 import static org.toxsoft.core.tsgui.ved.ITsguiVedConstants.*;
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
+import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 import static org.toxsoft.skf.mnemo.lib.ISkMnemosServiceHardConstants.*;
 
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
+import org.toxsoft.core.tsgui.bricks.tin.tti.*;
 import org.toxsoft.core.tsgui.dialogs.*;
 import org.toxsoft.core.tsgui.ved.comps.*;
+import org.toxsoft.core.tsgui.ved.editor.palette.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.*;
+import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.skf.mnemo.gui.cmd.*;
 import org.toxsoft.skf.mnemo.gui.utils.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.cmdserv.*;
@@ -46,6 +52,21 @@ public class SkActorUpDownCmdButton
   static final String PROPID_DOWN_CMD = "command.Down"; //$NON-NLS-1$
   static final String PROPID_UP_CMD   = "command.Up";   //$NON-NLS-1$
 
+  static final String PROPID_UP_CMD_ARGS_ID   = "command.Up.CmdArgs";   //$NON-NLS-1$
+  static final String PROPID_DOWN_CMD_ARGS_ID = "command.Down.CmdArgs"; //$NON-NLS-1$
+
+  private static final IDataDef PROP_UP_CMD_ARGS   = DataDef.create3( PROPID_UP_CMD_ARGS_ID, DT_CMD_ARG_VALUES_SET );
+  private static final IDataDef PROP_DOWN_CMD_ARGS = DataDef.create3( PROPID_DOWN_CMD_ARGS_ID, DT_CMD_ARG_VALUES_SET );
+
+  private static final ITinTypeInfo TTI_UP_CMD_ARGS =
+      new TinAtomicTypeInfo.TtiValobj<>( PROP_UP_CMD_ARGS, CmdArgValuesSet.class );
+
+  private static final ITinTypeInfo TTI_DOW_CMD_ARGS =
+      new TinAtomicTypeInfo.TtiValobj<>( PROP_DOWN_CMD_ARGS, CmdArgValuesSet.class );
+
+  private static final ITinFieldInfo TFI_UP_CMD_ARGS   = new TinFieldInfo( PROP_UP_CMD_ARGS, TTI_UP_CMD_ARGS );
+  private static final ITinFieldInfo TFI_DOWN_CMD_ARGS = new TinFieldInfo( PROP_DOWN_CMD_ARGS, TTI_DOW_CMD_ARGS );
+
   /**
    * The VISEL factory singleton.
    */
@@ -64,8 +85,10 @@ public class SkActorUpDownCmdButton
       // fields.add( TFI_CMD_UGWI );
       fields.add( new TinFieldInfo( PROPID_DOWN_CMD, TFI_CMD_UGWI.typeInfo(), //
           TSID_NAME, "Команда при нажатии" ) );
+      fields.add( TFI_DOWN_CMD_ARGS );
       fields.add( new TinFieldInfo( PROPID_UP_CMD, TFI_CMD_UGWI.typeInfo(), //
           TSID_NAME, "Команда при отпускании" ) );
+      fields.add( TFI_UP_CMD_ARGS );
       fields.add( TFI_IS_ACTIVE );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorUpDownCmdButton.class );
     }
@@ -75,10 +98,23 @@ public class SkActorUpDownCmdButton
       return new SkActorUpDownCmdButton( aCfg, propDefs(), aVedScreen );
     }
 
+    @Override
+    protected StridablesList<IVedItemsPaletteEntry> doCreatePaletteEntries() {
+      CmdArgValuesSet argValues = new CmdArgValuesSet( PROPID_DOWN_CMD_ARGS_ID );
+      VedItemCfg cfg = new VedItemCfg( id(), kind(), id(), IOptionSet.NULL );
+      OptionSetUtils.initOptionSet( cfg.propValues(), propDefs() );
+      cfg.propValues().setValobj( PROPID_UP_CMD_ARGS_ID, argValues );
+      IVedItemsPaletteEntry pent = new VedItemPaletteEntry( id(), params(), cfg );
+      return new StridablesList<>( pent );
+    }
+
   };
 
   private ISkCommand downCommand = null;
   private ISkCommand upCommand   = null;
+
+  private IOptionSet argsUp   = IOptionSet.NULL;
+  private IOptionSet argsDown = IOptionSet.NULL;
 
   private final ISkVedEnvironment vedEnv;
   private final ISkCoreApi        coreApi;
@@ -88,34 +124,6 @@ public class SkActorUpDownCmdButton
 
     vedEnv = aVedScreen.tsContext().get( ISkVedEnvironment.class );
     coreApi = vedEnv.skConn().coreApi();
-
-    // IButtonClickHandler buttonHandler = aVisel -> {
-    // VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
-    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
-    //
-    // ISkLoggedUserInfo userInfo = coreApi.getCurrentUserInfo();
-    // ISkUser user = vedEnv.skConn().coreApi().userService().findUser( userInfo.userSkid().strid() );
-    //
-    // if( !coreApi.userService().abilityManager().isAbilityAllowed( ABILITYID_MNEMO_SEND_COMMANDS ) ) {
-    // TsDialogUtils.warn( getShell(), ERR_STR_OPERATION_NOT_ALLOWED );
-    // return;
-    // }
-    //
-    // Ugwi cmdUgwi = MnemoUtils.findUgwi( PROPID_DOWN_CMD, props() );
-    // if( cmdUgwi != null && cmdUgwi != Ugwi.NONE ) {
-    // Gwid cmdGwid = UgwiKindSkCmd.getGwid( cmdUgwi );
-    // currCommand = vedEnv.sendCommand( cmdGwid, user.skid(), IOptionSet.NULL );
-    // if( currCommand == null ) {
-    // TsDialogUtils.error( getShell(), "Unexpected NULL command returned" ); //$NON-NLS-1$
-    // }
-    // }
-    // else {
-    // currCommand = null;
-    // LoggerUtils.errorLogger().error( "Attempt to send command with null or none UGWI" ); //$NON-NLS-1$
-    // }
-    // updateButtonState();
-    // };
-    // setButtonClickHandler( buttonHandler );
 
     IButtonUpDownHandler buttonHandler = new IButtonUpDownHandler() {
 
@@ -133,7 +141,7 @@ public class SkActorUpDownCmdButton
         Ugwi cmdUgwi = MnemoUtils.findUgwi( PROPID_UP_CMD, props() );
         if( cmdUgwi != null && cmdUgwi != Ugwi.NONE ) {
           Gwid cmdGwid = UgwiKindSkCmd.getGwid( cmdUgwi );
-          upCommand = vedEnv.sendCommand( cmdGwid, user.skid(), IOptionSet.NULL );
+          upCommand = vedEnv.sendCommand( cmdGwid, user.skid(), argsUp );
           if( upCommand == null ) {
             TsDialogUtils.error( getShell(), "Unexpected NULL command returned" ); //$NON-NLS-1$
           }
@@ -158,7 +166,7 @@ public class SkActorUpDownCmdButton
         Ugwi cmdUgwi = MnemoUtils.findUgwi( PROPID_DOWN_CMD, props() );
         if( cmdUgwi != null && cmdUgwi != Ugwi.NONE ) {
           Gwid cmdGwid = UgwiKindSkCmd.getGwid( cmdUgwi );
-          downCommand = vedEnv.sendCommand( cmdGwid, user.skid(), IOptionSet.NULL );
+          downCommand = vedEnv.sendCommand( cmdGwid, user.skid(), argsDown );
           if( downCommand == null ) {
             TsDialogUtils.error( getShell(), "Unexpected NULL command returned" ); //$NON-NLS-1$
           }
@@ -247,6 +255,30 @@ public class SkActorUpDownCmdButton
       }
       else {
         setTooltipText( null );
+      }
+    }
+    if( aChangedValues.hasKey( PROPID_UP_CMD_ARGS_ID ) ) {
+      IAtomicValue v = aChangedValues.getValue( PROPID_UP_CMD_ARGS_ID );
+      if( v != null && v.isAssigned() ) {
+        CmdArgValuesSet args = v.asValobj();
+        argsUp = args.argValues( coreApi() );
+      }
+      else {
+        props().propsEventer().pauseFiring();
+        props().setValobj( PROPID_UP_CMD_ARGS_ID, new CmdArgValuesSet( PROPID_UP_CMD_ARGS_ID ) );
+        props().propsEventer().resumeFiring( false );
+      }
+    }
+    if( aChangedValues.hasKey( PROPID_DOWN_CMD_ARGS_ID ) ) {
+      IAtomicValue v = aChangedValues.getValue( PROPID_DOWN_CMD_ARGS_ID );
+      if( v != null && v.isAssigned() ) {
+        CmdArgValuesSet args = v.asValobj();
+        argsDown = args.argValues( coreApi() );
+      }
+      else {
+        props().propsEventer().pauseFiring();
+        props().setValobj( PROPID_DOWN_CMD_ARGS_ID, new CmdArgValuesSet( PROPID_DOWN_CMD_ARGS_ID ) );
+        props().propsEventer().resumeFiring( false );
       }
     }
   }

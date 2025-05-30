@@ -82,15 +82,14 @@ public class SkActorCmdButton
 
   static final String PROPID_OFF_CMD = "command.Off"; //$NON-NLS-1$
 
-  static final String PROPID_CMD_ON_ARGS_ID  = "command.On.CmdArgs";
-  static final String PROPID_CMD_OFF_ARGS_ID = "command.Off.CmdArgs";
+  static final String PROPID_CMD_ON_ARGS_ID  = "command.On.CmdArgs";  //$NON-NLS-1$
+  static final String PROPID_CMD_OFF_ARGS_ID = "command.Off.CmdArgs"; //$NON-NLS-1$
 
-  private static final IDataDef PROP_CMD_ON_ARGS = DataDef.create3( PROPID_CMD_ON_ARGS_ID, DT_CMD_ARG_VALUES_SET );
+  private static final IDataDef PROP_CMD_ON_ARGS  = DataDef.create3( PROPID_CMD_ON_ARGS_ID, DT_CMD_ARG_VALUES_SET );
+  private static final IDataDef PROP_CMD_OFF_ARGS = DataDef.create3( PROPID_CMD_OFF_ARGS_ID, DT_CMD_ARG_VALUES_SET );
 
   private static final ITinTypeInfo TTI_CMD_ON_ARGS =
       new TinAtomicTypeInfo.TtiValobj<>( PROP_CMD_ON_ARGS, CmdArgValuesSet.class );
-
-  private static final IDataDef PROP_CMD_OFF_ARGS = DataDef.create3( PROPID_CMD_OFF_ARGS_ID, DT_CMD_ARG_VALUES_SET );
 
   private static final ITinTypeInfo TTI_CMD_OFF_ARGS =
       new TinAtomicTypeInfo.TtiValobj<>( PROP_CMD_OFF_ARGS, CmdArgValuesSet.class );
@@ -202,7 +201,11 @@ public class SkActorCmdButton
     guiTimersService().quickTimers().addListener( aRtTime -> {
       if( currCommand != null ) {
         SkCommandState cmdState = currCommand.state();
-        VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
+        VedAbstractVisel visel = findVisel( props().getStr( PROPID_VISEL_ID ) );
+        if( visel == null ) {
+          currCommand = null;
+          return;
+        }
         switch( cmdState.state() ) {
           case SENDING:
             return;
