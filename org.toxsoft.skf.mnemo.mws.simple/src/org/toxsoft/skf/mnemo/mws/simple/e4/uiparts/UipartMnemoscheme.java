@@ -1,5 +1,10 @@
 package org.toxsoft.skf.mnemo.mws.simple.e4.uiparts;
 
+import org.eclipse.swt.*;
+import org.eclipse.swt.custom.*;
+import org.eclipse.swt.graphics.*;
+import org.eclipse.swt.layout.*;
+import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.widgets.*;
@@ -32,10 +37,15 @@ public class UipartMnemoscheme
   ISkMnemoCfg skMnemoCfg = null; // currently displayed mnemoscheme object
 
   IRuntimeMnemoPanel panel;
+  ScrolledComposite  scroller; // Sol++
 
   @Override
   protected void doCreateContent( TsComposite aParent ) {
-    panel = new RuntimeMnemoPanel( aParent, new TsGuiContext( tsContext() ) );
+    aParent.setLayout( new FillLayout() ); // Sol++
+    scroller = new ScrolledComposite( aParent, SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL ); // Sol++
+    panel = new RuntimeMnemoPanel( scroller, new TsGuiContext( tsContext() ) );
+    // scroller.setContent( panel.getControl() ); // Sol++
+    // panel = new RuntimeMnemoPanel( aParent, new TsGuiContext( tsContext() ) );
     panel.pause();
     // listen to mnemos changes and immediately update panel
     mnemoServ().eventer().addListener( this::whenMnemoCfgChanged );
@@ -97,6 +107,14 @@ public class UipartMnemoscheme
       panel.setMnemoConfig( null );
       panel.pause();
     }
+    Control ctrl = panel.getControl(); // Sol++
+    Point p = ctrl.getSize(); // Sol++
+    scroller.setContent( panel.getControl() ); // Sol++
+    // scroller.layout();
+    p = ((RuntimeMnemoPanel)panel).computeSize( -1, -1 );
+    ctrl.setSize( p );
+    // p = ctrl.getSize();
+    // System.out.println( "Size = " + p ); // Sol++
   }
 
 }
