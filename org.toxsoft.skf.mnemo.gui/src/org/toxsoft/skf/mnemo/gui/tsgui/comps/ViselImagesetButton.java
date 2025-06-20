@@ -158,6 +158,9 @@ public class ViselImagesetButton
           props().setValobj( PROPID_STATE, prevState );
         }
         else {
+          if( prevState == EButtonViselState.DISABLED ) {
+            prevState = EButtonViselState.NORMAL;
+          }
           prevState = props().getValobj( PROPID_STATE );
           props().setValobj( PROPID_STATE, EButtonViselState.DISABLED );
         }
