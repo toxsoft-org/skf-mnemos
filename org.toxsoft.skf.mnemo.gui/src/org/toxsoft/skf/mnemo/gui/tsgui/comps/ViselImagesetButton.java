@@ -84,6 +84,7 @@ public class ViselImagesetButton
     @Override
     protected ITinTypeInfo doCreateTypeInfo() {
       IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
+      fields.add( TFI_ENABLED );
       fields.add( TFI_NAME );
       fields.add( TFI_DESCRIPTION );
       // fields.add( TFI_TEXT );
@@ -120,6 +121,8 @@ public class ViselImagesetButton
 
   private final ImagesetButtonRenderer btnRenderer;
 
+  EButtonViselState prevState = EButtonViselState.NORMAL;
+
   /**
    * Constructor.
    *
@@ -147,6 +150,20 @@ public class ViselImagesetButton
   @Override
   protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValue ) {
     super.doUpdateCachesAfterPropsChange( aChangedValue );
+    if( aChangedValue.hasKey( PROPID_ENABLED ) ) {
+      IAtomicValue av = aChangedValue.getByKey( PROPID_ENABLED );
+      if( av != null && av.isAssigned() ) {
+        props().propsEventer().pauseFiring();
+        if( av.asBool() ) {
+          props().setValobj( PROPID_STATE, prevState );
+        }
+        else {
+          prevState = props().getValobj( PROPID_STATE );
+          props().setValobj( PROPID_STATE, EButtonViselState.DISABLED );
+        }
+        props().propsEventer().resumeFiring( false );
+      }
+    }
     btnRenderer.update();
     if( aChangedValue.hasKey( PROPID_REFBOOK_ITEM ) ) {
       IdChain idChain = aChangedValue.getValobj( PROPID_REFBOOK_ITEM );
@@ -183,6 +200,14 @@ public class ViselImagesetButton
   // ------------------------------------------------------------------------------------
   // IViselButton
   //
+  @Override
+  public boolean isEnabled() {
+    IAtomicValue value = props().getValue( PROPID_ENABLED );
+    if( value == null || !value.isAssigned() ) {
+      return true;
+    }
+    return value.asBool();
+  }
 
   @Override
   public EButtonViselState buttonState() {
