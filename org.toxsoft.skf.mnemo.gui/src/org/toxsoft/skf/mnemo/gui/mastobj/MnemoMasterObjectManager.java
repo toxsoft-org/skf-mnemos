@@ -93,7 +93,7 @@ public class MnemoMasterObjectManager
         }
         else {
           LoggerUtils.errorLogger().error( "Resolve failed for property: \"%s\"", propId ); //$NON-NLS-1$
-          destCfg.propValues().setValobj( propId, IAtomicValue.NULL );
+          destCfg.propValues().setValue( propId, IAtomicValue.NULL );
         }
       }
       cfg.actorCfgs().add( destCfg );
