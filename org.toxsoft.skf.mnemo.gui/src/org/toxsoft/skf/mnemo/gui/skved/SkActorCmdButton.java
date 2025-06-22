@@ -85,8 +85,23 @@ public class SkActorCmdButton
   static final String PROPID_CMD_ON_ARGS_ID  = "command.On.CmdArgs";  //$NON-NLS-1$
   static final String PROPID_CMD_OFF_ARGS_ID = "command.Off.CmdArgs"; //$NON-NLS-1$
 
+  static final String PROPID_CMD_ON_CONFIRMATION  = "command.On.Confiration";  //$NON-NLS-1$
+  static final String PROPID_CMD_OFF_CONFIRMATION = "command.Off.Confiration"; //$NON-NLS-1$
+
   private static final IDataDef PROP_CMD_ON_ARGS  = DataDef.create3( PROPID_CMD_ON_ARGS_ID, DT_CMD_ARG_VALUES_SET );
   private static final IDataDef PROP_CMD_OFF_ARGS = DataDef.create3( PROPID_CMD_OFF_ARGS_ID, DT_CMD_ARG_VALUES_SET );
+
+  static final IDataDef PROP_CMD_ON_CONFIRMATION = DataDef.create( PROPID_CMD_ON_CONFIRMATION, STRING, //
+      TSID_NAME, STR_CMD_ON_CONFIRMATION, //
+      TSID_DESCRIPTION, STR_CMD_ON_CONFIRMATION_D, //
+      TSID_DEFAULT_VALUE, avStr( TsLibUtils.EMPTY_STRING ) //
+  );
+
+  static final IDataDef PROP_CMD_OFF_CONFIRMATION = DataDef.create( PROPID_CMD_OFF_CONFIRMATION, STRING, //
+      TSID_NAME, STR_CMD_OFF_CONFIRMATION, //
+      TSID_DESCRIPTION, STR_CMD_OFF_CONFIRMATION_D, //
+      TSID_DEFAULT_VALUE, avStr( TsLibUtils.EMPTY_STRING ) //
+  );
 
   private static final ITinTypeInfo TTI_CMD_ON_ARGS =
       new TinAtomicTypeInfo.TtiValobj<>( PROP_CMD_ON_ARGS, CmdArgValuesSet.class );
@@ -94,8 +109,16 @@ public class SkActorCmdButton
   private static final ITinTypeInfo TTI_CMD_OFF_ARGS =
       new TinAtomicTypeInfo.TtiValobj<>( PROP_CMD_OFF_ARGS, CmdArgValuesSet.class );
 
+  private static final ITinTypeInfo TTI_CMD_ON_CONFIRMATION  = TinAtomicTypeInfo.ofString( PROP_CMD_ON_CONFIRMATION );
+  private static final ITinTypeInfo TTI_CMD_OFF_CONFIRMATION = TinAtomicTypeInfo.ofString( PROP_CMD_OFF_CONFIRMATION );
+
   private static final ITinFieldInfo TFI_CMD_ON_ARGS  = new TinFieldInfo( PROP_CMD_ON_ARGS, TTI_CMD_ON_ARGS );
   private static final ITinFieldInfo TFI_CMD_OFF_ARGS = new TinFieldInfo( PROP_CMD_OFF_ARGS, TTI_CMD_OFF_ARGS );
+
+  private static final ITinFieldInfo TFI_CMD_ON_CONFIRMATION  =
+      new TinFieldInfo( PROP_CMD_ON_CONFIRMATION, TTI_CMD_ON_CONFIRMATION );
+  private static final ITinFieldInfo TFI_CMD_OFF_CONFIRMATION =
+      new TinFieldInfo( PROP_CMD_OFF_CONFIRMATION, TTI_CMD_OFF_CONFIRMATION );
 
   /**
    * The VISEL factory singleton.
@@ -117,9 +140,11 @@ public class SkActorCmdButton
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_CMD_UGWI );
       fields.add( TFI_CMD_ON_ARGS );
+      fields.add( TFI_CMD_ON_CONFIRMATION );
       fields.add( new TinFieldInfo( PROPID_OFF_CMD, TFI_CMD_UGWI.typeInfo(), //
           TSID_NAME, STR_N_COMMAND_ON_UNPRESS ) );
       fields.add( TFI_CMD_OFF_ARGS );
+      fields.add( TFI_CMD_OFF_CONFIRMATION );
       fields.add( TFI_IS_ACTIVE );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorCmdButton.class );
     }
@@ -170,12 +195,24 @@ public class SkActorCmdButton
         return;
       }
 
+      String confStr = TsLibUtils.EMPTY_STRING;
       Ugwi cmdUgwi = MnemoUtils.findUgwi( TFI_CMD_UGWI.id(), props() );
       IOptionSet args = argsOn;
+      if( props().hasKey( PROPID_CMD_ON_CONFIRMATION ) ) {
+        confStr = props().getStr( PROPID_CMD_ON_CONFIRMATION );
+      }
       // if( toggle && selected.isAssigned() && selected.asBool() ) {
       if( toggle && selected ) {
         cmdUgwi = MnemoUtils.findUgwi( PROPID_OFF_CMD, props() );
         args = argsOff;
+        if( props().hasKey( PROPID_CMD_OFF_CONFIRMATION ) ) {
+          confStr = props().getStr( PROPID_CMD_OFF_CONFIRMATION );
+        }
+      }
+      if( confStr != null && !confStr.isBlank() ) {
+        if( TsDialogUtils.askYesNoCancel( getShell(), confStr ) != ETsDialogCode.YES ) {
+          return;
+        }
       }
       if( cmdUgwi != null && cmdUgwi != Ugwi.NONE ) {
         Gwid cmdGwid = UgwiKindSkCmd.getGwid( cmdUgwi );

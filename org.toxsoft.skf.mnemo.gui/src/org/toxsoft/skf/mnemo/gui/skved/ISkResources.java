@@ -52,6 +52,11 @@ interface ISkResources {
   String STR_FEEDBACK_VALUE     = Messages.getString( "STR_FEEDBACK_VALUE" );     //$NON-NLS-1$
   String STR_FEEDBACK_VALUE_D   = Messages.getString( "STR_FEEDBACK_VALUE_D" );   //$NON-NLS-1$
 
+  String STR_CMD_ON_CONFIRMATION    = Messages.getString( "STR_CMD_ON_CONFIRMATION" );    //$NON-NLS-1$
+  String STR_CMD_ON_CONFIRMATION_D  = Messages.getString( "STR_CMD_ON_CONFIRMATION_D" );  //$NON-NLS-1$
+  String STR_CMD_OFF_CONFIRMATION   = Messages.getString( "STR_CMD_OFF_CONFIRMATION" );   //$NON-NLS-1$
+  String STR_CMD_OFF_CONFIRMATION_D = Messages.getString( "STR_CMD_OFF_CONFIRMATION_D" ); //$NON-NLS-1$
+
   /**
    * {@link SkActorRtdataText}
    */
