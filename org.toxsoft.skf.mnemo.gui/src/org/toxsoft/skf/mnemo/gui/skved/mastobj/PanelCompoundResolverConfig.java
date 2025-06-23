@@ -62,7 +62,8 @@ public class PanelCompoundResolverConfig
   @Override
   protected ValidationResult doValidate() {
     IMasterPathNode node = viewer.selectedNode();
-    if( node != null && node.isObject() && node.parent() != null ) {
+    // if( node != null && node.isObject() && node.parent() != null ) { // Оказалось слишком сильное ограничение
+    if( node != null && node.isObject() ) {
       return ValidationResult.SUCCESS;
     }
     return ValidationResult.create( EValidationResultType.ERROR, "Необходимо выбрать узел объекта" );

@@ -164,6 +164,7 @@ public class MasterObjectUtils {
         case UgwiKindSkAttr.KIND_ID -> UgwiKindSkAttr.getClassId( ugwi );
         case UgwiKindRriAttrInfo.KIND_ID -> UgwiKindRriAttrInfo.getClassId( ugwi );
         case UgwiKindRriAttr.KIND_ID -> UgwiKindRriAttr.getClassId( ugwi );
+        case UgwiKindSkSkid.KIND_ID -> UgwiKindSkSkid.getClassId( ugwi );
         default -> throw new TsNotAllEnumsUsedRtException();
       };
     }

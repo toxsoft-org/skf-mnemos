@@ -137,7 +137,7 @@ public abstract class AbstractSkVedClickableActor
     }
     ID2Point p = vedScreen().view().coorsConverter().swt2Visel( aCoors, visel );
     if( visel.isYours( p ) ) {
-      setIfHasProp( visel, ViselButton.PROPID_STATE, true );
+      // setIfHasProp( visel, ViselButton.PROPID_HOVERED, true );
       setHandCursor();
       return false;
     }

@@ -161,6 +161,11 @@ public class MasterPathViewer
     @Override
     public SimpleResolverCfg resolverConfig() {
       BaseNode parent = parent();
+      if( parent == null ) {
+        Ugwi ugwi = UgwiKindSkSkid.makeUgwi( masterClassId, Skid.NONE.canonicalString() );
+        return DirectSkidResolver.createResolverConfig( ugwi ).cfgs().first();
+      }
+
       if( parent.kind() == EMpvNodeKind.LINK ) {
         LinkNode ln = (LinkNode)parent;
         IDtoLinkInfo li = ln.linkInfo;
@@ -618,9 +623,13 @@ public class MasterPathViewer
   public Pair<ICompoundResolverConfig, String> resolverConfig() {
     IListEdit<SimpleResolverCfg> simpleConfigs = new ElemArrayList<>();
     IMasterPathNode node = selectedNode();
-    while( node.isObject() && node.parent() != null ) {
+    // while( node.isObject() && node.parent() != null ) {
+    while( node.isObject() ) {
       SimpleResolverCfg cfg = node.resolverConfig();
       simpleConfigs.insert( 0, cfg );
+      if( node.parent() == null ) {
+        break;
+      }
       node = node.parent().parent();
     }
 
