@@ -228,6 +228,7 @@ public abstract class AbstractSkVedButtonActor
         if( clickHandler != null ) {
           clickHandler.onButtonClick( visel );
         }
+        onMouseUp( aSource, aDragInfo.button(), aState, aCoors, aDragInfo.starterControl() );
         // TsDialogUtils.info( vedScreen().view().getControl().getShell(), "Ти нажяль!" );
       }
       else {

@@ -130,6 +130,7 @@ public class SkActorUpDownCmdButton
       @Override
       public void onButtonUp( VedAbstractVisel aVisel ) {
         if( upCommand != null ) {
+          LoggerUtils.errorLogger().warning( "Up command is in process: " + upCommand.toString() ); //$NON-NLS-1$
           return;
         }
         if( !canSendCommands() ) {
@@ -158,6 +159,7 @@ public class SkActorUpDownCmdButton
       @Override
       public void onButtonDown( VedAbstractVisel aVisel ) {
         if( downCommand != null ) {
+          LoggerUtils.errorLogger().warning( "Down command is in process: " + downCommand.toString() ); //$NON-NLS-1$
           return;
         }
         if( !canSendCommands() ) {
