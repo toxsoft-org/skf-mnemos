@@ -274,6 +274,9 @@ public class SkActorCmdField
         value = AvUtils.avFromObj( bv );
         break;
       case FLOATING:
+        // dima 09.08.25 fix invalid float delimiter
+        // TODO сделать по уму через системный символ разделителя целой и дробной System.getProperty(...
+        valStr = valStr.replace( ',', '.' );
         Double dv = Double.valueOf( Double.parseDouble( valStr ) );
         value = AvUtils.avFromObj( dv );
         break;
