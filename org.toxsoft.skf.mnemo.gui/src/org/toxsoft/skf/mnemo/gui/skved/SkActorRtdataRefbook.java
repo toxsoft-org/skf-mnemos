@@ -162,9 +162,14 @@ public class SkActorRtdataRefbook
           IStringList branches = rbChain.branches();
           int count = branches.size() - branches.size() % 2;
           for( int i = 2; i < count - 1; i += 2 ) {
-            IAtomicValue aValue = item.attrs().getValue( rbChain.get( i ) );
-            String viselPropId = rbChain.get( i + 1 );
-            setViselPropValue( viselId, viselPropId, aValue );
+            if( item.attrs().hasValue( rbChain.get( i ) ) ) {
+              IAtomicValue aValue = item.attrs().getValue( rbChain.get( i ) );
+              String viselPropId = rbChain.get( i + 1 );
+              setViselPropValue( viselId, viselPropId, aValue );
+            }
+            else {
+              LoggerUtils.errorLogger().error( "RbAttr not found: " + rbChain );
+            }
           }
           break;
         }

@@ -95,6 +95,7 @@ public abstract class AbstractSkVedActor
           // ug = SkUgwiUtils.ofGwid( gwid );
           if( !MnemoUtils.isEntityExists( ug, aCoreApi ) ) {
             aValues.remove( aPropId );
+            MnemoUtils.isEntityExists( ug, aCoreApi );
             LoggerUtils.errorLogger().warning( "UGWI does not exists: \"%s\"", ug ); //$NON-NLS-1$
           }
           // else {

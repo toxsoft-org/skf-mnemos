@@ -19,16 +19,15 @@ import org.toxsoft.uskat.core.api.ugwis.kinds.*;
  *
  * @author vs
  */
-abstract class AbstractSkActorSingleRtDataConsumer
+public abstract class AbstractSkActorSingleRtDataConsumer
     extends AbstractSkVedActor {
 
-  private Ugwi      ugwi     = null;
-  private Gwid      gwid     = null;
-  private IUgwiList ugwiList = IUgwiList.EMPTY;
-  // private IAtomicValue lastValue = IAtomicValue.NULL;
+  private Ugwi         ugwi      = null;
+  private Gwid         gwid      = null;
+  private IUgwiList    ugwiList  = IUgwiList.EMPTY;
   private IAtomicValue lastValue = null;
 
-  AbstractSkActorSingleRtDataConsumer( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs,
+  protected AbstractSkActorSingleRtDataConsumer( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs,
       VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
   }
