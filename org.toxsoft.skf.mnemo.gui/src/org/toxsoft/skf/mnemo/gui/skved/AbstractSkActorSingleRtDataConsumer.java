@@ -70,6 +70,7 @@ public abstract class AbstractSkActorSingleRtDataConsumer
         doOnValueChanged( newValue );
       }
     }
+    doWhenRealTimePassed( aRtTime );
   }
 
   // ------------------------------------------------------------------------------------
@@ -102,6 +103,11 @@ public abstract class AbstractSkActorSingleRtDataConsumer
   // ------------------------------------------------------------------------------------
   // To override
   //
+
+  @SuppressWarnings( "unused" )
+  protected void doWhenRealTimePassed( long aRtTime ) {
+    // nop
+  }
 
   @SuppressWarnings( "unused" )
   protected void doDoUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
