@@ -1,5 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.tsgui.utils;
 
+import static org.toxsoft.core.tsgui.m5.gui.mpc.IMultiPaneComponentConstants.*;
+import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.uskat.core.gui.km5.sgw.ISgwM5Constants.*;
 
 import org.toxsoft.core.tsgui.bricks.ctx.*;
@@ -122,6 +124,8 @@ public class SkGuiUtils {
     IM5Domain m5 = aSkConn.scope().get( IM5Domain.class );
     String propModelId = sgwGetClassPropModelId( null );
     IM5Model<IDtoClassPropInfoBase> modelProps = m5.getModel( propModelId, IDtoClassPropInfoBase.class );
+    // dima 11.07.25 add filter panel
+    OPDEF_IS_FILTER_PANE.setValue( aTsContext.params(), AV_TRUE );
     return modelProps.panelCreator().createCollViewerPanel( aTsContext, IM5ItemsProvider.EMPTY );
   }
 
@@ -139,6 +143,8 @@ public class SkGuiUtils {
     IM5Domain m5 = aSkConn.scope().get( IM5Domain.class );
     String propModelId = sgwGetClassPropModelId( aPropKind );
     IM5Model<IDtoClassPropInfoBase> modelProps = m5.getModel( propModelId, IDtoClassPropInfoBase.class );
+    // dima 11.07.25 add filter panel
+    OPDEF_IS_FILTER_PANE.setValue( aTsContext.params(), AV_TRUE );
     return modelProps.panelCreator().createCollViewerPanel( aTsContext, IM5ItemsProvider.EMPTY );
   }
 
@@ -155,6 +161,8 @@ public class SkGuiUtils {
     IM5Domain m5 = aSkConn.scope().get( IM5Domain.class );
     String propModelId = sgwGetClassPropModelId( ESkClassPropKind.ATTR );
     IM5Model<IDtoClassPropInfoBase> modelProps = m5.getModel( propModelId, IDtoClassPropInfoBase.class );
+    // dima 11.07.25 add filter panel
+    OPDEF_IS_FILTER_PANE.setValue( aTsContext.params(), AV_TRUE );
     return modelProps.panelCreator().createCollViewerPanel( aTsContext, IM5ItemsProvider.EMPTY );
   }
 
