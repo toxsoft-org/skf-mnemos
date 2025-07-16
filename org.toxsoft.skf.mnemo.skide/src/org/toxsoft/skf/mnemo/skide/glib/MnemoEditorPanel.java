@@ -42,6 +42,7 @@ import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.tools.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
 import org.toxsoft.skf.mnemo.lib.*;
+import org.toxsoft.skf.mnemo.skide.bkn.*;
 import org.toxsoft.uskat.core.api.objserv.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.connection.*;
@@ -392,6 +393,8 @@ public class MnemoEditorPanel
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
     actionsProvider.addHandler( new AspRunActors( vedScreen ) );
     actionsProvider.addHandler( new AspDiagnosticMnemo( vedScreen ) );
+    actionsProvider.addHandler( new AspBknCreateRefbooks( skConn ) );
+    actionsProvider.addHandler( new AspBknCreateMnemos( vedScreen ) );
     // WEST
     westFolder = new TabFolder( sfMain, SWT.TOP | SWT.BORDER );
     tiObjTree = new TabItem( westFolder, SWT.NONE );
