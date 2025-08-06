@@ -44,7 +44,7 @@ public class ActorViselTooltipAction
   /**
    * ИД поля "Коммандер"
    */
-  private static final String FID_USER_ACTION_CFG = "userActionCfg"; //$NON-NLS-1$
+  public static final String FID_USER_ACTION_CFG = "userActionCfg"; //$NON-NLS-1$
 
   private static final IDataDef PROP_USER_ACTION_CFG = DataDef.create3( FID_USER_ACTION_CFG, DDEF_VALOBJ, //
       TSID_NAME, STR_USER_ACTION_CFG, //

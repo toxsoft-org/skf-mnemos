@@ -79,7 +79,7 @@ public final class VedUserActionCfg
 
   private final IOptionSetEdit propValues = new OptionSet();
 
-  VedUserActionCfg( String aId, String aCommanderId, IOptionSet aProps, IOptionSet aParams ) {
+  public VedUserActionCfg( String aId, String aCommanderId, IOptionSet aProps, IOptionSet aParams ) {
     id = aId;
     commanderId = aCommanderId;
     propValues.setAll( aProps );
