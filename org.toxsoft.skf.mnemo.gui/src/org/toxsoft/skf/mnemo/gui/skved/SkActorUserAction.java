@@ -35,6 +35,11 @@ import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.tti.*;
 
+/**
+ * Актор вызывающий действие пользователя по нажатию соответствующей кнопки мыши.
+ *
+ * @author vs
+ */
 public class SkActorUserAction
     extends AbstractSkVedActor {
 
@@ -46,7 +51,7 @@ public class SkActorUserAction
   /**
    * ИД поля "Кнопка мыши"
    */
-  private static final String FID_MOUSE_BUTTON = "mouseButton"; //$NON-NLS-1$
+  public static final String FID_MOUSE_BUTTON = "mouseButton"; //$NON-NLS-1$
 
   private static final ITinFieldInfo TFI_MOUSE_BUTTON = new TinFieldInfo( FID_MOUSE_BUTTON, TtiAvEnum.INSTANCE, //
       TSID_NAME, STR_MOUSE_BUTTON, //
@@ -57,7 +62,7 @@ public class SkActorUserAction
   /**
    * ИД поля "Двойной щелчок"
    */
-  private static final String FID_DOUBLE_CLICK = "doubleClick"; //$NON-NLS-1$
+  public static final String FID_DOUBLE_CLICK = "doubleClick"; //$NON-NLS-1$
 
   private static final ITinFieldInfo TFI_DOUBLE_CLIK = new TinFieldInfo( FID_DOUBLE_CLICK, TTI_AT_BOOLEAN, //
       TSID_NAME, STR_DOUBLE_CLICK, //
@@ -68,7 +73,7 @@ public class SkActorUserAction
   /**
    * ИД поля "Кнопка мыши"
    */
-  private static final String FID_KEY_MASK = "keyMask"; //$NON-NLS-1$
+  public static final String FID_KEY_MASK = "keyMask"; //$NON-NLS-1$
 
   private static final ITinFieldInfo TFI_KEY_MASK = new TinFieldInfo( FID_KEY_MASK, TtiKeyMask.INSTANCE, //
       TSID_NAME, STR_KEY_MASK, //
@@ -78,9 +83,9 @@ public class SkActorUserAction
   /**
    * ИД поля "Коммандер"
    */
-  private static final String FID_USER_ACTION_CFG = "userActionCfg"; //$NON-NLS-1$
+  public static final String FID_USER_ACTION_CFG = "userActionCfg"; //$NON-NLS-1$
 
-  private static final IDataDef PROP_USER_ACTION_CFG = DataDef.create3( FID_USER_ACTION_CFG, DDEF_VALOBJ, //
+  private static final IDataDef PROP_USER_ACTION_CFG = DataDef.create3( FID_USER_ACTION_CFG, DT_VALOBJ, //
       TSID_NAME, STR_USER_ACTION_CFG, //
       TSID_DESCRIPTION, STR_USER_ACTION_CFG_D, //
       TSID_KEEPER_ID, VedUserActionCfg.KEEPER_ID, //
@@ -233,13 +238,13 @@ public class SkActorUserAction
     }
   }
 
-  private VedAbstractVisel viselUnderCursor( ITsPoint aCoors ) {
-    IStringList ids = vedScreen().view().listViselIdsAtPoint( aCoors );
-    if( !ids.isEmpty() ) {
-      return vedScreen().model().visels().list().findByKey( ids.first() );
-    }
-    return null;
-  }
+  // private VedAbstractVisel viselUnderCursor( ITsPoint aCoors ) {
+  // IStringList ids = vedScreen().view().listViselIdsAtPoint( aCoors );
+  // if( !ids.isEmpty() ) {
+  // return vedScreen().model().visels().list().findByKey( ids.first() );
+  // }
+  // return null;
+  // }
 
   /**
    * Test if user click on proper mouse button
