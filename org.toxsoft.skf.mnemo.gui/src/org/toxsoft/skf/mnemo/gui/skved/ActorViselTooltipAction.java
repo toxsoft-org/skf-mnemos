@@ -7,6 +7,7 @@ import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
+import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
@@ -86,6 +87,8 @@ public class ActorViselTooltipAction
 
   private IVedVisel currVisel = null;
 
+  private Cursor prevCursor = null;
+
   ActorViselTooltipAction( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
   }
@@ -99,11 +102,13 @@ public class ActorViselTooltipAction
     IVedVisel v = viselUnderCursor( aCoors );
     if( v == null ) {
       vedScreen().view().getControl().setToolTipText( null );
+      restorCursor();
       currVisel = null;
     }
     else {
       // System.out.println( "VISEL: " + v );
       if( !v.equals( currVisel ) ) {
+        setCursor( prevCursor );
         currVisel = v;
         doUserAction( aCoors );
       }
@@ -130,32 +135,12 @@ public class ActorViselTooltipAction
       VedUserActionCfg cfg = v.asValobj();
       MnemoUserActionsRegistry mcr = tsContext().get( MnemoUserActionsRegistry.class );
       IMnemoUserAction mc = mcr.registeredActions().getByKey( cfg.commanderId() );
-      // resolve( cfg );
       TsGuiContext ctx = new TsGuiContext( vedScreen().tsContext() );
       ctx.put( IVedScreen.class, vedScreen() );
+      setCursor( mc.getCursor( aSwtCoors, ctx ) );
       mc.run( cfg.propValues(), aSwtCoors, ctx );
     }
   }
-
-  // private void resolve( VedUserActionCfg aCfg ) {
-  // // String sectionId = VED_ITEM_EXTRA_DATA_ID_PROPERTIES_RESOLVERS;
-  // // if( aCfg.params().hasKey( sectionId ) ) {
-  // // // MnemoResolverConfig mrc = MasterObjectUtils.readMnemoResolverConfig( vedScreen() );
-  // // VedScreenCfg vsCfg = VedScreenUtils.getVedScreenConfig( vedScreen() );
-  // // Ugwi masterUgwi = vsCfg.extraData().readItem( VED_SCREEN_MAIN_MNEMO_MASTER_UGWI, Ugwi.KEEPER, null );
-  // // if( masterUgwi != null ) {
-  // // ISimpleResolverFactoriesRegistry registry = tsContext().get( ISimpleResolverFactoriesRegistry.class );
-  // // IStringMap<ICompoundResolverConfig> resolvers;
-  // // resolvers = CompoundResolverConfig.KEEPER.str2strmap( aCfg.params().getStr( sectionId ) );
-  // // for( String id : resolvers.keys() ) {
-  // // ICompoundResolverConfig rCfg = resolvers.getByKey( id );
-  // // IUgwiResolver resolver = CompoundResolver.create( rCfg, skConn(), registry );
-  // // Ugwi destUgwi = resolver.resolve( masterUgwi );
-  // // aCfg.propValues().setValobj( id, destUgwi );
-  // // }
-  // // }
-  // // }
-  // }
 
   private VedAbstractVisel viselUnderCursor( ITsPoint aCoors ) {
     IStringList ids = vedScreen().view().listViselIdsAtPoint( aCoors );
@@ -165,26 +150,16 @@ public class ActorViselTooltipAction
     return null;
   }
 
-  // private void setActivated( boolean aActivated ) {
-  // activated = aActivated;
-  // if( activated ) {
-  // setHandCursor();
-  // }
-  // else {
-  // restorCursor();
-  // }
-  // }
+  private void setCursor( Cursor aCursor ) {
+    Cursor cur = vedScreen().view().getControl().getCursor();
+    if( cur == null || !cur.equals( aCursor ) ) {
+      prevCursor = vedScreen().view().getControl().getCursor();
+      vedScreen().view().getControl().setCursor( aCursor );
+    }
+  }
 
-  // private void setHandCursor() {
-  // Cursor cur = vedScreen().view().getControl().getCursor();
-  // if( cur == null || !cur.equals( handCursor ) ) {
-  // prevCursor = vedScreen().view().getControl().getCursor();
-  // vedScreen().view().getControl().setCursor( handCursor );
-  // }
-  // }
-  //
-  // private void restorCursor() {
-  // vedScreen().view().getControl().setCursor( prevCursor );
-  // }
+  private void restorCursor() {
+    vedScreen().view().getControl().setCursor( prevCursor );
+  }
 
 }

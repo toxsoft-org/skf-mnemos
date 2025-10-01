@@ -1,5 +1,6 @@
 package org.toxsoft.skf.mnemo.gui.cmd;
 
+import org.eclipse.swt.graphics.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
@@ -44,6 +45,17 @@ public interface IMnemoUserAction
    * @param aTsContext {@link ITsGuiContext} - контекст содержащий необходимую информацию
    */
   void run( IOptionSet aInputValues, ITsPoint aCoors, ITsGuiContext aTsContext );
+
+  /**
+   * Возвращает курсор мыши для указанных координат. (По умолчанию <b>null</b>)
+   *
+   * @param aCoors {@link ITsPoint} - координаты курсора
+   * @param aTsContext {@link ITsGuiContext} - соответствующий контекст
+   * @return {@link Cursor} - требуемый курсор или <b>null</b>
+   */
+  default Cursor getCursor( ITsPoint aCoors, ITsGuiContext aTsContext ) {
+    return null;
+  }
 
   // /**
   // * Возвращает набор значений аргументов.<br>

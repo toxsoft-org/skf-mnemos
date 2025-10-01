@@ -300,7 +300,9 @@ public class SkActorUserAction
   }
 
   private void restorCursor() {
-    vedScreen().view().getControl().setCursor( prevCursor );
+    if( !vedScreen().view().getControl().isDisposed() ) {
+      vedScreen().view().getControl().setCursor( prevCursor );
+    }
   }
 
 }
