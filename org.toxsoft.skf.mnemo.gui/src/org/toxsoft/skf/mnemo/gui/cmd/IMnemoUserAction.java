@@ -57,22 +57,4 @@ public interface IMnemoUserAction
     return null;
   }
 
-  // /**
-  // * Возвращает набор значений аргументов.<br>
-  // *
-  // * @param aInputValues {@link IOptionSet} - набор значений входных данных, заданных на этапе разработки
-  // * @param aTsContext {@link ITsGuiContext} - контекст содержащий информацию для формирования значений аргументов
-  // * @return {@link IOptionSet} - набор значений аргументов
-  // */
-  // IOptionSet argValues( IOptionSet aInputValues, ITsGuiContext aTsContext );
-
-  // /**
-  // * Выполняет команду.
-  // *
-  // * @param aArgs {@link IOptionSet}
-  // * @param aTsContext {@link ITsGuiContext} - контекст содержащий информацию для выполнения команды
-  // * @return {@link IOptionSet} - execution result, may be {@link IOptionSet#NULL} but not <code>null</code>
-  // */
-  // IOptionSet executeCommand( IOptionSet aArgs, ITsGuiContext aTsContext );
-
 }
