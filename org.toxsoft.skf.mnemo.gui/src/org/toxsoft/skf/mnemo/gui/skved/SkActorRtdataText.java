@@ -39,7 +39,12 @@ public class SkActorRtdataText
    */
   public static final String FACTORY_ID = SKVED_ID + ".actor.RtdataText"; //$NON-NLS-1$
 
-  static final IDataDef PROP_NULL_TEXT = DataDef.create3( "piNullText", DDEF_NAME, // //$NON-NLS-1$
+  /**
+   * Property ID for non assigned value text
+   */
+  public static final String PROPID_NULL_TEXT = "piNullText"; //$NON-NLS-1$
+
+  static final IDataDef PROP_NULL_TEXT = DataDef.create3( PROPID_NULL_TEXT, DDEF_NAME, //
       TSID_NAME, STR_NULL_TEXT, //
       TSID_DESCRIPTION, STR_NULL_TEXT_D, //
       TSID_DEFAULT_VALUE, AV_STR_EMPTY //
