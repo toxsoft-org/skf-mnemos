@@ -404,7 +404,7 @@ public class MnemoEditorPanel
     sfObjTree.setSashWidth( 8 );
 
     VedViselsParentChildTreeMaker treeMaker = new VedViselsParentChildTreeMaker( vedScreen, masterSlaveManager );
-    TreeModeInfo<IVedVisel> tmi = new TreeModeInfo<IVedVisel>( "tmi", "name", "descr", null, treeMaker );
+    TreeModeInfo<IVedVisel> tmi = new TreeModeInfo<>( "tmi", "name", "descr", null, treeMaker );
     IStridablesList<TreeModeInfo<IVedVisel>> modesList = new StridablesList<>( tmi );
     panelVisels = new VedPanelViselsList( sfObjTree, new TsGuiContext( tsContext() ), vedScreen, modesList );
     VVParentChildReorderer vvReorderer = new VVParentChildReorderer( vedScreen, masterSlaveManager );
@@ -486,7 +486,6 @@ public class MnemoEditorPanel
     VedScreenDropTarget dropTarget = new VedScreenDropTarget();
     dropTarget.attachToScreen( vedScreen );
     guiTimersService().quickTimers().addListener( vedScreen );
-    guiTimersService().slowTimers().addListener( vedScreen );
 
     // add VED snippets: user input handler for editing needs
     vedScreen.model().screenHandlersBefore().add( hotKeysManager.inputHandler() );
@@ -515,6 +514,7 @@ public class MnemoEditorPanel
   @Override
   protected void doDispose() {
     skVedEnvironment.close();
+    guiTimersService().quickTimers().removeListener( vedScreen );
   }
 
   // ------------------------------------------------------------------------------------

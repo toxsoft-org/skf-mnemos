@@ -60,7 +60,6 @@ public class RuntimeMnemoPanel
     vedScreen.tsContext().put( ISkVedEnvironment.class, vedEnv );
 
     guiTimersService().quickTimers().addListener( vedScreen );
-    guiTimersService().slowTimers().addListener( vedScreen );
 
     // DEBUG --- load mnemo from file by mouse double click on an empty area
     // theCanvas.addMouseListener( new MouseListener() {
@@ -117,7 +116,11 @@ public class RuntimeMnemoPanel
     vedScreen.tsContext().put( ISkVedEnvironment.class, vedEnv );
 
     guiTimersService().quickTimers().addListener( vedScreen );
-    guiTimersService().slowTimers().addListener( vedScreen );
+  }
+
+  @Override
+  protected void doDispose() {
+    guiTimersService().quickTimers().removeListener( vedScreen );
   }
 
   // ------------------------------------------------------------------------------------
