@@ -104,35 +104,35 @@ public class SkActorCmdField
   protected SkActorCmdField( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
 
-    guiTimersService().quickTimers().addListener( aRtTime -> {
-      if( currCommand != null ) {
-        SkCommandState cmdState = currCommand.state();
-        switch( cmdState.state() ) {
-          case SENDING:
-            return;
-          case EXECUTING:
-            return;
-          case SUCCESS:
-            currCommand = null;
-            break;
-          case FAILED:
-          case TIMEOUTED:
-          case UNHANDLED:
-            currCommand = null;
-            TsDialogUtils.error( getShell(), cmdState.toString() );
-            break;
-          default:
-            currCommand = null;
-            if( inputHandler != null ) {
-              inputHandler.resume();
-            }
-            throw new TsNotAllEnumsUsedRtException();
-        }
-        if( inputHandler != null ) {
-          inputHandler.resume();
-        }
-      }
-    } );
+    // guiTimersService().quickTimers().addListener( aRtTime -> {
+    // if( currCommand != null ) {
+    // SkCommandState cmdState = currCommand.state();
+    // switch( cmdState.state() ) {
+    // case SENDING:
+    // return;
+    // case EXECUTING:
+    // return;
+    // case SUCCESS:
+    // currCommand = null;
+    // break;
+    // case FAILED:
+    // case TIMEOUTED:
+    // case UNHANDLED:
+    // currCommand = null;
+    // TsDialogUtils.error( getShell(), cmdState.toString() );
+    // break;
+    // default:
+    // currCommand = null;
+    // if( inputHandler != null ) {
+    // inputHandler.resume();
+    // }
+    // throw new TsNotAllEnumsUsedRtException();
+    // }
+    // if( inputHandler != null ) {
+    // inputHandler.resume();
+    // }
+    // }
+    // } );
   }
 
   // ------------------------------------------------------------------------------------
@@ -205,6 +205,33 @@ public class SkActorCmdField
         String text = AvUtils.printAv( fmtStr, newValue );
         setStdViselPropValue( avStr( text ) );
         lastValue = newValue;
+      }
+    }
+    if( currCommand != null ) {
+      SkCommandState cmdState = currCommand.state();
+      switch( cmdState.state() ) {
+        case SENDING:
+          return;
+        case EXECUTING:
+          return;
+        case SUCCESS:
+          currCommand = null;
+          break;
+        case FAILED:
+        case TIMEOUTED:
+        case UNHANDLED:
+          currCommand = null;
+          TsDialogUtils.error( getShell(), cmdState.toString() );
+          break;
+        default:
+          currCommand = null;
+          if( inputHandler != null ) {
+            inputHandler.resume();
+          }
+          throw new TsNotAllEnumsUsedRtException();
+      }
+      if( inputHandler != null ) {
+        inputHandler.resume();
       }
     }
   }

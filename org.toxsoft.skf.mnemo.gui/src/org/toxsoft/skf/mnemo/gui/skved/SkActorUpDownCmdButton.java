@@ -187,64 +187,64 @@ public class SkActorUpDownCmdButton
     };
     setButtonUpDownHandler( buttonHandler );
 
-    guiTimersService().quickTimers().addListener( aRtTime -> {
-      if( upCommand != null ) {
-        SkCommandState cmdState = upCommand.state();
-        VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
-        switch( cmdState.state() ) {
-          case SENDING:
-            return;
-          case EXECUTING:
-            return;
-          case SUCCESS:
-            // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            upCommand = null;
-            break;
-          case FAILED:
-          case TIMEOUTED:
-          case UNHANDLED:
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            upCommand = null;
-            // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
-            TsDialogUtils.error( getShell(), cmdState.toString() );
-            break;
-          default:
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            upCommand = null;
-            // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
-            throw new TsNotAllEnumsUsedRtException();
-        }
-      }
-
-      if( downCommand != null ) {
-        SkCommandState cmdState = downCommand.state();
-        VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
-        switch( cmdState.state() ) {
-          case SENDING:
-            return;
-          case EXECUTING:
-            return;
-          case SUCCESS:
-            // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            downCommand = null;
-            break;
-          case FAILED:
-          case TIMEOUTED:
-          case UNHANDLED:
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            downCommand = null;
-            // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
-            TsDialogUtils.error( getShell(), cmdState.toString() );
-            break;
-          default:
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            downCommand = null;
-            // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
-            throw new TsNotAllEnumsUsedRtException();
-        }
-      }
-
-    } );
+    // guiTimersService().quickTimers().addListener( aRtTime -> {
+    // if( upCommand != null ) {
+    // SkCommandState cmdState = upCommand.state();
+    // VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
+    // switch( cmdState.state() ) {
+    // case SENDING:
+    // return;
+    // case EXECUTING:
+    // return;
+    // case SUCCESS:
+    // // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+    // upCommand = null;
+    // break;
+    // case FAILED:
+    // case TIMEOUTED:
+    // case UNHANDLED:
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+    // upCommand = null;
+    // // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+    // TsDialogUtils.error( getShell(), cmdState.toString() );
+    // break;
+    // default:
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+    // upCommand = null;
+    // // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+    // throw new TsNotAllEnumsUsedRtException();
+    // }
+    // }
+    //
+    // if( downCommand != null ) {
+    // SkCommandState cmdState = downCommand.state();
+    // VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
+    // switch( cmdState.state() ) {
+    // case SENDING:
+    // return;
+    // case EXECUTING:
+    // return;
+    // case SUCCESS:
+    // // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+    // downCommand = null;
+    // break;
+    // case FAILED:
+    // case TIMEOUTED:
+    // case UNHANDLED:
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+    // downCommand = null;
+    // // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+    // TsDialogUtils.error( getShell(), cmdState.toString() );
+    // break;
+    // default:
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+    // downCommand = null;
+    // // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+    // throw new TsNotAllEnumsUsedRtException();
+    // }
+    // }
+    //
+    // } );
   }
 
   @Override
@@ -294,6 +294,65 @@ public class SkActorUpDownCmdButton
   @Override
   protected IGwidList doListUsedGwids() {
     return IGwidList.EMPTY;
+  }
+
+  @Override
+  public void whenRealTimePassed( long aRtTime ) {
+    if( upCommand != null ) {
+      SkCommandState cmdState = upCommand.state();
+      VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
+      switch( cmdState.state() ) {
+        case SENDING:
+          return;
+        case EXECUTING:
+          return;
+        case SUCCESS:
+          // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+          upCommand = null;
+          break;
+        case FAILED:
+        case TIMEOUTED:
+        case UNHANDLED:
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+          upCommand = null;
+          // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+          TsDialogUtils.error( getShell(), cmdState.toString() );
+          break;
+        default:
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+          upCommand = null;
+          // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+          throw new TsNotAllEnumsUsedRtException();
+      }
+    }
+
+    if( downCommand != null ) {
+      SkCommandState cmdState = downCommand.state();
+      VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
+      switch( cmdState.state() ) {
+        case SENDING:
+          return;
+        case EXECUTING:
+          return;
+        case SUCCESS:
+          // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+          downCommand = null;
+          break;
+        case FAILED:
+        case TIMEOUTED:
+        case UNHANDLED:
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+          downCommand = null;
+          // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+          TsDialogUtils.error( getShell(), cmdState.toString() );
+          break;
+        default:
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+          downCommand = null;
+          // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+          throw new TsNotAllEnumsUsedRtException();
+      }
+    }
   }
 
   // ------------------------------------------------------------------------------------

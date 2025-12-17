@@ -185,35 +185,35 @@ public class SkActorCmdCheckbox
     };
     setButtonClickHandler( buttonHandler );
 
-    guiTimersService().quickTimers().addListener( aRtTime -> {
-      if( currCommand != null ) {
-        SkCommandState cmdState = currCommand.state();
-        VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
-        switch( cmdState.state() ) {
-          case SENDING:
-            return;
-          case EXECUTING:
-            return;
-          case SUCCESS:
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            currCommand = null;
-            break;
-          case FAILED:
-          case TIMEOUTED:
-          case UNHANDLED:
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            currCommand = null;
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
-            TsDialogUtils.error( getShell(), cmdState.toString() );
-            break;
-          default:
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            currCommand = null;
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
-            throw new TsNotAllEnumsUsedRtException();
-        }
-      }
-    } );
+    // guiTimersService().quickTimers().addListener( aRtTime -> {
+    // if( currCommand != null ) {
+    // SkCommandState cmdState = currCommand.state();
+    // VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
+    // switch( cmdState.state() ) {
+    // case SENDING:
+    // return;
+    // case EXECUTING:
+    // return;
+    // case SUCCESS:
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+    // currCommand = null;
+    // break;
+    // case FAILED:
+    // case TIMEOUTED:
+    // case UNHANDLED:
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+    // currCommand = null;
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+    // TsDialogUtils.error( getShell(), cmdState.toString() );
+    // break;
+    // default:
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+    // currCommand = null;
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+    // throw new TsNotAllEnumsUsedRtException();
+    // }
+    // }
+    // } );
   }
 
   @Override
@@ -253,6 +253,33 @@ public class SkActorCmdCheckbox
       if( !newValue.equals( lastValue ) ) {
         lastValue = newValue;
         doOnValueChanged( newValue );
+      }
+    }
+    if( currCommand != null ) {
+      SkCommandState cmdState = currCommand.state();
+      VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
+      switch( cmdState.state() ) {
+        case SENDING:
+          return;
+        case EXECUTING:
+          return;
+        case SUCCESS:
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+          currCommand = null;
+          break;
+        case FAILED:
+        case TIMEOUTED:
+        case UNHANDLED:
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+          currCommand = null;
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+          TsDialogUtils.error( getShell(), cmdState.toString() );
+          break;
+        default:
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+          currCommand = null;
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+          throw new TsNotAllEnumsUsedRtException();
       }
     }
   }

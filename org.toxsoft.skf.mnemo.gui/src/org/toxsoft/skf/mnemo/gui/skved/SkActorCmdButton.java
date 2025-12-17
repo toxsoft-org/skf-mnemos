@@ -235,40 +235,40 @@ public class SkActorCmdButton
     };
     setButtonClickHandler( buttonHandler );
 
-    guiTimersService().quickTimers().addListener( aRtTime -> {
-      if( currCommand != null ) {
-        SkCommandState cmdState = currCommand.state();
-        VedAbstractVisel visel = findVisel( props().getStr( PROPID_VISEL_ID ) );
-        if( visel == null ) {
-          currCommand = null;
-          return;
-        }
-        switch( cmdState.state() ) {
-          case SENDING:
-            return;
-          case EXECUTING:
-            return;
-          case SUCCESS:
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            currCommand = null;
-            break;
-          case FAILED:
-          case TIMEOUTED:
-          case UNHANDLED:
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            currCommand = null;
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
-            TsDialogUtils.error( getShell(), cmdState.toString() );
-            break;
-          default:
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
-            currCommand = null;
-            visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
-            throw new TsNotAllEnumsUsedRtException();
-        }
-        updateButtonState();
-      }
-    } );
+    // guiTimersService().quickTimers().addListener( aRtTime -> {
+    // if( currCommand != null ) {
+    // SkCommandState cmdState = currCommand.state();
+    // VedAbstractVisel visel = findVisel( props().getStr( PROPID_VISEL_ID ) );
+    // if( visel == null ) {
+    // currCommand = null;
+    // return;
+    // }
+    // switch( cmdState.state() ) {
+    // case SENDING:
+    // return;
+    // case EXECUTING:
+    // return;
+    // case SUCCESS:
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+    // currCommand = null;
+    // break;
+    // case FAILED:
+    // case TIMEOUTED:
+    // case UNHANDLED:
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+    // currCommand = null;
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+    // TsDialogUtils.error( getShell(), cmdState.toString() );
+    // break;
+    // default:
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+    // currCommand = null;
+    // visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+    // throw new TsNotAllEnumsUsedRtException();
+    // }
+    // updateButtonState();
+    // }
+    // } );
   }
 
   @Override
@@ -348,6 +348,38 @@ public class SkActorCmdButton
         currValue = newValue;
         doOnValueChanged( newValue );
       }
+    }
+    if( currCommand != null ) {
+      SkCommandState cmdState = currCommand.state();
+      VedAbstractVisel visel = findVisel( props().getStr( PROPID_VISEL_ID ) );
+      if( visel == null ) {
+        currCommand = null;
+        return;
+      }
+      switch( cmdState.state() ) {
+        case SENDING:
+          return;
+        case EXECUTING:
+          return;
+        case SUCCESS:
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+          currCommand = null;
+          break;
+        case FAILED:
+        case TIMEOUTED:
+        case UNHANDLED:
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+          currCommand = null;
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+          TsDialogUtils.error( getShell(), cmdState.toString() );
+          break;
+        default:
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.NORMAL );
+          currCommand = null;
+          visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
+          throw new TsNotAllEnumsUsedRtException();
+      }
+      updateButtonState();
     }
   }
 
