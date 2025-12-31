@@ -53,7 +53,7 @@ public abstract class AbstractSkActorSingleRtDataConsumer
       if( av.isAssigned() ) {
         ugwi = av.asValobj();
         if( ugwi != null && ugwi != Ugwi.NONE ) {
-          gwid = UgwiKindSkRtdata.getGwid( ugwi );
+          gwid = UgwiKindSkRtdata.INSTANCE.getGwid( ugwi );
           ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
         }
       }
@@ -81,7 +81,7 @@ public abstract class AbstractSkActorSingleRtDataConsumer
   protected final IGwidList doListUsedGwids() {
     GwidList gl = new GwidList();
     for( Ugwi u : ugwiList.items() ) {
-      gl.add( UgwiKindSkRtdata.getGwid( u ) );
+      gl.add( UgwiKindSkRtdata.INSTANCE.getGwid( u ) );
     }
     return gl;
   }

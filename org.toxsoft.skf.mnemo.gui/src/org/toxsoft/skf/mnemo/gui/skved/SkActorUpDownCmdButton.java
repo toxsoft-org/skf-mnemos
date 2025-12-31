@@ -141,7 +141,7 @@ public class SkActorUpDownCmdButton
         ISkUser user = vedEnv.skConn().coreApi().userService().findUser( userInfo.userSkid().strid() );
         Ugwi cmdUgwi = MnemoUtils.findUgwi( PROPID_UP_CMD, props() );
         if( cmdUgwi != null && cmdUgwi != Ugwi.NONE ) {
-          Gwid cmdGwid = UgwiKindSkCmd.getGwid( cmdUgwi );
+          Gwid cmdGwid = UgwiKindSkCmd.INSTANCE.getGwid( cmdUgwi );
           upCommand = vedEnv.sendCommand( cmdGwid, user.skid(), argsUp );
           if( upCommand == null ) {
             TsDialogUtils.error( getShell(), "Unexpected NULL command returned" ); //$NON-NLS-1$
@@ -170,7 +170,7 @@ public class SkActorUpDownCmdButton
         ISkUser user = vedEnv.skConn().coreApi().userService().findUser( userInfo.userSkid().strid() );
         Ugwi cmdUgwi = MnemoUtils.findUgwi( PROPID_DOWN_CMD, props() );
         if( cmdUgwi != null && cmdUgwi != Ugwi.NONE ) {
-          Gwid cmdGwid = UgwiKindSkCmd.getGwid( cmdUgwi );
+          Gwid cmdGwid = UgwiKindSkCmd.INSTANCE.getGwid( cmdUgwi );
           downCommand = vedEnv.sendCommand( cmdGwid, user.skid(), argsDown );
           if( downCommand == null ) {
             TsDialogUtils.error( getShell(), "Unexpected NULL command returned" ); //$NON-NLS-1$

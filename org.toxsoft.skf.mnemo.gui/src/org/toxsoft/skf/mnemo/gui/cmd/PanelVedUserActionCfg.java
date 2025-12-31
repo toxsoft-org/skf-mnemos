@@ -21,9 +21,9 @@ import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
-import org.toxsoft.skf.mnemo.gui.mastobj.*;
+import org.toxsoft.skf.ext.mastobj.gui.main.*;
+import org.toxsoft.skf.ext.mastobj.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.*;
 
 public class PanelVedUserActionCfg
     extends AbstractGenericEntityEditPanel<VedUserActionCfg> {

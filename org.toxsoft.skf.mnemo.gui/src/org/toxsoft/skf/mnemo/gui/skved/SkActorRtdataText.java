@@ -19,6 +19,7 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
+import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
@@ -126,9 +127,10 @@ public class SkActorRtdataText
 
     if( (fmtStr == null || fmtStr.isBlank()) && ugwi() != Ugwi.NONE && ugwi() != null ) {
       System.out.println( ugwi() );
-      ISkClassInfo classInfo = skSysdescr().findClassInfo( UgwiKindSkRtdata.getClassId( ugwi() ) );
+      Gwid gwid = UgwiKindSkRtdata.INSTANCE.getGwid( ugwi() );
+      ISkClassInfo classInfo = skSysdescr().findClassInfo( gwid.classId() );
       if( classInfo != null ) {
-        IDtoRtdataInfo rtdInfo = classInfo.rtdata().list().findByKey( UgwiKindSkRtdata.getRtdataId( ugwi() ) );
+        IDtoRtdataInfo rtdInfo = classInfo.rtdata().list().findByKey( gwid.propId() );
         if( rtdInfo != null ) {
           IAtomicValue avFmtStr = SkHelperUtils.getConstraint( rtdInfo, TSID_FORMAT_STRING );
           if( avFmtStr != null ) {

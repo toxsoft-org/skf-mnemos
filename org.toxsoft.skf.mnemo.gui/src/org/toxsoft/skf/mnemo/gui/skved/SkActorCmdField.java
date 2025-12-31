@@ -92,10 +92,9 @@ public class SkActorCmdField
 
   private ISkCommand currCommand = null;
 
-  private String oldStr = TsLibUtils.EMPTY_STRING;
-  private Gwid   gwid   = null;
-  private Ugwi   ugwi   = null;
-  private String fmtStr = null;
+  private String oldStr  = TsLibUtils.EMPTY_STRING;
+  private Gwid   rtdGwid = null;
+  private String fmtStr  = null;
 
   private IGwidList sourceGwidList = IGwidList.EMPTY;
 
@@ -150,10 +149,10 @@ public class SkActorCmdField
     if( aChangedValues.hasKey( PROPID_RTD_UGWI ) ) {
       IAtomicValue av = props().getValue( PROPID_RTD_UGWI );
       if( av != null && av.isAssigned() ) {
-        ugwi = av.asValobj();
+        Ugwi ugwi = av.asValobj();
         if( ugwi != Ugwi.NONE ) {
-          gwid = UgwiKindSkRtdata.getGwid( ugwi );
-          sourceGwidList = new GwidList( gwid );
+          rtdGwid = UgwiKindSkRtdata.INSTANCE.getGwid( ugwi );
+          sourceGwidList = new GwidList( rtdGwid );
         }
       }
     }
@@ -161,10 +160,10 @@ public class SkActorCmdField
       fmtStr = props().getStr( PROP_FORMAT_STRING );
       if( fmtStr.isBlank() ) {
         fmtStr = null;
-        if( gwid != null ) {
-          ISkClassInfo classInfo = skSysdescr().findClassInfo( gwid.classId() );
+        if( rtdGwid != null ) {
+          ISkClassInfo classInfo = skSysdescr().findClassInfo( rtdGwid.classId() );
           if( classInfo != null ) {
-            IDtoRtdataInfo rtdInfo = classInfo.rtdata().list().findByKey( gwid.propId() );
+            IDtoRtdataInfo rtdInfo = classInfo.rtdata().list().findByKey( rtdGwid.propId() );
             if( rtdInfo != null ) {
               IAtomicValue avFmtStr = SkHelperUtils.getConstraint( rtdInfo, TSID_FORMAT_STRING );
               if( avFmtStr != null ) {
@@ -199,8 +198,8 @@ public class SkActorCmdField
       super.whenRealTimePassed( aRtTime );
       return;
     }
-    if( gwid != null ) {
-      IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
+    if( rtdGwid != null ) {
+      IAtomicValue newValue = skVedEnv().getRtDataValue( rtdGwid );
       if( !newValue.equals( lastValue ) ) {
         String text = AvUtils.printAv( fmtStr, newValue );
         setStdViselPropValue( avStr( text ) );
@@ -269,7 +268,7 @@ public class SkActorCmdField
 
     Ugwi cmdUgwi = MnemoUtils.findUgwi( TFI_CMD_UGWI.id(), props() );
     if( cmdUgwi != null && cmdUgwi != Ugwi.NONE ) {
-      Gwid cmdGwid = UgwiKindSkCmd.getGwid( cmdUgwi );
+      Gwid cmdGwid = UgwiKindSkCmd.INSTANCE.getGwid( cmdUgwi );
       IOptionSetEdit opSet = new OptionSet();
       IDtoCmdInfo cmdInfo = getCommandInfo();
       IAtomicValue argValue = getFiledValue( cmdInfo );
@@ -326,9 +325,9 @@ public class SkActorCmdField
 
   IDtoCmdInfo getCommandInfo() {
     Ugwi cmdUgwi = MnemoUtils.findUgwi( TFI_CMD_UGWI.id(), props() );
-    String aClassId = UgwiKindSkCmd.getClassId( cmdUgwi );
-    ISkClassInfo clsInfo = coreApi().sysdescr().getClassInfo( aClassId );
-    IDtoCmdInfo cmdInfo = clsInfo.cmds().list().getByKey( UgwiKindSkCmd.getCmdId( cmdUgwi ) );
+    Gwid gwid = UgwiKindSkCmd.INSTANCE.getGwid( cmdUgwi );
+    ISkClassInfo clsInfo = coreApi().sysdescr().getClassInfo( gwid.classId() );
+    IDtoCmdInfo cmdInfo = clsInfo.cmds().list().getByKey( gwid.propId() );
     return cmdInfo;
   }
 

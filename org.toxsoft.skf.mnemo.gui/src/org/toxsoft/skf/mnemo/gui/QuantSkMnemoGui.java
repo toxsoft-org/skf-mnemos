@@ -7,13 +7,11 @@ import org.toxsoft.core.tsgui.m5.*;
 import org.toxsoft.core.tsgui.valed.api.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.utils.valobj.*;
+import org.toxsoft.skf.ext.mastobj.gui.*;
 import org.toxsoft.skf.mnemo.gui.cmd.*;
 import org.toxsoft.skf.mnemo.gui.km5.*;
 import org.toxsoft.skf.mnemo.gui.m51.*;
-import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.valed.*;
 import org.toxsoft.skf.mnemo.gui.tools.imageset.*;
@@ -40,13 +38,6 @@ public class QuantSkMnemoGui
    */
   public QuantSkMnemoGui() {
     super( QuantSkMnemoGui.class.getSimpleName() );
-    SkCoreUtils.registerSkServiceCreator( SkMnemosService.CREATOR );
-    KM5Utils.registerContributorCreator( KM5MnemosContributor.CREATOR );
-    SkCoreUtils.registerCoreApiHandler( this );
-  }
-
-  @Override
-  protected void doInitApp( IEclipseContext aAppContext ) {
     TsValobjUtils.registerKeeperIfNone( ETsFillKind.KEEPER_ID, ETsFillKind.KEEPER );
     TsValobjUtils.registerKeeperIfNone( RgbaSet.KEEPER_ID, RgbaSet.KEEPER );
     TsValobjUtils.registerKeeperIfNone( ImageEntryInfo.KEEPER_ID, ImageEntryInfo.KEEPER );
@@ -61,9 +52,17 @@ public class QuantSkMnemoGui
     TsValobjUtils.registerKeeperIfNone( PopupMnemoResolverConfig.KEEPER_ID, PopupMnemoResolverConfig.KEEPER );
     TsValobjUtils.registerKeeperIfNone( SwitchPerspInfo.KEEPER_ID, SwitchPerspInfo.KEEPER );
     TsValobjUtils.registerKeeperIfNone( MPerspId.KEEPER_ID, MPerspId.KEEPER );
-    TsValobjUtils.registerKeeperIfNone( SkoRecognizerCfg.KEEPER_ID, SkoRecognizerCfg.KEEPER );
     TsValobjUtils.registerKeeperIfNone( VedUserActionCfg.KEEPER_ID, VedUserActionCfg.KEEPER );
     TsValobjUtils.registerKeeperIfNone( CmdArgValuesSet.KEEPER_ID, CmdArgValuesSet.KEEPER );
+    SkCoreUtils.registerSkServiceCreator( SkMnemosService.CREATOR );
+    KM5Utils.registerContributorCreator( KM5MnemosContributor.CREATOR );
+    SkCoreUtils.registerCoreApiHandler( this );
+
+    registerQuant( new QuantSkfExtMastobjGui() ); // TODO maybe in exe plugin???
+  }
+
+  @Override
+  protected void doInitApp( IEclipseContext aAppContext ) {
 
     IVedViselFactoriesRegistry visFact = aAppContext.get( IVedViselFactoriesRegistry.class );
     visFact.register( ViselImagesetButton.FACTORY );
@@ -117,23 +116,6 @@ public class QuantSkMnemoGui
     vcfRegistry.registerFactory( ValedAvValobjCmdArgValuesSet.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjRefbookValuesInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjRefbookItemSelector.FACTORY );
-
-    // ------------------------------------------------------------------------------------
-    // Регистрация резолверов
-    //
-
-    ISimpleResolverFactoriesRegistry resolversRegistry = aWinContext.get( ISimpleResolverFactoriesRegistry.class );
-    if( resolversRegistry == null ) {
-      resolversRegistry = new SimpleResolverFactoriesRegistry();
-      aWinContext.set( ISimpleResolverFactoriesRegistry.class, resolversRegistry );
-    }
-    resolversRegistry.register( DirectSkidResolver.FACTORY );
-    resolversRegistry.register( DirectAttrResolver.FACTORY );
-    resolversRegistry.register( DirectRriAttrResolver.FACTORY );
-    resolversRegistry.register( DirectRtDataResolver.FACTORY );
-    resolversRegistry.register( DirectCmdResolver.FACTORY );
-    resolversRegistry.register( LinkInfoResolver.FACTORY );
-    resolversRegistry.register( RivetInfoResolver.FACTORY );
 
     // ------------------------------------------------------------------------------------
     // M5

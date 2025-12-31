@@ -25,22 +25,20 @@ Require-Bundle: jakarta.inject.jakarta.inject-api,
  org.toxsoft.skf.reports.gui,
  org.toxsoft.skf.rri.lib;bundle-version="1.0.0",
  org.toxsoft.skf.refbooks.lib;bundle-version="1.0.0",
- org.toxsoft.skf.mnemo.lib
+ org.toxsoft.skf.mnemo.lib,
+ org.toxsoft.skf.ext.mastobj.lib,
+ org.toxsoft.skf.ext.mastobj.gui
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.toxsoft.skf.mnemo.gui
 Bundle-ActivationPolicy: lazy
 Export-Package: org.toxsoft.skf.mnemo.gui,
+ org.toxsoft.skf.mnemo.gui.chart,
  org.toxsoft.skf.mnemo.gui.cmd,
  org.toxsoft.skf.mnemo.gui.e4.services,
  org.toxsoft.skf.mnemo.gui.glib,
  org.toxsoft.skf.mnemo.gui.km5,
- org.toxsoft.skf.mnemo.gui.mastobj,
- org.toxsoft.skf.mnemo.gui.mastobj.gui,
- org.toxsoft.skf.mnemo.gui.mastobj.resolver,
+ org.toxsoft.skf.mnemo.gui.m51,
  org.toxsoft.skf.mnemo.gui.skved,
- org.toxsoft.skf.mnemo.gui.skved.mastobj,
- org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers,
- org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers,
  org.toxsoft.skf.mnemo.gui.skved.rt_action,
  org.toxsoft.skf.mnemo.gui.skved.rt_action.tti,
  org.toxsoft.skf.mnemo.gui.skved.rt_action.valed,

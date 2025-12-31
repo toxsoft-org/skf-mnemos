@@ -9,7 +9,7 @@ import org.toxsoft.core.tslib.bricks.strio.impl.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.valobj.*;
-import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
+import org.toxsoft.skf.ext.mastobj.gui.main.resolver.*;
 
 /**
  * Информация для "разрешителя" передаваемого мастер-объекта в мастер-объект мнемосхемы.

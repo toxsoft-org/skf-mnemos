@@ -3,7 +3,7 @@ package org.toxsoft.skf.mnemo.gui.tsgui;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.*;
+import org.toxsoft.skf.ext.mastobj.gui.skved.*;
 
 public class MasterObjectDeleteProcessor
     implements IDeleteProcessor {

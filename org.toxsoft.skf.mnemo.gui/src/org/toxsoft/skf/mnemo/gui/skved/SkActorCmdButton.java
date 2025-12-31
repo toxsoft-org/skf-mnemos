@@ -215,7 +215,7 @@ public class SkActorCmdButton
         }
       }
       if( cmdUgwi != null && cmdUgwi != Ugwi.NONE ) {
-        Gwid cmdGwid = UgwiKindSkCmd.getGwid( cmdUgwi );
+        Gwid cmdGwid = UgwiKindSkCmd.INSTANCE.getGwid( cmdUgwi );
         try {
           currCommand = vedEnv.sendCommand( cmdGwid, user.skid(), args );
         }
@@ -295,7 +295,7 @@ public class SkActorCmdButton
       if( av.isAssigned() ) {
         ugwi = av.asValobj();
         if( ugwi != null && ugwi != Ugwi.NONE ) {
-          gwid = UgwiKindSkRtdata.getGwid( ugwi );
+          gwid = UgwiKindSkRtdata.INSTANCE.getGwid( ugwi );
           ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
         }
       }
@@ -387,7 +387,7 @@ public class SkActorCmdButton
   protected IGwidList doListUsedGwids() {
     GwidList gl = new GwidList();
     for( Ugwi u : ugwiList.items() ) {
-      gl.add( UgwiKindSkRtdata.getGwid( u ) );
+      gl.add( UgwiKindSkRtdata.INSTANCE.getGwid( u ) );
     }
     return gl;
   }

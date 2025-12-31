@@ -6,8 +6,8 @@ import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
-import org.toxsoft.skf.mnemo.gui.mastobj.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.*;
+import org.toxsoft.skf.ext.mastobj.gui.main.*;
+import org.toxsoft.skf.ext.mastobj.gui.skved.*;
 
 /**
  * Дополнительный обработчик информации связанной с поддержкой "мастер-объекта" при действиях copy/paste.

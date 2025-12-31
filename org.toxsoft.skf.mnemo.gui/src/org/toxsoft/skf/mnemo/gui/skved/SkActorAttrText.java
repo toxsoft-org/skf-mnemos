@@ -108,9 +108,10 @@ public class SkActorAttrText
         fmtStr = props().getStr( TFI_FORMAT_STRING.id() );
         if( fmtStr.isBlank() && ugwi != null && ugwi != Ugwi.NONE ) {
           fmtStr = null;
-          ISkClassInfo classInfo = skSysdescr().findClassInfo( UgwiKindSkAttr.getClassId( ugwi ) );
+          Gwid gwid = UgwiKindSkAttr.INSTANCE.getGwid( ugwi );
+          ISkClassInfo classInfo = skSysdescr().findClassInfo( gwid.classId() );
           if( classInfo != null ) {
-            IDtoAttrInfo attrInfo = classInfo.attrs().list().findByKey( UgwiKindSkAttr.getAttrId( ugwi ) );
+            IDtoAttrInfo attrInfo = classInfo.attrs().list().findByKey( gwid.propId() );
             if( attrInfo != null ) {
               IAtomicValue avFmtStr = SkHelperUtils.getConstraint( attrInfo, TSID_FORMAT_STRING );
               if( avFmtStr != null && avFmtStr.isAssigned() ) {
@@ -131,11 +132,12 @@ public class SkActorAttrText
 
   @Override
   public void whenRealTimePassed( long aRtTime ) {
-    if( ugwi != null && ugwi != Ugwi.NONE && UgwiKindSkAttr.getSkid( ugwi ) != null ) {
-      ISkObject skObj = skVedEnv().skConn().coreApi().objService().find( UgwiKindSkAttr.getSkid( ugwi ) );
+    if( ugwi != null && ugwi != Ugwi.NONE && UgwiKindSkAttr.INSTANCE.getGwid( ugwi ).skid() != null ) {
+      ISkObject skObj =
+          skVedEnv().skConn().coreApi().objService().find( UgwiKindSkAttr.INSTANCE.getGwid( ugwi ).skid() );
       IAtomicValue newValue = IAtomicValue.NULL;
       if( skObj != null ) {
-        newValue = skObj.attrs().getValue( UgwiKindSkAttr.getAttrId( ugwi ) );
+        newValue = skObj.attrs().getValue( UgwiKindSkAttr.INSTANCE.getGwid( ugwi ).propId() );
       }
       if( !newValue.equals( lastValue ) ) {
         try {
@@ -160,7 +162,7 @@ public class SkActorAttrText
   protected IGwidList doListUsedGwids() {
     GwidList gl = new GwidList();
     for( Ugwi u : ugwiList.items() ) {
-      gl.add( UgwiKindSkAttr.getGwid( u ) );
+      gl.add( UgwiKindSkAttr.INSTANCE.getGwid( u ) );
     }
     return gl;
   }

@@ -23,7 +23,9 @@ Require-Bundle: jakarta.inject.jakarta.inject-api,
  org.toxsoft.uskat.core.gui,
  org.toxsoft.skf.mnemo.lib,
  org.toxsoft.skf.mnemo.gui,
- org.toxsoft.core.tsgui.ved
+ org.toxsoft.core.tsgui.ved,
+ org.toxsoft.skf.ext.mastobj.lib,
+ org.toxsoft.skf.ext.mastobj.gui
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.toxsoft.skf.mnemo.mws.simple
 Bundle-ActivationPolicy: lazy

@@ -8,11 +8,9 @@ import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
-import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
-import org.toxsoft.skf.rri.lib.ugwi.*;
 import org.toxsoft.uskat.core.*;
-import org.toxsoft.uskat.core.api.ugwis.kinds.*;
+import org.toxsoft.uskat.core.api.ugwis.*;
 import org.toxsoft.uskat.core.connection.*;
 
 /**
@@ -41,17 +39,8 @@ public class MnemoUtils {
    *         <b>false</b> - сущность отсутствует
    */
   public static boolean isEntityExists( Ugwi aUgwi, ISkCoreApi aCoreApi ) {
-
-    return switch( aUgwi.kindId() ) {
-      case UgwiKindSkAttr.KIND_ID -> UgwiKindSkAttr.isEntityExists( aUgwi, aCoreApi );
-      case UgwiKindRriAttr.KIND_ID -> UgwiKindRriAttr.isEntityExists( aUgwi, aCoreApi );
-      case UgwiKindSkRtdata.KIND_ID -> UgwiKindSkRtdata.isEntityExists( aUgwi, aCoreApi );
-      case UgwiKindSkSkid.KIND_ID -> UgwiKindSkSkid.isEntityExists( aUgwi, aCoreApi );
-      case UgwiKindSkLink.KIND_ID -> UgwiKindSkLink.isEntityExists( aUgwi, aCoreApi );
-      case UgwiKindSkRivet.KIND_ID -> UgwiKindSkRivet.isEntityExists( aUgwi, aCoreApi );
-      case UgwiKindSkCmd.KIND_ID -> UgwiKindSkCmd.isEntityExists( aUgwi, aCoreApi );
-      default -> throw new TsNotAllEnumsUsedRtException();
-    };
+    ISkUgwiKind ugwiKind = aCoreApi.ugwiService().getKind( aUgwi );
+    return ugwiKind.isContent( aUgwi );
   }
 
   /**

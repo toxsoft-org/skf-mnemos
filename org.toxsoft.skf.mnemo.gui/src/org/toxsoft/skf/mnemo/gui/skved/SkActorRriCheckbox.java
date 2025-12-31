@@ -21,7 +21,6 @@ import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
-import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
@@ -127,9 +126,10 @@ public class SkActorRriCheckbox
       if( fmtStr.isBlank() ) {
         fmtStr = null;
         if( ugwi != null && ugwi != Ugwi.NONE ) {
-          ISkClassInfo classInfo = skSysdescr().findClassInfo( UgwiKindRriAttr.getClassId( ugwi ) );
+          Gwid gwid = UgwiKindRriAttr.INSTANCE.getGwid( ugwi );
+          ISkClassInfo classInfo = skSysdescr().findClassInfo( gwid.classId() );
           if( classInfo != null ) {
-            IDtoAttrInfo attrInfo = classInfo.attrs().list().findByKey( UgwiKindRriAttr.getAttrId( ugwi ) );
+            IDtoAttrInfo attrInfo = classInfo.attrs().list().findByKey( gwid.propId() );
             if( attrInfo != null ) {
               IAtomicValue avFmtStr = SkHelperUtils.getConstraint( attrInfo, TSID_FORMAT_STRING );
               if( avFmtStr != null ) {
@@ -176,7 +176,8 @@ public class SkActorRriCheckbox
     if( ugwi == null || ugwi == Ugwi.NONE ) {
       return IAtomicValue.NULL;
     }
-    return section.getAttrParamValue( UgwiKindRriAttr.getSkid( ugwi ), UgwiKindRriAttr.getAttrId( ugwi ) );
+    Gwid gwid = UgwiKindRriAttr.INSTANCE.getGwid( ugwi );
+    return section.getAttrParamValue( gwid.skid(), gwid.propId() );
   }
 
   void setRriAttrValue( boolean aValue ) {
@@ -184,9 +185,8 @@ public class SkActorRriCheckbox
       LoggerUtils.errorLogger().error( "Attempt to set RRI attribute for null or NONE Ugwi" ); //$NON-NLS-1$
       return;
     }
-    Skid skid = UgwiKindRriAttr.getSkid( ugwi );
-    String attrId = UgwiKindRriAttr.getAttrId( ugwi );
-    section.setAttrParamValue( skid, attrId, avBool( aValue ), TsLibUtils.EMPTY_STRING );
+    Gwid gwid = UgwiKindRriAttr.INSTANCE.getGwid( ugwi );
+    section.setAttrParamValue( gwid.skid(), gwid.propId(), avBool( aValue ), TsLibUtils.EMPTY_STRING );
   }
 
 }

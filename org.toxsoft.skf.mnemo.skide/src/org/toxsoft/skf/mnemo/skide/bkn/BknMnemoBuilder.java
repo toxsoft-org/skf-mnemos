@@ -2,7 +2,7 @@ package org.toxsoft.skf.mnemo.skide.bkn;
 
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
-import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
+import static org.toxsoft.skf.ext.mastobj.gui.main.IMnemoMasterObjectConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
 import org.eclipse.swt.graphics.*;
@@ -26,12 +26,12 @@ import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.*;
-import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
+import org.toxsoft.skf.ext.mastobj.gui.main.resolver.*;
+import org.toxsoft.skf.ext.mastobj.gui.skved.*;
+import org.toxsoft.skf.ext.mastobj.gui.skved.recognizers.*;
+import org.toxsoft.skf.ext.mastobj.gui.skved.recognizers.ByAttrValueRecognizer;
+import org.toxsoft.skf.ext.mastobj.gui.skved.resolvers.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.resolvers.recognizers.ByAttrValueRecognizer;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.objserv.*;
@@ -449,7 +449,7 @@ public class BknMnemoBuilder {
     IdChain idChain = new IdChain( branchList );
     a.props().setValobj( SkActorRtdataRefbook.REFBOOK_INFO_ID, idChain );
     if( aRtdUgwi != null ) {
-      Skid skid = UgwiKindSkRtdata.getSkid( aRtdUgwi );
+      Skid skid = UgwiKindSkRtdata.INSTANCE.getGwid( aRtdUgwi ).skid();
       Ugwi ugwi = UgwiKindSkRtdata.makeUgwi( skid, "rtdVisualMode" );
       a.props().setValobj( PROPID_RTD_UGWI, ugwi );
     }
@@ -468,7 +468,7 @@ public class BknMnemoBuilder {
     idChain = new IdChain( branchList );
     a.props().setValobj( SkActorRtdataRefbook.REFBOOK_INFO_ID, idChain );
     if( aRtdUgwi != null ) {
-      Skid skid = UgwiKindSkRtdata.getSkid( aRtdUgwi );
+      Skid skid = UgwiKindSkRtdata.INSTANCE.getGwid( aRtdUgwi ).skid();
       Ugwi ugwi = UgwiKindSkRtdata.makeUgwi( skid, "rtdVisualMode" );
       a.props().setValobj( PROPID_RTD_UGWI, ugwi );
     }

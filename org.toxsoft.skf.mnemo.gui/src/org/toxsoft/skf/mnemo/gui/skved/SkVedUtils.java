@@ -2,6 +2,7 @@ package org.toxsoft.skf.mnemo.gui.skved;
 
 import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.skf.rri.lib.*;
 import org.toxsoft.skf.rri.lib.ugwi.*;
@@ -37,7 +38,8 @@ public class SkVedUtils {
     String sectId = UgwiKindRriAttr.getSectionId( aUgwi );
     ISkRriSection section;
     section = ((ISkRegRefInfoService)aCoreApi.getService( ISkRegRefInfoService.SERVICE_ID )).findSection( sectId );
-    av = section.getAttrParamValue( UgwiKindRriAttr.getSkid( aUgwi ), UgwiKindRriAttr.getAttrId( aUgwi ) );
+    Gwid gwid = UgwiKindRriAttr.INSTANCE.getGwid( aUgwi );
+    av = section.getAttrParamValue( gwid.skid(), gwid.propId() );
     return av;
   }
 

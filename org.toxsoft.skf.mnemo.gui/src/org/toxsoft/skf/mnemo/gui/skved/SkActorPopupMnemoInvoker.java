@@ -28,9 +28,9 @@ import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.*;
+import org.toxsoft.skf.ext.mastobj.gui.main.*;
+import org.toxsoft.skf.ext.mastobj.gui.main.resolver.*;
 import org.toxsoft.skf.mnemo.gui.glib.*;
-import org.toxsoft.skf.mnemo.gui.mastobj.*;
-import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
 import org.toxsoft.skf.mnemo.gui.skved.rt_action.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.api.objserv.*;
@@ -182,7 +182,7 @@ public class SkActorPopupMnemoInvoker
     if( value.isAssigned() ) {
       Ugwi moUgwi = props().getValobj( TFI_SKID_UGWI.id() );
       if( moUgwi != Ugwi.NONE ) {
-        Skid moSkid = UgwiKindSkSkid.getSkid( moUgwi );
+        Skid moSkid = UgwiKindSkSkid.INSTANCE.getGwid( moUgwi ).skid();
         // prepare (resolve) popup mnemo config for #moSkid master object
         ISimpleResolverFactoriesRegistry resRegistry = tsContext().get( ISimpleResolverFactoriesRegistry.class );
         MnemoMasterObjectManager mmoManager = new MnemoMasterObjectManager( skConn(), resRegistry );
@@ -294,7 +294,7 @@ public class SkActorPopupMnemoInvoker
       }
     }
     if( moUgwi != null && moUgwi != Ugwi.NONE ) {
-      Skid moSkid = UgwiKindSkSkid.getSkid( moUgwi );
+      Skid moSkid = UgwiKindSkSkid.INSTANCE.getGwid( moUgwi ).skid();
       ISkObject skObj = skVedEnv().skConn().coreApi().objService().find( moSkid );
       if( skObj != null ) {
         return skObj.attrs().getValue( TSID_NAME ).asString();

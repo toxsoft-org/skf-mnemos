@@ -7,7 +7,7 @@ import org.toxsoft.core.tsgui.valed.api.*;
 import org.toxsoft.core.tsgui.valed.controls.av.*;
 import org.toxsoft.core.tsgui.valed.impl.*;
 import org.toxsoft.core.tslib.av.*;
-import org.toxsoft.skf.mnemo.gui.mastobj.*;
+import org.toxsoft.skf.ext.mastobj.gui.main.*;
 
 /**
  * {@link EAtomicType#VALOBJ} of type {@link SubmasterConfig} editor.

@@ -2,7 +2,7 @@ package org.toxsoft.skf.mnemo.gui.cmd;
 
 import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
-import static org.toxsoft.skf.mnemo.gui.mastobj.IMnemoMasterObjectConstants.*;
+import static org.toxsoft.skf.ext.mastobj.gui.main.IMnemoMasterObjectConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 
 import org.eclipse.jface.viewers.*;
@@ -25,11 +25,13 @@ import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.skf.mnemo.gui.mastobj.*;
-import org.toxsoft.skf.mnemo.gui.mastobj.resolver.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.*;
-import org.toxsoft.skf.mnemo.gui.skved.mastobj.PanelActorPropertyResolverConfig.*;
+import org.toxsoft.skf.ext.mastobj.gui.main.*;
+import org.toxsoft.skf.ext.mastobj.gui.main.resolver.*;
+import org.toxsoft.skf.ext.mastobj.gui.skved.*;
+import org.toxsoft.skf.ext.mastobj.gui.skved.PanelActorPropertyResolverConfig.*;
+import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
+import org.toxsoft.uskat.core.connection.*;
 
 /**
  * Панель редактирования свйств пользовательского действия типа - UGWI, которые требуют разрешения на этапе исполнения.
@@ -175,7 +177,8 @@ public class PanelUserActionCfgUgwies
         ViewerRow row = (ViewerRow)selection.getFirstElement();
         String smClassId = MasterObjectUtils.findMainMasterClassId( getResolverConfig() );
         ICompoundResolverConfig cfg = null;
-        PanelContext pCtx = new PanelContext( row.ugwiKindId, smClassId, vedScreen );
+        ISkConnection skConn = vedScreen.tsContext().get( ISkVedEnvironment.class ).skConn();
+        PanelContext pCtx = new PanelContext( row.ugwiKindId, smClassId, vedScreen, skConn );
         if( row.ugwiKindId.equals( UgwiKindSkSkid.KIND_ID ) ) {
           cfg = PanelCompoundResolverConfig.edit( null, smClassId, vedScreen.tsContext() );
         }

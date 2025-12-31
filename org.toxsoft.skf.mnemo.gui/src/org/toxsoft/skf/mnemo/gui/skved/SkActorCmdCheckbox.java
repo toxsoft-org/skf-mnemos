@@ -118,8 +118,7 @@ public class SkActorCmdCheckbox
   private ISkCommand  currCommand = null;
   private IDtoCmdInfo cmdInfo     = null;
 
-  private Ugwi         ugwi      = null;
-  private Gwid         gwid      = null;
+  private Gwid         rtdGwid   = null;
   private IUgwiList    ugwiList  = IUgwiList.EMPTY;
   private IAtomicValue lastValue = IAtomicValue.NULL;
 
@@ -159,7 +158,7 @@ public class SkActorCmdCheckbox
         }
       }
       if( cmdUgwi != null && cmdUgwi != Ugwi.NONE ) {
-        Gwid cmdGwid = UgwiKindSkCmd.getGwid( cmdUgwi );
+        Gwid cmdGwid = UgwiKindSkCmd.INSTANCE.getGwid( cmdUgwi );
 
         IOptionSetEdit args = IOptionSet.NULL;
         IStridablesList<IDataDef> argDefs = cmdInfo.argDefs();
@@ -225,14 +224,14 @@ public class SkActorCmdCheckbox
   @Override
   protected final void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
     if( aChangedValues.hasKey( TFI_VALUE.id() ) ) {
-      gwid = null;
-      ugwi = Ugwi.NONE;
+      rtdGwid = null;
+      Ugwi ugwi = Ugwi.NONE;
       ugwiList = IUgwiList.EMPTY;
       IAtomicValue av = aChangedValues.getValue( TFI_VALUE.id() );
       if( av.isAssigned() ) {
         ugwi = av.asValobj();
         if( ugwi != null && ugwi != Ugwi.NONE ) {
-          gwid = UgwiKindSkRtdata.getGwid( ugwi );
+          rtdGwid = UgwiKindSkRtdata.INSTANCE.getGwid( ugwi );
           ugwiList = UgwiList.createDirect( new ElemArrayList<>( ugwi ) );
         }
       }
@@ -241,15 +240,16 @@ public class SkActorCmdCheckbox
     cmdOffUgwi = MnemoUtils.findUgwi( TFI_UNCHECK_CMD_UGWI.id(), aChangedValues );
 
     if( cmdOnUgwi != null && cmdOnUgwi != Ugwi.NONE ) {
-      ISkClassInfo clsInfo = coreApi().sysdescr().findClassInfo( UgwiKindSkCmd.getClassId( cmdOnUgwi ) );
-      cmdInfo = clsInfo.cmds().list().findByKey( UgwiKindSkCmd.getCmdId( cmdOnUgwi ) );
+      Gwid gwid = UgwiKindSkCmd.INSTANCE.getGwid( cmdOnUgwi );
+      ISkClassInfo clsInfo = coreApi().sysdescr().findClassInfo( gwid.classId() );
+      cmdInfo = clsInfo.cmds().list().findByKey( gwid.propId() );
     }
   }
 
   @Override
   public final void whenRealTimePassed( long aRtTime ) {
-    if( gwid != null ) {
-      IAtomicValue newValue = skVedEnv().getRtDataValue( gwid );
+    if( rtdGwid != null ) {
+      IAtomicValue newValue = skVedEnv().getRtDataValue( rtdGwid );
       if( !newValue.equals( lastValue ) ) {
         lastValue = newValue;
         doOnValueChanged( newValue );
@@ -288,7 +288,7 @@ public class SkActorCmdCheckbox
   protected final IGwidList doListUsedGwids() {
     GwidList gl = new GwidList();
     for( Ugwi u : ugwiList.items() ) {
-      gl.add( UgwiKindSkRtdata.getGwid( u ) );
+      gl.add( UgwiKindSkRtdata.INSTANCE.getGwid( u ) );
     }
     return gl;
   }

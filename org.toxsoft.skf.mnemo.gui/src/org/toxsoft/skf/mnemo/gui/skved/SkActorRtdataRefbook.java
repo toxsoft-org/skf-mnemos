@@ -24,6 +24,7 @@ import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.more.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
+import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.refbooks.lib.*;
@@ -112,9 +113,10 @@ public class SkActorRtdataRefbook
       fmtStr = aChangedValues.getStr( PROP_FORMAT_STRING );
       if( fmtStr.isBlank() && ugwi() != null && ugwi() != Ugwi.NONE ) {
         fmtStr = null;
-        ISkClassInfo classInfo = skSysdescr().findClassInfo( UgwiKindSkRtdata.getClassId( ugwi() ) );
+        Gwid gwid = UgwiKindSkRtdata.INSTANCE.getGwid( ugwi() );
+        ISkClassInfo classInfo = skSysdescr().findClassInfo( gwid.classId() );
         if( classInfo != null ) {
-          IDtoRtdataInfo rtdInfo = classInfo.rtdata().list().findByKey( UgwiKindSkRtdata.getRtdataId( ugwi() ) );
+          IDtoRtdataInfo rtdInfo = classInfo.rtdata().list().findByKey( gwid.propId() );
           if( rtdInfo != null ) {
             IAtomicValue avFmtStr = SkHelperUtils.getConstraint( rtdInfo, TSID_FORMAT_STRING );
             if( avFmtStr != null ) {
