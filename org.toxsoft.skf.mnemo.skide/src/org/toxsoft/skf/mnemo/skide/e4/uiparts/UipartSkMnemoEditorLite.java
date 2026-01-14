@@ -22,9 +22,9 @@ import org.toxsoft.skf.mnemo.skide.e4.services.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
 /**
- * Mnemoscheme editor UIpart.
+ * Mnemoscheme editor LITE UIpart.
  * <p>
- * Contain {@link IMnemoEditorPanel} as a mnemoscheme editor.
+ * FIXME right now it is de-facto PRO editor, change to LITE!!!!!!!!!!
  * <p>
  * Multiple instances of this UIpart is managed by {@link ISkMnemoEditService}. This UIpart remembers the source of the
  * mnemoscheme configuration to save it back to the source. The source may be the Sk-connection or the file, depends on
@@ -33,7 +33,7 @@ import org.toxsoft.uskat.core.gui.conn.*;
  *
  * @author hazard157
  */
-public class UipartSkMnemoEditor
+public class UipartSkMnemoEditorLite
     extends MwsAbstractPart {
 
   IMnemoEditorPanel panel;

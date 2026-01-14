@@ -21,8 +21,8 @@ import org.toxsoft.skf.mnemo.skide.e4.uiparts.*;
  * Mnemoscheme configuration, when loaded by {@link IMnemoEditorPanel#setCurrentConfig(IVedScreenCfg)} is strictly
  * checked for correctness. However, during development process, both VED items (actors and VISELs) may be intensively
  * changed. Without correction, mismatch between saved mnemo configuration and changed VED items properties makes it
- * impossible to load menemoscheme. This corrector is used by {@link UipartSkMnemoEditor} to remove mismatches before
- * editing saved mnemocheme.
+ * impossible to load menemoscheme. This corrector is used by {@link UipartSkMnemoEditorPro} and
+ * {@link UipartSkMnemoEditorLite} to remove mismatches before editing saved mnemocheme.
  *
  * @author hazard157
  */
