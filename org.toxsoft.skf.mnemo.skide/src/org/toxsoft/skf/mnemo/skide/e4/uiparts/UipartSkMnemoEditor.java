@@ -17,8 +17,8 @@ import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.mnemo.gui.e4.services.*;
 import org.toxsoft.skf.mnemo.lib.*;
+import org.toxsoft.skf.mnemo.mned.pro.glib.*;
 import org.toxsoft.skf.mnemo.skide.e4.services.*;
-import org.toxsoft.skf.mnemo.skide.glib.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
 /**

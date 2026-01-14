@@ -9,8 +9,9 @@ Export-Package: org.toxsoft.skf.mnemo.skide,
  org.toxsoft.skf.mnemo.skide.e4.addons,
  org.toxsoft.skf.mnemo.skide.e4.services,
  org.toxsoft.skf.mnemo.skide.e4.uiparts,
- org.toxsoft.skf.mnemo.skide.glib,
- org.toxsoft.skf.mnemo.skide.main
+ org.toxsoft.skf.mnemo.skide.main,
+ org.toxsoft.skf.mnemo.skide.tasks.codegen,
+ org.toxsoft.skf.mnemo.skide.tasks.upload
 Require-Bundle: jakarta.inject.jakarta.inject-api,
  jakarta.annotation-api,
  org.eclipse.core.runtime,
@@ -37,7 +38,9 @@ Require-Bundle: jakarta.inject.jakarta.inject-api,
  org.toxsoft.skf.reports.gui,
  org.toxsoft.skide.task.codegen,
  org.toxsoft.skide.plugin.exconn,
- org.toxsoft.skf.refbooks.lib
+ org.toxsoft.skf.refbooks.lib,
+ org.toxsoft.skf.mnemo.mned.lite,
+ org.toxsoft.skf.mnemo.mned.pro
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Automatic-Module-Name: org.toxsoft.skide.plugin.template
 Bundle-ActivationPolicy: lazy

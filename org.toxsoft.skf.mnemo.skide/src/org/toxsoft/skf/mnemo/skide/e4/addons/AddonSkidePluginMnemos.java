@@ -7,6 +7,8 @@ import org.toxsoft.core.tsgui.mws.bases.*;
 import org.toxsoft.core.tsgui.ved.*;
 import org.toxsoft.skf.mnemo.gui.*;
 import org.toxsoft.skf.mnemo.gui.e4.services.*;
+import org.toxsoft.skf.mnemo.mned.lite.*;
+import org.toxsoft.skf.mnemo.mned.pro.*;
 import org.toxsoft.skf.mnemo.skide.*;
 import org.toxsoft.skf.mnemo.skide.Activator;
 import org.toxsoft.skf.mnemo.skide.e4.services.*;
@@ -39,6 +41,8 @@ public class AddonSkidePluginMnemos
     aQuantRegistrator.registerQuant( new QuantSkMnemoGui() );
     aQuantRegistrator.registerQuant( new QuantVtReportTemplate() );
     aQuantRegistrator.registerQuant( new QuantSkMnemoGui() );
+    aQuantRegistrator.registerQuant( new QuantSkfMnemoMnedPro() );
+    aQuantRegistrator.registerQuant( new QuantSkfMnemoMnedLite() );
   }
 
   @Override

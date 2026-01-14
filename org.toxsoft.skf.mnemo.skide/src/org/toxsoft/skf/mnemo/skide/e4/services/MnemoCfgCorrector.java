@@ -12,14 +12,14 @@ import org.toxsoft.core.tslib.bricks.validator.*;
 import org.toxsoft.core.tslib.bricks.validator.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.lib.*;
+import org.toxsoft.skf.mnemo.mned.pro.glib.*;
 import org.toxsoft.skf.mnemo.skide.e4.uiparts.*;
-import org.toxsoft.skf.mnemo.skide.glib.*;
 
 /**
  * Correct {@link ISkMnemoCfg} instance to avoid exceptions during development.
  * <p>
  * Mnemoscheme configuration, when loaded by {@link IMnemoEditorPanel#setCurrentConfig(IVedScreenCfg)} is strictly
- * checked for correctness. However,, during development process, both VED items (actors and VISELs) may be intensively
+ * checked for correctness. However, during development process, both VED items (actors and VISELs) may be intensively
  * changed. Without correction, mismatch between saved mnemo configuration and changed VED items properties makes it
  * impossible to load menemoscheme. This corrector is used by {@link UipartSkMnemoEditor} to remove mismatches before
  * editing saved mnemocheme.
