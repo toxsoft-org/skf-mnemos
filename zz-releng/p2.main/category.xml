@@ -7,12 +7,16 @@
    </category-def>
    <bundle id="org.toxsoft.skf.mnemo.lib"/>
    <bundle id="org.toxsoft.skf.mnemo.gui"/>
+   <bundle id="org.toxsoft.skf.mnemo.mned.lite"/>
+   <bundle id="org.toxsoft.skf.mnemo.mned.pro"/>
    <bundle id="org.toxsoft.skf.mnemo.mws.simple"/>
    <bundle id="org.toxsoft.skf.mnemo.skide"/>
 
    <!-- sources -->
    <bundle id="org.toxsoft.skf.mnemo.lib.source"/>
    <bundle id="org.toxsoft.skf.mnemo.gui.source"/>
+   <bundle id="org.toxsoft.skf.mnemo.mned.lite.source"/>
+   <bundle id="org.toxsoft.skf.mnemo.mned.pro.source"/>
    <bundle id="org.toxsoft.skf.mnemo.mws.simple.source"/>
    <bundle id="org.toxsoft.skf.mnemo.skide.source"/>
 

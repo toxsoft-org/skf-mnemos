@@ -566,7 +566,10 @@
   <modules>
     <module>org.toxsoft.skf.mnemo.lib</module>
     <module>org.toxsoft.skf.mnemo.gui</module>
+    <module>org.toxsoft.skf.mnemo.mned.lite</module>
+    <module>org.toxsoft.skf.mnemo.mned.pro</module>
     <module>org.toxsoft.skf.mnemo.mws.simple</module>
+
     <module>org.toxsoft.skf.mnemo.skide</module>
 
     <module>zz-releng/p2.main</module>

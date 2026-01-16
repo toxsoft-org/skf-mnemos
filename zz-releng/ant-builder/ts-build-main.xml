@@ -18,6 +18,8 @@
   <target name="build-lib-jar" depends="clean" description="Сборка общих плагинов">
     <ant dir="../../org.toxsoft.skf.mnemo.lib" antfile="${ts-scripts-dir}/ts-build-lib.xml" target="build-lib-jar" />
     <ant dir="../../org.toxsoft.skf.mnemo.gui" antfile="${ts-scripts-dir}/ts-build-lib.xml" target="build-lib-jar" />
+    <ant dir="../../org.toxsoft.skf.mnemo.mned.lite" antfile="${ts-scripts-dir}/ts-build-lib.xml" target="build-lib-jar" />
+    <ant dir="../../org.toxsoft.skf.mnemo.mned.pro" antfile="${ts-scripts-dir}/ts-build-lib.xml" target="build-lib-jar" />
     <ant dir="../../org.toxsoft.skf.mnemo.mws.simple" antfile="${ts-scripts-dir}/ts-build-lib.xml" target="build-lib-jar" />
     <ant dir="../../org.toxsoft.skf.mnemo.skide" antfile="${ts-scripts-dir}/ts-build-lib.xml" target="build-lib-jar" />
   </target>
@@ -32,6 +34,8 @@
                        exportType="directory"
                        plugins="org.toxsoft.skf.mnemo.lib,
                                 org.toxsoft.skf.mnemo.gui,
+                                org.toxsoft.skf.mnemo.mned.lite,
+                                org.toxsoft.skf.mnemo.mned.pro,
                                 org.toxsoft.skf.mnemo.mws.simple,
                                 org.toxsoft.skf.mnemo.skide"
                        useworkspacecompiledclasses="true"
