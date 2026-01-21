@@ -11,6 +11,8 @@ import org.toxsoft.core.tsgui.graphics.icons.*;
 @SuppressWarnings( "javadoc" )
 public interface ISkfMnemMnedLiteConstants {
 
+  String MNED_LITE = "mned.lite"; //$NON-NLS-1$
+
   // ------------------------------------------------------------------------------------
   // plugin constants prefixes
 
@@ -24,6 +26,16 @@ public interface ISkfMnemMnedLiteConstants {
 
   String PREFIX_OF_ICON_FIELD_NAME = "ICONID_";         //$NON-NLS-1$
   String ICONID_MNEMO_EDIT_LITE    = "mnemo-edit-lite"; //$NON-NLS-1$
+  String ICONID_RTC_RECTANGLE      = "rtc-rectangle";   //$NON-NLS-1$
+  String ICONID_RTC_ELLIPSE        = "rtc-ellipse";     //$NON-NLS-1$
+
+  // ------------------------------------------------------------------------------------
+  // Palette categories
+
+  String PARAMID_CATEGORY = "paletteCategory"; //$NON-NLS-1$
+
+  String CATID_GEOMETRY     = "geometry";   //$NON-NLS-1$
+  String CATID_BOOLEAN_LAMP = "boolenLamp"; //$NON-NLS-1$
 
   /**
    * Constants registration.

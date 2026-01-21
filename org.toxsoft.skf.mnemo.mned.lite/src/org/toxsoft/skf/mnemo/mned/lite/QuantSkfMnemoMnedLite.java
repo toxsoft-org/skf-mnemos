@@ -2,6 +2,8 @@ package org.toxsoft.skf.mnemo.mned.lite;
 
 import org.eclipse.e4.core.contexts.*;
 import org.toxsoft.core.tsgui.bricks.quant.*;
+import org.toxsoft.skf.mnemo.mned.lite.rtc.*;
+import org.toxsoft.skf.mnemo.mned.lite.rtc.impl.*;
 
 /**
  * The library quant.
@@ -24,7 +26,10 @@ public class QuantSkfMnemoMnedLite
 
   @Override
   protected void doInitApp( IEclipseContext aAppContext ) {
-    // nop
+    RtControlFactoriesRegistry rtcFact = new RtControlFactoriesRegistry();
+    aAppContext.set( IRtControlFactoriesRegistry.class, rtcFact );
+    rtcFact.register( RtcRectangle.FACTORY );
+    rtcFact.register( RtcEllipse.FACTORY );
   }
 
   @Override

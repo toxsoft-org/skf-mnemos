@@ -4,6 +4,7 @@ Bundle-Name: Mnemoschemes Editor LITE library
 Bundle-SymbolicName: org.toxsoft.skf.mnemo.mned.lite
 Bundle-Version: 1.0.0.qualifier
 Export-Package: org.toxsoft.skf.mnemo.mned.lite,
+ org.toxsoft.skf.mnemo.mned.lite.glib,
  org.toxsoft.skf.mnemo.mned.lite.l10n
 Bundle-Activator: org.toxsoft.skf.mnemo.mned.lite.Activator
 Bundle-Vendor: toxsoft.org

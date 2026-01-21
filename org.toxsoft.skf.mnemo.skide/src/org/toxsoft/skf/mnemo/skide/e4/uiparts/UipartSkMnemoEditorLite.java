@@ -17,7 +17,7 @@ import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.mnemo.gui.e4.services.*;
 import org.toxsoft.skf.mnemo.lib.*;
-import org.toxsoft.skf.mnemo.mned.pro.glib.*;
+import org.toxsoft.skf.mnemo.mned.lite.glib.*;
 import org.toxsoft.skf.mnemo.skide.e4.services.*;
 import org.toxsoft.uskat.core.gui.conn.*;
 
@@ -45,7 +45,7 @@ public class UipartSkMnemoEditorLite
   protected void doInit( Composite aParent ) {
     IdChain skConnId = ISkConnectionSupplier.DEF_CONN_ID; // default connection is used is SkIDE
     panel = new MnemoEditorPanel( aParent, tsContext(), skConnId );
-    panel.setExternelHandler( this::processEditorPanelExternalAction );
+    panel.setExternalHandler( this::processEditorPanelExternalAction );
     panel.mnemoChangedEventer().addListener( s -> whenEditorDirtyStateChanges() );
   }
 
