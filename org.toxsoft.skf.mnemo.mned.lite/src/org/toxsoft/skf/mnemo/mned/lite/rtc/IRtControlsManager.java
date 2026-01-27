@@ -33,10 +33,10 @@ public interface IRtControlsManager
   IStridablesList<IRtControl> list();
 
   /**
-   * Retuns {@link IRtControl} by corresponding visel ID.
+   * Retuns {@link IRtControl} by corresponding visel ID or <code>null</code>.
    *
    * @param aViselId String - visel ID
-   * @return {@link IRtControl} - found RtControl or null
+   * @return {@link IRtControl} - found RtControl or <code>null</code>
    */
   IRtControl getRtControlByViselId( String aViselId );
 

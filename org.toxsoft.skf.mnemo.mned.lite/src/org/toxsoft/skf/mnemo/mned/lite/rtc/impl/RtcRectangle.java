@@ -68,17 +68,27 @@ public class RtcRectangle
     @Override
     protected IRtControl doCreate( IRtControlCfg aCfg, VedScreen aVedScreen ) {
       VedAbstractVisel v = null;
+      // String viselId = TsLibUtils.EMPTY_STRING;
+      // if( aCfg.params().hasKey( PROPID_VISEL_ID ) ) {
+      // viselId = aCfg.params().getStr( PROPID_VISEL_ID );
+      // }
+      // if( viselId.isBlank() ) { // создание с нуля
+
       if( aCfg.viselId().isBlank() ) { // создание с нуля
         IVedViselFactory f = viselFactory( ViselRectangle.FACTORY_ID, aVedScreen );
         VedItemCfg viselCfg = aVedScreen.model().visels().prepareFromTemplate( f.paletteEntries().first().itemCfg() );
-        // viselCfg.params().setDouble( PROPID_X, aCfg.params().getDouble( PROPID_X ) );
-        viselCfg.params().setDouble( PROPID_X, 400 );
-        viselCfg.params().setDouble( PROPID_Y, 300 );
+        viselCfg.propValues().setDouble( PROPID_X, aCfg.params().getDouble( PROPID_X ) );
+        viselCfg.propValues().setDouble( PROPID_Y, aCfg.params().getDouble( PROPID_Y ) );
         v = aVedScreen.model().visels().create( viselCfg );
-        // v = f.create( f.paletteEntries().first().itemCfg(), aVedScreen );
       }
+      else {
+        v = aVedScreen.model().visels().list().getByKey( aCfg.viselId() );
+      }
+
       if( v != null ) {
         IOptionSetEdit params = new OptionSet();
+        params.setDouble( PROPID_X, v.props().getDouble( PROPID_X ) );
+        params.setDouble( PROPID_Y, v.props().getDouble( PROPID_Y ) );
         params.setStr( PROPID_VISEL_ID, v.id() );
         RtControlCfg cfg = new RtControlCfg( v.id(), FACTORY_ID, params );
         return new RtcRectangle( cfg, propDefs(), aVedScreen );
@@ -89,8 +99,8 @@ public class RtcRectangle
 
   protected RtcRectangle( IRtControlCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
-    // TODO Auto-generated constructor stub
-    VedAbstractVisel visel = aVedScreen.model().visels().list().getByKey( aConfig.viselId() );
+    // nop
+    // VedAbstractVisel visel = aVedScreen.model().visels().list().getByKey( aConfig.viselId() );
     // visel.props().propsEventer().addListener( null );
   }
 

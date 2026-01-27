@@ -76,7 +76,7 @@ public class MnemoEditorPanel
   // private final VedViselsEditManager editManager;
   // private final VedViselsCopyPasteManager copyPasteManager;
   // private final VedViselsLayoutManager layoutManager;
-  // private final VedViselsDeleteManager deleteManager;
+  private final VedViselsDeleteManager    deleteManager;
   private final IVedViselsPositionManager positionManager;
   private final IRtControlsManager        rtControlsManager;
 
@@ -85,6 +85,7 @@ public class MnemoEditorPanel
   //
 
   private final VedViselPositionHandler viselsPositionHandler;
+  private final VedViselsDeleteHandler  deleteHandler;
 
   /**
    * Constructor.
@@ -106,6 +107,9 @@ public class MnemoEditorPanel
     vedScreen.tsContext().put( ISkVedEnvironment.class, skVedEnvironment );
     vedScreen.tsContext().put( ISkConnection.class, skConn );
     setCtxSkConnKey( tsContext(), aSuppliedConnectionId );
+
+    // hotKeysManager = new VedHotKeysManager( vedScreen );
+    deleteManager = new VedViselsDeleteManager( vedScreen );
 
     undoManager = new VedUndoManager( vedScreen );
     rtControlsManager = new RtControlsManager( (VedScreen)vedScreen );
@@ -132,7 +136,13 @@ public class MnemoEditorPanel
 
     viselsPositionHandler = new VedViselPositionHandler( vedScreen, positionManager );
 
+    deleteManager.addProcessor( new SelectionDeleteProcessor( vedScreen, selectionManager ) );
+    deleteManager.addProcessor( new RtControlDeleteProcessor( rtControlsManager ) );
+    deleteHandler = new VedViselsDeleteHandler( vedScreen, deleteManager );
+
+    // vedScreen.model().screenHandlersBefore().add( hotKeysManager.inputHandler() );
     vedScreen.model().screenHandlersBefore().add( vertexSetManager );
+    vedScreen.model().screenHandlersBefore().add( deleteHandler );
     vedScreen.model().screenHandlersBefore().add( viselsPositionHandler );
     vedScreen.model().screenHandlersBefore().add( paletteSelectionManager );
 
@@ -157,6 +167,7 @@ public class MnemoEditorPanel
   @Override
   public IVedScreenCfg getCurrentConfig() {
     VedScreenCfg scrCfg = VedScreenUtils.getVedScreenConfig( vedScreen );
+    ((RtControlsManager)rtControlsManager).updateScreenCfg( scrCfg );
     return scrCfg;
   }
 
@@ -164,7 +175,7 @@ public class MnemoEditorPanel
   public void setCurrentConfig( IVedScreenCfg aCfg ) {
     // TODO Auto-generated method stub
     VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
-
+    ((RtControlsManager)rtControlsManager).setScreenCfg( aCfg );
   }
 
   @Override

@@ -7,6 +7,7 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.bricks.strid.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.coll.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 
@@ -62,4 +63,12 @@ public interface IRtControlFactory
    * @return IList&lt;Pair&lt;String, String>> - correspondence between visel and RtControl propertyIds
    */
   IList<Pair<String, String>> viselPropIdBinding();
+
+  /**
+   * Correspondence between actor propertyIds and RtControl propertyIds.<br>
+   * Key - actor ID, Left - rtControl propertyId, right - viselPropertyId
+   *
+   * @return IList&lt;Pair&lt;String, String>> - correspondence between visel and RtControl propertyIds
+   */
+  IStringMap<IList<Pair<String, String>>> actorPropIdBinding();
 }

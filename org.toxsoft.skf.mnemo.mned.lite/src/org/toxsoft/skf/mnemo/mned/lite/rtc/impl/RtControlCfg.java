@@ -6,7 +6,11 @@ import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.av.utils.*;
+import org.toxsoft.core.tslib.bricks.keeper.*;
+import org.toxsoft.core.tslib.bricks.keeper.AbstractEntityKeeper.*;
 import org.toxsoft.core.tslib.bricks.strid.impl.*;
+import org.toxsoft.core.tslib.bricks.strio.*;
+import org.toxsoft.core.tslib.bricks.strio.impl.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.utils.*;
@@ -21,9 +25,59 @@ import org.toxsoft.skf.mnemo.mned.lite.rtc.*;
 public class RtControlCfg
     implements IRtControlCfg, IParameterizedEdit {
 
+  private static final String KW_PARAMS = "params"; //$NON-NLS-1$
+
+  /**
+   * The keeper singleton.
+   */
+  public static final IEntityKeeper<IRtControlCfg> KEEPER =
+      new AbstractEntityKeeper<>( IRtControlCfg.class, EEncloseMode.ENCLOSES_BASE_CLASS, null ) {
+
+        @Override
+        protected void doWrite( IStrioWriter aSw, IRtControlCfg aEntity ) {
+          aSw.incNewLine();
+          // item ID and factory ID
+          aSw.writeAsIs( aEntity.id() );
+          aSw.writeSeparatorChar();
+          aSw.writeAsIs( aEntity.factoryId() );
+          aSw.writeSeparatorChar();
+          aSw.writeEol();
+          // properties values
+          OptionSetKeeper.KEEPER_INDENTED.write( aSw, aEntity.propValues() );
+          aSw.writeSeparatorChar();
+          aSw.writeEol();
+          // parameters values
+          StrioUtils.writeKeywordHeader( aSw, KW_PARAMS, true );
+          OptionSetKeeper.KEEPER.write( aSw, aEntity.params() );
+          aSw.writeSeparatorChar();
+          aSw.writeEol();
+        }
+
+        @Override
+        protected IRtControlCfg doRead( IStrioReader aSr ) {
+          // item ID and factory ID
+          String id = aSr.readIdPath();
+          aSr.ensureSeparatorChar();
+          String factoryId = aSr.readIdPath();
+          aSr.ensureSeparatorChar();
+          // properties values
+          IOptionSet propValues = OptionSetKeeper.KEEPER.read( aSr );
+          aSr.ensureSeparatorChar();
+          // parameters values
+          StrioUtils.ensureKeywordHeader( aSr, KW_PARAMS );
+          IOptionSet params = OptionSetKeeper.KEEPER.read( aSr );
+          aSr.ensureSeparatorChar();
+          // create an item to read extra data into it
+          RtControlCfg itemCfg = new RtControlCfg( id, factoryId, params );
+          itemCfg.propValues().setAll( propValues );
+          return itemCfg;
+        }
+
+      };
+
   private final String         id;
-  private final IOptionSetEdit params     = new OptionSet();
   private final String         factoryId;
+  private final IOptionSetEdit params     = new OptionSet();
   private final IOptionSetEdit propValues = new OptionSet();
 
   private String viselId = TsLibUtils.EMPTY_STRING;
@@ -148,5 +202,18 @@ public class RtControlCfg
       return aParams.getStr( PROPID_VISEL_ID );
     }
     return TsLibUtils.EMPTY_STRING;
+  }
+
+  /**
+   * Returns list of actor ID's or empty.
+   *
+   * @param aParams {@link IOptionSet} - parameters
+   * @return IStringList - list of actor ID's or empty
+   */
+  public static IStringList actorIds( IOptionSet aParams ) {
+    if( aParams.hasKey( PROPID_ACTORS_IDS ) ) {
+      return aParams.getValobj( PROPID_ACTORS_IDS );
+    }
+    return IStringList.EMPTY;
   }
 }

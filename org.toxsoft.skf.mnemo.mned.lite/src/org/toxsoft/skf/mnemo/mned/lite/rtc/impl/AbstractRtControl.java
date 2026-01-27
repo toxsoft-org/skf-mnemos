@@ -6,15 +6,16 @@ import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
-import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.av.props.*;
 import org.toxsoft.core.tslib.av.utils.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
@@ -42,9 +43,13 @@ public class AbstractRtControl
 
   private final VedAbstractVisel visel;
 
+  private final IStridablesListEdit<VedAbstractActor> actors;
+
   private final IRtControlFactory factory;
 
   private final IList<Pair<String, String>> viselPropsBinding;
+
+  private final IStringMap<IList<Pair<String, String>>> actorPropsBinding;
 
   /**
    * Constructor for subclasses.
@@ -63,40 +68,47 @@ public class AbstractRtControl
     IRtControlFactoriesRegistry reg = aVedScreen.tsContext().get( IRtControlFactoriesRegistry.class );
     factory = reg.get( aConfig.factoryId() );
     viselPropsBinding = factory.viselPropIdBinding();
+    actorPropsBinding = factory.actorPropIdBinding();
 
     String viselId = RtControlCfg.viselId( params );
     visel = aVedScreen.model().visels().list().getByKey( viselId );
+    IStringList actorIds = RtControlCfg.actorIds( params );
+    if( actorIds.size() <= 0 ) {
+      actors = IStridablesList.EMPTY;
+    }
+    else {
+      actors = new StridablesList<>();
+      for( String id : actorIds ) {
+        actors.add( aVedScreen.model().actors().list().getByKey( id ) );
+      }
+    }
 
     propSet = new PropertiesSet<>( this, aPropDefs );
     propSet.propsEventer().addListener( ( aSource, aNewValues, aOldValues ) -> {
       visel.props().propsEventer().pauseFiring();
       for( Pair<String, String> p : viselPropsBinding ) {
         if( aNewValues.keys().hasElem( p.left() ) ) {
-          IAtomicValue v = visel.props().getValue( p.right() );
+          // IAtomicValue v = visel.props().getValue( p.right() );
           visel.props().setValue( p.right(), aNewValues.getValue( p.left() ) );
-          v = visel.props().getValue( p.right() );
+          // v = visel.props().getValue( p.right() );
         }
       }
       visel.props().propsEventer().resumeFiring( true );
+
+      for( String actorId : actorPropsBinding.keys() ) {
+        VedAbstractActor actor = actors.getByKey( actorId );
+        actor.props().propsEventer().pauseFiring();
+        IList<Pair<String, String>> pairs = actorPropsBinding.getByKey( actorId );
+        for( Pair<String, String> p : pairs ) {
+          if( aNewValues.keys().hasElem( p.left() ) ) {
+            actor.props().setValue( p.right(), aNewValues.getValue( p.left() ) );
+          }
+        }
+        actor.props().propsEventer().resumeFiring( true );
+      }
+
       doUpdateCachesAfterPropsChange( aNewValues );
     } );
-
-    // propSet = new PropertiesSet<>( this, aPropDefs ) {
-    //
-    // @Override
-    // protected void doAfterPropValuesSet( IOptionSet aChangedValues ) {
-    // visel.props().propsEventer().pauseFiring();
-    // for( Pair<String, String> p : viselPropsBinding ) {
-    // if( aChangedValues.keys().hasElem( p.left() ) ) {
-    // IAtomicValue v = visel.props().getValue( p.right() );
-    // visel.props().setValue( p.right(), aChangedValues.getValue( p.left() ) );
-    // v = visel.props().getValue( p.right() );
-    // }
-    // }
-    // visel.props().propsEventer().resumeFiring( false );
-    // doUpdateCachesAfterPropsChange( aChangedValues );
-    // }
-    // };
 
     visel.props().propsEventer().addListener( ( aSource, aNewValues, aOldValues ) -> {
       propSet.propsEventer().pauseFiring();
@@ -110,6 +122,12 @@ public class AbstractRtControl
 
     // extraData.copyFrom( aConfig.extraData() );
     props().setInterceptor( ( s, aNewValues, aValuesToSet ) -> interceptPropsChange( aNewValues, aValuesToSet ) );
+    propSet.propsEventer().pauseFiring();
+    updatePropsByVisel( visel.props() );
+    for( VedAbstractActor actor : actors ) {
+      updatePropsByActor( actor );
+    }
+    propSet.propsEventer().resumeFiring( false );
   }
 
   // ------------------------------------------------------------------------------------
@@ -281,4 +299,20 @@ public class AbstractRtControl
     doInterceptPropsChange( aNewValues, aValuesToSet );
   }
 
+  void updatePropsByVisel( IOptionSet aProps ) {
+    for( Pair<String, String> p : viselPropsBinding ) {
+      if( aProps.keys().hasElem( p.right() ) ) {
+        propSet.setValue( p.left(), aProps.getValue( p.right() ) );
+      }
+    }
+  }
+
+  void updatePropsByActor( VedAbstractActor aActor ) {
+    IList<Pair<String, String>> pairs = actorPropsBinding.getByKey( aActor.id() );
+    for( Pair<String, String> p : pairs ) {
+      if( aActor.props().keys().hasElem( p.right() ) ) {
+        propSet.setValue( p.left(), aActor.props().getValue( p.right() ) );
+      }
+    }
+  }
 }

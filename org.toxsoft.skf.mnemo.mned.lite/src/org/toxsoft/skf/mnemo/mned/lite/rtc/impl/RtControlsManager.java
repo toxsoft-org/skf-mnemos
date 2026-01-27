@@ -1,7 +1,9 @@
 package org.toxsoft.skf.mnemo.mned.lite.rtc.impl;
 
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
+import static org.toxsoft.skf.mnemo.mned.lite.ISkfMnemMnedLiteConstants.*;
 
+import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.bricks.events.*;
@@ -11,6 +13,7 @@ import org.toxsoft.core.tslib.bricks.strid.coll.notifier.*;
 import org.toxsoft.core.tslib.bricks.strid.impl.*;
 import org.toxsoft.core.tslib.bricks.validator.*;
 import org.toxsoft.core.tslib.bricks.validator.impl.*;
+import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.helpers.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
@@ -145,7 +148,7 @@ public class RtControlsManager
   }
 
   // ------------------------------------------------------------------------------------
-  // IVedItemsManager
+  // IRtControlsManager
   //
 
   @Override
@@ -252,6 +255,33 @@ public class RtControlsManager
 
     // TODO Auto-generated method stub
 
+  }
+
+  // ------------------------------------------------------------------------------------
+  // API
+  //
+
+  /**
+   * Записывает в экстра-данные конфигурации экрана редактрования текущую конфигурацию RtControl'ей.
+   *
+   * @param aScreenCfg {@link IVedScreenCfg} - конфигурация экрана редактирования
+   */
+  public void updateScreenCfg( VedScreenCfg aScreenCfg ) {
+    IStridablesListEdit<IRtControlCfg> configs = new StridablesList<>();
+    for( IRtControl rtc : itemsList ) {
+      RtControlCfg cfg = new RtControlCfg( rtc.id(), rtc.factoryId(), rtc.params() );
+      configs.add( cfg );
+    }
+    String id = VED_SCREEN_EXTRA_DATA_ID_RTCONTROLS_MANAGER_CONGIF;
+    aScreenCfg.extraData().writeColl( id, configs, RtControlCfg.KEEPER );
+  }
+
+  public void setScreenCfg( IVedScreenCfg aScreenCfg ) {
+    String id = VED_SCREEN_EXTRA_DATA_ID_RTCONTROLS_MANAGER_CONGIF;
+    IList<IRtControlCfg> rtcCfgs = aScreenCfg.extraData().readColl( id, RtControlCfg.KEEPER );
+    for( IRtControlCfg rtcCfg : rtcCfgs ) {
+      create( rtcCfg );
+    }
   }
 
   // ------------------------------------------------------------------------------------

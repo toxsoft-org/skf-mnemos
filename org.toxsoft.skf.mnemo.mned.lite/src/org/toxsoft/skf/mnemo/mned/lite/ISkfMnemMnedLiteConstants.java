@@ -1,7 +1,13 @@
 package org.toxsoft.skf.mnemo.mned.lite;
 
+import static org.toxsoft.uskat.core.ISkHardConstants.*;
+
 import org.eclipse.e4.core.contexts.*;
 import org.toxsoft.core.tsgui.graphics.icons.*;
+import org.toxsoft.core.tsgui.ved.screen.cfg.*;
+import org.toxsoft.core.tslib.bricks.keeper.*;
+import org.toxsoft.core.txtproj.lib.storage.*;
+import org.toxsoft.skf.ext.mastobj.gui.main.*;
 
 /**
  * Plugin common constants.
@@ -24,11 +30,11 @@ public interface ISkfMnemMnedLiteConstants {
   // ------------------------------------------------------------------------------------
   // Icons
 
-  String PREFIX_OF_ICON_FIELD_NAME = "ICONID_";         //$NON-NLS-1$
-  String ICONID_MNEMO_EDIT_LITE    = "mnemo-edit-lite"; //$NON-NLS-1$
-  String ICONID_RTC_RECTANGLE      = "rtc-rectangle";   //$NON-NLS-1$
-  String ICONID_RTC_ELLIPSE        = "rtc-ellipse";     //$NON-NLS-1$
-
+  String PREFIX_OF_ICON_FIELD_NAME = "ICONID_";          //$NON-NLS-1$
+  String ICONID_MNEMO_EDIT_LITE    = "mnemo-edit-lite";  //$NON-NLS-1$
+  String ICONID_RTC_RECTANGLE      = "rtc-rectangle";    //$NON-NLS-1$
+  String ICONID_RTC_ELLIPSE        = "rtc-ellipse";      //$NON-NLS-1$
+  String ICONID_RTC_LINEAR_GAUGE   = "rtc-linear-gauge"; //$NON-NLS-1$
   // ------------------------------------------------------------------------------------
   // Palette categories
 
@@ -36,6 +42,16 @@ public interface ISkfMnemMnedLiteConstants {
 
   String CATID_GEOMETRY     = "geometry";   //$NON-NLS-1$
   String CATID_BOOLEAN_LAMP = "boolenLamp"; //$NON-NLS-1$
+  String CATID_GAUGE        = "gauge";      //$NON-NLS-1$
+
+  /**
+   * Section ID in {@link IVedScreenCfg#extraData()} to store instance of type {@link IMnemoResolverConfig}.
+   * <p>
+   * Section with this ID contains {@link IMnemoResolverConfig} keeper textual representation. The method
+   * {@link IKeepablesStorageRo#readItem(String, IEntityKeeper, Object)} must be used to read the content of the
+   * section.
+   */
+  String VED_SCREEN_EXTRA_DATA_ID_RTCONTROLS_MANAGER_CONGIF = USKAT_FULL_ID + ".RtControlsManagerConfig"; //$NON-NLS-1$
 
   /**
    * Constants registration.

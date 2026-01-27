@@ -15,6 +15,8 @@ import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.impl.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
+import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.mned.lite.rtc.*;
@@ -36,6 +38,11 @@ public abstract class AbstractRtControlFactory
    * Список пар соответствия свойства RtContorl'я и визуального элемента.
    */
   private final IListEdit<Pair<String, String>> viselPropsBinding = new ElemArrayList<>();
+
+  /**
+   * Карта списоков пар соответствия свойства RtContorl'я и актора.
+   */
+  private final IStringMapEdit<IList<Pair<String, String>>> actorPropsBinding = new StringMap<>();
 
   /**
    * Constructor.
@@ -118,6 +125,11 @@ public abstract class AbstractRtControlFactory
     return viselPropsBinding;
   }
 
+  @Override
+  public IStringMap<IList<Pair<String, String>>> actorPropIdBinding() {
+    return actorPropsBinding;
+  }
+
   // ------------------------------------------------------------------------------------
   // To use
   //
@@ -127,8 +139,25 @@ public abstract class AbstractRtControlFactory
     return reg.get( aFactoryId );
   }
 
+  IVedActorFactory actorFactory( String aFactoryId, IVedScreen aVedScreen ) {
+    IVedActorFactoriesRegistry reg = aVedScreen.tsContext().get( IVedActorFactoriesRegistry.class );
+    return reg.get( aFactoryId );
+  }
+
   void bindViselPropId( String aRtcPropid, String aViselPropId ) {
     viselPropsBinding.add( new Pair<>( aRtcPropid, aViselPropId ) );
+  }
+
+  void bindActorPropId( String aActorId, String aRtcPropid, String aViselPropId ) {
+    IListEdit<Pair<String, String>> pairs;
+    if( !actorPropsBinding.hasKey( aActorId ) ) {
+      pairs = new ElemArrayList<>();
+      actorPropsBinding.put( aActorId, pairs );
+    }
+    else {
+      pairs = (IListEdit<Pair<String, String>>)actorPropsBinding.getByKey( aActorId );
+    }
+    pairs.add( new Pair<>( aRtcPropid, aViselPropId ) );
   }
 
   // ------------------------------------------------------------------------------------

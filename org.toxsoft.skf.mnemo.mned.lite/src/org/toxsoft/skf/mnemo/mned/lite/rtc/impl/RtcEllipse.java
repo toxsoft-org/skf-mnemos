@@ -71,8 +71,8 @@ public class RtcEllipse
       if( aCfg.viselId().isBlank() ) { // создание с нуля
         IVedViselFactory f = viselFactory( ViselEllipse.FACTORY_ID, aVedScreen );
         VedItemCfg viselCfg = aVedScreen.model().visels().prepareFromTemplate( f.paletteEntries().first().itemCfg() );
-        viselCfg.params().setDouble( PROPID_X, 400 );
-        viselCfg.params().setDouble( PROPID_Y, 300 );
+        viselCfg.propValues().setDouble( PROPID_X, aCfg.params().getDouble( PROPID_X ) );
+        viselCfg.propValues().setDouble( PROPID_Y, aCfg.params().getDouble( PROPID_Y ) );
         v = aVedScreen.model().visels().create( viselCfg );
       }
       if( v != null ) {

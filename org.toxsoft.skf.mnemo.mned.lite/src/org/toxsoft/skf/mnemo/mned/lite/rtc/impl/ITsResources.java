@@ -18,4 +18,11 @@ interface ITsResources {
    */
   String STR_RTC_ELLIPSE   = Messages.getString( "STR_RTC_ELLIPSE" );   //$NON-NLS-1$ ;
   String STR_RTC_ELLIPSE_D = Messages.getString( "STR_RTC_ELLIPSE_D" ); //$NON-NLS-1$ ;
+
+  /**
+   * RtcLinearGauge
+   */
+
+  String STR_RTC_LINEAR_GAUGE   = Messages.getString( "STR_RTC_LINEAR_GAUGE" );   //$NON-NLS-1$ ;
+  String STR_RTC_LINEAR_GAUGE_D = Messages.getString( "STR_RTC_LINEAR_GAUGE_D" ); //$NON-NLS-1$ ;
 }
