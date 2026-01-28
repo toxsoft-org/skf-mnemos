@@ -45,8 +45,8 @@ public class RtcEllipse
     protected ITinTypeInfo doCreateTypeInfo() {
       IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
       fields.add( TFI_BK_FILL );
-      fields.add( TFI_COLOR_DESCRIPTOR );
-      fields.add( TFI_BORDER_INFO );
+      fields.add( TFI_FG_COLOR );
+      fields.add( TFI_LINE_INFO );
       fields.add( TFI_X );
       fields.add( TFI_Y );
       fields.add( TFI_WIDTH );
@@ -57,8 +57,8 @@ public class RtcEllipse
     @Override
     protected void bindViselProps() {
       bindViselPropId( PROPID_BK_FILL, PROPID_BK_FILL );
-      bindViselPropId( PROPID_COLOR_DESCRIPTOR, PROPID_COLOR_DESCRIPTOR );
-      bindViselPropId( PROPID_BORDER_INFO, PROPID_BORDER_INFO );
+      bindViselPropId( PROPID_FG_COLOR, PROPID_FG_COLOR );
+      bindViselPropId( PROPID_LINE_INFO, PROPID_LINE_INFO );
       bindViselPropId( PROPID_X, PROPID_X );
       bindViselPropId( PROPID_Y, PROPID_Y );
       bindViselPropId( PROPID_WIDTH, PROPID_WIDTH );
@@ -87,8 +87,8 @@ public class RtcEllipse
 
   protected RtcEllipse( IRtControlCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
-    // TODO Auto-generated constructor stub
-    VedAbstractVisel visel = aVedScreen.model().visels().list().getByKey( aConfig.viselId() );
+    // nop
+    // VedAbstractVisel visel = aVedScreen.model().visels().list().getByKey( aConfig.viselId() );
     // visel.props().propsEventer().addListener( null );
   }
 

@@ -45,7 +45,6 @@ public class RtcRectangle
     protected ITinTypeInfo doCreateTypeInfo() {
       IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
       fields.add( TFI_BK_FILL );
-      fields.add( TFI_COLOR_DESCRIPTOR );
       fields.add( TFI_BORDER_INFO );
       fields.add( TFI_X );
       fields.add( TFI_Y );
@@ -57,7 +56,6 @@ public class RtcRectangle
     @Override
     protected void bindViselProps() {
       bindViselPropId( PROPID_BK_FILL, PROPID_BK_FILL );
-      bindViselPropId( PROPID_COLOR_DESCRIPTOR, PROPID_COLOR_DESCRIPTOR );
       bindViselPropId( PROPID_BORDER_INFO, PROPID_BORDER_INFO );
       bindViselPropId( PROPID_X, PROPID_X );
       bindViselPropId( PROPID_Y, PROPID_Y );

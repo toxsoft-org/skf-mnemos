@@ -169,6 +169,7 @@ public interface ISkVedConstants {
       TSID_KEEPER_ID, Ugwi.KEEPER_ID, //
       OPDEF_EDITOR_FACTORY_NAME, ValedAvUgwiSelector.FACTORY_NAME, //
       ValedUgwiSelector.OPDEF_SINGLE_UGWI_KIND_ID, avStr( UgwiKindSkRtdata.KIND_ID ), //
+      OPDEF_IS_SINGLE_LINE_UI, AV_TRUE, //
       TSID_DEFAULT_VALUE, IAtomicValue.NULL //
   );
 

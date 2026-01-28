@@ -254,9 +254,7 @@ public class MnemoEditorPanel
       rtc = rtControlsManager.getRtControlByViselId( viselId );
       // selVisel = vedScreen.model().visels().list().getByKey( viselId );
     }
-    if( rtc != null ) {
-      rtControlInspector.setRtControl( rtc );
-    }
+    rtControlInspector.setRtControl( rtc );
     // eastFolder.setSelection( tiViselInsp );
   }
 
