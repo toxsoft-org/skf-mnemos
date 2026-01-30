@@ -86,13 +86,13 @@ public class SkMnemoEditService
     partInfo.setCloseable( true );
     if( aLite ) {
       partInfo.setContributionUri( org.toxsoft.skf.mnemo.skide.Activator.PLUGIN_ID, UipartSkMnemoEditorLite.class );
-      partInfo.setIconUri( TsIconManagerUtils.imageUriFromPlugin( org.toxsoft.skf.mnemo.gui.Activator.PLUGIN_ID,
-          ISkMnemoGuiConstants.ICONID_MNEMO_EDIT_LITE ) );
+      // partInfo.setIconUri( TsIconManagerUtils.imageUriFromPlugin( org.toxsoft.skf.mnemo.gui.Activator.PLUGIN_ID,
+      // ISkMnemoGuiConstants.ICONID_MNEMO_EDIT_LITE ) );
     }
     else {
       partInfo.setContributionUri( org.toxsoft.skf.mnemo.skide.Activator.PLUGIN_ID, UipartSkMnemoEditorPro.class );
-      partInfo.setIconUri( TsIconManagerUtils.imageUriFromPlugin( org.toxsoft.skf.mnemo.gui.Activator.PLUGIN_ID,
-          ISkMnemoGuiConstants.ICONID_MNEMO_EDIT_PRO ) );
+      // partInfo.setIconUri( TsIconManagerUtils.imageUriFromPlugin( org.toxsoft.skf.mnemo.gui.Activator.PLUGIN_ID,
+      // ISkMnemoGuiConstants.ICONID_MNEMO_EDIT_PRO ) );
     }
     partInfo.setLabel( aMnemoCfg.nmName() );
     partInfo.setTooltip( aMnemoCfg.description() );
