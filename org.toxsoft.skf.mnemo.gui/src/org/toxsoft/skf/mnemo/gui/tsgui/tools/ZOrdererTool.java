@@ -1,5 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.tsgui.tools;
 
+import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
+
 import org.eclipse.swt.*;
 import org.eclipse.swt.graphics.*;
 import org.eclipse.swt.widgets.*;
@@ -35,8 +37,6 @@ public class ZOrdererTool
   public static final String TOOLID = "toolZOrderer"; //$NON-NLS-1$
 
   private final static String CURSOR_NAME = "zOrderCursor"; //$NON-NLS-1$
-
-  private final static String ICONID = "cur_zorder.png"; //$NON-NLS-1$
 
   static class ZNumberDecorator
       extends VedAbstractDecorator {
@@ -157,7 +157,7 @@ public class ZOrdererTool
     if( !cursorManager.hasCursor( CURSOR_NAME ) ) {
       Image cursorImage;
       String pluginId = Activator.PLUGIN_ID;
-      cursorImage = TsIconManagerUtils.imageDescriptorFromPlugin( pluginId, "icons/cursors/" + ICONID ).createImage(); //$NON-NLS-1$
+      cursorImage = TsIconManagerUtils.imageDescriptorFromPlugin( pluginId, CURSOR_IMG_ZORDER ).createImage();
       // Cursor cursor = TsSingleFiltersourcingUtils.Cursor_Cursor( display, cursorImage.getImageData(), 0, 0 );
       cursor = new Cursor( getDisplay(), cursorImage.getImageData(), 0, 0 );
       cursorManager.putCursor( CURSOR_NAME, cursor );
@@ -174,7 +174,7 @@ public class ZOrdererTool
 
   @Override
   public String iconId() {
-    return ICONID;
+    return null; // TODO what icon?
   }
 
   // ------------------------------------------------------------------------------------

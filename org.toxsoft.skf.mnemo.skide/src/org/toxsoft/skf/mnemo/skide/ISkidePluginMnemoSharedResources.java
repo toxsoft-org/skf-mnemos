@@ -14,18 +14,6 @@ import org.toxsoft.skf.mnemo.skide.tasks.upload.*;
 public interface ISkidePluginMnemoSharedResources {
 
   /**
-   * {@link ISkidePluginMnemoSharedResources}
-   */
-  String STR_EDIT_MNEMO_AS_LITE              = Messages.getString( "STR_EDIT_MNEMO_AS_LITE" );
-  String STR_EDIT_MNEMO_AS_LITE_D            = Messages.getString( "STR_EDIT_MNEMO_AS_LITE_D" );
-  String STR_EDIT_MNEMO_AS_PRO               = Messages.getString( "STR_EDIT_MNEMO_AS_PRO" );
-  String STR_EDIT_MNEMO_AS_PRO_D             = Messages.getString( "STR_EDIT_MNEMO_AS_PRO_D" );
-  String STR_PREF_BINDLE_MNEMOS              = Messages.getString( "STR_PREF_BINDLE_MNEMOS" );
-  String STR_PREF_BINDLE_MNEMOS_D            = Messages.getString( "STR_PREF_BINDLE_MNEMOS_D" );
-  String STR_APPREF_IS_DEFAULT_EDITOR_LITE   = Messages.getString( "STR_APPREF_IS_DEFAULT_EDITOR_LITE" );
-  String STR_APPREF_IS_DEFAULT_EDITOR_LITE_D = Messages.getString( "STR_APPREF_IS_DEFAULT_EDITOR_LITE_D" );
-
-  /**
    * {@link SkidePluginMnemo}
    */
   String STR_SKIDE_MNEMOS_PLUGIN   = Messages.getString( "STR_SKIDE_MNEMOS_PLUGIN" );

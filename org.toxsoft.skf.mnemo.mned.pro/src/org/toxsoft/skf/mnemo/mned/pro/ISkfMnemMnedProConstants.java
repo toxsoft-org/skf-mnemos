@@ -22,8 +22,7 @@ public interface ISkfMnemMnedProConstants {
   // ------------------------------------------------------------------------------------
   // Icons
 
-  String PREFIX_OF_ICON_FIELD_NAME = "ICONID_";        //$NON-NLS-1$
-  String ICONID_MNEMO_EDIT_PRO     = "mnemo-edit-pro"; //$NON-NLS-1$
+  String PREFIX_OF_ICON_FIELD_NAME = "ICONID_"; //$NON-NLS-1$
 
   /**
    * Constants registration.

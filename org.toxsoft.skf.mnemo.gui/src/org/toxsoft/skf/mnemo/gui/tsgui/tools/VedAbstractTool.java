@@ -1,5 +1,7 @@
 package org.toxsoft.skf.mnemo.gui.tsgui.tools;
 
+import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
+
 import org.eclipse.swt.graphics.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.graphics.icons.impl.*;
@@ -41,8 +43,7 @@ public abstract class VedAbstractTool
     if( !cursorManager().hasCursor( STOP_CURSOR_NAME ) ) {
       Image cursorImage;
       String pluginId = Activator.PLUGIN_ID;
-      cursorImage =
-          TsIconManagerUtils.imageDescriptorFromPlugin( pluginId, "icons/cursors/cur_stop.png" ).createImage(); //$NON-NLS-1$
+      cursorImage = TsIconManagerUtils.imageDescriptorFromPlugin( pluginId, CURSOR_IMG_STOP ).createImage();
       // Cursor cursor = TsSingleFiltersourcingUtils.Cursor_Cursor( display, cursorImage.getImageData(), 0, 0 );
       stopCursor = new Cursor( getDisplay(), cursorImage.getImageData(), 0, 0 );
       cursorManager().putCursor( STOP_CURSOR_NAME, stopCursor );

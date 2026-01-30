@@ -31,7 +31,6 @@ public interface ISkfMnemMnedLiteConstants {
   // Icons
 
   String PREFIX_OF_ICON_FIELD_NAME = "ICONID_";          //$NON-NLS-1$
-  String ICONID_MNEMO_EDIT_LITE    = "mnemo-edit-lite";  //$NON-NLS-1$
   String ICONID_RTC_RECTANGLE      = "rtc-rectangle";    //$NON-NLS-1$
   String ICONID_RTC_ELLIPSE        = "rtc-ellipse";      //$NON-NLS-1$
   String ICONID_RTC_LINEAR_GAUGE   = "rtc-linear-gauge"; //$NON-NLS-1$

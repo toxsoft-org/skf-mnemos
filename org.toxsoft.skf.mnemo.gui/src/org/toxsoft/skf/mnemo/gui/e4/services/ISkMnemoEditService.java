@@ -19,7 +19,7 @@ public interface ISkMnemoEditService {
    *
    * @param aMnemoCfg {@link ISkMnemoCfg} - the mnemo to edit
    */
-  void openMnemoForEditing( ISkMnemoCfg aMnemoCfg );
+  // void openMnemoForEditing( ISkMnemoCfg aMnemoCfg );
 
   void openMnemoForEditingLite( ISkMnemoCfg aMnemoCfg );
 

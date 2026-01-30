@@ -86,13 +86,13 @@ public class SkMnemoEditService
     partInfo.setCloseable( true );
     if( aLite ) {
       partInfo.setContributionUri( org.toxsoft.skf.mnemo.skide.Activator.PLUGIN_ID, UipartSkMnemoEditorLite.class );
-      // partInfo.setIconUri( TsIconManagerUtils.imageUriFromPlugin( org.toxsoft.skf.mnemo.gui.Activator.PLUGIN_ID,
-      // ISkMnemoGuiConstants.ICONID_MNEMO_EDIT_LITE ) );
+      partInfo.setIconUri( TsIconManagerUtils.imageUriFromPlugin( org.toxsoft.skf.mnemo.gui.Activator.PLUGIN_ID,
+          ISkMnemoGuiConstants.ICONID_MNEMO_EDIT_LITE ) );
     }
     else {
       partInfo.setContributionUri( org.toxsoft.skf.mnemo.skide.Activator.PLUGIN_ID, UipartSkMnemoEditorPro.class );
-      // partInfo.setIconUri( TsIconManagerUtils.imageUriFromPlugin( org.toxsoft.skf.mnemo.gui.Activator.PLUGIN_ID,
-      // ISkMnemoGuiConstants.ICONID_MNEMO_EDIT_PRO ) );
+      partInfo.setIconUri( TsIconManagerUtils.imageUriFromPlugin( org.toxsoft.skf.mnemo.gui.Activator.PLUGIN_ID,
+          ISkMnemoGuiConstants.ICONID_MNEMO_EDIT_PRO ) );
     }
     partInfo.setLabel( aMnemoCfg.nmName() );
     partInfo.setTooltip( aMnemoCfg.description() );
@@ -112,32 +112,32 @@ public class SkMnemoEditService
   // ISkMnemoEditService
   //
 
-  @Override
-  public void openMnemoForEditing( ISkMnemoCfg aMnemoCfg ) {
-    e4Helper().switchToPerspective( PERSPID_MENMOS_EDITOR, null );
-    // activate part for mnemo if already exists
-    String partId = makePartId( aMnemoCfg.id() );
-    MPart found = psManager().findPart( partId );
-    if( found != null ) {
-      EPartService partService = tsContext.get( EPartService.class );
-      partService.activate( found );
-      return;
-    }
-    // open new part for mnrmo
-    UIpartInfo partInfo = new UIpartInfo( partId );
-    partInfo.setCloseable( true );
-    partInfo.setContributionUri( org.toxsoft.skf.mnemo.skide.Activator.PLUGIN_ID, UipartSkMnemoEditorLite.class );
-    // partInfo.setContributionUri( org.toxsoft.skf.mnemo.skide.Activator.PLUGIN_ID, UipartSkMnemoEditorPro.class );
-    partInfo.setIconUri( TsIconManagerUtils.imageUriFromPlugin( org.toxsoft.skf.mnemo.gui.Activator.PLUGIN_ID,
-        ISkMnemoGuiConstants.ICONID_MNEMO ) );
-    partInfo.setLabel( aMnemoCfg.nmName() );
-    partInfo.setTooltip( aMnemoCfg.description() );
-    MPart newPart = psManager().createPart( partInfo );
-    // set mnemo to edit
-    UipartSkMnemoEditorLite editor = (UipartSkMnemoEditorLite)newPart.getObject();
-    // UipartSkMnemoEditorPro editor = (UipartSkMnemoEditorPro)newPart.getObject();
-    editor.setMnemoCfg( aMnemoCfg );
-  }
+  // @Override
+  // public void openMnemoForEditing( ISkMnemoCfg aMnemoCfg ) {
+  // e4Helper().switchToPerspective( PERSPID_MENMOS_EDITOR, null );
+  // // activate part for mnemo if already exists
+  // String partId = makePartId( aMnemoCfg.id() );
+  // MPart found = psManager().findPart( partId );
+  // if( found != null ) {
+  // EPartService partService = tsContext.get( EPartService.class );
+  // partService.activate( found );
+  // return;
+  // }
+  // // open new part for mnrmo
+  // UIpartInfo partInfo = new UIpartInfo( partId );
+  // partInfo.setCloseable( true );
+  // partInfo.setContributionUri( org.toxsoft.skf.mnemo.skide.Activator.PLUGIN_ID, UipartSkMnemoEditorLite.class );
+  // // partInfo.setContributionUri( org.toxsoft.skf.mnemo.skide.Activator.PLUGIN_ID, UipartSkMnemoEditorPro.class );
+  // partInfo.setIconUri( TsIconManagerUtils.imageUriFromPlugin( org.toxsoft.skf.mnemo.gui.Activator.PLUGIN_ID,
+  // ISkMnemoGuiConstants.ICONID_MNEMO ) );
+  // partInfo.setLabel( aMnemoCfg.nmName() );
+  // partInfo.setTooltip( aMnemoCfg.description() );
+  // MPart newPart = psManager().createPart( partInfo );
+  // // set mnemo to edit
+  // UipartSkMnemoEditorLite editor = (UipartSkMnemoEditorLite)newPart.getObject();
+  // // UipartSkMnemoEditorPro editor = (UipartSkMnemoEditorPro)newPart.getObject();
+  // editor.setMnemoCfg( aMnemoCfg );
+  // }
 
   @Override
   public void openMnemoForEditingLite( ISkMnemoCfg aMnemoCfg ) {
