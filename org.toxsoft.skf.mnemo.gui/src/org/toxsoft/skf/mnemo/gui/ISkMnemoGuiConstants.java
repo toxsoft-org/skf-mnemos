@@ -24,6 +24,14 @@ import org.toxsoft.uskat.core.impl.dto.*;
 public interface ISkMnemoGuiConstants {
 
   // ------------------------------------------------------------------------------------
+  // plugin constants prefixes
+
+  String MNEMO_FULL_ID = "org.toxsoft.skf.mnemo"; //$NON-NLS-1$ general full ID prefix (IDpath)
+  String MNEMO_ID      = "mnemo";                 //$NON-NLS-1$ general short ID prefix (IDname)
+  String MNEMO_ACT_ID  = MNEMO_ID + ".act";       //$NON-NLS-1$ prefix of the ITsActionDef IDs
+  String MNEMO_M5_ID   = MNEMO_ID + ".m5";        //$NON-NLS-1$ perfix of M5-model IDs
+
+  // ------------------------------------------------------------------------------------
   // Icons
 
   String PREFIX_OF_ICON_FIELD_NAME  = "ICONID_";          //$NON-NLS-1$

@@ -4,6 +4,7 @@ import static org.toxsoft.core.tsgui.m5.gui.mpc.IMultiPaneComponentConstants.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 
 import org.eclipse.swt.widgets.*;
+import org.toxsoft.core.tsgui.bricks.actions.asp.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.bricks.ctx.impl.*;
 import org.toxsoft.core.tsgui.m5.*;
@@ -23,6 +24,21 @@ import org.toxsoft.uskat.core.gui.conn.*;
  */
 class SkideUnitMnemoPanel
     extends AbstractSkideUnitPanel {
+
+  /**
+   * Actions of drop-down button to open mnemoscheme in PRO or LITE editor.
+   *
+   * @author hazard157
+   */
+  class AspEditMnemo
+      extends MethodPerActionTsActionSetProvider {
+
+    public AspEditMnemo() {
+      defineAction( null, null, null );
+      // TODO Auto-generated constructor stub
+    }
+
+  }
 
   public SkideUnitMnemoPanel( ITsGuiContext aContext, ISkideUnit aUnit ) {
     super( aContext, aUnit );
