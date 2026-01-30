@@ -127,6 +127,7 @@ public class SkMnemoEditService
     UIpartInfo partInfo = new UIpartInfo( partId );
     partInfo.setCloseable( true );
     partInfo.setContributionUri( org.toxsoft.skf.mnemo.skide.Activator.PLUGIN_ID, UipartSkMnemoEditorLite.class );
+    // partInfo.setContributionUri( org.toxsoft.skf.mnemo.skide.Activator.PLUGIN_ID, UipartSkMnemoEditorPro.class );
     partInfo.setIconUri( TsIconManagerUtils.imageUriFromPlugin( org.toxsoft.skf.mnemo.gui.Activator.PLUGIN_ID,
         ISkMnemoGuiConstants.ICONID_MNEMO ) );
     partInfo.setLabel( aMnemoCfg.nmName() );
@@ -134,6 +135,7 @@ public class SkMnemoEditService
     MPart newPart = psManager().createPart( partInfo );
     // set mnemo to edit
     UipartSkMnemoEditorLite editor = (UipartSkMnemoEditorLite)newPart.getObject();
+    // UipartSkMnemoEditorPro editor = (UipartSkMnemoEditorPro)newPart.getObject();
     editor.setMnemoCfg( aMnemoCfg );
   }
 
