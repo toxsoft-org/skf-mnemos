@@ -21,4 +21,8 @@ public interface ISkMnemoEditService {
    */
   void openMnemoForEditing( ISkMnemoCfg aMnemoCfg );
 
+  void openMnemoForEditingLite( ISkMnemoCfg aMnemoCfg );
+
+  void openMnemoForEditingPro( ISkMnemoCfg aMnemoCfg );
+
 }
