@@ -33,7 +33,15 @@ public interface ISkfMnemMnedLiteConstants {
   String PREFIX_OF_ICON_FIELD_NAME = "ICONID_";          //$NON-NLS-1$
   String ICONID_RTC_RECTANGLE      = "rtc-rectangle";    //$NON-NLS-1$
   String ICONID_RTC_ELLIPSE        = "rtc-ellipse";      //$NON-NLS-1$
+  String ICONID_RTC_LINE           = "rtc-line";         //$NON-NLS-1$
   String ICONID_RTC_LINEAR_GAUGE   = "rtc-linear-gauge"; //$NON-NLS-1$
+  String ICONID_RTC_LABEL          = "rtc-label";        //$NON-NLS-1$
+  String ICONID_RTC_SIMPLE_ARROW   = "rtc-simple-arrow"; //$NON-NLS-1$
+
+  String ICONID_RTC_ATTR_VALUE_VIEW   = "rtc-attr-value";   //$NON-NLS-1$
+  String ICONID_RTC_RTDATA_VALUE_VIEW = "rtc-rtdata-value"; //$NON-NLS-1$
+  String ICONID_RTC_RRI_VALUE_VIEW    = "rtc-rri-value";    //$NON-NLS-1$
+
   // ------------------------------------------------------------------------------------
   // Palette categories
 
@@ -42,6 +50,10 @@ public interface ISkfMnemMnedLiteConstants {
   String CATID_GEOMETRY     = "geometry";   //$NON-NLS-1$
   String CATID_BOOLEAN_LAMP = "boolenLamp"; //$NON-NLS-1$
   String CATID_GAUGE        = "gauge";      //$NON-NLS-1$
+  String CATID_TEXT         = "text";       //$NON-NLS-1$
+  String CATID_ARROW        = "arrow";      //$NON-NLS-1$
+
+  String CATID_NUMERIC_VALUE_VIEW = "numericValueView"; //$NON-NLS-1$
 
   /**
    * Section ID in {@link IVedScreenCfg#extraData()} to store instance of type {@link IMnemoResolverConfig}.
