@@ -92,7 +92,7 @@ public class SkVedEnvironment
   @Override
   public IAtomicValue getRtDataValue( Gwid aGwid ) {
     ISkReadCurrDataChannel ch = rtdChannels.findByKey( aGwid );
-    if( ch != null ) {
+    if( ch != null && ch.isOk() ) {
       return ch.getValue();
     }
     return IAtomicValue.NULL;
