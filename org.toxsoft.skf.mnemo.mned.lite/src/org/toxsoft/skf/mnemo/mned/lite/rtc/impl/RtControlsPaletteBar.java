@@ -221,21 +221,43 @@ public class RtControlsPaletteBar
     for( IRtControlsPaletteCategory pCat : categories ) {
       createCategoryButton( pCat );
     }
+
+    IRtControlFactoriesRegistry fr = tsContext().get( IRtControlFactoriesRegistry.class );
+    for( IRtControlsPaletteEntry pe : entries ) {
+      IRtControlFactory f = fr.find( pe.itemCfg().factoryId() );
+      if( f != null ) {
+        if( f.params().hasKey( PARAMID_CATEGORY ) ) {
+          String cat = f.params().getStr( PARAMID_CATEGORY );
+          if( !cat.isBlank() ) {
+            continue;
+          }
+        }
+        createEntityButton( pe );
+      }
+    }
+
   }
 
   void createEntityButton( IRtControlsPaletteEntry aEntry ) {
-    // ITsActionDef ad = TsActionDef.ofMenu2( CATID_GEOMETRY, "Фигуры", "Геометрические фигуры", ICONID_RTC_ELLIPSE );
-    // TsAction a = new TsAction( ad, iconSize, vedScreen.tsContext() );
-    // toolBar.addAction( null );
+    ToolItem ti = new ToolItem( toolBar, SWT.PUSH | SWT.TOGGLE );
+    toolItems.add( ti );
+    Image image = iconManager().loadStdIcon( aEntry.iconId(), iconSize );
 
-    // Button btn = new Button( paletteComp, SWT.FLAT | SWT.TOGGLE );
-    // btn.setData( aEntry );
-    // // buttons.add( btn );
-    //
-    // Image image = iconManager().loadStdIcon( aEntry.iconId(), iconSize );
-    //
-    // btn.setImage( image );
-    // btn.setToolTipText( aEntry.nmName() + '\n' + aEntry.description() );
+    ti.setImage( image );
+    ti.setData( aEntry );
+    ti.setToolTipText( aEntry.description() );
+    ti.addSelectionListener( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( SelectionEvent aE ) {
+        IRtControlsPaletteEntry pent = (IRtControlsPaletteEntry)ti.getData();
+        ti.setData( pent );
+        ti.setImage( iconManager().loadStdIcon( pent.iconId(), iconSize ) );
+        ti.setSelection( true );
+        selectedToolItem = ti;
+      }
+    } );
+
   }
 
   void createCategoryButton( IRtControlsPaletteCategory aCategory ) {
@@ -255,6 +277,7 @@ public class RtControlsPaletteBar
       Image img = iconManager().loadStdIcon( pEntry.iconId(), iconSize );
       mi.setImage( img );
       mi.setData( pEntry );
+      mi.setToolTipText( pEntry.description() );
       mi.addSelectionListener( new SelectionAdapter() {
 
         @Override
@@ -262,6 +285,11 @@ public class RtControlsPaletteBar
           IRtControlsPaletteEntry pent = (IRtControlsPaletteEntry)mi.getData();
           ti.setData( pent );
           ti.setImage( iconManager().loadStdIcon( pent.iconId(), iconSize ) );
+          ti.setToolTipText( pent.description() );
+          if( selectedToolItem != null ) {
+            selectedToolItem.setBackground( null );
+          }
+          selectedToolItem = ti;
         }
       } );
     }
@@ -270,7 +298,7 @@ public class RtControlsPaletteBar
 
       @Override
       public void widgetSelected( SelectionEvent aEvent ) {
-        selectedToolItem = ti;
+        // selectedToolItem = ti;
         if( aEvent.detail == SWT.ARROW ) {
           Rectangle bounds = ti.getBounds();
           Point point = toolBar.toDisplay( bounds.x, bounds.y + bounds.height );

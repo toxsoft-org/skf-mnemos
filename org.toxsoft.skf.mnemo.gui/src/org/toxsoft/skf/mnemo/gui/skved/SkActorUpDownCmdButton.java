@@ -64,8 +64,13 @@ public class SkActorUpDownCmdButton
   private static final ITinTypeInfo TTI_DOW_CMD_ARGS =
       new TinAtomicTypeInfo.TtiValobj<>( PROP_DOWN_CMD_ARGS, CmdArgValuesSet.class );
 
-  private static final ITinFieldInfo TFI_UP_CMD_ARGS   = new TinFieldInfo( PROP_UP_CMD_ARGS, TTI_UP_CMD_ARGS );
-  private static final ITinFieldInfo TFI_DOWN_CMD_ARGS = new TinFieldInfo( PROP_DOWN_CMD_ARGS, TTI_DOW_CMD_ARGS );
+  public static final ITinFieldInfo TFI_DOWN_CMD = new TinFieldInfo( PROPID_DOWN_CMD, TFI_CMD_UGWI.typeInfo(),   //
+      TSID_NAME, "Команда при нажатии" );
+  public static final ITinFieldInfo TFI_UP_CMD   = new TinFieldInfo( PROPID_UP_CMD, TFI_CMD_UGWI.typeInfo(),     //
+      TSID_NAME, "Команда при отпускании" );
+
+  public static final ITinFieldInfo TFI_UP_CMD_ARGS   = new TinFieldInfo( PROP_UP_CMD_ARGS, TTI_UP_CMD_ARGS );
+  public static final ITinFieldInfo TFI_DOWN_CMD_ARGS = new TinFieldInfo( PROP_DOWN_CMD_ARGS, TTI_DOW_CMD_ARGS );
 
   /**
    * The VISEL factory singleton.
@@ -83,11 +88,13 @@ public class SkActorUpDownCmdButton
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
       // fields.add( TFI_CMD_UGWI );
-      fields.add( new TinFieldInfo( PROPID_DOWN_CMD, TFI_CMD_UGWI.typeInfo(), //
-          TSID_NAME, "Команда при нажатии" ) );
+      // fields.add( new TinFieldInfo( PROPID_DOWN_CMD, TFI_CMD_UGWI.typeInfo(), //
+      // TSID_NAME, "Команда при нажатии" ) );
+      fields.add( TFI_DOWN_CMD );
       fields.add( TFI_DOWN_CMD_ARGS );
-      fields.add( new TinFieldInfo( PROPID_UP_CMD, TFI_CMD_UGWI.typeInfo(), //
-          TSID_NAME, "Команда при отпускании" ) );
+      // fields.add( new TinFieldInfo( PROPID_UP_CMD, TFI_CMD_UGWI.typeInfo(), //
+      // TSID_NAME, "Команда при отпускании" ) );
+      fields.add( TFI_UP_CMD );
       fields.add( TFI_UP_CMD_ARGS );
       fields.add( TFI_IS_ACTIVE );
       return new PropertableEntitiesTinTypeInfo<>( fields, SkActorUpDownCmdButton.class );
@@ -152,7 +159,7 @@ public class SkActorUpDownCmdButton
         }
         else {
           upCommand = null;
-          LoggerUtils.errorLogger().error( "Attempt to send command with null or none UGWI" ); //$NON-NLS-1$
+          LoggerUtils.errorLogger().warning( "Up command not set" ); //$NON-NLS-1$
         }
       }
 
@@ -181,7 +188,7 @@ public class SkActorUpDownCmdButton
         }
         else {
           downCommand = null;
-          LoggerUtils.errorLogger().error( "Attempt to send command with null or none UGWI" ); //$NON-NLS-1$
+          LoggerUtils.errorLogger().warning( "Down command not set" ); //$NON-NLS-1$
         }
       }
     };

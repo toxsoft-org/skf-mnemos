@@ -35,6 +35,10 @@ public class QuantSkfMnemoMnedLite
     rtcFact.register( RtcLabel.FACTORY );
     rtcFact.register( RtcAttrValueView.FACTORY );
     rtcFact.register( RtcRtdataValueView.FACTORY );
+    rtcFact.register( RtcImage.FACTORY );
+    rtcFact.register( RtcCmdCheckbox.FACTORY );
+    rtcFact.register( RtcCmdButton.FACTORY );
+    rtcFact.register( RtcCircleLamp.FACTORY );
   }
 
   @Override

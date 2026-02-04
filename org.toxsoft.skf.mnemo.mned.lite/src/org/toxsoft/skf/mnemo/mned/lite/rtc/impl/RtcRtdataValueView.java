@@ -125,8 +125,6 @@ public class RtcRtdataValueView
         params.setValobj( IRtControlCfg.PROPID_ACTORS_IDS, actorIds );
         RtControlCfg cfg = new RtControlCfg( v.id(), FACTORY_ID, params );
 
-        bindActorPropId( actor.id(), TFI_RTD_UGWI.id(), TFI_RTD_UGWI.id() );
-
         return new RtcRtdataValueView( cfg, propDefs(), aVedScreen );
       }
       return null;
@@ -136,6 +134,12 @@ public class RtcRtdataValueView
   protected RtcRtdataValueView( IRtControlCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
     // nop
+  }
+
+  @Override
+  protected void bindActorProps() {
+    VedAbstractActor actor = actors().first();
+    bindActorPropId( actor.id(), TFI_RTD_UGWI.id(), TFI_RTD_UGWI.id() );
   }
 
 }

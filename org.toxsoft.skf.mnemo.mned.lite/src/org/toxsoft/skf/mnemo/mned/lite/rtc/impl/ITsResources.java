@@ -49,4 +49,10 @@ interface ITsResources {
   String STR_RTC_RTDATA_VALUE_VIEW   = Messages.getString( "STR_RTC_RTDATA_VALUE_VIEW" );   //$NON-NLS-1$
   String STR_RTC_RTDATA_VALUE_VIEW_D = Messages.getString( "STR_RTC_RTDATA_VALUE_VIEW_D" ); //$NON-NLS-1$
 
+  /**
+   * RtcCmdButton
+   */
+  String STR_HIGHLIGHT_BKG = Messages.getString( "STR_HIGHLIGHT_BKG" ); //$NON-NLS-1$
+  String STR_SELECTION_BKG = Messages.getString( "STR_SELECTION_BKG" ); //$NON-NLS-1$
+
 }

@@ -16,6 +16,7 @@ import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
+import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
@@ -49,7 +50,11 @@ public class AbstractRtControl
 
   private final IList<Pair<String, String>> viselPropsBinding;
 
-  private final IStringMap<IList<Pair<String, String>>> actorPropsBinding;
+  // private final IStringMap<IList<Pair<String, String>>> actorPropsBinding;
+  /**
+   * Карта списоков пар соответствия свойства RtContorl'я и актора.
+   */
+  private final IStringMapEdit<IList<Pair<String, String>>> actorPropsBinding = new StringMap<>();
 
   /**
    * Constructor for subclasses.
@@ -68,7 +73,7 @@ public class AbstractRtControl
     IRtControlFactoriesRegistry reg = aVedScreen.tsContext().get( IRtControlFactoriesRegistry.class );
     factory = reg.get( aConfig.factoryId() );
     viselPropsBinding = factory.viselPropIdBinding();
-    actorPropsBinding = factory.actorPropIdBinding();
+    // actorPropsBinding = factory.actorPropIdBinding();
 
     String viselId = RtControlCfg.viselId( params );
     visel = aVedScreen.model().visels().list().getByKey( viselId );
@@ -82,6 +87,7 @@ public class AbstractRtControl
         actors.add( aVedScreen.model().actors().list().getByKey( id ) );
       }
     }
+    bindActorProps();
 
     propSet = new PropertiesSet<>( this, aPropDefs );
     propSet.propsEventer().addListener( ( aSource, aNewValues, aOldValues ) -> {
@@ -229,6 +235,10 @@ public class AbstractRtControl
   // To override
   //
 
+  protected void bindActorProps() {
+    // nop
+  }
+
   /**
    * Subclass may process property values change request.
    * <p>
@@ -288,6 +298,14 @@ public class AbstractRtControl
   }
 
   // ------------------------------------------------------------------------------------
+  //
+  //
+
+  IStridablesList<VedAbstractActor> actors() {
+    return actors;
+  }
+
+  // ------------------------------------------------------------------------------------
   // implementation
   //
 
@@ -308,11 +326,26 @@ public class AbstractRtControl
   }
 
   void updatePropsByActor( VedAbstractActor aActor ) {
-    IList<Pair<String, String>> pairs = actorPropsBinding.getByKey( aActor.id() );
-    for( Pair<String, String> p : pairs ) {
-      if( aActor.props().keys().hasElem( p.right() ) ) {
-        propSet.setValue( p.left(), aActor.props().getValue( p.right() ) );
+    if( actorPropsBinding.hasKey( aActor.id() ) ) {
+      IList<Pair<String, String>> pairs = actorPropsBinding.getByKey( aActor.id() );
+      for( Pair<String, String> p : pairs ) {
+        if( aActor.props().keys().hasElem( p.right() ) ) {
+          propSet.setValue( p.left(), aActor.props().getValue( p.right() ) );
+        }
       }
     }
   }
+
+  void bindActorPropId( String aActorId, String aRtcPropid, String aViselPropId ) {
+    IListEdit<Pair<String, String>> pairs;
+    if( !actorPropsBinding.hasKey( aActorId ) ) {
+      pairs = new ElemArrayList<>();
+      actorPropsBinding.put( aActorId, pairs );
+    }
+    else {
+      pairs = (IListEdit<Pair<String, String>>)actorPropsBinding.getByKey( aActorId );
+    }
+    pairs.add( new Pair<>( aRtcPropid, aViselPropId ) );
+  }
+
 }

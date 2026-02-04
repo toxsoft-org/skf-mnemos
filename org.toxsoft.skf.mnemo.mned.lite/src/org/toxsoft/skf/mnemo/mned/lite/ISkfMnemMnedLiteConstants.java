@@ -42,6 +42,13 @@ public interface ISkfMnemMnedLiteConstants {
   String ICONID_RTC_RTDATA_VALUE_VIEW = "rtc-rtdata-value"; //$NON-NLS-1$
   String ICONID_RTC_RRI_VALUE_VIEW    = "rtc-rri-value";    //$NON-NLS-1$
 
+  String ICONID_RTC_CIRCLE_LAMP = "rtc-circle-lamp"; //$NON-NLS-1$
+  String ICONID_RTC_RECT_LAMP   = "rtc-rect-lamp";   //$NON-NLS-1$
+
+  String ICONID_RTC_IMAGE      = "rtc-image";      //$NON-NLS-1$
+  String ICONID_RTC_CHECKBOX   = "rtc-checkbox";   //$NON-NLS-1$
+  String ICONID_RTC_CMD_BUTTON = "rtc-cmd-button"; //$NON-NLS-1$
+
   // ------------------------------------------------------------------------------------
   // Palette categories
 
@@ -52,6 +59,7 @@ public interface ISkfMnemMnedLiteConstants {
   String CATID_GAUGE        = "gauge";      //$NON-NLS-1$
   String CATID_TEXT         = "text";       //$NON-NLS-1$
   String CATID_ARROW        = "arrow";      //$NON-NLS-1$
+  String CATID_LAMP         = "lamp";       //$NON-NLS-1$
 
   String CATID_NUMERIC_VALUE_VIEW = "numericValueView"; //$NON-NLS-1$
 
