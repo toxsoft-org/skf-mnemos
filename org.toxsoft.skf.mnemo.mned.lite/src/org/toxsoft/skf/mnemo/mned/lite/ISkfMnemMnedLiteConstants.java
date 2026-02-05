@@ -42,6 +42,8 @@ public interface ISkfMnemMnedLiteConstants {
   String ICONID_RTC_RTDATA_VALUE_VIEW = "rtc-rtdata-value"; //$NON-NLS-1$
   String ICONID_RTC_RRI_VALUE_VIEW    = "rtc-rri-value";    //$NON-NLS-1$
 
+  String ICONID_RTC_INPUT_FIELD = "rtc-input-field"; //$NON-NLS-1$
+
   String ICONID_RTC_CIRCLE_LAMP = "rtc-circle-lamp"; //$NON-NLS-1$
   String ICONID_RTC_RECT_LAMP   = "rtc-rect-lamp";   //$NON-NLS-1$
 
@@ -62,6 +64,7 @@ public interface ISkfMnemMnedLiteConstants {
   String CATID_LAMP         = "lamp";       //$NON-NLS-1$
 
   String CATID_NUMERIC_VALUE_VIEW = "numericValueView"; //$NON-NLS-1$
+  String CATID_NUMERIC_VALUE_EDIT = "numericValueEdit"; //$NON-NLS-1$
 
   /**
    * Section ID in {@link IVedScreenCfg#extraData()} to store instance of type {@link IMnemoResolverConfig}.

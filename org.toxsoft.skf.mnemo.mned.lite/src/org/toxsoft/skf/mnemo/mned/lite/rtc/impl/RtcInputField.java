@@ -21,18 +21,13 @@ import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.mned.lite.rtc.*;
 
-/**
- * Однострочный текст, отображающий значение атрибута.
- *
- * @author vs
- */
-public class RtcAttrValueView
+public class RtcInputField
     extends AbstractRtControl {
 
   /**
    * The RtControl factory ID.
    */
-  public static final String FACTORY_ID = MNED_LITE + ".rtc.AttrValueView"; //$NON-NLS-1$
+  public static final String FACTORY_ID = MNED_LITE + ".rtc.InputField"; //$NON-NLS-1$
 
   /**
    * The IRtControl factory singleton.
@@ -40,15 +35,16 @@ public class RtcAttrValueView
   public static final IRtControlFactory FACTORY = new AbstractRtControlFactory( FACTORY_ID, //
       TSID_NAME, STR_RTC_ATTR_VALUE_VIEW, //
       TSID_DESCRIPTION, STR_RTC_ATTR_VALUE_VIEW_D, //
-      TSID_ICON_ID, ICONID_RTC_ATTR_VALUE_VIEW, //
-      PARAMID_CATEGORY, CATID_NUMERIC_VALUE_VIEW//
+      TSID_ICON_ID, ICONID_RTC_INPUT_FIELD, //
+      PARAMID_CATEGORY, CATID_NUMERIC_VALUE_EDIT//
   ) {
 
     @Override
     protected ITinTypeInfo doCreateTypeInfo() {
       IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
 
-      fields.add( TFI_ATTR_UGWI );
+      fields.add( TFI_GWID );
+      fields.add( SkActorInputField.TFI_SOURCE_GWID );
       fields.add( TFI_FORMAT_STRING );
 
       fields.add( TFI_TEXT );
@@ -69,7 +65,7 @@ public class RtcAttrValueView
       fields.add( TFI_Y );
       fields.add( TFI_WIDTH );
       fields.add( TFI_HEIGHT );
-      return new PropertableEntitiesTinTypeInfo<>( fields, RtcAttrValueView.class );
+      return new PropertableEntitiesTinTypeInfo<>( fields, RtcInputField.class );
     }
 
     @Override
@@ -103,7 +99,7 @@ public class RtcAttrValueView
         viselCfg.propValues().setDouble( PROPID_Y, aCfg.params().getDouble( PROPID_Y ) );
         v = aVedScreen.model().visels().create( viselCfg );
 
-        IVedActorFactory af = actorFactory( SkActorAttrText.FACTORY_ID, aVedScreen );
+        IVedActorFactory af = actorFactory( SkActorInputField.FACTORY_ID, aVedScreen );
         VedItemCfg actorCfg = aVedScreen.model().actors().prepareFromTemplate( af.paletteEntries().first().itemCfg() );
         actorCfg.propValues().setStr( PROPID_VISEL_ID, v.id() );
         actorCfg.propValues().setStr( PROPID_VISEL_PROP_ID, PROPID_TEXT );
@@ -125,19 +121,21 @@ public class RtcAttrValueView
         params.setValobj( IRtControlCfg.PROPID_ACTORS_IDS, actorIds );
         RtControlCfg cfg = new RtControlCfg( v.id(), FACTORY_ID, params );
 
-        return new RtcAttrValueView( cfg, propDefs(), aVedScreen );
+        return new RtcInputField( cfg, propDefs(), aVedScreen );
       }
       return null;
     }
   };
 
-  protected RtcAttrValueView( IRtControlCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
+  protected RtcInputField( IRtControlCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
   }
 
   @Override
   protected void bindActorProps() {
     VedAbstractActor actor = actors().first();
-    bindActorPropId( actor.id(), TFI_ATTR_UGWI.id(), TFI_ATTR_UGWI.id() );
+    bindActorPropId( actor.id(), TFI_GWID.id(), TFI_GWID.id() );
+    bindActorPropId( actor.id(), SkActorInputField.TFI_SOURCE_GWID.id(), SkActorInputField.TFI_SOURCE_GWID.id() );
   }
+
 }

@@ -55,7 +55,7 @@ public class SkActorInputField
       TSID_DEFAULT_VALUE, avValobj( Gwid.of( "classId[*]" ) ) // //$NON-NLS-1$
   );
 
-  private final static ITinFieldInfo TFI_SOURCE_GWID = new TinFieldInfo( PROP_SOURCE_GWID, TTI_GWID );
+  public final static ITinFieldInfo TFI_SOURCE_GWID = new TinFieldInfo( PROP_SOURCE_GWID, TTI_GWID );
 
   /**
    * The VISEL factory singleton.

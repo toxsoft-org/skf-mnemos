@@ -62,6 +62,8 @@ public class MnemoEditorPanel
 
   private RtControlInspector rtControlInspector;
 
+  private final MultiSelectionDecorator selectionDecorator;
+
   // ------------------------------------------------------------------------------------
   // Managers
   //
@@ -70,10 +72,10 @@ public class MnemoEditorPanel
   // private final VedHotKeysManager hotKeysManager;
   private final IVedViselSelectionManager selectionManager;
   // private final IVedViselsMasterSlaveRelationsManager masterSlaveManager;
-  private final VedViselVertexSetManager vertexSetManager;
-  // private final VedViselContextMenuManager viselCtxMenuManager;
-  private final PaletteSelectionManager paletteSelectionManager;
-  // private final VedViselsEditManager editManager;
+  private final VedViselVertexSetManager   vertexSetManager;
+  private final VedViselContextMenuManager viselCtxMenuManager;
+  private final PaletteSelectionManager    paletteSelectionManager;
+  private final VedViselsEditManager       editManager;
   // private final VedViselsCopyPasteManager copyPasteManager;
   // private final VedViselsLayoutManager layoutManager;
   private final VedViselsDeleteManager    deleteManager;
@@ -84,8 +86,9 @@ public class MnemoEditorPanel
   // Handlers - обработчики пользовательского ввода
   //
 
-  private final VedViselPositionHandler viselsPositionHandler;
-  private final VedViselsDeleteHandler  deleteHandler;
+  private final VedViselPositionHandler       viselsPositionHandler;
+  private final VedViselMultiselectionHandler multiSelectionHandler;
+  private final VedViselsDeleteHandler        deleteHandler;
 
   /**
    * Constructor.
@@ -132,6 +135,15 @@ public class MnemoEditorPanel
     vertexSetManager = new VedViselVertexSetManager( vedScreen, selectionManager );
     paletteSelectionManager = new PaletteSelectionManager( vedScreen, rtcPalette, rtControlsManager );
 
+    editManager = new VedViselsEditManager( vedScreen, selectionManager );
+
+    viselCtxMenuManager = new VedViselContextMenuManager( vedScreen, selectionManager );
+    viselCtxMenuManager.addCustomMenuCreator( editManager );
+    // viselCtxMenuManager.addCustomMenuCreator( copyPasteManager );
+    // viselCtxMenuManager.addCustomMenuCreator( masterSlaveManager );
+    // viselCtxMenuManager.addCustomMenuCreator( layoutManager );
+    viselCtxMenuManager.addCustomMenuCreator( deleteManager );
+
     positionManager = new VedViselsPositionManager();
 
     viselsPositionHandler = new VedViselPositionHandler( vedScreen, positionManager );
@@ -140,10 +152,16 @@ public class MnemoEditorPanel
     deleteManager.addProcessor( new RtControlDeleteProcessor( rtControlsManager ) );
     deleteHandler = new VedViselsDeleteHandler( vedScreen, deleteManager );
 
+    multiSelectionHandler = new VedViselMultiselectionHandler( vedScreen, selectionManager );
+    selectionDecorator = new MultiSelectionDecorator( vedScreen, selectionManager );
+    vedScreen.model().screenDecoratorsAfter().add( selectionDecorator );
+
     // vedScreen.model().screenHandlersBefore().add( hotKeysManager.inputHandler() );
     vedScreen.model().screenHandlersBefore().add( vertexSetManager );
+    vedScreen.model().screenHandlersBefore().add( multiSelectionHandler );
     vedScreen.model().screenHandlersBefore().add( deleteHandler );
     vedScreen.model().screenHandlersBefore().add( viselsPositionHandler );
+    vedScreen.model().screenHandlersBefore().add( viselCtxMenuManager );
     vedScreen.model().screenHandlersBefore().add( paletteSelectionManager );
 
     selectionManager.genericChangeEventer().addListener( aSource -> whenSelectionManagerSelectionChanges() );
@@ -230,7 +248,7 @@ public class MnemoEditorPanel
     eastPanel.setSashWidth( 8 );
     // Composite eastComp = new Composite( eastPanel, SWT.BORDER );
     rtControlInspector = new RtControlInspector( eastPanel, vedScreen );
-
+    sfMain.setWeights( 75, 25 );
   }
 
   /**
