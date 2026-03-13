@@ -57,6 +57,11 @@ public class AbstractRtControl
   private final IStringMapEdit<IList<Pair<String, String>>> actorPropsBinding = new StringMap<>();
 
   /**
+   * <code>true</code> indicates that VISEL/ACTOR properties are changed by this RtControl.
+   */
+  private boolean selfChange = false;
+
+  /**
    * Constructor for subclasses.
    *
    * @param aConfig {@link IRtControlCfg} - the item config
@@ -93,24 +98,28 @@ public class AbstractRtControl
 
       @Override
       protected void doAfterPropValuesSet( IOptionSet aChangedValues ) {
-        for( Pair<String, String> p : viselPropsBinding ) {
-          if( aChangedValues.keys().hasElem( p.left() ) ) {
-            visel.props().setValue( p.right(), aChangedValues.getValue( p.left() ) );
-          }
-        }
-
-        for( String actorId : actorPropsBinding.keys() ) {
-          VedAbstractActor actor = actors.getByKey( actorId );
-          actor.props().propsEventer().pauseFiring();
-          IList<Pair<String, String>> pairs = actorPropsBinding.getByKey( actorId );
-          for( Pair<String, String> p : pairs ) {
+        selfChange = true;
+        try {
+          for( Pair<String, String> p : viselPropsBinding ) {
             if( aChangedValues.keys().hasElem( p.left() ) ) {
-              actor.props().setValue( p.right(), aChangedValues.getValue( p.left() ) );
+              visel.props().setValue( p.right(), aChangedValues.getValue( p.left() ) );
             }
           }
-          actor.props().propsEventer().resumeFiring( true );
+          for( String actorId : actorPropsBinding.keys() ) {
+            VedAbstractActor actor = actors.getByKey( actorId );
+            actor.props().propsEventer().pauseFiring();
+            IList<Pair<String, String>> pairs = actorPropsBinding.getByKey( actorId );
+            for( Pair<String, String> p : pairs ) {
+              if( aChangedValues.keys().hasElem( p.left() ) ) {
+                actor.props().setValue( p.right(), aChangedValues.getValue( p.left() ) );
+              }
+            }
+            actor.props().propsEventer().resumeFiring( true );
+          }
         }
-
+        finally {
+          selfChange = false;
+        }
       }
     };
 
@@ -141,6 +150,9 @@ public class AbstractRtControl
     // } );
 
     visel.props().propsEventer().addListener( ( aSource, aNewValues, aOldValues ) -> {
+      if( selfChange ) {
+        return;
+      }
       // propSet.propsEventer().pauseFiring();
       for( Pair<String, String> p : viselPropsBinding ) {
         if( aNewValues.keys().hasElem( p.right() ) ) {
@@ -149,6 +161,8 @@ public class AbstractRtControl
       }
       // propSet.propsEventer().resumeFiring( false );
     } );
+
+    // TODO maybe also set listener on ACTORs?
 
     // extraData.copyFrom( aConfig.extraData() );
     props().setInterceptor( ( s, aNewValues, aValuesToSet ) -> interceptPropsChange( aNewValues, aValuesToSet ) );
