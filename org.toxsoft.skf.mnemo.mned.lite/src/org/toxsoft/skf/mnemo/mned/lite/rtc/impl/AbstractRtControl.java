@@ -6,6 +6,7 @@ import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
+import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
@@ -101,20 +102,24 @@ public class AbstractRtControl
         selfChange = true;
         try {
           for( Pair<String, String> p : viselPropsBinding ) {
+            IStringMapEdit<IAtomicValue> values = new StringMap<>();
             if( aChangedValues.keys().hasElem( p.left() ) ) {
-              visel.props().setValue( p.right(), aChangedValues.getValue( p.left() ) );
+              // visel.props().setValue( p.right(), aChangedValues.getValue( p.left() ) );
+              values.put( p.right(), aChangedValues.getValue( p.left() ) );
             }
+            visel.props().setProps( values );
           }
           for( String actorId : actorPropsBinding.keys() ) {
             VedAbstractActor actor = actors.getByKey( actorId );
-            actor.props().propsEventer().pauseFiring();
             IList<Pair<String, String>> pairs = actorPropsBinding.getByKey( actorId );
             for( Pair<String, String> p : pairs ) {
+              IStringMapEdit<IAtomicValue> values = new StringMap<>();
               if( aChangedValues.keys().hasElem( p.left() ) ) {
-                actor.props().setValue( p.right(), aChangedValues.getValue( p.left() ) );
+                // actor.props().setValue( p.right(), aChangedValues.getValue( p.left() ) );
+                values.put( p.right(), aChangedValues.getValue( p.left() ) );
               }
+              actor.props().setProps( values );
             }
-            actor.props().propsEventer().resumeFiring( true );
           }
         }
         finally {

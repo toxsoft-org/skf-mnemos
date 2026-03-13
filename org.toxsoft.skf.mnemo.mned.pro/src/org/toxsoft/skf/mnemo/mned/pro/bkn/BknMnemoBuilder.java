@@ -421,7 +421,7 @@ public class BknMnemoBuilder {
     IOptionSetEdit params = new OptionSet();
 
     String id = StridUtils.makeIdPath( "rtd", aAttrValue ); //$NON-NLS-1$
-    VedItemCfg cfg = new VedItemCfg( id, EVedItemKind.ACTOR, SkActorRtdataText.FACTORY.id(), params );
+    VedItemCfg cfg = new VedItemCfg( id, EVedItemKind.ACTOR, SkActorSimpleRtdataText.FACTORY.id(), params );
     VedAbstractActor a = vedScreen.model().actors().create( cfg );
     a.props().setStr( TSID_NAME, "данное " + aAttrValue );
     a.props().setStr( PROPID_VISEL_ID, aVisel.id() );

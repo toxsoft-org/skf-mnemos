@@ -58,7 +58,7 @@ interface ISkResources {
   String STR_CMD_OFF_CONFIRMATION_D = Messages.getString( "STR_CMD_OFF_CONFIRMATION_D" ); //$NON-NLS-1$
 
   /**
-   * {@link SkActorRtdataText}
+   * {@link SkActorSimpleRtdataText}
    */
   String STR_ACTOR_RTDATA_TEXT   = Messages.getString( "STR_ACTOR_RTDATA_TEXT" );   //$NON-NLS-1$
   String STR_ACTOR_RTDATA_TEXT_D = Messages.getString( "STR_ACTOR_RTDATA_TEXT_D" ); //$NON-NLS-1$

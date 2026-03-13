@@ -1,4 +1,4 @@
-package org.toxsoft.skf.mnemo.gui.skved;
+package org.toxsoft.skf.mnemo.gui.skved.moved;
 
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.*;

@@ -18,7 +18,6 @@ import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.skf.reports.gui.panels.valed.*;
-import org.toxsoft.skf.rri.lib.ugwi.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.gui.valed.ugwi.*;
 
@@ -90,13 +89,13 @@ public interface ISkVedConstants {
       TSID_DEFAULT_VALUE, AV_STR_EMPTY //
   );
 
-  IDataDef PROP_RRI_ID = DataDef.create( PROPID_RRI_ID, VALOBJ, //
-      TSID_NAME, STR_PROP_RRI_ID, //
-      TSID_DESCRIPTION, STR_PROP_RRI_ID_D, //
-      TSID_KEEPER_ID, RriId.KEEPER_ID, //
-      OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjRriIdEditor.FACTORY_NAME, //
-      TSID_DEFAULT_VALUE, avValobj( RriId.NONE ) //
-  );
+  // IDataDef PROP_RRI_ID = DataDef.create( PROPID_RRI_ID, VALOBJ, //
+  // TSID_NAME, STR_PROP_RRI_ID, //
+  // TSID_DESCRIPTION, STR_PROP_RRI_ID_D, //
+  // TSID_KEEPER_ID, RriId.KEEPER_ID, //
+  // OPDEF_EDITOR_FACTORY_NAME, ValedAvValobjRriIdEditor.FACTORY_NAME, //
+  // TSID_DEFAULT_VALUE, avValobj( RriId.NONE ) //
+  // );
 
   ITinTypeInfo TTI_GWID          = new TinAtomicTypeInfo.TtiValobj<>( PROP_GWID, Gwid.class );
   ITinTypeInfo TTI_SKID          = new TinAtomicTypeInfo.TtiValobj<>( PROP_SKID, Skid.class );
@@ -104,7 +103,7 @@ public interface ISkVedConstants {
   ITinTypeInfo TTI_RTD_GWID      = new TinAtomicTypeInfo.TtiValobj<>( PROP_RTD_GWID, Gwid.class );
   ITinTypeInfo TTI_CMD_GWID      = new TinAtomicTypeInfo.TtiValobj<>( PROP_CMD_GWID, Gwid.class );
   ITinTypeInfo TTI_FORMAT_STRING = new TinAtomicTypeInfo.TtiString( PROP_FORMAT_STRING );
-  ITinTypeInfo TTI_RRI_ID        = new TinAtomicTypeInfo.TtiValobj<>( PROP_RRI_ID, RriId.class );
+  // ITinTypeInfo TTI_RRI_ID = new TinAtomicTypeInfo.TtiValobj<>( PROP_RRI_ID, RriId.class );
 
   ITinFieldInfo TFI_GWID          = new TinFieldInfo( PROP_GWID, TTI_GWID );
   ITinFieldInfo TFI_SKID          = new TinFieldInfo( PROP_SKID, TTI_SKID );
@@ -112,7 +111,7 @@ public interface ISkVedConstants {
   ITinFieldInfo TFI_RTD_GWID      = new TinFieldInfo( PROP_RTD_GWID, TTI_RTD_GWID );
   ITinFieldInfo TFI_CMD_GWID      = new TinFieldInfo( PROP_CMD_GWID, TTI_CMD_GWID );
   ITinFieldInfo TFI_FORMAT_STRING = new TinFieldInfo( PROP_FORMAT_STRING, TTI_FORMAT_STRING );
-  ITinFieldInfo TFI_RRI_ID        = new TinFieldInfo( PROP_RRI_ID, TTI_RRI_ID );
+  // ITinFieldInfo TFI_RRI_ID = new TinFieldInfo( PROP_RRI_ID, TTI_RRI_ID );
 
   // ------------------------------------------------------------------------------------
   // UGWI support
@@ -153,15 +152,15 @@ public interface ISkVedConstants {
       TSID_DEFAULT_VALUE, IAtomicValue.NULL //
   );
 
-  IDataDef PROP_RRI_ATTR_UGWI = DataDef.create( PROPID_RRI_ATTR_UGWI, VALOBJ, //
-      TSID_NAME, STR_PROP_RRI_ATTR_UGWI, //
-      TSID_DESCRIPTION, STR_PROP_RRI_ATTR_UGWI_D, //
-      PROPID_UGWI_KIND, avStr( UgwiKindRriAttr.KIND_ID ), //
-      TSID_KEEPER_ID, Ugwi.KEEPER_ID, //
-      OPDEF_EDITOR_FACTORY_NAME, ValedAvUgwiSelector.FACTORY_NAME, //
-      ValedUgwiSelector.OPDEF_SINGLE_UGWI_KIND_ID, avStr( UgwiKindRriAttr.KIND_ID ), //
-      TSID_DEFAULT_VALUE, IAtomicValue.NULL //
-  );
+  // IDataDef PROP_RRI_ATTR_UGWI = DataDef.create( PROPID_RRI_ATTR_UGWI, VALOBJ, //
+  // TSID_NAME, STR_PROP_RRI_ATTR_UGWI, //
+  // TSID_DESCRIPTION, STR_PROP_RRI_ATTR_UGWI_D, //
+  // PROPID_UGWI_KIND, avStr( UgwiKindRriAttr.KIND_ID ), //
+  // TSID_KEEPER_ID, Ugwi.KEEPER_ID, //
+  // OPDEF_EDITOR_FACTORY_NAME, ValedAvUgwiSelector.FACTORY_NAME, //
+  // ValedUgwiSelector.OPDEF_SINGLE_UGWI_KIND_ID, avStr( UgwiKindRriAttr.KIND_ID ), //
+  // TSID_DEFAULT_VALUE, IAtomicValue.NULL //
+  // );
 
   IDataDef PROP_RTD_UGWI = DataDef.create( PROPID_RTD_UGWI, VALOBJ, //
       TSID_NAME, STR_PROP_RTD_UGWI, //
@@ -185,17 +184,17 @@ public interface ISkVedConstants {
       TSID_DEFAULT_VALUE, IAtomicValue.NULL //
   );
 
-  ITinTypeInfo TTI_UGWI          = new TinAtomicTypeInfo.TtiValobj<>( PROP_UGWI, Ugwi.class );
-  ITinTypeInfo TTI_SKID_UGWI     = new TinAtomicTypeInfo.TtiValobj<>( PROP_SKID_UGWI, Ugwi.class );
-  ITinTypeInfo TTI_ATTR_UGWI     = new TinAtomicTypeInfo.TtiValobj<>( PROP_ATTR_UGWI, Ugwi.class );
-  ITinTypeInfo TTI_RRI_ATTR_UGWI = new TinAtomicTypeInfo.TtiValobj<>( PROP_RRI_ATTR_UGWI, Ugwi.class );
-  ITinTypeInfo TTI_RTD_UGWI      = new TinAtomicTypeInfo.TtiValobj<>( PROP_RTD_UGWI, Ugwi.class );
-  ITinTypeInfo TTI_CMD_UGWI      = new TinAtomicTypeInfo.TtiValobj<>( PROP_CMD_UGWI, Ugwi.class );
+  ITinTypeInfo TTI_UGWI      = new TinAtomicTypeInfo.TtiValobj<>( PROP_UGWI, Ugwi.class );
+  ITinTypeInfo TTI_SKID_UGWI = new TinAtomicTypeInfo.TtiValobj<>( PROP_SKID_UGWI, Ugwi.class );
+  ITinTypeInfo TTI_ATTR_UGWI = new TinAtomicTypeInfo.TtiValobj<>( PROP_ATTR_UGWI, Ugwi.class );
+  // ITinTypeInfo TTI_RRI_ATTR_UGWI = new TinAtomicTypeInfo.TtiValobj<>( PROP_RRI_ATTR_UGWI, Ugwi.class );
+  ITinTypeInfo TTI_RTD_UGWI = new TinAtomicTypeInfo.TtiValobj<>( PROP_RTD_UGWI, Ugwi.class );
+  ITinTypeInfo TTI_CMD_UGWI = new TinAtomicTypeInfo.TtiValobj<>( PROP_CMD_UGWI, Ugwi.class );
 
-  ITinFieldInfo TFI_SKID_UGWI     = new TinFieldInfo( PROP_SKID_UGWI, TTI_SKID_UGWI );
-  ITinFieldInfo TFI_ATTR_UGWI     = new TinFieldInfo( PROP_ATTR_UGWI, TTI_ATTR_UGWI );
-  ITinFieldInfo TFI_RRI_ATTR_UGWI = new TinFieldInfo( PROP_RRI_ATTR_UGWI, TTI_RRI_ATTR_UGWI );
-  ITinFieldInfo TFI_RTD_UGWI      = new TinFieldInfo( PROP_RTD_UGWI, TTI_RTD_UGWI );
-  ITinFieldInfo TFI_CMD_UGWI      = new TinFieldInfo( PROP_CMD_UGWI, TTI_CMD_UGWI );
+  ITinFieldInfo TFI_SKID_UGWI = new TinFieldInfo( PROP_SKID_UGWI, TTI_SKID_UGWI );
+  ITinFieldInfo TFI_ATTR_UGWI = new TinFieldInfo( PROP_ATTR_UGWI, TTI_ATTR_UGWI );
+  // ITinFieldInfo TFI_RRI_ATTR_UGWI = new TinFieldInfo( PROP_RRI_ATTR_UGWI, TTI_RRI_ATTR_UGWI );
+  ITinFieldInfo TFI_RTD_UGWI = new TinFieldInfo( PROP_RTD_UGWI, TTI_RTD_UGWI );
+  ITinFieldInfo TFI_CMD_UGWI = new TinFieldInfo( PROP_CMD_UGWI, TTI_CMD_UGWI );
 
 }

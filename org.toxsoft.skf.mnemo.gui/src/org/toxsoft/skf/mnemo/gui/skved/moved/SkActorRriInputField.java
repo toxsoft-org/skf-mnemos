@@ -1,21 +1,19 @@
-package org.toxsoft.skf.mnemo.gui.skved;
+package org.toxsoft.skf.mnemo.gui.skved.moved;
 
+import static org.toxsoft.core.tsgui.ved.ITsguiVedConstants.*;
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
-import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkResources.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
-import static org.toxsoft.skf.mnemo.lib.ISkMnemosServiceHardConstants.*;
 
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
-import org.toxsoft.core.tsgui.dialogs.*;
-import org.toxsoft.core.tsgui.ved.comps.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.*;
+import org.toxsoft.core.tslib.av.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
@@ -26,32 +24,31 @@ import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.rri.lib.*;
 import org.toxsoft.skf.rri.lib.ugwi.*;
-import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.utils.*;
 
 /**
- * Обработчик checkbox'a для чения/записи значения булевого параметра НСИ.
+ * Обработчик поля ввода для чения/записи значения параметра НСИ.
  * <p>
  *
  * @author vs
  */
-public class SkActorRriCheckbox
-    extends AbstractSkVedButtonActor {
+public class SkActorRriInputField
+    extends AbstractSkActorInputField {
 
   /**
    * The actor factor ID.
    */
-  public static final String FACTORY_ID = SKVED_ID + ".actor.RriCheckbox"; //$NON-NLS-1$
+  public static final String FACTORY_ID = SKVED_ID + ".actor.RriInputField"; //$NON-NLS-1$
 
   /**
    * The VISEL factory singleton.
    */
   public static final IVedActorFactory FACTORY = new VedAbstractActorFactory( FACTORY_ID, //
-      TSID_NAME, STR_ACTOR_RRI_CHECKBOX, //
-      TSID_DESCRIPTION, STR_ACTOR_RRI_CHECKBOX_D, //
-      TSID_ICON_ID, ICONID_VED_RRI_CHECK_ACTOR //
+      TSID_NAME, STR_ACTOR_RRI_INPUT_FIELD, //
+      TSID_DESCRIPTION, STR_ACTOR_RRI_INPUT_FIELD_D, //
+      TSID_ICON_ID, ICONID_VED_RRI_EDIT_ACTOR //
   ) {
 
     @Override
@@ -62,48 +59,30 @@ public class SkActorRriCheckbox
       fields.add( TFI_DESCRIPTION );
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_VISEL_PROP_ID );
+      // fields.add( TFI_RRI_ID );
       fields.add( TFI_RRI_ATTR_UGWI );
-      return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRriCheckbox.class );
+      fields.add( TFI_FORMAT_STRING );
+      return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRriInputField.class );
     }
 
     @Override
     protected VedAbstractActor doCreate( IVedItemCfg aCfg, VedScreen aVedScreen ) {
-      return new SkActorRriCheckbox( aCfg, propDefs(), aVedScreen );
+      return new SkActorRriInputField( aCfg, propDefs(), aVedScreen );
     }
 
   };
 
   private Ugwi   ugwi   = null;
+  private String oldStr = TsLibUtils.EMPTY_STRING;
   private String fmtStr = null;
 
   private IAtomicValue lastValue = IAtomicValue.NULL;
 
   private ISkRriSection section = null;
 
-  protected SkActorRriCheckbox( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
+  protected SkActorRriInputField( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
-    IButtonClickHandler buttonHandler = aVisel -> {
-
-      ISkVedEnvironment vedEnv = aVedScreen.tsContext().get( ISkVedEnvironment.class );
-      ISkCoreApi coreApi = vedEnv.skConn().coreApi();
-      if( !coreApi.userService().abilityManager().isAbilityAllowed( ABILITYID_MNEMO_EDIT_PARAMS ) ) {
-        TsDialogUtils.warn( getShell(), ERR_STR_OPERATION_NOT_ALLOWED );
-        return;
-      }
-
-      VedAbstractVisel visel = getVisel( props().getStr( PROPID_VISEL_ID ) );
-      visel.props().setValobj( ViselButton.PROPID_STATE, EButtonViselState.WORKING );
-      IAtomicValue value = getRriAttrValue();
-      boolean bVal = false;
-      if( value.isAssigned() ) {
-        bVal = value.asBool();
-      }
-      setRriAttrValue( !bVal );
-      if( visel.props().hasKey( PROPID_ON_OFF_STATE ) ) {
-        visel.props().setBool( PROPID_ON_OFF_STATE, !bVal );
-      }
-    };
-    setButtonClickHandler( buttonHandler );
+    // TODO Auto-generated constructor stub
   }
 
   // ------------------------------------------------------------------------------------
@@ -112,15 +91,22 @@ public class SkActorRriCheckbox
 
   @Override
   protected void doUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
-    if( aChangedValues.hasKey( TFI_RRI_ATTR_UGWI.id() ) ) {
-      IAtomicValue av = aChangedValues.getValue( TFI_RRI_ATTR_UGWI.id() );
-      if( av.isAssigned() && av.asValobj() != null && av.asValobj() != IAtomicValue.NULL
-          && av.asValobj() != Ugwi.NONE ) {
-        ugwi = av.asValobj();
-        String sectId = UgwiKindRriAttr.getSectionId( ugwi );
-        section = ((ISkRegRefInfoService)coreApi().getService( ISkRegRefInfoService.SERVICE_ID )).findSection( sectId );
-      }
+    ugwi = SkVedUtils.getRriAttributeUgwi( TFI_RRI_ATTR_UGWI.id(), aChangedValues );
+    if( ugwi != null && ugwi != Ugwi.NONE ) {
+      String sectId = UgwiKindRriAttr.getSectionId( ugwi );
+      section = ((ISkRegRefInfoService)coreApi().getService( ISkRegRefInfoService.SERVICE_ID )).findSection( sectId );
     }
+    // if( aChangedValues.hasKey( TFI_RRI_ATTR_UGWI.id() ) ) {
+    // IAtomicValue av = aChangedValues.getValue( TFI_RRI_ATTR_UGWI.id() );
+    // if( av.isAssigned() && av.asValobj() != null && av.asValobj() != IAtomicValue.NULL ) {
+    // ugwi = av.asValobj();
+    // if( ugwi != Ugwi.NONE ) {
+    // String sectId = UgwiKindRriAttr.getSectionId( ugwi );
+    // section =
+    // ((ISkRegRefInfoService)coreApi().getService( ISkRegRefInfoService.SERVICE_ID )).findSection( sectId );
+    // }
+    // }
+    // }
     if( aChangedValues.hasKey( TFI_FORMAT_STRING.id() ) ) {
       fmtStr = props().getStr( TFI_FORMAT_STRING.id() );
       if( fmtStr.isBlank() ) {
@@ -155,16 +141,37 @@ public class SkActorRriCheckbox
   }
 
   // ------------------------------------------------------------------------------------
-  // IRealTimeSensitive
+  // AbstractSkActorInputField
   //
 
   @Override
   public void whenRealTimePassed( long aRtTime ) {
+    if( inputHandler != null && inputHandler.isEditing() ) {
+      super.whenRealTimePassed( aRtTime );
+      return;
+    }
     IAtomicValue newValue = getRriAttrValue();
     if( !newValue.equals( lastValue ) ) {
-      // String text = AvUtils.printAv( fmtStr, newValue );
-      setStdViselPropValue( newValue );
+      String text = AvUtils.printAv( fmtStr, newValue );
+      setStdViselPropValue( avStr( text ) );
       lastValue = newValue;
+    }
+  }
+
+  @Override
+  protected void onStartEdit() {
+    oldStr = getVisel().props().getStr( PROPID_TEXT );
+  }
+
+  @Override
+  protected void onCancelEdit() {
+    getVisel().props().setStr( PROPID_TEXT, oldStr );
+  }
+
+  @Override
+  protected void onFinishEdit() {
+    if( section != null ) {
+      setRriAttrValue( getVisel().props().getStr( PROPID_TEXT ) );
     }
   }
 
@@ -180,13 +187,39 @@ public class SkActorRriCheckbox
     return section.getAttrParamValue( gwid.skid(), gwid.propId() );
   }
 
-  void setRriAttrValue( boolean aValue ) {
+  void setRriAttrValue( String aText ) {
     if( ugwi == null || ugwi == Ugwi.NONE ) {
       LoggerUtils.errorLogger().error( "Attempt to set RRI attribute for null or NONE Ugwi" ); //$NON-NLS-1$
       return;
     }
     Gwid gwid = UgwiKindRriAttr.INSTANCE.getGwid( ugwi );
-    section.setAttrParamValue( gwid.skid(), gwid.propId(), avBool( aValue ), TsLibUtils.EMPTY_STRING );
+    IAtomicValue value = section.getAttrParamValue( gwid.skid(), gwid.propId() );
+    IDtoAttrInfo attrInfo = section.listParamInfoes( gwid.classId() ).getByKey( gwid.propId() ).attrInfo();
+    switch( attrInfo.dataType().atomicType() ) {
+      case BOOLEAN:
+        Boolean bv = Boolean.valueOf( Boolean.parseBoolean( aText ) );
+        value = AvUtils.avFromObj( bv );
+        break;
+      case FLOATING:
+        String text = aText.replace( ',', '.' );
+        Double dv = Double.valueOf( Double.parseDouble( text ) );
+        value = AvUtils.avFromObj( dv );
+        break;
+      case INTEGER:
+        Integer iv = Integer.valueOf( Integer.parseInt( aText ) );
+        value = AvUtils.avFromObj( iv );
+        break;
+      case STRING:
+        value = AvUtils.avFromObj( aText );
+        break;
+      case TIMESTAMP:
+      case VALOBJ:
+      case NONE:
+        break;
+      default:
+        throw new IllegalArgumentException( "Unexpected value: " + value.atomicType() ); //$NON-NLS-1$
+    }
+    section.setAttrParamValue( gwid.skid(), gwid.propId(), value, TsLibUtils.EMPTY_STRING );
   }
 
 }

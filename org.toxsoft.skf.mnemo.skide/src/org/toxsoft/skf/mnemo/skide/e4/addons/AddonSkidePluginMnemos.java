@@ -39,10 +39,12 @@ public class AddonSkidePluginMnemos
   protected void doRegisterQuants( IQuantRegistrator aQuantRegistrator ) {
     aQuantRegistrator.registerQuant( new QuantTsGuiVed() );
     aQuantRegistrator.registerQuant( new QuantSkMnemoGui() );
-    aQuantRegistrator.registerQuant( new QuantVtReportTemplate() );
-    aQuantRegistrator.registerQuant( new QuantSkMnemoGui() );
     aQuantRegistrator.registerQuant( new QuantSkfMnemoMnedPro() );
     aQuantRegistrator.registerQuant( new QuantSkfMnemoMnedLite() );
+    aQuantRegistrator.registerQuant( new QuantVtReportTemplate() );
+    // aQuantRegistrator.registerQuant( new QuantSkMnemoGui() );
+    // aQuantRegistrator.registerQuant( new QuantSkfMnemoMnedPro() );
+    // aQuantRegistrator.registerQuant( new QuantSkfMnemoMnedLite() );
   }
 
   @Override

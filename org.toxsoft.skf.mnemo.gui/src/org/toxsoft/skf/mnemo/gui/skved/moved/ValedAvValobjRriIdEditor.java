@@ -1,4 +1,4 @@
-package org.toxsoft.skf.mnemo.gui.skved;
+package org.toxsoft.skf.mnemo.gui.skved.moved;
 
 import static org.toxsoft.core.tsgui.valed.api.IValedControlConstants.*;
 

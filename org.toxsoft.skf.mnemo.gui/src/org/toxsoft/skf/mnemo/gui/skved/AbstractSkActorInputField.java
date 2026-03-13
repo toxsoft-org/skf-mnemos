@@ -23,7 +23,7 @@ import org.toxsoft.uskat.core.*;
 public abstract class AbstractSkActorInputField
     extends AbstractSkVedActor {
 
-  InputFieldHandler inputHandler;
+  protected InputFieldHandler inputHandler;
 
   boolean enabled = true;
 

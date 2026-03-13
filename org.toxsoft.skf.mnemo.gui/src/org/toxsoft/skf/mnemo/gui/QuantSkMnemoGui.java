@@ -69,7 +69,7 @@ public class QuantSkMnemoGui
 
     IVedActorFactoriesRegistry actFact = aAppContext.get( IVedActorFactoriesRegistry.class );
     actFact.register( SkActorAttrText.FACTORY );
-    actFact.register( SkActorRtdataText.FACTORY );
+    // actFact.register( SkActorRtdataText.FACTORY );
     actFact.register( SkActorRtdataValue.FACTORY );
     actFact.register( SkActorRtBooleanValue.FACTORY );
     actFact.register( SkActorCmdButton.FACTORY );
@@ -78,8 +78,8 @@ public class QuantSkMnemoGui
     actFact.register( SkActorRtdataImage.FACTORY );
     actFact.register( SkActorInputField.FACTORY );
     actFact.register( SkActorCmdField.FACTORY );
-    actFact.register( SkActorRriInputField.FACTORY );
-    actFact.register( SkActorRriCheckbox.FACTORY );
+    // actFact.register( SkActorRriInputField.FACTORY );
+    // actFact.register( SkActorRriCheckbox.FACTORY );
     // actFact.register( SkActorRunTimeAction.FACTORY );
     actFact.register( SkActorPopupMnemoInvoker.FACTORY );
     actFact.register( SkActorRtdataRefbook.FACTORY );
@@ -101,8 +101,8 @@ public class QuantSkMnemoGui
     vcfRegistry.registerFactory( ValedAvValobjImageInfoesSet.FACTORY );
     vcfRegistry.registerFactory( ValedAnyGwidEditor.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjAnyGwidEditor.FACTORY );
-    vcfRegistry.registerFactory( ValedRriIdEditor.FACTORY );
-    vcfRegistry.registerFactory( ValedAvValobjRriIdEditor.FACTORY );
+    // vcfRegistry.registerFactory( ValedRriIdEditor.FACTORY );
+    // vcfRegistry.registerFactory( ValedAvValobjRriIdEditor.FACTORY );
     vcfRegistry.registerFactory( ValedRtUserActionInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjRtUserActionInfo.FACTORY );
     vcfRegistry.registerFactory( ValedPopupMnemoInfo.FACTORY );

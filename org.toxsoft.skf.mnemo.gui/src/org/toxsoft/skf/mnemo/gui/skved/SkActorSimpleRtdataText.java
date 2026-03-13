@@ -32,13 +32,13 @@ import org.toxsoft.uskat.core.utils.*;
  *
  * @author hazard157, vs
  */
-public class SkActorRtdataText
+public class SkActorSimpleRtdataText
     extends AbstractSkActorSingleRtDataConsumer {
 
   /**
    * The actor factor ID.
    */
-  public static final String FACTORY_ID = SKVED_ID + ".actor.RtdataText"; //$NON-NLS-1$
+  public static final String FACTORY_ID = SKVED_ID + ".actor.SimpleRtdataText"; //$NON-NLS-1$
 
   /**
    * Property ID for non assigned value text
@@ -52,14 +52,6 @@ public class SkActorRtdataText
   );
 
   static final ITinFieldInfo TFI_NULL_TEXT = new TinFieldInfo( PROP_NULL_TEXT, TTI_AT_STRING );
-
-  static final String PROPID_RRI_FORMAT_STRING = "rriFormatString"; //$NON-NLS-1$
-
-  static final ITinFieldInfo TFI_RRI_FORMAT_STRING = new TinFieldInfo( PROPID_RRI_FORMAT_STRING, //
-      TFI_RRI_ATTR_UGWI.typeInfo(), //
-      TSID_NAME, "Формат из НСИ", //
-      TSID_DESCRIPTION, "Строка форматирования в НСИ" //
-  );
 
   /**
    * The VISEL factory singleton.
@@ -79,25 +71,23 @@ public class SkActorRtdataText
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_VISEL_PROP_ID );
       fields.add( TFI_FORMAT_STRING );
-      fields.add( TFI_RRI_FORMAT_STRING );
       fields.add( TFI_RTD_UGWI );
       fields.add( TFI_NULL_TEXT );
-      return new PropertableEntitiesTinTypeInfo<>( fields, SkActorRtdataText.class );
+      return new PropertableEntitiesTinTypeInfo<>( fields, SkActorSimpleRtdataText.class );
     }
 
     @Override
     protected VedAbstractActor doCreate( IVedItemCfg aCfg, VedScreen aVedScreen ) {
-      return new SkActorRtdataText( aCfg, propDefs(), aVedScreen );
+      return new SkActorSimpleRtdataText( aCfg, propDefs(), aVedScreen );
     }
 
   };
 
   private String fmtStr         = null;
   private String fixedFormatStr = null;                   // строка форматирования введенная вручную
-  private String rriFormatStr   = null;                   // строка форматирования в НСИ параметрах
   private String nullValueStr   = TsLibUtils.EMPTY_STRING;
 
-  SkActorRtdataText( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
+  SkActorSimpleRtdataText( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
   }
 
@@ -107,13 +97,6 @@ public class SkActorRtdataText
 
   @Override
   protected void doDoUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
-    Ugwi rriUgwi = SkVedUtils.getRriAttributeUgwi( PROPID_RRI_FORMAT_STRING, aChangedValues );
-    if( rriUgwi != null && rriUgwi != Ugwi.NONE ) {
-      IAtomicValue av = SkVedUtils.getRriValue( rriUgwi, coreApi() );
-      if( av != null && av.isAssigned() ) {
-        rriFormatStr = av.asString();
-      }
-    }
     if( aChangedValues.hasKey( PROPID_FORMAT_STRING ) ) {
       fixedFormatStr = aChangedValues.getStr( PROP_FORMAT_STRING );
     }
@@ -121,9 +104,9 @@ public class SkActorRtdataText
     if( fixedFormatStr != null && !fixedFormatStr.isBlank() ) {
       fmtStr = fixedFormatStr;
     }
-    else {
-      fmtStr = rriFormatStr;
-    }
+    // else {
+    // fmtStr = rriFormatStr;
+    // }
 
     if( (fmtStr == null || fmtStr.isBlank()) && ugwi() != Ugwi.NONE && ugwi() != null ) {
       System.out.println( ugwi() );
