@@ -89,41 +89,65 @@ public class AbstractRtControl
     }
     bindActorProps();
 
-    propSet = new PropertiesSet<>( this, aPropDefs );
-    propSet.propsEventer().addListener( ( aSource, aNewValues, aOldValues ) -> {
-      visel.props().propsEventer().pauseFiring();
-      for( Pair<String, String> p : viselPropsBinding ) {
-        if( aNewValues.keys().hasElem( p.left() ) ) {
-          // IAtomicValue v = visel.props().getValue( p.right() );
-          visel.props().setValue( p.right(), aNewValues.getValue( p.left() ) );
-          // v = visel.props().getValue( p.right() );
-        }
-      }
-      visel.props().propsEventer().resumeFiring( true );
+    propSet = new PropertiesSet<>( this, aPropDefs ) {
 
-      for( String actorId : actorPropsBinding.keys() ) {
-        VedAbstractActor actor = actors.getByKey( actorId );
-        actor.props().propsEventer().pauseFiring();
-        IList<Pair<String, String>> pairs = actorPropsBinding.getByKey( actorId );
-        for( Pair<String, String> p : pairs ) {
-          if( aNewValues.keys().hasElem( p.left() ) ) {
-            actor.props().setValue( p.right(), aNewValues.getValue( p.left() ) );
+      @Override
+      protected void doAfterPropValuesSet( IOptionSet aChangedValues ) {
+        for( Pair<String, String> p : viselPropsBinding ) {
+          if( aChangedValues.keys().hasElem( p.left() ) ) {
+            visel.props().setValue( p.right(), aChangedValues.getValue( p.left() ) );
           }
         }
-        actor.props().propsEventer().resumeFiring( true );
-      }
 
-      doUpdateCachesAfterPropsChange( aNewValues );
-    } );
+        for( String actorId : actorPropsBinding.keys() ) {
+          VedAbstractActor actor = actors.getByKey( actorId );
+          actor.props().propsEventer().pauseFiring();
+          IList<Pair<String, String>> pairs = actorPropsBinding.getByKey( actorId );
+          for( Pair<String, String> p : pairs ) {
+            if( aChangedValues.keys().hasElem( p.left() ) ) {
+              actor.props().setValue( p.right(), aChangedValues.getValue( p.left() ) );
+            }
+          }
+          actor.props().propsEventer().resumeFiring( true );
+        }
+
+      }
+    };
+
+    // propSet.propsEventer().addListener( ( aSource, aNewValues, aOldValues ) -> {
+    // visel.props().propsEventer().pauseFiring();
+    // for( Pair<String, String> p : viselPropsBinding ) {
+    // if( aNewValues.keys().hasElem( p.left() ) ) {
+    // // IAtomicValue v = visel.props().getValue( p.right() );
+    // visel.props().setValue( p.right(), aNewValues.getValue( p.left() ) );
+    // // v = visel.props().getValue( p.right() );
+    // }
+    // }
+    // visel.props().propsEventer().resumeFiring( true );
+    //
+    // for( String actorId : actorPropsBinding.keys() ) {
+    // VedAbstractActor actor = actors.getByKey( actorId );
+    // actor.props().propsEventer().pauseFiring();
+    // IList<Pair<String, String>> pairs = actorPropsBinding.getByKey( actorId );
+    // for( Pair<String, String> p : pairs ) {
+    // if( aNewValues.keys().hasElem( p.left() ) ) {
+    // actor.props().setValue( p.right(), aNewValues.getValue( p.left() ) );
+    // }
+    // }
+    // actor.props().propsEventer().resumeFiring( true );
+    // }
+    //
+    // doUpdateCachesAfterPropsChange( aNewValues );
+    // } );
 
     visel.props().propsEventer().addListener( ( aSource, aNewValues, aOldValues ) -> {
-      propSet.propsEventer().pauseFiring();
+      // propSet.propsEventer().pauseFiring();
       for( Pair<String, String> p : viselPropsBinding ) {
         if( aNewValues.keys().hasElem( p.right() ) ) {
           propSet.setValue( p.left(), aNewValues.getValue( p.right() ) );
         }
       }
-      propSet.propsEventer().resumeFiring( false );
+      // propSet.propsEventer().resumeFiring( false );
     } );
 
     // extraData.copyFrom( aConfig.extraData() );
@@ -298,10 +322,10 @@ public class AbstractRtControl
   }
 
   // ------------------------------------------------------------------------------------
-  //
+  // To use
   //
 
-  IStridablesList<VedAbstractActor> actors() {
+  protected IStridablesList<VedAbstractActor> actors() {
     return actors;
   }
 
@@ -336,7 +360,7 @@ public class AbstractRtControl
     }
   }
 
-  void bindActorPropId( String aActorId, String aRtcPropid, String aViselPropId ) {
+  protected void bindActorPropId( String aActorId, String aRtcPropid, String aViselPropId ) {
     IListEdit<Pair<String, String>> pairs;
     if( !actorPropsBinding.hasKey( aActorId ) ) {
       pairs = new ElemArrayList<>();
