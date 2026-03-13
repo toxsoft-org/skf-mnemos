@@ -73,7 +73,7 @@ public class RtcRtdataValueView
     }
 
     @Override
-    void bindViselPropId( String aRtcPropid, String aViselPropId ) {
+    protected void bindViselPropId( String aRtcPropid, String aViselPropId ) {
       bindViselPropId( TFI_TEXT.id(), TFI_TEXT.id() );
       bindViselPropId( TFI_FONT.id(), TFI_FONT.id() );
       bindViselPropId( TFI_FG_COLOR.id(), TFI_FG_COLOR.id() );
@@ -103,7 +103,7 @@ public class RtcRtdataValueView
         viselCfg.propValues().setDouble( PROPID_Y, aCfg.params().getDouble( PROPID_Y ) );
         v = aVedScreen.model().visels().create( viselCfg );
 
-        IVedActorFactory af = actorFactory( SkActorRtdataText.FACTORY_ID, aVedScreen );
+        IVedActorFactory af = actorFactory( SkActorSimpleRtdataText.FACTORY_ID, aVedScreen );
         VedItemCfg actorCfg = aVedScreen.model().actors().prepareFromTemplate( af.paletteEntries().first().itemCfg() );
         actorCfg.propValues().setStr( PROPID_VISEL_ID, v.id() );
         actorCfg.propValues().setStr( PROPID_VISEL_PROP_ID, PROPID_TEXT );

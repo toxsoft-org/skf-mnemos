@@ -55,4 +55,12 @@ interface ITsResources {
   String STR_HIGHLIGHT_BKG = Messages.getString( "STR_HIGHLIGHT_BKG" ); //$NON-NLS-1$
   String STR_SELECTION_BKG = Messages.getString( "STR_SELECTION_BKG" ); //$NON-NLS-1$
 
+  String STR_RTC_FANCY_LAMP   = Messages.getString( "STR_RTC_FANCY_LAMP" );   //$NON-NLS-1$
+  String STR_RTC_FANCY_LAMP_D = Messages.getString( "STR_RTC_FANCY_LAMP_D" ); //$NON-NLS-1$
+
+  String STR_RTC_RECT_LAMP   = Messages.getString( "STR_RTC_RECT_LAMP" );   //$NON-NLS-1$
+  String STR_RTC_RECT_LAMP_D = Messages.getString( "STR_RTC_RECT_LAMP_D" ); //$NON-NLS-1$
+
+  String STR_RTC_CIRCLE_LAMP   = Messages.getString( "STR_RTC_CIRCLE_LAMP" );   //$NON-NLS-1$
+  String STR_RTC_CIRCLE_LAMP_D = Messages.getString( "STR_RTC_CIRCLE_LAMP_D" ); //$NON-NLS-1$
 }

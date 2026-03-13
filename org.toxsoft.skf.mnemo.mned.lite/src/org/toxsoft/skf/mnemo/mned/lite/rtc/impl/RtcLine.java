@@ -38,7 +38,7 @@ public class RtcLine
       TSID_NAME, STR_RTC_LINE, //
       TSID_DESCRIPTION, STR_RTC_LINE_D, //
       TSID_ICON_ID, ICONID_RTC_LINE, //
-      PARAMID_CATEGORY, CATID_GEOMETRY//
+      PARAMID_CATEGORY, CATID_DECORATORS//
   ) {
 
     @Override

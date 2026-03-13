@@ -132,17 +132,17 @@ public abstract class AbstractRtControlFactory
   // To use
   //
 
-  IVedViselFactory viselFactory( String aFactoryId, IVedScreen aVedScreen ) {
+  protected IVedViselFactory viselFactory( String aFactoryId, IVedScreen aVedScreen ) {
     IVedViselFactoriesRegistry reg = aVedScreen.tsContext().get( IVedViselFactoriesRegistry.class );
     return reg.get( aFactoryId );
   }
 
-  IVedActorFactory actorFactory( String aFactoryId, IVedScreen aVedScreen ) {
+  protected IVedActorFactory actorFactory( String aFactoryId, IVedScreen aVedScreen ) {
     IVedActorFactoriesRegistry reg = aVedScreen.tsContext().get( IVedActorFactoriesRegistry.class );
     return reg.get( aFactoryId );
   }
 
-  void bindViselPropId( String aRtcPropid, String aViselPropId ) {
+  protected void bindViselPropId( String aRtcPropid, String aViselPropId ) {
     viselPropsBinding.add( new Pair<>( aRtcPropid, aViselPropId ) );
   }
 

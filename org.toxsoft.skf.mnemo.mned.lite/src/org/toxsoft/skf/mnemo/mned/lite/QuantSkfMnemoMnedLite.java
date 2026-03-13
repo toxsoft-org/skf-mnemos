@@ -2,6 +2,8 @@ package org.toxsoft.skf.mnemo.mned.lite;
 
 import org.eclipse.e4.core.contexts.*;
 import org.toxsoft.core.tsgui.bricks.quant.*;
+import org.toxsoft.core.tsgui.ved.screen.items.*;
+import org.toxsoft.skf.mnemo.mned.lite.actors.*;
 import org.toxsoft.skf.mnemo.mned.lite.rtc.*;
 import org.toxsoft.skf.mnemo.mned.lite.rtc.impl.*;
 
@@ -38,8 +40,13 @@ public class QuantSkfMnemoMnedLite
     rtcFact.register( RtcImage.FACTORY );
     rtcFact.register( RtcCmdCheckbox.FACTORY );
     rtcFact.register( RtcCmdButton.FACTORY );
+    rtcFact.register( RtcFancyLamp.FACTORY );
+    rtcFact.register( RtcRectLamp.FACTORY );
     rtcFact.register( RtcCircleLamp.FACTORY );
     rtcFact.register( RtcInputField.FACTORY );
+
+    IVedActorFactoriesRegistry actReg = aAppContext.get( IVedActorFactoriesRegistry.class );
+    actReg.register( LiteActorLamp.FACTORY );
   }
 
   @Override

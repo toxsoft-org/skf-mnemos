@@ -38,6 +38,57 @@ public class MnemoEditorPanel
     extends SkPanel
     implements IMnemoEditorPanel {
 
+  /**
+   * Runs editor in "live" mode.
+   *
+   * @author hazard157
+   */
+  class AspRunActors
+      extends AspActorsRunner {
+
+    IVedScreenCfg oldConfig = null;
+
+    public AspRunActors( IVedScreen aVedScreen ) {
+      super( aVedScreen );
+    }
+
+    @Override
+    protected void doBeforeActorsRun() {
+      // TODO when actors enabled, turn off editing
+      // TODO when actors enabled, turn off SAVE, etc.
+      oldConfig = VedScreenUtils.getVedScreenConfig( vedScreen );
+
+      vedScreen.model().screenHandlersBefore().remove( vertexSetManager );
+      vedScreen.model().screenHandlersBefore().remove( multiSelectionHandler );
+      vedScreen.model().screenHandlersBefore().remove( viselsPositionHandler );
+      vedScreen.model().screenHandlersBefore().remove( viselCtxMenuManager );
+      vedScreen.model().screenHandlersBefore().remove( paletteSelectionManager );
+
+      skVedEnvironment.restart();
+
+      undoManager.setEnabled( false ); // when actors enabled, turn off UNDO/REDO
+    }
+
+    @Override
+    protected void doBeforeActorsStop() {
+      vedScreen.model().screenHandlersBefore().add( vertexSetManager );
+      vedScreen.model().screenHandlersBefore().add( multiSelectionHandler );
+      vedScreen.model().screenHandlersBefore().add( viselsPositionHandler );
+      vedScreen.model().screenHandlersBefore().add( viselCtxMenuManager );
+      vedScreen.model().screenHandlersBefore().add( paletteSelectionManager );
+
+      // TODO when actors disabled, turn on editing
+      // TODO when actors disabled, turn on SAVE, etc.
+      VedScreenUtils.setVedScreenConfig( vedScreen, oldConfig );
+    }
+
+    @Override
+    protected void doAfterActorsStop() {
+      undoManager.setEnabled( true ); // when actors disabled, turn on UNDO/REDO
+    }
+
+  }
+
   private final GenericChangeEventer mnemoChangedEventer;
 
   private final IdChain suppliedConnectionId;
@@ -59,6 +110,8 @@ public class MnemoEditorPanel
   private ITsActionHandler externalHandler = null;
 
   private final VedUndoManager undoManager;
+
+  private final MnemoScrollManager scrollManager;
 
   private RtControlInspector rtControlInspector;
 
@@ -128,6 +181,7 @@ public class MnemoEditorPanel
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
     actionsProvider.addHandler( new VedAspCanvasActions( vedScreen ) );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
+    actionsProvider.addHandler( new AspRunActors( vedScreen ) );
 
     createContent();
 
@@ -156,6 +210,13 @@ public class MnemoEditorPanel
     selectionDecorator = new MultiSelectionDecorator( vedScreen, selectionManager );
     vedScreen.model().screenDecoratorsAfter().add( selectionDecorator );
 
+    guiTimersService().quickTimers().addListener( vedScreen );
+
+    toolbar.addListener( actionsProvider );
+    vedScreen.model().actors().eventer().addListener( ( src, op, id ) -> whenVedItemChanged() );
+    vedScreen.model().visels().eventer().addListener( ( src, op, id ) -> whenVedItemChanged() );
+    vedScreen.view().configChangeEventer().addListener( src -> setChanged( true ) );
+
     // vedScreen.model().screenHandlersBefore().add( hotKeysManager.inputHandler() );
     vedScreen.model().screenHandlersBefore().add( vertexSetManager );
     vedScreen.model().screenHandlersBefore().add( multiSelectionHandler );
@@ -165,7 +226,13 @@ public class MnemoEditorPanel
     vedScreen.model().screenHandlersBefore().add( paletteSelectionManager );
 
     selectionManager.genericChangeEventer().addListener( aSource -> whenSelectionManagerSelectionChanges() );
+    scrollManager = new MnemoScrollManager( vedScreen );
+  }
 
+  @Override
+  protected void doDispose() {
+    skVedEnvironment.close();
+    guiTimersService().quickTimers().removeListener( vedScreen );
   }
 
   // ------------------------------------------------------------------------------------
@@ -191,9 +258,10 @@ public class MnemoEditorPanel
 
   @Override
   public void setCurrentConfig( IVedScreenCfg aCfg ) {
-    // TODO Auto-generated method stub
     VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
     ((RtControlsManager)rtControlsManager).setScreenCfg( aCfg );
+    setChanged( false );
+    scrollManager.setOrigin( 0, 0 );
   }
 
   @Override
@@ -274,6 +342,17 @@ public class MnemoEditorPanel
     }
     rtControlInspector.setRtControl( rtc );
     // eastFolder.setSelection( tiViselInsp );
+  }
+
+  /**
+   * Called when any VED item (VISEL, actor) property changes.
+   * <p>
+   * Calls {@link #setChanged(boolean) setChanged(true)} if necessary.
+   */
+  private void whenVedItemChanged() {
+    if( !vedScreen.isActorsEnabled() ) {
+      setChanged( true );
+    }
   }
 
 }

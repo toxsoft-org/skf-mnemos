@@ -40,31 +40,40 @@ public interface ISkfMnemMnedLiteConstants {
 
   String ICONID_RTC_ATTR_VALUE_VIEW   = "rtc-attr-value";   //$NON-NLS-1$
   String ICONID_RTC_RTDATA_VALUE_VIEW = "rtc-rtdata-value"; //$NON-NLS-1$
-  String ICONID_RTC_RRI_VALUE_VIEW    = "rtc-rri-value";    //$NON-NLS-1$
 
   String ICONID_RTC_INPUT_FIELD = "rtc-input-field"; //$NON-NLS-1$
 
   String ICONID_RTC_CIRCLE_LAMP = "rtc-circle-lamp"; //$NON-NLS-1$
   String ICONID_RTC_RECT_LAMP   = "rtc-rect-lamp";   //$NON-NLS-1$
+  String ICONID_RTC_FANCY_LAMP  = "rtc-fancy-lamp";  //$NON-NLS-1$
 
   String ICONID_RTC_IMAGE      = "rtc-image";      //$NON-NLS-1$
   String ICONID_RTC_CHECKBOX   = "rtc-checkbox";   //$NON-NLS-1$
   String ICONID_RTC_CMD_BUTTON = "rtc-cmd-button"; //$NON-NLS-1$
+
+  String ICONID_ACTOR_LAMP = "actor-lamp"; //$NON-NLS-1$
 
   // ------------------------------------------------------------------------------------
   // Palette categories
 
   String PARAMID_CATEGORY = "paletteCategory"; //$NON-NLS-1$
 
-  String CATID_GEOMETRY     = "geometry";   //$NON-NLS-1$
+  // String CATID_GEOMETRY = "geometry"; //$NON-NLS-1$
   String CATID_BOOLEAN_LAMP = "boolenLamp"; //$NON-NLS-1$
   String CATID_GAUGE        = "gauge";      //$NON-NLS-1$
   String CATID_TEXT         = "text";       //$NON-NLS-1$
   String CATID_ARROW        = "arrow";      //$NON-NLS-1$
-  String CATID_LAMP         = "lamp";       //$NON-NLS-1$
+  // String CATID_LAMP = "lamp"; //$NON-NLS-1$
 
   String CATID_NUMERIC_VALUE_VIEW = "numericValueView"; //$NON-NLS-1$
   String CATID_NUMERIC_VALUE_EDIT = "numericValueEdit"; //$NON-NLS-1$
+
+  String CATID_DECORATORS   = "decorators";  //$NON-NLS-1$
+  String CATID_GAUGES       = "gauges";      //$NON-NLS-1$
+  String CATID_LAMPS        = "lamps";       //$NON-NLS-1$
+  String CATID_TEXT_VIEWS   = "textViewes";  //$NON-NLS-1$
+  String CATID_INPUT_FIELDS = "inputFields"; //$NON-NLS-1$
+  String CATID_COMMANDS     = "commands";    //$NON-NLS-1$
 
   /**
    * Section ID in {@link IVedScreenCfg#extraData()} to store instance of type {@link IMnemoResolverConfig}.
