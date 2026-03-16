@@ -9,4 +9,26 @@
     <artifactId>org.toxsoft.skf.mnemo.gui</artifactId>
     <packaging>eclipse-plugin</packaging>
 
+    <!-- 2025-12-29 mvk+++ исключение кода из компиляции -->
+    <!-- 2026-01-03 mvk
+    -->
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>org.eclipse.tycho</groupId>
+          <artifactId>tycho-compiler-plugin</artifactId>
+          <configuration>
+            <source>${java.version}</source>
+            <target>${java.version}</target>
+            <useProjectSettings>true</useProjectSettings>
+            <optimize>true</optimize>
+            <showWarnings>false</showWarnings>
+            <excludes>
+               <exclude>org/toxsoft/skf/mnemo/gui/skved/moved/**</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+      </plugins>
+    </build>
+
 </project>
