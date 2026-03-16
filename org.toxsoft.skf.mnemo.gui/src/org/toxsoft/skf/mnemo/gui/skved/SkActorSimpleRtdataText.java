@@ -83,7 +83,7 @@ public class SkActorSimpleRtdataText
 
   };
 
-  private String fmtStr         = null;
+  private String fmtStr         = null;                   // строка форматирования
   private String fixedFormatStr = null;                   // строка форматирования введенная вручную
   private String nullValueStr   = TsLibUtils.EMPTY_STRING;
 
