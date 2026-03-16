@@ -63,4 +63,8 @@ interface ITsResources {
 
   String STR_RTC_CIRCLE_LAMP   = Messages.getString( "STR_RTC_CIRCLE_LAMP" );   //$NON-NLS-1$
   String STR_RTC_CIRCLE_LAMP_D = Messages.getString( "STR_RTC_CIRCLE_LAMP_D" ); //$NON-NLS-1$
+
+  String STR_RTC_IMAGE   = Messages.getString( "STR_RTC_IMAGE" );   //$NON-NLS-1$
+  String STR_RTC_IMAGE_D = Messages.getString( "STR_RTC_IMAGE_D" ); //$NON-NLS-1$
+
 }

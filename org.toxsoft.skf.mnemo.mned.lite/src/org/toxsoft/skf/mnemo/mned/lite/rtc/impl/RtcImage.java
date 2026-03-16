@@ -35,9 +35,10 @@ public class RtcImage
    * The IRtControl factory singleton.
    */
   public static final IRtControlFactory FACTORY = new AbstractRtControlFactory( FACTORY_ID, //
-      TSID_NAME, STR_RTC_RECTANGLE, //
-      TSID_DESCRIPTION, STR_RTC_RECTANGLE_D, //
-      TSID_ICON_ID, ICONID_RTC_IMAGE //
+      TSID_NAME, STR_RTC_IMAGE, //
+      TSID_DESCRIPTION, STR_RTC_IMAGE, //
+      TSID_ICON_ID, ICONID_RTC_IMAGE, //
+      PARAMID_CATEGORY, CATID_DECORATORS//
   ) {
 
     @Override

@@ -35,14 +35,14 @@ public class QuantSkfMnemoMnedLite
     rtcFact.register( RtcLine.FACTORY );
     rtcFact.register( RtcLinearGauge.FACTORY );
     rtcFact.register( RtcLabel.FACTORY );
+    rtcFact.register( RtcFancyLamp.FACTORY );
+    rtcFact.register( RtcRectLamp.FACTORY );
+    rtcFact.register( RtcCircleLamp.FACTORY );
     rtcFact.register( RtcAttrValueView.FACTORY );
     rtcFact.register( RtcRtdataValueView.FACTORY );
     rtcFact.register( RtcImage.FACTORY );
     rtcFact.register( RtcCmdCheckbox.FACTORY );
     rtcFact.register( RtcCmdButton.FACTORY );
-    rtcFact.register( RtcFancyLamp.FACTORY );
-    rtcFact.register( RtcRectLamp.FACTORY );
-    rtcFact.register( RtcCircleLamp.FACTORY );
     rtcFact.register( RtcInputField.FACTORY );
 
     IVedActorFactoriesRegistry actReg = aAppContext.get( IVedActorFactoriesRegistry.class );
