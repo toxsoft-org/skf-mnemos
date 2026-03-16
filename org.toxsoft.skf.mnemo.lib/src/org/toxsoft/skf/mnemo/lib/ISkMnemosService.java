@@ -15,6 +15,7 @@ import org.toxsoft.uskat.core.api.objserv.*;
  * Menmoschemes service.
  * <p>
  * Note: mnemoscheme ID {@link ISkMnemoCfg#strid()} must be unique across all sections, not just it's own section.
+ * <p>
  *
  * @author hazard157
  */
