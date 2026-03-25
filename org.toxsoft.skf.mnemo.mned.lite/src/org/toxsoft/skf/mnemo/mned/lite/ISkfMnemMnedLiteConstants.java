@@ -102,7 +102,7 @@ public interface ISkfMnemMnedLiteConstants {
   String VED_SCREEN_EXTRA_DATA_ID_RTCONTROLS_MANAGER_CONGIF = USKAT_FULL_ID + ".RtControlsManagerConfig"; //$NON-NLS-1$
 
   // ------------------------------------------------------------------------------------
-  // Field infoes that use Swt Color dialog
+  // Field infoes that use Swt Color dialog.
   //
 
   ITinFieldInfo TFI_SWT_FG_COLOR = TinFieldInfo.makeCopy( TFI_FG_COLOR, //
