@@ -268,6 +268,7 @@ public class RtControlsPaletteBar
 
     ti.setImage( image );
     ti.setData( pe );
+    ti.setToolTipText( pe.nmName() + SWT.CR + pe.description() );
 
     Menu menu = new Menu( toolBar.getShell(), SWT.POP_UP );
 
@@ -285,7 +286,8 @@ public class RtControlsPaletteBar
           IRtControlsPaletteEntry pent = (IRtControlsPaletteEntry)mi.getData();
           ti.setData( pent );
           ti.setImage( iconManager().loadStdIcon( pent.iconId(), iconSize ) );
-          ti.setToolTipText( pent.description() );
+          // ti.setToolTipText( pent.description() );
+          ti.setToolTipText( pent.nmName() + SWT.CR + pent.description() );
           if( selectedToolItem != null ) {
             selectedToolItem.setBackground( null );
           }

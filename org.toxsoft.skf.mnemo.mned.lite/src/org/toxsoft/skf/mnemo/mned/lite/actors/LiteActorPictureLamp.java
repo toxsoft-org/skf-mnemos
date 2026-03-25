@@ -1,0 +1,136 @@
+package org.toxsoft.skf.mnemo.mned.lite.actors;
+
+import static org.toxsoft.core.tsgui.bricks.tin.tti.ITtiConstants.*;
+import static org.toxsoft.core.tsgui.graphics.ITsGraphicsConstants.*;
+import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
+import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
+import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
+import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
+import static org.toxsoft.skf.mnemo.mned.lite.ISkfMnemMnedLiteConstants.*;
+import static org.toxsoft.skf.mnemo.mned.lite.actors.ITsResources.*;
+
+import org.toxsoft.core.tsgui.bricks.tin.*;
+import org.toxsoft.core.tsgui.bricks.tin.impl.*;
+import org.toxsoft.core.tsgui.graphics.image.*;
+import org.toxsoft.core.tsgui.ved.screen.cfg.*;
+import org.toxsoft.core.tsgui.ved.screen.impl.*;
+import org.toxsoft.core.tsgui.ved.screen.items.*;
+import org.toxsoft.core.tslib.av.*;
+import org.toxsoft.core.tslib.av.impl.*;
+import org.toxsoft.core.tslib.av.metainfo.*;
+import org.toxsoft.core.tslib.av.opset.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.*;
+import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
+import org.toxsoft.skf.mnemo.gui.skved.*;
+
+/**
+ * Актор,реализующий функциональность отображения булеого значения в виде 2-x произвольных изображений (без мигания).
+ * <p>
+ *
+ * @author vs
+ */
+public class LiteActorPictureLamp
+    extends AbstractSkActorSingleRtDataConsumer {
+
+  /**
+   * The actor factor ID.
+   */
+  public static final String FACTORY_ID = SKVED_ID + "lite.actor.PictureLamp"; //$NON-NLS-1$
+
+  static final String PROPID_TRUE_IMAGE  = "trueImage";  //$NON-NLS-1$
+  static final String PROPID_FALSE_IMAGE = "falseImage"; //$NON-NLS-1$
+
+  static final IDataDef PROP_TRUE_IMAGE = DataDef.create3( PROPID_TRUE_IMAGE, DT_TS_IMAGE_DESCRIPTOR, //
+      TSID_NAME, STR_TRUE_IMAGE, //
+      TSID_DESCRIPTION, STR_TRUE_IMAGE_D, //
+      TSID_DEFAULT_VALUE, avValobj( TsImageDescriptor.NONE ) //
+  );
+
+  static final IDataDef PROP_FALSE_IMAGE = DataDef.create3( PROPID_FALSE_IMAGE, DT_TS_IMAGE_DESCRIPTOR, //
+      TSID_NAME, STR_FALSE_IMAGE, //
+      TSID_DESCRIPTION, STR_FALSE_IMAGE_D, //
+      TSID_DEFAULT_VALUE, avValobj( TsImageDescriptor.NONE ) //
+  );
+
+  /**
+   * Описание поля, содержащего цвет включенной лампы
+   */
+  public static final ITinFieldInfo TFI_TRUE_IMAGE = new TinFieldInfo( PROP_TRUE_IMAGE, TTI_TS_IMAGE_DECRIPTOR );
+
+  /**
+   * Описание поля, содержащего цвет выключенной лампы
+   */
+  public static final ITinFieldInfo TFI_FALSE_IMAGE = new TinFieldInfo( PROP_FALSE_IMAGE, TTI_TS_IMAGE_DECRIPTOR );
+
+  /**
+   * The ACTOR factory singleton.
+   */
+  public static final IVedActorFactory FACTORY = new VedAbstractActorFactory( FACTORY_ID, //
+      TSID_NAME, STR_FALSE_COLOR, //
+      TSID_DESCRIPTION, STR_FALSE_COLOR_D, //
+      TSID_ICON_ID, ICONID_ACTOR_LAMP //
+  ) {
+
+    @Override
+    protected ITinTypeInfo doCreateTypeInfo() {
+      IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
+      fields.add( TFI_IS_ACTIVE );
+      fields.add( TFI_NAME );
+      fields.add( TFI_DESCRIPTION );
+
+      fields.add( TFI_VISEL_ID );
+      fields.add( TFI_VISEL_PROP_ID );
+      fields.add( TFI_RTD_UGWI );
+
+      fields.add( TFI_TRUE_IMAGE );
+      fields.add( TFI_FALSE_IMAGE );
+
+      return new PropertableEntitiesTinTypeInfo<>( fields, LiteActorPictureLamp.class );
+    }
+
+    @Override
+    protected VedAbstractActor doCreate( IVedItemCfg aCfg, VedScreen aVedScreen ) {
+      return new LiteActorPictureLamp( aCfg, propDefs(), aVedScreen );
+    }
+
+  };
+
+  private VedAbstractVisel lampVisel = null;
+
+  private TsImageDescriptor trueImage = TsImageDescriptor.NONE;
+
+  private TsImageDescriptor falseImage = TsImageDescriptor.NONE;
+
+  protected LiteActorPictureLamp( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
+    super( aConfig, aPropDefs, aVedScreen );
+  }
+
+  @Override
+  protected void doDoUpdateCachesAfterPropsChange( IOptionSet aChangedValues ) {
+    if( aChangedValues.hasKey( PROPID_TRUE_IMAGE ) ) {
+      trueImage = aChangedValues.getValobj( PROPID_TRUE_IMAGE );
+    }
+    if( aChangedValues.hasKey( PROPID_FALSE_IMAGE ) ) {
+      falseImage = aChangedValues.getValobj( PROPID_FALSE_IMAGE );
+    }
+    if( aChangedValues.hasKey( PROPID_VISEL_ID ) ) {
+      String vId = aChangedValues.getStr( PROPID_VISEL_ID );
+      lampVisel = VedScreenUtils.findVisel( vId, vedScreen() );
+    }
+  }
+
+  @Override
+  protected void doOnValueChanged( IAtomicValue aNewValue ) {
+    if( lampVisel != null ) {
+      if( aNewValue != null && aNewValue.isAssigned() ) {
+        if( aNewValue.asBool() ) {
+          lampVisel.props().setValobj( PROP_IMAGE_DESCRIPTOR, trueImage );
+        }
+        else {
+          lampVisel.props().setValobj( PROP_IMAGE_DESCRIPTOR, falseImage );
+        }
+      }
+    }
+  }
+
+}

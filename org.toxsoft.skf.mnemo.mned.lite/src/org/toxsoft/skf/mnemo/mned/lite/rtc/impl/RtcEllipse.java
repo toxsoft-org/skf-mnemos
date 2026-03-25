@@ -45,7 +45,7 @@ public class RtcEllipse
     protected ITinTypeInfo doCreateTypeInfo() {
       IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
       fields.add( TFI_BK_FILL );
-      fields.add( TFI_FG_COLOR );
+      fields.add( TFI_SWT_FG_COLOR );
       fields.add( TFI_LINE_INFO );
       fields.add( TFI_X );
       fields.add( TFI_Y );
@@ -75,6 +75,10 @@ public class RtcEllipse
         viselCfg.propValues().setDouble( PROPID_Y, aCfg.params().getDouble( PROPID_Y ) );
         v = aVedScreen.model().visels().create( viselCfg );
       }
+      else {
+        v = aVedScreen.model().visels().list().getByKey( aCfg.viselId() );
+      }
+
       if( v != null ) {
         IOptionSetEdit params = new OptionSet();
         params.setStr( PROPID_VISEL_ID, v.id() );

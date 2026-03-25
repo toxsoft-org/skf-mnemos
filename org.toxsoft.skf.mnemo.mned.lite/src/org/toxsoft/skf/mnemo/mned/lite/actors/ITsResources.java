@@ -14,4 +14,13 @@ interface ITsResources {
   String STR_TRUE_COLOR_D  = Messages.getString( "STR_TRUE_COLOR_D" );  //$NON-NLS-1$
   String STR_FALSE_COLOR   = Messages.getString( "STR_FALSE_COLOR" );   //$NON-NLS-1$
   String STR_FALSE_COLOR_D = Messages.getString( "STR_FALSE_COLOR_D" ); //$NON-NLS-1$
+
+  /**
+   * {@link LiteActorPictureLamp}
+   */
+  String STR_TRUE_IMAGE    = Messages.getString( "STR_TRUE_IMAGE" );    //$NON-NLS-1$
+  String STR_TRUE_IMAGE_D  = Messages.getString( "STR_TRUE_IMAGE_D" );  //$NON-NLS-1$
+  String STR_FALSE_IMAGE   = Messages.getString( "STR_FALSE_IMAGE" );   //$NON-NLS-1$
+  String STR_FALSE_IMAGE_D = Messages.getString( "STR_FALSE_IMAGE_D" ); //$NON-NLS-1$
+
 }

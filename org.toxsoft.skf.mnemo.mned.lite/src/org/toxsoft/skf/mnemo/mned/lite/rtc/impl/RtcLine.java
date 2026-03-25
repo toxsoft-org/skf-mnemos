@@ -45,7 +45,7 @@ public class RtcLine
     protected ITinTypeInfo doCreateTypeInfo() {
       IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
       fields.add( TFI_LINE_INFO );
-      fields.add( TFI_COLOR_DESCRIPTOR );
+      fields.add( TFI_SWT_COLOR_DESCRIPTOR );
       fields.add( TinFieldInfo.makeCopy( TFI_X, TSID_NAME, "x1" ) ); //$NON-NLS-1$
       fields.add( TinFieldInfo.makeCopy( TFI_Y, TSID_NAME, "y1" ) ); //$NON-NLS-1$
       fields.add( TinFieldInfo.makeCopy( ViselLine.TFI_X2, TSID_NAME, "x2" ) ); //$NON-NLS-1$

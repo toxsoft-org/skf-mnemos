@@ -45,17 +45,16 @@ public class AbstractRtControl
 
   private final VedAbstractVisel visel;
 
-  private final IStridablesListEdit<VedAbstractActor> actors;
+  protected final IStridablesListEdit<VedAbstractActor> actors;
 
   private final IRtControlFactory factory;
 
   private final IList<Pair<String, String>> viselPropsBinding;
 
-  // private final IStringMap<IList<Pair<String, String>>> actorPropsBinding;
   /**
    * Карта списоков пар соответствия свойства RtContorl'я и актора.
    */
-  private final IStringMapEdit<IList<Pair<String, String>>> actorPropsBinding = new StringMap<>();
+  protected final IStringMapEdit<IList<Pair<String, String>>> actorPropsBinding = new StringMap<>();
 
   /**
    * <code>true</code> indicates that VISEL/ACTOR properties are changed by this RtControl.
@@ -101,26 +100,26 @@ public class AbstractRtControl
       protected void doAfterPropValuesSet( IOptionSet aChangedValues ) {
         selfChange = true;
         try {
-          for( Pair<String, String> p : viselPropsBinding ) {
-            IStringMapEdit<IAtomicValue> values = new StringMap<>();
-            if( aChangedValues.keys().hasElem( p.left() ) ) {
-              // visel.props().setValue( p.right(), aChangedValues.getValue( p.left() ) );
-              values.put( p.right(), aChangedValues.getValue( p.left() ) );
-            }
-            visel.props().setProps( values );
-          }
-          for( String actorId : actorPropsBinding.keys() ) {
-            VedAbstractActor actor = actors.getByKey( actorId );
-            IList<Pair<String, String>> pairs = actorPropsBinding.getByKey( actorId );
-            for( Pair<String, String> p : pairs ) {
-              IStringMapEdit<IAtomicValue> values = new StringMap<>();
-              if( aChangedValues.keys().hasElem( p.left() ) ) {
-                // actor.props().setValue( p.right(), aChangedValues.getValue( p.left() ) );
-                values.put( p.right(), aChangedValues.getValue( p.left() ) );
-              }
-              actor.props().setProps( values );
-            }
-          }
+          updateViselProps( aChangedValues );
+          updateActorProps( aChangedValues );
+          // for( Pair<String, String> p : viselPropsBinding ) {
+          // IStringMapEdit<IAtomicValue> values = new StringMap<>();
+          // if( aChangedValues.keys().hasElem( p.left() ) ) {
+          // values.put( p.right(), aChangedValues.getValue( p.left() ) );
+          // }
+          // visel.props().setProps( values );
+          // }
+          // for( String actorId : actorPropsBinding.keys() ) {
+          // VedAbstractActor actor = actors.getByKey( actorId );
+          // IList<Pair<String, String>> pairs = actorPropsBinding.getByKey( actorId );
+          // for( Pair<String, String> p : pairs ) {
+          // IStringMapEdit<IAtomicValue> values = new StringMap<>();
+          // if( aChangedValues.keys().hasElem( p.left() ) ) {
+          // values.put( p.right(), aChangedValues.getValue( p.left() ) );
+          // }
+          // actor.props().setProps( values );
+          // }
+          // }
         }
         finally {
           selfChange = false;
@@ -252,6 +251,30 @@ public class AbstractRtControl
 
   protected void bindActorProps() {
     // nop
+  }
+
+  protected void updateViselProps( IOptionSet aChangedValues ) {
+    for( Pair<String, String> p : viselPropsBinding ) {
+      IStringMapEdit<IAtomicValue> values = new StringMap<>();
+      if( aChangedValues.keys().hasElem( p.left() ) ) {
+        values.put( p.right(), aChangedValues.getValue( p.left() ) );
+      }
+      visel.props().setProps( values );
+    }
+  }
+
+  protected void updateActorProps( IOptionSet aChangedValues ) {
+    for( String actorId : actorPropsBinding.keys() ) {
+      VedAbstractActor actor = actors.getByKey( actorId );
+      IList<Pair<String, String>> pairs = actorPropsBinding.getByKey( actorId );
+      for( Pair<String, String> p : pairs ) {
+        IStringMapEdit<IAtomicValue> values = new StringMap<>();
+        if( aChangedValues.keys().hasElem( p.left() ) ) {
+          values.put( p.right(), aChangedValues.getValue( p.left() ) );
+        }
+        actor.props().setProps( values );
+      }
+    }
   }
 
   /**

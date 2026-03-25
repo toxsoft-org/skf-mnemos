@@ -1,6 +1,7 @@
 package org.toxsoft.skf.mnemo.mned.lite.rtc.impl;
 
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
+import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 import static org.toxsoft.skf.mnemo.mned.lite.ISkfMnemMnedLiteConstants.*;
@@ -8,6 +9,7 @@ import static org.toxsoft.skf.mnemo.mned.lite.rtc.impl.ITsResources.*;
 
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
+import org.toxsoft.core.tsgui.valed.controls.graphics.*;
 import org.toxsoft.core.tsgui.ved.comps.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
@@ -35,6 +37,12 @@ public class RtcCircleLamp
    */
   public static final String FACTORY_ID = MNED_LITE + ".rtc.CircleLamp"; //$NON-NLS-1$
 
+  static final ITinFieldInfo TFI_SWT_TRUE_COLOR = TinFieldInfo.makeCopy( LiteActorLamp.TFI_TRUE_COLOR, //
+      AbstractValedSimpleRgba.OPDEF_USE_SWT_COLOR_DIALOG, AV_TRUE );
+
+  static final ITinFieldInfo TFI_SWT_FALSE_COLOR = TinFieldInfo.makeCopy( LiteActorLamp.TFI_FALSE_COLOR, //
+      AbstractValedSimpleRgba.OPDEF_USE_SWT_COLOR_DIALOG, AV_TRUE );
+
   /**
    * The IRtControl factory singleton.
    */
@@ -49,8 +57,8 @@ public class RtcCircleLamp
     protected ITinTypeInfo doCreateTypeInfo() {
       IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
       fields.add( TFI_RTD_UGWI );
-      fields.add( LiteActorLamp.TFI_TRUE_COLOR );
-      fields.add( LiteActorLamp.TFI_FALSE_COLOR );
+      fields.add( TFI_SWT_TRUE_COLOR );
+      fields.add( TFI_SWT_FALSE_COLOR );
       fields.add( TFI_LINE_INFO );
       fields.add( TFI_X );
       fields.add( TFI_Y );

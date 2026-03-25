@@ -44,8 +44,8 @@ public class RtcRectangle
     @Override
     protected ITinTypeInfo doCreateTypeInfo() {
       IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
-      fields.add( TFI_BK_FILL );
-      fields.add( TFI_BORDER_INFO );
+      fields.add( TFI_SWT_BK_FILL );
+      fields.add( TFI_SWT_BORDER_INFO );
       fields.add( TFI_X );
       fields.add( TFI_Y );
       fields.add( TFI_WIDTH );

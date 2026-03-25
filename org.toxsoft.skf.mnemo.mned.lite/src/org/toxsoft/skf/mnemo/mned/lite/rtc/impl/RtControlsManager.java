@@ -15,6 +15,7 @@ import org.toxsoft.core.tslib.bricks.validator.*;
 import org.toxsoft.core.tslib.bricks.validator.impl.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.helpers.*;
+import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.mned.lite.rtc.*;
@@ -217,6 +218,11 @@ public class RtControlsManager
     TsValidationFailedRtException.checkError( svs.canRemove( aId ) );
     IRtControl item = itemsList.removeById( aId );
     if( item != null ) {
+      IStringList actorIds = item.params().getValobj( IRtControlCfg.PROPID_ACTORS_IDS );
+      for( String actId : actorIds ) {
+        vedScreen.model().actors().remove( actId );
+      }
+      vedScreen.model().visels().remove( aId );
       eventer.fireEvent( ECrudOp.REMOVE, aId );
       // item.dispose();
     }

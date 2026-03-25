@@ -44,10 +44,22 @@ interface ITsResources {
   String STR_RTC_ATTR_VALUE_VIEW_D = Messages.getString( "STR_RTC_ATTR_VALUE_VIEW_D" ); //$NON-NLS-1$
 
   /**
+   * {@link RtcAttrInput}
+   */
+  String STR_RTC_ATTR_INPUT   = Messages.getString( "STR_RTC_ATTR_INPUT" );   //$NON-NLS-1$
+  String STR_RTC_ATTR_INPUT_D = Messages.getString( "STR_RTC_ATTR_INPUT_D" ); //$NON-NLS-1$
+
+  /**
    * {@link RtcRtdataValueView}
    */
   String STR_RTC_RTDATA_VALUE_VIEW   = Messages.getString( "STR_RTC_RTDATA_VALUE_VIEW" );   //$NON-NLS-1$
   String STR_RTC_RTDATA_VALUE_VIEW_D = Messages.getString( "STR_RTC_RTDATA_VALUE_VIEW_D" ); //$NON-NLS-1$
+
+  /**
+   * {@link RtcAttrInput}
+   */
+  String STR_RTC_RTDATA_INPUT   = Messages.getString( "STR_RTC_RTDATA_INPUT" );   //$NON-NLS-1$
+  String STR_RTC_RTDATA_INPUT_D = Messages.getString( "STR_RTC_RTDATA_INPUT_D" ); //$NON-NLS-1$
 
   /**
    * RtcCmdButton
@@ -55,15 +67,37 @@ interface ITsResources {
   String STR_HIGHLIGHT_BKG = Messages.getString( "STR_HIGHLIGHT_BKG" ); //$NON-NLS-1$
   String STR_SELECTION_BKG = Messages.getString( "STR_SELECTION_BKG" ); //$NON-NLS-1$
 
+  /**
+   * {@link RtcFancyLamp}
+   */
   String STR_RTC_FANCY_LAMP   = Messages.getString( "STR_RTC_FANCY_LAMP" );   //$NON-NLS-1$
   String STR_RTC_FANCY_LAMP_D = Messages.getString( "STR_RTC_FANCY_LAMP_D" ); //$NON-NLS-1$
 
+  /**
+   * {@link RtcRectLamp}
+   */
   String STR_RTC_RECT_LAMP   = Messages.getString( "STR_RTC_RECT_LAMP" );   //$NON-NLS-1$
   String STR_RTC_RECT_LAMP_D = Messages.getString( "STR_RTC_RECT_LAMP_D" ); //$NON-NLS-1$
 
+  /**
+   * {@link RtcCircleLamp}
+   */
   String STR_RTC_CIRCLE_LAMP   = Messages.getString( "STR_RTC_CIRCLE_LAMP" );   //$NON-NLS-1$
   String STR_RTC_CIRCLE_LAMP_D = Messages.getString( "STR_RTC_CIRCLE_LAMP_D" ); //$NON-NLS-1$
+  String STR_TRUE_IMAGE        = Messages.getString( "STR_TRUE_IMAGE" );        //$NON-NLS-1$
+  String STR_TRUE_IMAGE_D      = Messages.getString( "STR_TRUE_IMAGE_D" );      //$NON-NLS-1$
+  String STR_FALSE_IMAGE       = Messages.getString( "STR_FALSE_IMAGE" );       //$NON-NLS-1$
+  String STR_FALSE_IMAGE_D     = Messages.getString( "STR_FALSE_IMAGE_D" );     //$NON-NLS-1$
 
+  /**
+   * {@link RtcPictureLamp}
+   */
+  String STR_RTC_PICTURE_LAMP   = Messages.getString( "STR_RTC_PICTURE_LAMP" );   //$NON-NLS-1$
+  String STR_RTC_PICTURE_LAMP_D = Messages.getString( "STR_RTC_PICTURE_LAMP_D" ); //$NON-NLS-1$
+
+  /**
+   * {@link RtcImage}
+   */
   String STR_RTC_IMAGE   = Messages.getString( "STR_RTC_IMAGE" );   //$NON-NLS-1$
   String STR_RTC_IMAGE_D = Messages.getString( "STR_RTC_IMAGE_D" ); //$NON-NLS-1$
 

@@ -50,7 +50,7 @@ public class RtcFancyLamp
     protected ITinTypeInfo doCreateTypeInfo() {
       IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
       fields.add( TFI_RTD_UGWI );
-      fields.add( TFI_BK_COLOR );
+      fields.add( TFI_SWT_BK_COLOR );
       fields.add( TFI_RADIUS );
       fields.add( TFI_EDGING_WIDTH );
       fields.add( TFI_SHOW_EDGING );

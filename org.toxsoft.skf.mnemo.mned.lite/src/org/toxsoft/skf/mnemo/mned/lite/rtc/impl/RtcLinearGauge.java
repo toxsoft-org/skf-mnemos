@@ -1,6 +1,8 @@
 package org.toxsoft.skf.mnemo.mned.lite.rtc.impl;
 
+import static org.toxsoft.core.tsgui.ved.comps.ViselLinearGauge.*;
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
+import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
 import static org.toxsoft.skf.mnemo.gui.skved.ISkVedConstants.*;
 import static org.toxsoft.skf.mnemo.mned.lite.ISkfMnemMnedLiteConstants.*;
@@ -8,6 +10,7 @@ import static org.toxsoft.skf.mnemo.mned.lite.rtc.impl.ITsResources.*;
 
 import org.toxsoft.core.tsgui.bricks.tin.*;
 import org.toxsoft.core.tsgui.bricks.tin.impl.*;
+import org.toxsoft.core.tsgui.valed.controls.graphics.*;
 import org.toxsoft.core.tsgui.ved.comps.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
@@ -34,6 +37,9 @@ public class RtcLinearGauge
    */
   public static final String FACTORY_ID = MNED_LITE + ".rtc.LinearGauge"; //$NON-NLS-1$
 
+  static final ITinFieldInfo TFI_SWT_VALUE_FILL = TinFieldInfo.makeCopy( TFI_VALUE_FILL, //
+      AbstractValedSimpleRgba.OPDEF_USE_SWT_COLOR_DIALOG, AV_TRUE );
+
   /**
    * The IRtControl factory singleton.
    */
@@ -52,9 +58,9 @@ public class RtcLinearGauge
       fields.add( ViselLinearGauge.TFI_VALUE );
       fields.add( ViselLinearGauge.TFI_MIN_VALUE );
       fields.add( ViselLinearGauge.TFI_MAX_VALUE );
-      fields.add( TFI_BK_FILL );
-      fields.add( ViselLinearGauge.TFI_VALUE_FILL );
-      fields.add( TFI_BORDER_INFO );
+      fields.add( TFI_SWT_BK_FILL );
+      fields.add( TFI_SWT_VALUE_FILL );
+      fields.add( TFI_SWT_BORDER_INFO );
       fields.add( TFI_X );
       fields.add( TFI_Y );
       fields.add( TFI_WIDTH );

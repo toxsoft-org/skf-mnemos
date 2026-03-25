@@ -113,7 +113,7 @@ public class SkActorInputField
       sourceGwidList = new GwidList( gwid = props().getValobj( PROP_SOURCE_GWID ) );
     }
     if( aChangedValues.hasKey( PROPID_FORMAT_STRING ) ) {
-      fmtStr = props().getStr( PROP_FORMAT_STRING );
+      fmtStr = aChangedValues.getStr( PROP_FORMAT_STRING );
       if( fmtStr.isBlank() ) {
         fmtStr = null;
         ISkClassInfo classInfo = skSysdescr().findClassInfo( gwid.classId() );

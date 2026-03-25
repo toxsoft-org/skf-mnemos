@@ -12,6 +12,7 @@ import org.toxsoft.core.tsgui.graphics.icons.*;
 import org.toxsoft.core.tsgui.panels.toolbar.*;
 import org.toxsoft.core.tsgui.utils.layout.*;
 import org.toxsoft.core.tsgui.ved.editor.*;
+import org.toxsoft.core.tsgui.ved.editor.IVedViselSelectionManager.*;
 import org.toxsoft.core.tsgui.ved.incub.undoman.*;
 import org.toxsoft.core.tsgui.ved.incub.undoman.tsgui.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
@@ -115,6 +116,8 @@ public class MnemoEditorPanel
 
   private RtControlInspector rtControlInspector;
 
+  private PanelRtConrolsList rtControlsList;
+
   private final MultiSelectionDecorator selectionDecorator;
 
   // ------------------------------------------------------------------------------------
@@ -179,7 +182,10 @@ public class MnemoEditorPanel
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
     actionsProvider.addHandler( new AspUndoManager( undoManager ) );
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
-    actionsProvider.addHandler( new VedAspCanvasActions( vedScreen ) );
+    // actionsProvider.addHandler( new VedAspCanvasActions( vedScreen ) );
+
+    // actionsProvider.addHandler( new AspDropDownMenu( "ddm", new VedAspCanvasActions( vedScreen ), aContext ) );
+
     actionsProvider.addHandler( SeparatorTsActionSetProvider.INSTANCE );
     actionsProvider.addHandler( new AspRunActors( vedScreen ) );
 
@@ -210,9 +216,14 @@ public class MnemoEditorPanel
     selectionDecorator = new MultiSelectionDecorator( vedScreen, selectionManager );
     vedScreen.model().screenDecoratorsAfter().add( selectionDecorator );
 
+    ITsActionSetProvider aspAlign = new VedAspViselsAlignment( vedScreen, selectionManager );
+    DropDownMenuActionFromAsp alignAction;
+    alignAction = new DropDownMenuActionFromAsp( "aspAlign", aspAlign, toolbar, tsContext() );
+    toolbar.addAction( alignAction );
+
     guiTimersService().quickTimers().addListener( vedScreen );
 
-    toolbar.addListener( actionsProvider );
+    // toolbar.addListener( actionsProvider );
     vedScreen.model().actors().eventer().addListener( ( src, op, id ) -> whenVedItemChanged() );
     vedScreen.model().visels().eventer().addListener( ( src, op, id ) -> whenVedItemChanged() );
     vedScreen.view().configChangeEventer().addListener( src -> setChanged( true ) );
@@ -300,7 +311,15 @@ public class MnemoEditorPanel
     Composite centerBoard = new Composite( sfMain, SWT.BORDER );
     centerBoard.setLayout( new BorderLayout() );
     ITsActionDef[] actionDefs = actionsProvider.listHandledActionDefs().toArray( new ITsActionDef[0] );
+    // IStridablesListEdit<ITsActionDef> actionDefs = new StridablesList<>( actionsProvider.listHandledActionDefs() );
     toolbar = TsToolbar.create( centerBoard, tsContext(), actionDefs );
+
+    // ITsActionSetProvider aspZoom = new VedAspCanvasActions( vedScreen );
+    ITsActionSetProvider aspZoom = new VedAspZoomActions( vedScreen );
+    DropDownMenuActionFromAsp zoomAction;
+    zoomAction = new DropDownMenuActionFromAsp( "aspZoom", aspZoom, toolbar, tsContext() );
+    toolbar.addAction( zoomAction );
+
     toolbar.addListener( actionsProvider );
     toolbar.getControl().setLayoutData( BorderLayout.NORTH );
 
@@ -316,6 +335,9 @@ public class MnemoEditorPanel
     eastPanel.setSashWidth( 8 );
     // Composite eastComp = new Composite( eastPanel, SWT.BORDER );
     rtControlInspector = new RtControlInspector( eastPanel, vedScreen );
+    rtControlsList = new PanelRtConrolsList( eastPanel, vedScreen, rtControlsManager );
+    rtControlsList.addTsSelectionListener( ( src, sel ) -> whenPanelRtControlsSelectionChanges( sel ) );
+
     sfMain.setWeights( 75, 25 );
   }
 
@@ -341,6 +363,7 @@ public class MnemoEditorPanel
       // selVisel = vedScreen.model().visels().list().getByKey( viselId );
     }
     rtControlInspector.setRtControl( rtc );
+    rtControlsList.setSelectedItem( rtc );
     // eastFolder.setSelection( tiViselInsp );
   }
 
@@ -352,6 +375,18 @@ public class MnemoEditorPanel
   private void whenVedItemChanged() {
     if( !vedScreen.isActorsEnabled() ) {
       setChanged( true );
+    }
+  }
+
+  /**
+   * Called when user selects VISEL in {@link #rtControlsList}, tell news to the selection manager.
+   *
+   * @param aRtc {@link IRtControl} - selected RtControl or <code>null</code>
+   */
+  private void whenPanelRtControlsSelectionChanges( IRtControl aRtc ) {
+    String viselId = aRtc != null ? RtControlCfg.viselId( aRtc.params() ) : null;
+    if( selectionManager.selectionKind() != ESelectionKind.MULTI ) {
+      selectionManager.setSingleSelectedViselId( viselId );
     }
   }
 
