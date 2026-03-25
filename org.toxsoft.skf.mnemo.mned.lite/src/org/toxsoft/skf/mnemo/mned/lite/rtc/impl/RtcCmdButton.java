@@ -38,8 +38,8 @@ public class RtcCmdButton
    * The IRtControl factory singleton.
    */
   public static final IRtControlFactory FACTORY = new AbstractRtControlFactory( FACTORY_ID, //
-      TSID_NAME, STR_RTC_LINEAR_GAUGE, //
-      TSID_DESCRIPTION, STR_RTC_LINEAR_GAUGE_D, //
+      TSID_NAME, STR_CMD_BUTTON, //
+      TSID_DESCRIPTION, STR_CMD_BUTTON_D, //
       TSID_ICON_ID, ICONID_RTC_CMD_BUTTON //
   // PARAMID_CATEGORY, CATID_GAUGE//
   ) {
@@ -96,6 +96,8 @@ public class RtcCmdButton
       if( aCfg.viselId().isBlank() ) { // создание с нуля
         IVedViselFactory f = viselFactory( ViselButton.FACTORY_ID, aVedScreen );
         VedItemCfg viselCfg = aVedScreen.model().visels().prepareFromTemplate( f.paletteEntries().first().itemCfg() );
+        String name = f.nmName() + extractNumberFromId( viselCfg.id() );
+        viselCfg.propValues().setStr( TSID_NAME, name );
         viselCfg.propValues().setDouble( PROPID_X, aCfg.params().getDouble( PROPID_X ) );
         viselCfg.propValues().setDouble( PROPID_Y, aCfg.params().getDouble( PROPID_Y ) );
         v = aVedScreen.model().visels().create( viselCfg );

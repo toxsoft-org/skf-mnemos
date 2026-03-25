@@ -386,4 +386,20 @@ public class AbstractRtControl
     pairs.add( new Pair<>( aRtcPropid, aViselPropId ) );
   }
 
+  // ------------------------------------------------------------------------------------
+  // Static methods
+  //
+
+  static String extractNumberFromId( String aId ) {
+    int idx = aId.length() - 1;
+    for( int i = 0; i < aId.length(); i++ ) {
+      char ch = aId.charAt( i );
+      if( Character.isDigit( ch ) ) {
+        idx = i;
+        break;
+      }
+    }
+    return aId.substring( idx );
+  }
+
 }

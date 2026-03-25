@@ -38,8 +38,8 @@ public class RtcCmdCheckbox
    * The IRtControl factory singleton.
    */
   public static final IRtControlFactory FACTORY = new AbstractRtControlFactory( FACTORY_ID, //
-      TSID_NAME, STR_RTC_LINEAR_GAUGE, //
-      TSID_DESCRIPTION, STR_RTC_LINEAR_GAUGE_D, //
+      TSID_NAME, STR_RTC_CMD_CHECKBOX, //
+      TSID_DESCRIPTION, STR_RTC_CMD_CHECKBOX_D, //
       TSID_ICON_ID, ICONID_RTC_CHECKBOX //
   // PARAMID_CATEGORY, CATID_GAUGE//
   ) {

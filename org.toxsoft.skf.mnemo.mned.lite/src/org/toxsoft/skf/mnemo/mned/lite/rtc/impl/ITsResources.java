@@ -101,4 +101,16 @@ interface ITsResources {
   String STR_RTC_IMAGE   = Messages.getString( "STR_RTC_IMAGE" );   //$NON-NLS-1$
   String STR_RTC_IMAGE_D = Messages.getString( "STR_RTC_IMAGE_D" ); //$NON-NLS-1$
 
+  /**
+   * {@link RtcCmdCheckbox}
+   */
+  String STR_RTC_CMD_CHECKBOX   = Messages.getString( "STR_RTC_CMD_CHECKBOX" );   //$NON-NLS-1$
+  String STR_RTC_CMD_CHECKBOX_D = Messages.getString( "STR_RTC_CMD_CHECKBOX_D" ); //$NON-NLS-1$
+
+  /**
+   * {@link RtcCmdButton}
+   */
+  String STR_CMD_BUTTON   = Messages.getString( "STR_CMD_BUTTON" );   //$NON-NLS-1$
+  String STR_CMD_BUTTON_D = Messages.getString( "STR_CMD_BUTTON_D" ); //$NON-NLS-1$
+
 }
