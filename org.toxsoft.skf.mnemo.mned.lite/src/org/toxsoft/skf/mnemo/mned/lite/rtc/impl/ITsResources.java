@@ -14,6 +14,12 @@ interface ITsResources {
   String STR_RTC_RECTANGLE_D = Messages.getString( "STR_RTC_RECTANGLE_D" ); //$NON-NLS-1$ ;
 
   /**
+   * {@link RtcRoundRect}
+   */
+  String STR_RTC_ROUNDRECT   = Messages.getString( "STR_RTC_ROUNDRECT" );   //$NON-NLS-1$ ;
+  String STR_RTC_ROUNDRECT_D = Messages.getString( "STR_RTC_ROUNDRECT_D" ); //$NON-NLS-1$ ;
+
+  /**
    * {@link RtcEllipse}
    */
   String STR_RTC_ELLIPSE   = Messages.getString( "STR_RTC_ELLIPSE" );   //$NON-NLS-1$ ;

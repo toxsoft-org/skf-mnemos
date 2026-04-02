@@ -33,6 +33,7 @@ public class QuantSkfMnemoMnedLite
     RtControlFactoriesRegistry rtcFact = new RtControlFactoriesRegistry();
     aAppContext.set( IRtControlFactoriesRegistry.class, rtcFact );
     rtcFact.register( RtcRectangle.FACTORY );
+    rtcFact.register( RtcRoundRect.FACTORY );
     rtcFact.register( RtcEllipse.FACTORY );
     rtcFact.register( RtcLine.FACTORY );
     rtcFact.register( RtcLinearGauge.FACTORY );
