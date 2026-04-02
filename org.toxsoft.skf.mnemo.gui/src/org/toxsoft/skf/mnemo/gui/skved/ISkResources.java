@@ -43,19 +43,24 @@ interface ISkResources {
   /**
    * {@link SkActorCmdButton}
    */
-  String STR_ACTOR_CMD_BUTTON   = Messages.getString( "STR_ACTOR_CMD_BUTTON" );   //$NON-NLS-1$
-  String STR_ACTOR_CMD_BUTTON_D = Messages.getString( "STR_ACTOR_CMD_BUTTON_D" ); //$NON-NLS-1$
-  String STR_TOGGLE             = Messages.getString( "STR_TOGGLE" );             //$NON-NLS-1$
-  String STR_TOGGLE_D           = Messages.getString( "STR_TOGGLE_D" );           //$NON-NLS-1$
-  String STR_VALUE_UGWI         = Messages.getString( "STR_VALUE_UGWI" );         //$NON-NLS-1$
-  String STR_VALUE_UGWI_D       = Messages.getString( "STR_VALUE_UGWI" );         //$NON-NLS-1$
-  String STR_FEEDBACK_VALUE     = Messages.getString( "STR_FEEDBACK_VALUE" );     //$NON-NLS-1$
-  String STR_FEEDBACK_VALUE_D   = Messages.getString( "STR_FEEDBACK_VALUE_D" );   //$NON-NLS-1$
-
+  String STR_ACTOR_CMD_BUTTON       = Messages.getString( "STR_ACTOR_CMD_BUTTON" );       //$NON-NLS-1$
+  String STR_ACTOR_CMD_BUTTON_D     = Messages.getString( "STR_ACTOR_CMD_BUTTON_D" );     //$NON-NLS-1$
+  String STR_TOGGLE                 = Messages.getString( "STR_TOGGLE" );                 //$NON-NLS-1$
+  String STR_TOGGLE_D               = Messages.getString( "STR_TOGGLE_D" );               //$NON-NLS-1$
+  String STR_VALUE_UGWI             = Messages.getString( "STR_VALUE_UGWI" );             //$NON-NLS-1$
+  String STR_VALUE_UGWI_D           = Messages.getString( "STR_VALUE_UGWI" );             //$NON-NLS-1$
+  String STR_FEEDBACK_VALUE         = Messages.getString( "STR_FEEDBACK_VALUE" );         //$NON-NLS-1$
+  String STR_FEEDBACK_VALUE_D       = Messages.getString( "STR_FEEDBACK_VALUE_D" );       //$NON-NLS-1$
   String STR_CMD_ON_CONFIRMATION    = Messages.getString( "STR_CMD_ON_CONFIRMATION" );    //$NON-NLS-1$
   String STR_CMD_ON_CONFIRMATION_D  = Messages.getString( "STR_CMD_ON_CONFIRMATION_D" );  //$NON-NLS-1$
   String STR_CMD_OFF_CONFIRMATION   = Messages.getString( "STR_CMD_OFF_CONFIRMATION" );   //$NON-NLS-1$
   String STR_CMD_OFF_CONFIRMATION_D = Messages.getString( "STR_CMD_OFF_CONFIRMATION_D" ); //$NON-NLS-1$
+
+  /**
+   * {@link SkActorCmdPushButton}
+   */
+  String STR_ACTOR_CMD_PUSH_BUTTON   = Messages.getString( "STR_ACTOR_CMD_PUSH_BUTTON" );   //$NON-NLS-1$
+  String STR_ACTOR_CMD_PUSH_BUTTON_D = Messages.getString( "STR_ACTOR_CMD_PUSH_BUTTON_D" ); //$NON-NLS-1$
 
   /**
    * {@link SkActorSimpleRtdataText}

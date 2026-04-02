@@ -4,23 +4,22 @@ import static org.toxsoft.core.tsgui.bricks.actions.ITsStdActionDefs.*;
 
 import org.toxsoft.core.tsgui.bricks.actions.*;
 import org.toxsoft.core.tsgui.bricks.actions.asp.*;
-import org.toxsoft.core.tsgui.ved.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 
 /**
- * Standard handling of the VED screen canvas transform related actions.
+ * Standard handling of the VED screen canvas zoom actions.
  * <p>
  * Handles the actions:
  * <ul>
  * <li>{@link ITsStdActionDefs#ACTID_ZOOM_IN};</li>
  * <li>{@link ITsStdActionDefs#ACTID_ZOOM_ORIGINAL};</li>
  * <li>{@link ITsStdActionDefs#ACTID_ZOOM_OUT};</li>
- * <li>{@link ITsguiVedConstants#ACTID_OBJECT_ROTATE_LEFT};</li>
- * <li>{@link ITsguiVedConstants#ACTID_OBJECT_ROTATE_ORIGINAL};</li>
- * <li>{@link ITsguiVedConstants#ACTID_OBJECT_ROTATE_RIGHT};</li>
- * <li>TODO more actions ???.</li>
+ * <li>{@link ITsStdActionDefs#ACTID_ZOOM_FIT_WIDTH};</li>
+ * <li>{@link ITsStdActionDefs#ACTID_ZOOM_FIT_HEIGHT};</li>
+ * <li>{@link ITsStdActionDefs#ACTID_ZOOM_FIT_BEST};</li>
+ * <li>{@link ITsStdActionDefs#ACTID_ZOOM_EXPAND_TO_FIT};</li>
  * </ul>
  *
  * @author hazard157

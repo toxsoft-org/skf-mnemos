@@ -49,9 +49,15 @@ public class QuantSkfMnemoMnedLite
     rtcFact.register( RtcCmdCheckbox.FACTORY );
     rtcFact.register( RtcCmdButton.FACTORY );
 
+    rtcFact.register( RtcAttrCheckbox.FACTORY );
+    rtcFact.register( RtcRtdataCheckbox.FACTORY );
+    rtcFact.register( RtcCmdInput.FACTORY );
+
     IVedActorFactoriesRegistry actReg = aAppContext.get( IVedActorFactoriesRegistry.class );
     actReg.register( LiteActorLamp.FACTORY );
     actReg.register( LiteActorPictureLamp.FACTORY );
+    actReg.register( LiteActorAttrCheckbox.FACTORY );
+    actReg.register( LiteActorRtdataCheckbox.FACTORY );
   }
 
   @Override

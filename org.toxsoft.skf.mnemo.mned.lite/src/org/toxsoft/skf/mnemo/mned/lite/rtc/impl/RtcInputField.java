@@ -16,7 +16,6 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
-import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.mned.lite.rtc.*;
@@ -40,32 +39,30 @@ public class RtcInputField
   ) {
 
     @Override
-    protected ITinTypeInfo doCreateTypeInfo() {
-      IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
+    protected ITinTypeInfo doCreateTypeInfo( IStridablesListEdit<ITinFieldInfo> aFields ) {
+      aFields.add( TFI_GWID );
+      aFields.add( SkActorInputField.TFI_SOURCE_GWID );
+      aFields.add( TFI_FORMAT_STRING );
 
-      fields.add( TFI_GWID );
-      fields.add( SkActorInputField.TFI_SOURCE_GWID );
-      fields.add( TFI_FORMAT_STRING );
+      aFields.add( TFI_TEXT );
+      aFields.add( TFI_FONT );
+      aFields.add( TFI_FG_COLOR );
+      aFields.add( TFI_BK_FILL );
+      aFields.add( TFI_BORDER_INFO );
 
-      fields.add( TFI_TEXT );
-      fields.add( TFI_FONT );
-      fields.add( TFI_FG_COLOR );
-      fields.add( TFI_BK_FILL );
-      fields.add( TFI_BORDER_INFO );
+      aFields.add( TFI_HOR_ALIGNMENT );
+      aFields.add( TFI_VER_ALIGNMENT );
 
-      fields.add( TFI_HOR_ALIGNMENT );
-      fields.add( TFI_VER_ALIGNMENT );
+      aFields.add( TFI_LEFT_INDENT );
+      aFields.add( TFI_TOP_INDENT );
+      aFields.add( TFI_RIGHT_INDENT );
+      aFields.add( TFI_BOTTOM_INDENT );
 
-      fields.add( TFI_LEFT_INDENT );
-      fields.add( TFI_TOP_INDENT );
-      fields.add( TFI_RIGHT_INDENT );
-      fields.add( TFI_BOTTOM_INDENT );
-
-      fields.add( TFI_X );
-      fields.add( TFI_Y );
-      fields.add( TFI_WIDTH );
-      fields.add( TFI_HEIGHT );
-      return new PropertableEntitiesTinTypeInfo<>( fields, RtcInputField.class );
+      aFields.add( TFI_X );
+      aFields.add( TFI_Y );
+      aFields.add( TFI_WIDTH );
+      aFields.add( TFI_HEIGHT );
+      return new PropertableEntitiesTinTypeInfo<>( aFields, RtcInputField.class );
     }
 
     @Override

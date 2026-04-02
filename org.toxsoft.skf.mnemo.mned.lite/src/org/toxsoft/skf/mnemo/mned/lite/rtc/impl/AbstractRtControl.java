@@ -5,7 +5,6 @@ import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
-import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
@@ -170,12 +169,12 @@ public class AbstractRtControl
 
   @Override
   final public String nmName() {
-    return PROP_NAME.getValue( propSet ).asString();
+    return PROP_NAME.getValue( visel.props() ).asString();
   }
 
   @Override
   final public String description() {
-    return PROP_DESCRIPTION.getValue( propSet ).asString();
+    return PROP_DESCRIPTION.getValue( visel.props() ).asString();
   }
 
   // ------------------------------------------------------------------------------------
@@ -184,7 +183,7 @@ public class AbstractRtControl
 
   @Override
   public String iconId() {
-    IVedItemFactoryBase<?> f = tsContext().get( IVedViselFactoriesRegistry.class ).find( initialConfig.factoryId() );
+    IRtControlFactory f = tsContext().get( IRtControlFactoriesRegistry.class ).find( initialConfig.factoryId() );
     return f != null ? f.iconId() : null;
   }
 
@@ -384,22 +383,6 @@ public class AbstractRtControl
       pairs = (IListEdit<Pair<String, String>>)actorPropsBinding.getByKey( aActorId );
     }
     pairs.add( new Pair<>( aRtcPropid, aViselPropId ) );
-  }
-
-  // ------------------------------------------------------------------------------------
-  // Static methods
-  //
-
-  static String extractNumberFromId( String aId ) {
-    int idx = aId.length() - 1;
-    for( int i = 0; i < aId.length(); i++ ) {
-      char ch = aId.charAt( i );
-      if( Character.isDigit( ch ) ) {
-        idx = i;
-        break;
-      }
-    }
-    return aId.substring( idx );
   }
 
 }

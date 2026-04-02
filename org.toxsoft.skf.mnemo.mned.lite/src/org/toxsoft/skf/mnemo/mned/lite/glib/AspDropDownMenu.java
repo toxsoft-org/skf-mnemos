@@ -9,6 +9,12 @@ import org.toxsoft.core.tsgui.bricks.actions.asp.*;
 import org.toxsoft.core.tsgui.bricks.ctx.*;
 import org.toxsoft.core.tsgui.panels.toolbar.*;
 
+/**
+ * Actionset provider that shows actions as button with dropdown menu. The last selected actions became the default one.
+ * <p>
+ *
+ * @author vs
+ */
 public class AspDropDownMenu
     extends AbstractSingleActionSetProvider
     implements IMenuCreator, ITsGuiContextable {
@@ -24,6 +30,13 @@ public class AspDropDownMenu
 
   TsAction thisAction = null;
 
+  /**
+   * Constructor.
+   *
+   * @param aId String - idetntifier
+   * @param aActionSet {@link ITsActionSetProvider} - actions
+   * @param aGuiContext {@link ITsGuiContext} - the corresponding context
+   */
   public AspDropDownMenu( String aId, ITsActionSetProvider aActionSet, ITsGuiContext aGuiContext ) {
     super( TsActionDef.ofMenu1( aId ) );
     actionSet = aActionSet;
@@ -72,6 +85,11 @@ public class AspDropDownMenu
   // API
   //
 
+  /**
+   * Sets the toolbar and conform action icon size with toolbar icon size.
+   *
+   * @param aToolbar {@link ITsToolbar} - toolbar
+   */
   public void setToolbar( ITsToolbar aToolbar ) {
     toolbar = aToolbar;
     thisAction = aToolbar.getAction( listHandledActionDefs().first().id() );
@@ -87,6 +105,12 @@ public class AspDropDownMenu
   // Static methods
   //
 
+  /**
+   * Create and returns action definition with style {@link IAction#AS_DROP_DOWN_MENU}
+   *
+   * @param aId String - Identifier
+   * @return ITsActioDef - action definition with style {@link IAction#AS_DROP_DOWN_MENU}
+   */
   public static ITsActionDef actionDef( String aId ) {
     return TsActionDef.ofMenu1( aId );
   }

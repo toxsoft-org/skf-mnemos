@@ -1,5 +1,7 @@
 package org.toxsoft.skf.mnemo.gui;
 
+import org.toxsoft.skf.mnemo.gui.cmd.*;
+
 /**
  * Localizable resources.
  *
@@ -22,4 +24,17 @@ public interface IMnemoGuiSharedResources {
 
   String STR_CMD_ARG_VALUES_SET   = Messages.getString( "STR_CMD_ARG_VALUES_SET" );   //$NON-NLS-1$
   String STR_CMD_ARG_VALUES_SET_D = Messages.getString( "STR_CMD_ARG_VALUES_SET_D" ); //$NON-NLS-1$
+
+  String STR_CMD_CFG   = Messages.getString( "STR_CMD_CFG" );   //$NON-NLS-1$
+  String STR_CMD_CFG_D = Messages.getString( "STR_CMD_CFG_D" ); //$NON-NLS-1$
+
+  /**
+   * {@link PanelMnemoCommandCfg}
+   */
+  String DLG_T_CMD_PROPS           = Messages.getString( "DLG_T_CMD_PROPS" );           //$NON-NLS-1$
+  String DLG_C_SELECT_CMD_AND_ARGS = Messages.getString( "DLG_C_SELECT_CMD_AND_ARGS" ); //$NON-NLS-1$
+  String STR_L_COMMAND             = Messages.getString( "STR_L_COMMAND" );             //$NON-NLS-1$
+  String STR_L_ARGUMENTS           = Messages.getString( "STR_L_ARGUMENTS" );           //$NON-NLS-1$
+  String STR_L_CONFIRMATION        = Messages.getString( "STR_L_CONFIRMATION" );        //$NON-NLS-1$
+
 }

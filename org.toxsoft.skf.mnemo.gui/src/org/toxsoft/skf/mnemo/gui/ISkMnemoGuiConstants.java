@@ -8,6 +8,9 @@ import static org.toxsoft.skf.mnemo.gui.IMnemoGuiSharedResources.*;
 
 import org.eclipse.e4.core.contexts.*;
 import org.toxsoft.core.tsgui.bricks.actions.*;
+import org.toxsoft.core.tsgui.bricks.tin.*;
+import org.toxsoft.core.tsgui.bricks.tin.impl.*;
+import org.toxsoft.core.tsgui.bricks.tin.tti.*;
 import org.toxsoft.core.tsgui.graphics.icons.*;
 import org.toxsoft.core.tslib.av.*;
 import org.toxsoft.core.tslib.av.impl.*;
@@ -67,6 +70,7 @@ public interface ISkMnemoGuiConstants {
   String ICONID_RESOLVED_OBJECT = "opened-box";
 
   String ICONID_VED_ACTOR_COLOR_DECORATOR = "ved-actor-color-decorator"; //$NON-NLS-1$
+  String ICONID_ACTOR_CMD                 = "actor-cmd";                 //$NON-NLS-1$
 
   String ICONID_VISEL_PANEL     = "visel-panel";           //$NON-NLS-1$
   String ICONID_IMAGESET_BUTTON = "visel-imageset-button"; //$NON-NLS-1$
@@ -114,6 +118,27 @@ public interface ISkMnemoGuiConstants {
       OPID_EDITOR_FACTORY_NAME, ValedAvValobjCmdArgValuesSet.FACTORY.factoryName(), //
       TSID_DEFAULT_VALUE, IAtomicValue.NULL //
   );
+
+  IDataType DT_CMD_CFG = DataType.create( VALOBJ, //
+      TSID_NAME, STR_CMD_CFG, //
+      TSID_DESCRIPTION, STR_CMD_CFG_D, //
+      TSID_KEEPER_ID, MnemoCommandCfg.KEEPER_ID, //
+      OPID_EDITOR_FACTORY_NAME, ValedAvValobjMnemoCommandCfg.FACTORY.factoryName(), //
+      TSID_DEFAULT_VALUE, IAtomicValue.NULL //
+  );
+
+  // ------------------------------------------------------------------------------------
+  // Commands support
+
+  String PROPID_CMD_CFG     = "cmdCfg";    //$NON-NLS-1$
+  String PROPID_ON_CMD_CFG  = "onCmdCfg";  //$NON-NLS-1$
+  String PROPID_OFF_CMD_CFG = "offCmdCfg"; //$NON-NLS-1$
+
+  IDataDef PROP_CMD_CFG = DataDef.create3( PROPID_CMD_CFG, DT_CMD_CFG );
+
+  ITinTypeInfo TTI_CMD_CFG = new TinAtomicTypeInfo.TtiValobj<>( PROP_CMD_CFG, MnemoCommandCfg.class );
+
+  ITinFieldInfo TFI_CMD_CFG = new TinFieldInfo( PROP_CMD_CFG, TTI_CMD_CFG );
 
   // ------------------------------------------------------------------------------------
   // Application preferences

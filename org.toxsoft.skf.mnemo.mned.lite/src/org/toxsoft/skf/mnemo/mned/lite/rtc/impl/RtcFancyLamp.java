@@ -17,7 +17,6 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
-import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.mned.lite.rtc.*;
@@ -47,18 +46,17 @@ public class RtcFancyLamp
   ) {
 
     @Override
-    protected ITinTypeInfo doCreateTypeInfo() {
-      IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
-      fields.add( TFI_RTD_UGWI );
-      fields.add( TFI_SWT_BK_COLOR );
-      fields.add( TFI_RADIUS );
-      fields.add( TFI_EDGING_WIDTH );
-      fields.add( TFI_SHOW_EDGING );
-      fields.add( ViselCircleLamp.TFI_USE_GRADIENT );
-      fields.add( TFI_X );
-      fields.add( TFI_Y );
-      fields.add( TFI_ON_OFF_STATE );
-      return new PropertableEntitiesTinTypeInfo<>( fields, RtcFancyLamp.class );
+    protected ITinTypeInfo doCreateTypeInfo( IStridablesListEdit<ITinFieldInfo> aFields ) {
+      aFields.add( TFI_RTD_UGWI );
+      aFields.add( TFI_SWT_BK_COLOR );
+      aFields.add( TFI_RADIUS );
+      aFields.add( TFI_EDGING_WIDTH );
+      aFields.add( TFI_SHOW_EDGING );
+      aFields.add( ViselCircleLamp.TFI_USE_GRADIENT );
+      aFields.add( TFI_X );
+      aFields.add( TFI_Y );
+      aFields.add( TFI_ON_OFF_STATE );
+      return new PropertableEntitiesTinTypeInfo<>( aFields, RtcFancyLamp.class );
     }
 
     @Override
@@ -78,8 +76,8 @@ public class RtcFancyLamp
       VedAbstractVisel v = null;
       VedAbstractActor actor = null;
       if( aCfg.viselId().isBlank() ) { // создание с нуля
-        IVedViselFactory f = viselFactory( ViselCircleLamp.FACTORY_ID, aVedScreen );
-        VedItemCfg viselCfg = aVedScreen.model().visels().prepareFromTemplate( f.paletteEntries().first().itemCfg() );
+        VedItemCfg viselCfg = createViselCfg( ViselCircleLamp.FACTORY_ID, aVedScreen, "FancyLamp" ); //$NON-NLS-1$
+
         viselCfg.propValues().setDouble( PROPID_X, aCfg.params().getDouble( PROPID_X ) );
         viselCfg.propValues().setDouble( PROPID_Y, aCfg.params().getDouble( PROPID_Y ) );
         v = aVedScreen.model().visels().create( viselCfg );

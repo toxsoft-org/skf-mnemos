@@ -221,6 +221,11 @@ public class MnemoEditorPanel
     alignAction = new DropDownMenuActionFromAsp( "aspAlign", aspAlign, toolbar, tsContext() );
     toolbar.addAction( alignAction );
 
+    ITsActionSetProvider aspSettings = new AspLiteEditorSettings( vedScreen );
+    DropDownMenuActionFromAsp settingsAction;
+    settingsAction = new DropDownMenuActionFromAsp( "aspSettings", aspSettings, toolbar, tsContext() );
+    toolbar.addAction( settingsAction );
+
     guiTimersService().quickTimers().addListener( vedScreen );
 
     // toolbar.addListener( actionsProvider );

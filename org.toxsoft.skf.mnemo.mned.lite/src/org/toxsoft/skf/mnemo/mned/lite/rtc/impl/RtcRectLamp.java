@@ -18,7 +18,6 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
-import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.skf.mnemo.mned.lite.actors.*;
 import org.toxsoft.skf.mnemo.mned.lite.rtc.*;
@@ -54,17 +53,16 @@ public class RtcRectLamp
   ) {
 
     @Override
-    protected ITinTypeInfo doCreateTypeInfo() {
-      IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
-      fields.add( TFI_RTD_UGWI );
-      fields.add( TFI_SWT_TRUE_COLOR );
-      fields.add( TFI_SWT_FALSE_COLOR );
-      fields.add( TFI_SWT_BORDER_INFO );
-      fields.add( TFI_X );
-      fields.add( TFI_Y );
-      fields.add( TFI_WIDTH );
-      fields.add( TFI_HEIGHT );
-      return new PropertableEntitiesTinTypeInfo<>( fields, RtcRectLamp.class );
+    protected ITinTypeInfo doCreateTypeInfo( IStridablesListEdit<ITinFieldInfo> aFields ) {
+      aFields.add( TFI_RTD_UGWI );
+      aFields.add( TFI_SWT_TRUE_COLOR );
+      aFields.add( TFI_SWT_FALSE_COLOR );
+      aFields.add( TFI_SWT_BORDER_INFO );
+      aFields.add( TFI_X );
+      aFields.add( TFI_Y );
+      aFields.add( TFI_WIDTH );
+      aFields.add( TFI_HEIGHT );
+      return new PropertableEntitiesTinTypeInfo<>( aFields, RtcRectLamp.class );
     }
 
     @Override
@@ -81,8 +79,8 @@ public class RtcRectLamp
       VedAbstractVisel v = null;
       VedAbstractActor actor = null;
       if( aCfg.viselId().isBlank() ) { // создание с нуля
-        IVedViselFactory f = viselFactory( ViselRectangle.FACTORY_ID, aVedScreen );
-        VedItemCfg viselCfg = aVedScreen.model().visels().prepareFromTemplate( f.paletteEntries().first().itemCfg() );
+        VedItemCfg viselCfg = createViselCfg( ViselRectangle.FACTORY_ID, aVedScreen, "RectLamp" ); //$NON-NLS-1$
+
         viselCfg.propValues().setDouble( PROPID_X, aCfg.params().getDouble( PROPID_X ) );
         viselCfg.propValues().setDouble( PROPID_Y, aCfg.params().getDouble( PROPID_Y ) );
         v = aVedScreen.model().visels().create( viselCfg );

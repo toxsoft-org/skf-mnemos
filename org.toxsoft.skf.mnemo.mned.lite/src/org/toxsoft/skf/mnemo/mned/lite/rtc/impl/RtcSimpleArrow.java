@@ -11,7 +11,6 @@ import org.toxsoft.core.tsgui.bricks.tin.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
-import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.skf.mnemo.mned.lite.rtc.*;
 
 /**
@@ -38,21 +37,20 @@ public class RtcSimpleArrow
   ) {
 
     @Override
-    protected ITinTypeInfo doCreateTypeInfo() {
-      IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
-      fields.add( TFI_X );
-      fields.add( TFI_Y );
-      fields.add( TFI_WIDTH );
-      fields.add( TFI_HEIGHT );
-      fields.add( TFI_FULCRUM );
-      fields.add( TinFieldInfo.makeCopy( TFI_TRANSFORM, ITinWidgetConstants.PRMID_IS_HIDDEN, AV_TRUE ) );
-      fields.add( TFI_ZOOM );
-      fields.add( TFI_ANGLE );
+    protected ITinTypeInfo doCreateTypeInfo( IStridablesListEdit<ITinFieldInfo> aFields ) {
+      aFields.add( TFI_X );
+      aFields.add( TFI_Y );
+      aFields.add( TFI_WIDTH );
+      aFields.add( TFI_HEIGHT );
+      aFields.add( TFI_FULCRUM );
+      aFields.add( TinFieldInfo.makeCopy( TFI_TRANSFORM, ITinWidgetConstants.PRMID_IS_HIDDEN, AV_TRUE ) );
+      aFields.add( TFI_ZOOM );
+      aFields.add( TFI_ANGLE );
       // fields.add( new TinFieldInfo( PROPID_IS_RIGHT, TTI_AT_BOOLEAN, PROP_IS_RIGHT.params() ) );
       // fields.add( new TinFieldInfo( PROPID_NOSE_LENGTH, TTI_AT_FLOATING, PROP_NOSE_LENGHT.params() ) );
-      fields.add( TFI_FG_COLOR );
-      fields.add( TFI_LINE_INFO );
-      return new PropertableEntitiesTinTypeInfo<>( fields, RtcSimpleArrow.class );
+      aFields.add( TFI_FG_COLOR );
+      aFields.add( TFI_LINE_INFO );
+      return new PropertableEntitiesTinTypeInfo<>( aFields, RtcSimpleArrow.class );
     }
 
     @Override

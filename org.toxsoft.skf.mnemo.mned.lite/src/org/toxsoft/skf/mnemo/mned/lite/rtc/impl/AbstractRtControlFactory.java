@@ -1,8 +1,14 @@
 package org.toxsoft.skf.mnemo.mned.lite.rtc.impl;
 
+import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
+import static org.toxsoft.core.tslib.av.impl.AvUtils.*;
+import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
+
 import org.toxsoft.core.tsgui.bricks.tin.*;
+import org.toxsoft.core.tsgui.bricks.tin.impl.*;
 import org.toxsoft.core.tsgui.ved.editor.palette.*;
 import org.toxsoft.core.tsgui.ved.screen.*;
+import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
 import org.toxsoft.core.tslib.av.errors.*;
@@ -36,11 +42,6 @@ public abstract class AbstractRtControlFactory
    * Список пар соответствия свойства RtContorl'я и визуального элемента.
    */
   private final IListEdit<Pair<String, String>> viselPropsBinding = new ElemArrayList<>();
-
-  // /**
-  // * Карта списоков пар соответствия свойства RtContorl'я и актора.
-  // */
-  // private final IStringMapEdit<IList<Pair<String, String>>> actorPropsBinding = new StringMap<>();
 
   /**
    * Constructor.
@@ -95,7 +96,12 @@ public abstract class AbstractRtControlFactory
   @Override
   public ITinTypeInfo typeInfo() {
     if( tinTypeInfo == null ) {
-      tinTypeInfo = doCreateTypeInfo();
+      IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
+      ITinFieldInfo tfiName = TinFieldInfo.makeCopy( TFI_NAME, ITinWidgetConstants.PRMID_IS_HIDDEN, AV_TRUE );
+      ITinFieldInfo tfiDescr = TinFieldInfo.makeCopy( TFI_DESCRIPTION, ITinWidgetConstants.PRMID_IS_HIDDEN, AV_TRUE );
+      fields.add( tfiName );
+      fields.add( tfiDescr );
+      tinTypeInfo = doCreateTypeInfo( fields );
       TsInternalErrorRtException.checkNull( tinTypeInfo );
       TsInternalErrorRtException.checkFalse( tinTypeInfo.kind().hasChildren() );
       for( ITinFieldInfo finf : tinTypeInfo.fieldInfos() ) {
@@ -146,6 +152,18 @@ public abstract class AbstractRtControlFactory
     viselPropsBinding.add( new Pair<>( aRtcPropid, aViselPropId ) );
   }
 
+  protected VedItemCfg createViselCfg( String aFactoryId, VedScreen aVedScreen, String aName ) {
+    IVedViselFactory f = viselFactory( aFactoryId, aVedScreen );
+    VedItemCfg viselCfg = aVedScreen.model().visels().prepareFromTemplate( f.paletteEntries().first().itemCfg() );
+
+    String num = extractNumberFromId( viselCfg.id() );
+    viselCfg = new VedItemCfg( aName + num, viselCfg );
+
+    viselCfg.propValues().setStr( TSID_NAME, nmName() + " " + num ); //$NON-NLS-1$
+    viselCfg.propValues().setStr( TSID_DESCRIPTION, description() );
+    return viselCfg;
+  }
+
   // void bindActorPropId( String aActorId, String aRtcPropid, String aViselPropId ) {
   // IListEdit<Pair<String, String>> pairs;
   // if( !actorPropsBinding.hasKey( aActorId ) ) {
@@ -189,9 +207,10 @@ public abstract class AbstractRtControlFactory
    * converted to the property of atomic type.</li>
    * </ul>
    *
+   * @param aFields IStridablesListEdit&lt;ITinFieldInfo> - field infoes, subclass should add needed field infoes
    * @return {@link ITinTypeInfo} - the type information for inspector
    */
-  protected abstract ITinTypeInfo doCreateTypeInfo();
+  protected abstract ITinTypeInfo doCreateTypeInfo( IStridablesListEdit<ITinFieldInfo> aFields );
 
   /**
    * Subclass must create the IRtControl item.
@@ -208,4 +227,21 @@ public abstract class AbstractRtControlFactory
   protected void bindViselProps() {
     // nop
   }
+
+  // ------------------------------------------------------------------------------------
+  // Static methods
+  //
+
+  static String extractNumberFromId( String aId ) {
+    int idx = aId.length() - 1;
+    for( int i = 0; i < aId.length(); i++ ) {
+      char ch = aId.charAt( i );
+      if( Character.isDigit( ch ) ) {
+        idx = i;
+        break;
+      }
+    }
+    return aId.substring( idx );
+  }
+
 }

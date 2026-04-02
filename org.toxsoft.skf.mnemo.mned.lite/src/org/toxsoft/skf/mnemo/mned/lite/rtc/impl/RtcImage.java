@@ -15,7 +15,6 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
-import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.skf.mnemo.mned.lite.rtc.*;
 
 /**
@@ -42,14 +41,13 @@ public class RtcImage
   ) {
 
     @Override
-    protected ITinTypeInfo doCreateTypeInfo() {
-      IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
-      fields.add( TFI_IMAGE_DESCRIPTOR );
-      fields.add( TFI_X );
-      fields.add( TFI_Y );
-      fields.add( TFI_WIDTH );
-      fields.add( TFI_HEIGHT );
-      return new PropertableEntitiesTinTypeInfo<>( fields, RtcImage.class );
+    protected ITinTypeInfo doCreateTypeInfo( IStridablesListEdit<ITinFieldInfo> aFields ) {
+      aFields.add( TFI_IMAGE_DESCRIPTOR );
+      aFields.add( TFI_X );
+      aFields.add( TFI_Y );
+      aFields.add( TFI_WIDTH );
+      aFields.add( TFI_HEIGHT );
+      return new PropertableEntitiesTinTypeInfo<>( aFields, RtcImage.class );
     }
 
     @Override

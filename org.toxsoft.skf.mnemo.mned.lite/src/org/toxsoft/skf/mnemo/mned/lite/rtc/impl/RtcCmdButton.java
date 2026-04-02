@@ -2,7 +2,7 @@ package org.toxsoft.skf.mnemo.mned.lite.rtc.impl;
 
 import static org.toxsoft.core.tsgui.ved.screen.IVedScreenConstants.*;
 import static org.toxsoft.core.tslib.av.metainfo.IAvMetaConstants.*;
-import static org.toxsoft.skf.mnemo.gui.skved.SkActorUpDownCmdButton.*;
+import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
 import static org.toxsoft.skf.mnemo.mned.lite.ISkfMnemMnedLiteConstants.*;
 import static org.toxsoft.skf.mnemo.mned.lite.rtc.impl.ITsResources.*;
 
@@ -16,7 +16,6 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
-import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.mned.lite.rtc.*;
@@ -40,39 +39,27 @@ public class RtcCmdButton
   public static final IRtControlFactory FACTORY = new AbstractRtControlFactory( FACTORY_ID, //
       TSID_NAME, STR_CMD_BUTTON, //
       TSID_DESCRIPTION, STR_CMD_BUTTON_D, //
-      TSID_ICON_ID, ICONID_RTC_CMD_BUTTON //
-  // PARAMID_CATEGORY, CATID_GAUGE//
+      TSID_ICON_ID, ICONID_RTC_CMD_BUTTON, //
+      PARAMID_CATEGORY, CATID_COMMANDS //
   ) {
 
     @Override
-    protected ITinTypeInfo doCreateTypeInfo() {
-      IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
-      // fields.add( TFI_ENABLED );
-      // fields.add( TFI_NAME );
-      // fields.add( TFI_DESCRIPTION );
-      fields.add( TFI_UP_CMD );
-      fields.add( TFI_UP_CMD_ARGS );
-      fields.add( TFI_TEXT );
-      fields.add( TFI_FONT );
-      fields.add( TFI_X );
-      fields.add( TFI_Y );
-      fields.add( TFI_WIDTH );
-      fields.add( TFI_HEIGHT );
-      // fields.add( TFI_FULCRUM );
-      fields.add( TFI_FG_COLOR );
-      fields.add( TFI_BK_COLOR );
-      fields.add( new TinFieldInfo( PROPID_HOVERED_BK_COLOR, TFI_BK_COLOR.typeInfo(), //
+    protected ITinTypeInfo doCreateTypeInfo( IStridablesListEdit<ITinFieldInfo> aFields ) {
+      aFields.add( TFI_CMD_CFG );
+      aFields.add( TFI_TEXT );
+      aFields.add( TFI_FONT );
+      aFields.add( TFI_X );
+      aFields.add( TFI_Y );
+      aFields.add( TFI_WIDTH );
+      aFields.add( TFI_HEIGHT );
+      aFields.add( TFI_FG_COLOR );
+      aFields.add( TFI_BK_COLOR );
+      aFields.add( new TinFieldInfo( PROPID_HOVERED_BK_COLOR, TFI_BK_COLOR.typeInfo(), //
           TSID_NAME, STR_HIGHLIGHT_BKG ) );
-      fields.add( new TinFieldInfo( PROPID_SELECTED_BK_COLOR, TFI_BK_COLOR.typeInfo(), //
+      aFields.add( new TinFieldInfo( PROPID_SELECTED_BK_COLOR, TFI_BK_COLOR.typeInfo(), //
           TSID_NAME, STR_SELECTION_BKG ) );
-      // fields.add( TFI_STATE );
-      // fields.add( TFI_HOVERED );
-      // fields.add( TFI_ZOOM );
-      // fields.add( TFI_ANGLE );
-      // fields.add( TinFieldInfo.makeCopy( TFI_TRANSFORM, ITinWidgetConstants.PRMID_IS_HIDDEN, AV_TRUE ) );
-      // fields.add( TFI_IS_ACTIVE );
 
-      return new PropertableEntitiesTinTypeInfo<>( fields, RtcCmdButton.class );
+      return new PropertableEntitiesTinTypeInfo<>( aFields, RtcCmdButton.class );
     }
 
     @Override
@@ -94,15 +81,16 @@ public class RtcCmdButton
       VedAbstractVisel v = null;
       VedAbstractActor actor = null;
       if( aCfg.viselId().isBlank() ) { // создание с нуля
-        IVedViselFactory f = viselFactory( ViselButton.FACTORY_ID, aVedScreen );
-        VedItemCfg viselCfg = aVedScreen.model().visels().prepareFromTemplate( f.paletteEntries().first().itemCfg() );
-        String name = f.nmName() + extractNumberFromId( viselCfg.id() );
-        viselCfg.propValues().setStr( TSID_NAME, name );
+        // IVedViselFactory f = viselFactory( ViselButton.FACTORY_ID, aVedScreen );
+        // VedItemCfg viselCfg = aVedScreen.model().visels().prepareFromTemplate( f.paletteEntries().first().itemCfg()
+        // );
+
+        VedItemCfg viselCfg = createViselCfg( ViselButton.FACTORY_ID, aVedScreen, "CmdButton" ); //$NON-NLS-1$
         viselCfg.propValues().setDouble( PROPID_X, aCfg.params().getDouble( PROPID_X ) );
         viselCfg.propValues().setDouble( PROPID_Y, aCfg.params().getDouble( PROPID_Y ) );
         v = aVedScreen.model().visels().create( viselCfg );
 
-        IVedActorFactory af = actorFactory( SkActorUpDownCmdButton.FACTORY_ID, aVedScreen );
+        IVedActorFactory af = actorFactory( SkActorCmdPushButton.FACTORY_ID, aVedScreen );
         VedItemCfg actorCfg = aVedScreen.model().actors().prepareFromTemplate( af.paletteEntries().first().itemCfg() );
         actorCfg.propValues().setStr( PROPID_VISEL_ID, v.id() );
         actor = aVedScreen.model().actors().create( actorCfg );
@@ -135,8 +123,7 @@ public class RtcCmdButton
   @Override
   protected void bindActorProps() {
     VedAbstractActor actor = actors().first();
-    bindActorPropId( actor.id(), TFI_UP_CMD.id(), TFI_UP_CMD.id() );
-    bindActorPropId( actor.id(), TFI_UP_CMD_ARGS.id(), TFI_UP_CMD_ARGS.id() );
+    bindActorPropId( actor.id(), TFI_CMD_CFG.id(), TFI_CMD_CFG.id() );
   }
 
 }

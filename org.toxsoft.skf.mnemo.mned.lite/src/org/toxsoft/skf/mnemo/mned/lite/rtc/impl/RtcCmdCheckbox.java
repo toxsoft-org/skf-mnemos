@@ -16,7 +16,6 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
-import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.mned.lite.rtc.*;
@@ -40,29 +39,28 @@ public class RtcCmdCheckbox
   public static final IRtControlFactory FACTORY = new AbstractRtControlFactory( FACTORY_ID, //
       TSID_NAME, STR_RTC_CMD_CHECKBOX, //
       TSID_DESCRIPTION, STR_RTC_CMD_CHECKBOX_D, //
-      TSID_ICON_ID, ICONID_RTC_CHECKBOX //
-  // PARAMID_CATEGORY, CATID_GAUGE//
+      TSID_ICON_ID, ICONID_RTC_CHECKBOX, //
+      PARAMID_CATEGORY, CATID_COMMANDS //
   ) {
 
     @Override
-    protected ITinTypeInfo doCreateTypeInfo() {
-      IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
+    protected ITinTypeInfo doCreateTypeInfo( IStridablesListEdit<ITinFieldInfo> aFields ) {
       // fields.add( ViselCheckbox.TFI_CHECKED );
-      fields.add( TFI_TEXT );
-      fields.add( SkActorCmdCheckbox.TFI_CHECK_CMD_UGWI );
-      fields.add( SkActorCmdCheckbox.TFI_UNCHECK_CMD_UGWI );
-      fields.add( SkActorCmdCheckbox.TFI_VALUE );
-      fields.add( SkActorCmdCheckbox.TFI_INVERSE_VALUE );
-      fields.add( TFI_FONT );
-      fields.add( TFI_X );
-      fields.add( TFI_Y );
-      fields.add( TFI_WIDTH );
-      fields.add( TFI_HEIGHT );
-      fields.add( TFI_FG_COLOR );
-      fields.add( TFI_BK_COLOR );
+      aFields.add( TFI_TEXT );
+      aFields.add( SkActorCmdCheckbox.TFI_CHECK_CMD_UGWI );
+      aFields.add( SkActorCmdCheckbox.TFI_UNCHECK_CMD_UGWI );
+      aFields.add( SkActorCmdCheckbox.TFI_VALUE );
+      aFields.add( SkActorCmdCheckbox.TFI_INVERSE_VALUE );
+      aFields.add( TFI_FONT );
+      aFields.add( TFI_X );
+      aFields.add( TFI_Y );
+      aFields.add( TFI_WIDTH );
+      aFields.add( TFI_HEIGHT );
+      aFields.add( TFI_FG_COLOR );
+      aFields.add( TFI_BK_COLOR );
       // fields.add( TFI_STATE );
       // fields.add( TFI_HOVERED );
-      return new PropertableEntitiesTinTypeInfo<>( fields, RtcCmdCheckbox.class );
+      return new PropertableEntitiesTinTypeInfo<>( aFields, RtcCmdCheckbox.class );
     }
 
     @Override
@@ -82,8 +80,11 @@ public class RtcCmdCheckbox
       VedAbstractVisel v = null;
       VedAbstractActor actor = null;
       if( aCfg.viselId().isBlank() ) { // создание с нуля
-        IVedViselFactory f = viselFactory( ViselCheckbox.FACTORY_ID, aVedScreen );
-        VedItemCfg viselCfg = aVedScreen.model().visels().prepareFromTemplate( f.paletteEntries().first().itemCfg() );
+        // IVedViselFactory f = viselFactory( ViselCheckbox.FACTORY_ID, aVedScreen );
+        // VedItemCfg viselCfg = aVedScreen.model().visels().prepareFromTemplate( f.paletteEntries().first().itemCfg()
+        // );
+
+        VedItemCfg viselCfg = createViselCfg( ViselCheckbox.FACTORY_ID, aVedScreen, "CmdCheckbox" ); //$NON-NLS-1$
         viselCfg.propValues().setDouble( PROPID_X, aCfg.params().getDouble( PROPID_X ) );
         viselCfg.propValues().setDouble( PROPID_Y, aCfg.params().getDouble( PROPID_Y ) );
         v = aVedScreen.model().visels().create( viselCfg );

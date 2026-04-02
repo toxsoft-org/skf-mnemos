@@ -54,6 +54,7 @@ public class QuantSkMnemoGui
     TsValobjUtils.registerKeeperIfNone( MPerspId.KEEPER_ID, MPerspId.KEEPER );
     TsValobjUtils.registerKeeperIfNone( VedUserActionCfg.KEEPER_ID, VedUserActionCfg.KEEPER );
     TsValobjUtils.registerKeeperIfNone( CmdArgValuesSet.KEEPER_ID, CmdArgValuesSet.KEEPER );
+    TsValobjUtils.registerKeeperIfNone( MnemoCommandCfg.KEEPER_ID, MnemoCommandCfg.KEEPER );
     SkCoreUtils.registerSkServiceCreator( SkMnemosService.CREATOR );
     KM5Utils.registerContributorCreator( KM5MnemosContributor.CREATOR );
     SkCoreUtils.registerCoreApiHandler( this );
@@ -70,9 +71,11 @@ public class QuantSkMnemoGui
     IVedActorFactoriesRegistry actFact = aAppContext.get( IVedActorFactoriesRegistry.class );
     actFact.register( SkActorAttrText.FACTORY );
     // actFact.register( SkActorRtdataText.FACTORY );
+    actFact.register( SkActorSimpleRtdataText.FACTORY );
     actFact.register( SkActorRtdataValue.FACTORY );
     actFact.register( SkActorRtBooleanValue.FACTORY );
     actFact.register( SkActorCmdButton.FACTORY );
+    actFact.register( SkActorCmdPushButton.FACTORY );
     actFact.register( SkActorCmdCheckbox.FACTORY );
     actFact.register( SkActorColorDecorator.FACTORY );
     actFact.register( SkActorRtdataImage.FACTORY );
@@ -114,6 +117,7 @@ public class QuantSkMnemoGui
     vcfRegistry.registerFactory( ValedAvValobjRtdataRefbookAttrInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjVedUserActionCfg.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjCmdArgValuesSet.FACTORY );
+    vcfRegistry.registerFactory( ValedAvValobjMnemoCommandCfg.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjRefbookValuesInfo.FACTORY );
     vcfRegistry.registerFactory( ValedAvValobjRefbookItemSelector.FACTORY );
 

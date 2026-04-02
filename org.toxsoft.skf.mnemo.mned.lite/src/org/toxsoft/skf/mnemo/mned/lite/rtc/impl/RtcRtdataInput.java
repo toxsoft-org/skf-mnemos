@@ -16,7 +16,6 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
-import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
@@ -49,31 +48,29 @@ public class RtcRtdataInput
   ) {
 
     @Override
-    protected ITinTypeInfo doCreateTypeInfo() {
-      IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
+    protected ITinTypeInfo doCreateTypeInfo( IStridablesListEdit<ITinFieldInfo> aFields ) {
+      aFields.add( TFI_RTD_UGWI );
+      aFields.add( TFI_FORMAT_STRING );
 
-      fields.add( TFI_RTD_UGWI );
-      fields.add( TFI_FORMAT_STRING );
+      aFields.add( TFI_TEXT );
+      aFields.add( TFI_FONT );
+      aFields.add( TFI_SWT_FG_COLOR );
+      aFields.add( TFI_SWT_BK_FILL );
+      aFields.add( TFI_SWT_BORDER_INFO );
 
-      fields.add( TFI_TEXT );
-      fields.add( TFI_FONT );
-      fields.add( TFI_SWT_FG_COLOR );
-      fields.add( TFI_SWT_BK_FILL );
-      fields.add( TFI_SWT_BORDER_INFO );
+      aFields.add( TFI_HOR_ALIGNMENT );
+      aFields.add( TFI_VER_ALIGNMENT );
 
-      fields.add( TFI_HOR_ALIGNMENT );
-      fields.add( TFI_VER_ALIGNMENT );
+      aFields.add( TFI_LEFT_INDENT );
+      aFields.add( TFI_TOP_INDENT );
+      aFields.add( TFI_RIGHT_INDENT );
+      aFields.add( TFI_BOTTOM_INDENT );
 
-      fields.add( TFI_LEFT_INDENT );
-      fields.add( TFI_TOP_INDENT );
-      fields.add( TFI_RIGHT_INDENT );
-      fields.add( TFI_BOTTOM_INDENT );
-
-      fields.add( TFI_X );
-      fields.add( TFI_Y );
-      fields.add( TFI_WIDTH );
-      fields.add( TFI_HEIGHT );
-      return new PropertableEntitiesTinTypeInfo<>( fields, RtcRtdataInput.class );
+      aFields.add( TFI_X );
+      aFields.add( TFI_Y );
+      aFields.add( TFI_WIDTH );
+      aFields.add( TFI_HEIGHT );
+      return new PropertableEntitiesTinTypeInfo<>( aFields, RtcRtdataInput.class );
     }
 
     @Override
@@ -101,8 +98,7 @@ public class RtcRtdataInput
       VedAbstractActor actor = null;
 
       if( aCfg.viselId().isBlank() ) { // создание с нуля
-        IVedViselFactory f = viselFactory( ViselLabel.FACTORY_ID, aVedScreen );
-        VedItemCfg viselCfg = aVedScreen.model().visels().prepareFromTemplate( f.paletteEntries().first().itemCfg() );
+        VedItemCfg viselCfg = createViselCfg( ViselLabel.FACTORY_ID, aVedScreen, "RtdataInput" ); //$NON-NLS-1$
         viselCfg.propValues().setDouble( PROPID_X, aCfg.params().getDouble( PROPID_X ) );
         viselCfg.propValues().setDouble( PROPID_Y, aCfg.params().getDouble( PROPID_Y ) );
         v = aVedScreen.model().visels().create( viselCfg );

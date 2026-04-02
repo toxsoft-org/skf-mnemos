@@ -15,7 +15,6 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.av.opset.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
-import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.skf.mnemo.mned.lite.rtc.*;
 
 /**
@@ -42,15 +41,14 @@ public class RtcLine
   ) {
 
     @Override
-    protected ITinTypeInfo doCreateTypeInfo() {
-      IStridablesListEdit<ITinFieldInfo> fields = new StridablesList<>();
-      fields.add( TFI_LINE_INFO );
-      fields.add( TFI_SWT_COLOR_DESCRIPTOR );
-      fields.add( TinFieldInfo.makeCopy( TFI_X, TSID_NAME, "x1" ) ); //$NON-NLS-1$
-      fields.add( TinFieldInfo.makeCopy( TFI_Y, TSID_NAME, "y1" ) ); //$NON-NLS-1$
-      fields.add( TinFieldInfo.makeCopy( ViselLine.TFI_X2, TSID_NAME, "x2" ) ); //$NON-NLS-1$
-      fields.add( TinFieldInfo.makeCopy( ViselLine.TFI_Y2, TSID_NAME, "y2" ) ); //$NON-NLS-1$
-      return new PropertableEntitiesTinTypeInfo<>( fields, RtcLine.class );
+    protected ITinTypeInfo doCreateTypeInfo( IStridablesListEdit<ITinFieldInfo> aFields ) {
+      aFields.add( TFI_LINE_INFO );
+      aFields.add( TFI_SWT_COLOR_DESCRIPTOR );
+      aFields.add( TinFieldInfo.makeCopy( TFI_X, TSID_NAME, "x1" ) ); //$NON-NLS-1$
+      aFields.add( TinFieldInfo.makeCopy( TFI_Y, TSID_NAME, "y1" ) ); //$NON-NLS-1$
+      aFields.add( TinFieldInfo.makeCopy( ViselLine.TFI_X2, TSID_NAME, "x2" ) ); //$NON-NLS-1$
+      aFields.add( TinFieldInfo.makeCopy( ViselLine.TFI_Y2, TSID_NAME, "y2" ) ); //$NON-NLS-1$
+      return new PropertableEntitiesTinTypeInfo<>( aFields, RtcLine.class );
     }
 
     @Override

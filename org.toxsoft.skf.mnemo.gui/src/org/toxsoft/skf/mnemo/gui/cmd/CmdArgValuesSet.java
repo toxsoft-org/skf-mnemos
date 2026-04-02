@@ -27,6 +27,11 @@ import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 public class CmdArgValuesSet
     extends StridableParameterized {
 
+  /**
+   * None arguments
+   */
+  public static final CmdArgValuesSet NONE = new CmdArgValuesSet( IStridable.NONE_ID );
+
   private static final String KW_PARAMS = "params"; //$NON-NLS-1$
 
   /**
@@ -191,6 +196,9 @@ public class CmdArgValuesSet
    */
   public IStridablesList<IDataDef> argDefs( ISkCoreApi aCoreApi ) {
     if( classId.isBlank() || cmdId.isBlank() ) {
+      return IStridablesList.EMPTY;
+    }
+    if( classId.equals( IStridable.NONE_ID ) || cmdId.equals( IStridable.NONE_ID ) ) {
       return IStridablesList.EMPTY;
     }
     ISkClassInfo clsInfo = aCoreApi.sysdescr().findClassInfo( classId );

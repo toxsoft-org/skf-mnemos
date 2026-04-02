@@ -23,4 +23,10 @@ interface ITsResources {
   String STR_FALSE_IMAGE   = Messages.getString( "STR_FALSE_IMAGE" );   //$NON-NLS-1$
   String STR_FALSE_IMAGE_D = Messages.getString( "STR_FALSE_IMAGE_D" ); //$NON-NLS-1$
 
+  /**
+   * {@link LiteActorRtdataCheckbox}
+   */
+  String STR_ACTOR_CHECKBOX   = Messages.getString( "STR_ACTOR_CHECKBOX" );   //$NON-NLS-1$
+  String STR_ACTOR_CHECKBOX_D = Messages.getString( "STR_ACTOR_CHECKBOX_D" ); //$NON-NLS-1$
+
 }

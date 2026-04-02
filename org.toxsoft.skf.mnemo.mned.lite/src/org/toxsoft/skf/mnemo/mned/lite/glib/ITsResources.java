@@ -18,4 +18,7 @@ public interface ITsResources {
   String STR_BTN_COPY_D = Messages.getString( "STR_BTN_COPY_D" ); //$NON-NLS-1$
   String STR_BTN_EDIT   = Messages.getString( "STR_BTN_EDIT" );   //$NON-NLS-1$
   String STR_BTN_EDIT_D = Messages.getString( "STR_BTN_EDIT_D" ); //$NON-NLS-1$
+
+  String STR_SCREEN_CONFIG   = Messages.getString( "STR_SCREEN_CONFIG" );   //$NON-NLS-1$
+  String STR_SCREEN_CONFIG_D = Messages.getString( "STR_SCREEN_CONFIG_D" ); //$NON-NLS-1$
 }

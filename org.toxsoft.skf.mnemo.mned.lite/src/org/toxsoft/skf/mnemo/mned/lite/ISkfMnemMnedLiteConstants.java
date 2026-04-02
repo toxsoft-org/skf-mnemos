@@ -55,9 +55,11 @@ public interface ISkfMnemMnedLiteConstants {
   String ICONID_RTC_ATTR_VALUE_VIEW   = "rtc-attr-value";   //$NON-NLS-1$
   String ICONID_RTC_RTDATA_VALUE_VIEW = "rtc-rtdata-value"; //$NON-NLS-1$
 
-  String ICONID_RTC_INPUT_FIELD  = "rtc-input-field";  //$NON-NLS-1$
-  String ICONID_RTC_ATTR_INPUT   = "rtc-attr-input";   //$NON-NLS-1$
-  String ICONID_RTC_RTDATA_INPUT = "rtc-rtdata-input"; //$NON-NLS-1$
+  String ICONID_RTC_INPUT_FIELD     = "rtc-input-field";   //$NON-NLS-1$
+  String ICONID_RTC_ATTR_INPUT      = "rtc-attr-input";    //$NON-NLS-1$
+  String ICONID_RTC_RTDATA_INPUT    = "rtc-rtdata-input";  //$NON-NLS-1$
+  String ICONID_RTC_ATTR_CHECKBOX   = "rtc-attr-checkbox"; //$NON-NLS-1$
+  String ICONID_RTC_RTDATA_CHECKBOX = "rtc-rtd-checkbox";  //$NON-NLS-1$
 
   String ICONID_RTC_CIRCLE_LAMP  = "rtc-circle-lamp";  //$NON-NLS-1$
   String ICONID_RTC_RECT_LAMP    = "rtc-rect-lamp";    //$NON-NLS-1$
@@ -67,6 +69,7 @@ public interface ISkfMnemMnedLiteConstants {
   String ICONID_RTC_IMAGE      = "rtc-image";      //$NON-NLS-1$
   String ICONID_RTC_CHECKBOX   = "rtc-checkbox";   //$NON-NLS-1$
   String ICONID_RTC_CMD_BUTTON = "rtc-cmd-button"; //$NON-NLS-1$
+  String ICONID_RTC_CMD_INPUT  = "rtc-cmd-input";  //$NON-NLS-1$
 
   String ICONID_ACTOR_LAMP = "actor-lamp"; //$NON-NLS-1$
 

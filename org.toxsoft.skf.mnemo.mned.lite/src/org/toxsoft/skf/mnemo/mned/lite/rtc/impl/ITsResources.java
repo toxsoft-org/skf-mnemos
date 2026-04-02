@@ -62,6 +62,18 @@ interface ITsResources {
   String STR_RTC_RTDATA_INPUT_D = Messages.getString( "STR_RTC_RTDATA_INPUT_D" ); //$NON-NLS-1$
 
   /**
+   * {@link RtcAttrCheckbox}
+   */
+  String STR_RTC_ATTR_CHECKBOX   = Messages.getString( "STR_RTC_ATTR_CHECKBOX" );   //$NON-NLS-1$
+  String STR_RTC_ATTR_CHECKBOX_D = Messages.getString( "STR_RTC_ATTR_CHECKBOX_D" ); //$NON-NLS-1$
+
+  /**
+   * {@link RtcRtdataCheckbox}
+   */
+  String STR_RTC_RTDATA_CHECKBOX   = Messages.getString( "STR_RTC_RTDATA_CHECKBOX" );   //$NON-NLS-1$
+  String STR_RTC_RTDATA_CHECKBOX_D = Messages.getString( "STR_RTC_RTDATA_CHECKBOX_D" ); //$NON-NLS-1$
+
+  /**
    * RtcCmdButton
    */
   String STR_HIGHLIGHT_BKG = Messages.getString( "STR_HIGHLIGHT_BKG" ); //$NON-NLS-1$
@@ -112,5 +124,11 @@ interface ITsResources {
    */
   String STR_CMD_BUTTON   = Messages.getString( "STR_CMD_BUTTON" );   //$NON-NLS-1$
   String STR_CMD_BUTTON_D = Messages.getString( "STR_CMD_BUTTON_D" ); //$NON-NLS-1$
+
+  /**
+   * {@link RtcCmdInput}
+   */
+  String STR_CMD_INPUT   = Messages.getString( "STR_CMD_INPUT" );   //$NON-NLS-1$
+  String STR_CMD_INPUT_D = Messages.getString( "STR_CMD_INPUT_D" ); //$NON-NLS-1$
 
 }
