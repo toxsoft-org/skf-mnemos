@@ -22,8 +22,9 @@ import org.toxsoft.core.tslib.bricks.strid.idgen.*;
 import org.toxsoft.core.tslib.bricks.strid.impl.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.core.tslib.utils.logs.*;
 import org.toxsoft.skf.mnemo.gui.tools.imageset.PanelImageSetEntryEditor.*;
+import org.toxsoft.uskat.core.logger.*;
 
 /**
  * Панель редактирования набора описаний изображений.
@@ -43,6 +44,8 @@ public class PanelImageSetEditor
   private final IStridablesListEdit<IImageEntryInfo> imgInfoList = new StridablesList<>();
 
   private static IStridGenerator idGen = new SimpleStridGenerator( "imageSet", 1, 0 ); //$NON-NLS-1$
+
+  private final ILogger logger = LoggerUtils.getLogger( getClass() );
 
   /**
    * Конструктор.<br>
@@ -296,7 +299,7 @@ public class PanelImageSetEditor
     }
     catch( IOException ex ) {
       // TODO Auto-generated catch block
-      LoggerUtils.errorLogger().error( ex );
+      logger.error( ex );
     }
     // mimetype should be something like "image/png"
     if( mimetype != null && mimetype.split( "/" )[0].equals( "image" ) ) { //$NON-NLS-1$ //$NON-NLS-2$

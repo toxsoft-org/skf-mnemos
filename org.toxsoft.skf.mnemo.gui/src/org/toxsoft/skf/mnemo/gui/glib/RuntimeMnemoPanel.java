@@ -13,9 +13,10 @@ import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.core.tslib.utils.logs.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.uskat.core.gui.conn.*;
+import org.toxsoft.uskat.core.logger.*;
 
 /**
  * {@link IRuntimeMnemoPanel} implementation.
@@ -35,6 +36,8 @@ public class RuntimeMnemoPanel
   String lastPath = TsLibUtils.EMPTY_STRING;
 
   ISkVedEnvironment vedEnv;
+
+  private final ILogger logger = LoggerUtils.getLogger( getClass() );
 
   /**
    * Constructor.
@@ -195,7 +198,7 @@ public class RuntimeMnemoPanel
         VedScreenUtils.setVedScreenConfig( vedScreen, aCfg );
       }
       catch( Exception ex ) {
-        LoggerUtils.errorLogger().error( ex );
+        logger.error( ex );
         VedScreenUtils.setVedScreenConfig( vedScreen, IVedScreenCfg.NONE );
       }
     }

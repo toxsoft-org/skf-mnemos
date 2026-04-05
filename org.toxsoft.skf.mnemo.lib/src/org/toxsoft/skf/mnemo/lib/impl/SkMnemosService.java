@@ -22,7 +22,6 @@ import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.skid.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
@@ -135,7 +134,7 @@ public class SkMnemosService
           l.onMnemoCfgChanged( coreApi(), aOp, aConfigId );
         }
         catch( Exception ex ) {
-          LoggerUtils.errorLogger().error( ex );
+          logger().error( ex );
         }
       }
     }

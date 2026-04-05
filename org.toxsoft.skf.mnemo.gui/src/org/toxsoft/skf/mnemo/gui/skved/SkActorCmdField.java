@@ -26,7 +26,7 @@ import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.core.tslib.utils.logs.*;
 import org.toxsoft.skf.mnemo.gui.utils.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.cmdserv.*;
@@ -34,6 +34,7 @@ import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.api.users.*;
+import org.toxsoft.uskat.core.logger.*;
 import org.toxsoft.uskat.core.utils.*;
 
 /**
@@ -98,7 +99,8 @@ public class SkActorCmdField
 
   private IGwidList sourceGwidList = IGwidList.EMPTY;
 
-  private IAtomicValue lastValue = IAtomicValue.NULL;
+  private IAtomicValue  lastValue = IAtomicValue.NULL;
+  private final ILogger logger    = LoggerUtils.getLogger( getClass() );
 
   protected SkActorCmdField( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
@@ -284,7 +286,7 @@ public class SkActorCmdField
     }
     else {
       currCommand = null;
-      LoggerUtils.errorLogger().error( "Attempt to send command with null or none UGWI" ); //$NON-NLS-1$
+      logger.error( "Attempt to send command with null or none UGWI" ); //$NON-NLS-1$
     }
   }
 

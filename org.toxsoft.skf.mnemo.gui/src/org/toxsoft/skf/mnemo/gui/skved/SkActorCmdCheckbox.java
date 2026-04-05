@@ -28,7 +28,7 @@ import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.core.tslib.utils.logs.*;
 import org.toxsoft.skf.mnemo.gui.utils.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.cmdserv.*;
@@ -36,6 +36,7 @@ import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.api.users.*;
+import org.toxsoft.uskat.core.logger.*;
 
 /**
  * Actor: process push button so that on click send command.
@@ -122,8 +123,9 @@ public class SkActorCmdCheckbox
   private IUgwiList    ugwiList  = IUgwiList.EMPTY;
   private IAtomicValue lastValue = IAtomicValue.NULL;
 
-  private Ugwi cmdOnUgwi  = null;
-  private Ugwi cmdOffUgwi = null;
+  private Ugwi          cmdOnUgwi  = null;
+  private Ugwi          cmdOffUgwi = null;
+  private final ILogger logger     = LoggerUtils.getLogger( getClass() );
 
   protected SkActorCmdCheckbox( IVedItemCfg aCfg, IStridablesList<IDataDef> aDataDefs, VedScreen aVedScreen ) {
     super( aCfg, aDataDefs, aVedScreen );
@@ -174,7 +176,7 @@ public class SkActorCmdCheckbox
       }
       else {
         currCommand = null;
-        LoggerUtils.errorLogger().error( "Attempt to send command with null or none UGWI" ); //$NON-NLS-1$
+        logger.error( "Attempt to send command with null or none UGWI" ); //$NON-NLS-1$
       }
       //
       // /**

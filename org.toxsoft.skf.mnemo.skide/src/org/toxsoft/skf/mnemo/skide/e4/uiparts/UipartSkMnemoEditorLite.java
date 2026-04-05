@@ -14,12 +14,13 @@ import org.toxsoft.core.tslib.bricks.strid.more.*;
 import org.toxsoft.core.tslib.bricks.validator.*;
 import org.toxsoft.core.tslib.bricks.validator.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.core.tslib.utils.logs.*;
 import org.toxsoft.skf.mnemo.gui.e4.services.*;
 import org.toxsoft.skf.mnemo.lib.*;
 import org.toxsoft.skf.mnemo.mned.lite.glib.*;
 import org.toxsoft.skf.mnemo.skide.e4.services.*;
 import org.toxsoft.uskat.core.gui.conn.*;
+import org.toxsoft.uskat.core.logger.*;
 
 /**
  * Mnemoscheme editor LITE UIpart.
@@ -38,8 +39,11 @@ public class UipartSkMnemoEditorLite
 
   IMnemoEditorPanel panel;
 
-  ISkMnemoCfg skMnemocfg = null; // non-null value means mnemoscheme is loaded from Skconnection
-  File        mnemoFile  = null; // non-null value means mnemoscheme was loaded from the file
+  ISkMnemoCfg           skMnemocfg = null;                               // non-null value means mnemoscheme is loaded
+                                                                         // from Skconnection
+  File                  mnemoFile  = null;                               // non-null value means mnemoscheme was loaded
+                                                                         // from the file
+  private final ILogger logger     = LoggerUtils.getLogger( getClass() );
 
   @Override
   protected void doInit( Composite aParent ) {
@@ -97,7 +101,7 @@ public class UipartSkMnemoEditorLite
     if( vrl.isError() ) {
       // log messages
       for( ValidationResult vr : vrl.results() ) {
-        LoggerUtils.errorLogger().debug( vr.message() );
+        logger.debug( vr.message() );
       }
       // ask user to continue
       if( TsDialogUtils.askYesNoCancel( getShell(), STR_ASK_ACCEPT_MNEMO_CORRECTIONS ) != ETsDialogCode.YES ) {

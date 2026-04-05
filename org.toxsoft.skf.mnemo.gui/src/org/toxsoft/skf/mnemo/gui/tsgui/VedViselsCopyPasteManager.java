@@ -28,7 +28,8 @@ import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.utils.*;
-import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.core.tslib.utils.logs.*;
+import org.toxsoft.uskat.core.logger.*;
 
 /**
  * Менеджер копирования/вставки визуальных элементов.
@@ -101,6 +102,8 @@ public class VedViselsCopyPasteManager
   private VedAbstractVisel clickedVisel = null;
 
   private ITsPoint pastePoint = null;
+
+  private final ILogger logger = LoggerUtils.getLogger( getClass() );
 
   /**
    * Конструктор.
@@ -318,13 +321,13 @@ public class VedViselsCopyPasteManager
     for( IVedItemCfg cfg : visels2paste ) {
       if( viselFactoriesRegistry.find( cfg.factoryId() ) == null ) {
         resList.add( ValidationResult.error( STR_FMT_NO_VISEL_FACTORY, cfg.factoryId() ) );
-        LoggerUtils.errorLogger().error( STR_FMT_NO_VISEL_FACTORY + "%s", cfg.factoryId() ); //$NON-NLS-1$
+        logger.error( STR_FMT_NO_VISEL_FACTORY + "%s", cfg.factoryId() ); //$NON-NLS-1$
       }
     }
     for( IVedItemCfg cfg : actors2paste ) {
       if( actorFactoriesRegistry.find( cfg.factoryId() ) == null ) {
         resList.add( ValidationResult.error( STR_FMT_NO_ACTOR_FACTORY, cfg.factoryId() ) );
-        LoggerUtils.errorLogger().error( STR_FMT_NO_ACTOR_FACTORY + "%s", cfg.factoryId() ); //$NON-NLS-1$
+        logger.error( STR_FMT_NO_ACTOR_FACTORY + "%s", cfg.factoryId() ); //$NON-NLS-1$
       }
     }
     return resList;

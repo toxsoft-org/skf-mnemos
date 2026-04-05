@@ -12,7 +12,8 @@ import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.core.tslib.utils.logs.*;
+import org.toxsoft.uskat.core.logger.*;
 import org.w3c.dom.*;
 
 public class SvgHelper {
@@ -20,8 +21,9 @@ public class SvgHelper {
   private final String          filePath;
   private final DocumentBuilder docBuilder;
 
-  IListEdit<Rectangle> rects = new ElemArrayList<>();
-  IListEdit<Path>      paths = new ElemArrayList<>();
+  IListEdit<Rectangle>  rects  = new ElemArrayList<>();
+  IListEdit<Path>       paths  = new ElemArrayList<>();
+  private final ILogger logger = LoggerUtils.getLogger( getClass() );
 
   /**
    * Constructor.
@@ -90,7 +92,7 @@ public class SvgHelper {
       return pathStrings;
     }
     catch( Throwable ex ) {
-      LoggerUtils.errorLogger().error( ex );
+      logger.error( ex );
       return IStringList.EMPTY;
     }
   }

@@ -26,11 +26,12 @@ import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
-import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.core.tslib.utils.logs.*;
 import org.toxsoft.skf.refbooks.lib.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.sysdescr.dto.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
+import org.toxsoft.uskat.core.logger.*;
 import org.toxsoft.uskat.core.utils.*;
 
 /**
@@ -99,6 +100,8 @@ public class SkActorRtdataRefbook
 
   IdChain rbChain;
 
+  private final ILogger logger = LoggerUtils.getLogger( getClass() );
+
   SkActorRtdataRefbook( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
   }
@@ -144,7 +147,7 @@ public class SkActorRtdataRefbook
           ISkRefbookService rbServ = coreApi().getService( ISkRefbookService.SERVICE_ID );
           refbook = rbServ.findRefbook( rbChain.get( 0 ) );
           if( refbook == null ) {
-            LoggerUtils.errorLogger().warning( "Refbook %s not found", rbChain.get( 0 ) ); //$NON-NLS-1$
+            logger.warning( "Refbook %s not found", rbChain.get( 0 ) ); //$NON-NLS-1$
           }
         }
       }
@@ -170,7 +173,7 @@ public class SkActorRtdataRefbook
               setViselPropValue( viselId, viselPropId, aValue );
             }
             else {
-              LoggerUtils.errorLogger().error( "RbAttr not found: " + rbChain );
+              logger.error( "RbAttr not found: " + rbChain );
             }
           }
           break;

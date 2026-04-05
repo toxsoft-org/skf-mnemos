@@ -27,10 +27,11 @@ import org.toxsoft.core.tslib.bricks.strid.more.*;
 import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.core.tslib.utils.logs.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.refbooks.lib.*;
 import org.toxsoft.uskat.core.connection.*;
+import org.toxsoft.uskat.core.logger.*;
 
 public class ViselImagesetButton
     extends VedAbstractVisel
@@ -123,6 +124,8 @@ public class ViselImagesetButton
 
   EButtonViselState prevState = EButtonViselState.NORMAL;
 
+  private final ILogger logger = LoggerUtils.getLogger( getClass() );
+
   /**
    * Constructor.
    *
@@ -175,12 +178,12 @@ public class ViselImagesetButton
         ISkRefbookService rbServ = skConn.coreApi().getService( ISkRefbookService.SERVICE_ID );
         ISkRefbook refbook = rbServ.findRefbook( idChain.get( 0 ) );
         if( refbook == null ) {
-          LoggerUtils.errorLogger().warning( "Refbook %s not found", idChain.get( 0 ) ); //$NON-NLS-1$
+          logger.warning( "Refbook %s not found", idChain.get( 0 ) ); //$NON-NLS-1$
         }
         else {
           ISkRefbookItem item = refbook.findItem( idChain.get( 1 ) );
           if( item == null ) {
-            LoggerUtils.errorLogger().warning( "Refbook item %s not found", idChain.get( 1 ) ); //$NON-NLS-1$
+            logger.warning( "Refbook item %s not found", idChain.get( 1 ) ); //$NON-NLS-1$
           }
           else {
             IMapEdit<EButtonViselState, TsImageDescriptor> map = new ElemMap<>();
@@ -190,7 +193,7 @@ public class ViselImagesetButton
                 map.put( state, value.asValobj() );
               }
               else {
-                LoggerUtils.errorLogger().warning( "Refbook item attribute %s not found", state.id() ); //$NON-NLS-1$
+                logger.warning( "Refbook item attribute %s not found", state.id() ); //$NON-NLS-1$
               }
             }
             btnRenderer.setImages( map, imageManager() );

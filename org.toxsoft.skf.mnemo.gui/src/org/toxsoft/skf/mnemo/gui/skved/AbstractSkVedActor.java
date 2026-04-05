@@ -8,10 +8,11 @@ import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
-import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.core.tslib.utils.logs.*;
 import org.toxsoft.skf.mnemo.gui.utils.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.connection.*;
+import org.toxsoft.uskat.core.logger.*;
 import org.toxsoft.uskat.core.utils.*;
 
 /**
@@ -26,6 +27,7 @@ public abstract class AbstractSkVedActor
     implements ISkConnected {
 
   private final ISkVedEnvironment skVedEnv;
+  private static final ILogger    logger = LoggerUtils.getLogger( AbstractSkVedActor.class );
 
   protected AbstractSkVedActor( IVedItemCfg aConfig, IStridablesList<IDataDef> aPropDefs, VedScreen aVedScreen ) {
     super( aConfig, aPropDefs, aVedScreen );
@@ -82,13 +84,13 @@ public abstract class AbstractSkVedActor
       IAtomicValue av = aValues.getValue( aPropId );
       if( !av.isAssigned() ) {
         aValues.remove( aPropId );
-        LoggerUtils.errorLogger().warning( "UGWI value for property \"%s\" not assigned", aPropId ); //$NON-NLS-1$
+        logger.warning( "UGWI value for property \"%s\" not assigned", aPropId ); //$NON-NLS-1$
       }
       else {
         Ugwi ug = av.asValobj();
         if( ug != null && ug != Ugwi.NONE && !ug.kindId().equals( aUgwiKindId ) ) {
           aValues.remove( aPropId );
-          LoggerUtils.errorLogger().warning( "Wrong UGWI: \"%s\" for property \"%s\" removed", ug, aPropId ); //$NON-NLS-1$
+          logger.warning( "Wrong UGWI: \"%s\" for property \"%s\" removed", ug, aPropId ); //$NON-NLS-1$
         }
         if( ug != null && ug != Ugwi.NONE ) {
           // Gwid gwid = Gwid.of( ug.essence() );
@@ -96,7 +98,7 @@ public abstract class AbstractSkVedActor
           if( !MnemoUtils.isEntityExists( ug, aCoreApi ) ) {
             aValues.remove( aPropId );
             MnemoUtils.isEntityExists( ug, aCoreApi );
-            LoggerUtils.errorLogger().warning( "UGWI does not exists: \"%s\"", ug ); //$NON-NLS-1$
+            logger.warning( "UGWI does not exists: \"%s\"", ug ); //$NON-NLS-1$
           }
           // else {
           // aValues.setValobj( aPropId, ug );

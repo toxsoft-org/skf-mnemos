@@ -27,13 +27,14 @@ import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.core.tslib.utils.errors.*;
-import org.toxsoft.core.tslib.utils.logs.impl.*;
+import org.toxsoft.core.tslib.utils.logs.*;
 import org.toxsoft.skf.mnemo.gui.cmd.*;
 import org.toxsoft.skf.mnemo.gui.utils.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.cmdserv.*;
 import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.api.users.*;
+import org.toxsoft.uskat.core.logger.*;
 
 /**
  * Actor: process push button so that on Down and Up send command.
@@ -126,6 +127,8 @@ public class SkActorUpDownCmdButton
   private final ISkVedEnvironment vedEnv;
   private final ISkCoreApi        coreApi;
 
+  private final ILogger logger = LoggerUtils.getLogger( getClass() );
+
   protected SkActorUpDownCmdButton( IVedItemCfg aCfg, IStridablesList<IDataDef> aDataDefs, VedScreen aVedScreen ) {
     super( aCfg, aDataDefs, aVedScreen );
 
@@ -137,7 +140,7 @@ public class SkActorUpDownCmdButton
       @Override
       public void onButtonUp( VedAbstractVisel aVisel ) {
         if( upCommand != null ) {
-          LoggerUtils.errorLogger().warning( "Up command is in process: " + upCommand.toString() ); //$NON-NLS-1$
+          logger.warning( "Up command is in process: " + upCommand.toString() ); //$NON-NLS-1$
           return;
         }
         if( !canSendCommands() ) {
@@ -154,19 +157,19 @@ public class SkActorUpDownCmdButton
             TsDialogUtils.error( getShell(), "Unexpected NULL command returned" ); //$NON-NLS-1$
           }
           else {
-            LoggerUtils.errorLogger().info( "Up command sent: " + upCommand.toString() ); //$NON-NLS-1$
+            logger.info( "Up command sent: " + upCommand.toString() ); //$NON-NLS-1$
           }
         }
         else {
           upCommand = null;
-          LoggerUtils.errorLogger().warning( "Up command not set" ); //$NON-NLS-1$
+          logger.warning( "Up command not set" ); //$NON-NLS-1$
         }
       }
 
       @Override
       public void onButtonDown( VedAbstractVisel aVisel ) {
         if( downCommand != null ) {
-          LoggerUtils.errorLogger().warning( "Down command is in process: " + downCommand.toString() ); //$NON-NLS-1$
+          logger.warning( "Down command is in process: " + downCommand.toString() ); //$NON-NLS-1$
           return;
         }
         if( !canSendCommands() ) {
@@ -183,12 +186,12 @@ public class SkActorUpDownCmdButton
             TsDialogUtils.error( getShell(), "Unexpected NULL command returned" ); //$NON-NLS-1$
           }
           else {
-            LoggerUtils.errorLogger().info( "Down command sent: " + downCommand.toString() ); //$NON-NLS-1$
+            logger.info( "Down command sent: " + downCommand.toString() ); //$NON-NLS-1$
           }
         }
         else {
           downCommand = null;
-          LoggerUtils.errorLogger().warning( "Down command not set" ); //$NON-NLS-1$
+          logger.warning( "Down command not set" ); //$NON-NLS-1$
         }
       }
     };
