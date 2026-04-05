@@ -23,8 +23,8 @@ import org.toxsoft.core.tslib.bricks.strid.impl.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.*;
+import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.mnemo.gui.tools.imageset.PanelImageSetEntryEditor.*;
-import org.toxsoft.uskat.core.logger.*;
 
 /**
  * Панель редактирования набора описаний изображений.

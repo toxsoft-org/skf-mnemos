@@ -29,7 +29,7 @@ import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.logs.*;
-import org.toxsoft.uskat.core.logger.*;
+import org.toxsoft.core.tslib.utils.logs.impl.*;
 
 /**
  * Менеджер копирования/вставки визуальных элементов.

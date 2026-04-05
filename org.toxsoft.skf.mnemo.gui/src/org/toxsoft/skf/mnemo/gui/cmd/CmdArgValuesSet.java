@@ -182,7 +182,7 @@ public class CmdArgValuesSet
         result.setValue( argId, propValues.getValue( argId ) );
       }
       else {
-        LoggerUtils.errorLogger().warning( "Command argument: " + argId + " not defined" ); //$NON-NLS-1$//$NON-NLS-2$
+        LoggerUtils.warning( "Command argument: " + argId + " not defined" ); //$NON-NLS-1$//$NON-NLS-2$
       }
     }
     return result;

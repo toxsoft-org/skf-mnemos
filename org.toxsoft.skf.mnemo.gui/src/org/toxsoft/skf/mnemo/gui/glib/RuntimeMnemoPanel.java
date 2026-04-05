@@ -14,9 +14,9 @@ import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.*;
+import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.uskat.core.gui.conn.*;
-import org.toxsoft.uskat.core.logger.*;
 
 /**
  * {@link IRuntimeMnemoPanel} implementation.

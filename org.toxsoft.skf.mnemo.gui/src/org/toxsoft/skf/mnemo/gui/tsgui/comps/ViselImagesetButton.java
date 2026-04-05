@@ -28,10 +28,10 @@ import org.toxsoft.core.tslib.coll.*;
 import org.toxsoft.core.tslib.coll.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.*;
+import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.refbooks.lib.*;
 import org.toxsoft.uskat.core.connection.*;
-import org.toxsoft.uskat.core.logger.*;
 
 public class ViselImagesetButton
     extends VedAbstractVisel

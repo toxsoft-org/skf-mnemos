@@ -128,7 +128,7 @@ public class SkActorCmdPushButton
       }
       else {
         currCommand = null;
-        LoggerUtils.errorLogger().error( "Attempt to send command with null or none UGWI" ); //$NON-NLS-1$
+        LoggerUtils.error( "Attempt to send command with null or none UGWI" ); //$NON-NLS-1$
       }
       updateButtonState();
     };
