@@ -221,7 +221,7 @@ public class AbstractRtControl
       disposed = true;
     }
     else {
-      LoggerUtils.errorLogger().warning( STR_WARN_DUPLICATE_DIPOSAL, toString() );
+      LoggerUtils.warning( STR_WARN_DUPLICATE_DIPOSAL, toString() );
     }
   }
 

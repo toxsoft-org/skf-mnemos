@@ -13,7 +13,7 @@ import org.toxsoft.core.tslib.coll.primtypes.*;
 import org.toxsoft.core.tslib.coll.primtypes.impl.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.core.tslib.utils.logs.*;
-import org.toxsoft.uskat.core.logger.*;
+import org.toxsoft.core.tslib.utils.logs.impl.*;
 import org.w3c.dom.*;
 
 public class SvgHelper {
