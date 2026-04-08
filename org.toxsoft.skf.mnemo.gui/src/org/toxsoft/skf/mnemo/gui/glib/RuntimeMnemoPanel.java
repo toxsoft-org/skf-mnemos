@@ -57,11 +57,7 @@ public class RuntimeMnemoPanel
     vedScreen = new VedScreen( ctx );
     vedScreen.attachTo( theCanvas );
     vedScreen.pause();
-
-    // 2026-04-06 vs, mvk (TODO:!!! в проекте 24053_nm у мнемосхем неправильный цвет)
-    // внесенное изменение цвета по умолчанию незаконное и временное
-    // vedScreen.view().getControl().setBackground( new Color( 255, 255, 255 ) );
-    vedScreen.view().getControl().setBackground( new Color( 160, 160, 160 ) );
+    vedScreen.view().getControl().setBackground( new Color( 255, 255, 255 ) );
 
     vedEnv = new SkVedEnvironment( aContext.get( ISkConnectionSupplier.class ).defConn() );
     vedScreen.tsContext().put( ISkVedEnvironment.class, vedEnv );
