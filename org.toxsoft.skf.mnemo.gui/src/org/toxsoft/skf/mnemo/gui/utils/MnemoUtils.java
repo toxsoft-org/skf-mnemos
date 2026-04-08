@@ -7,9 +7,11 @@ import org.toxsoft.core.tslib.av.metainfo.*;
 import org.toxsoft.core.tslib.av.opset.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
+import org.toxsoft.core.tslib.gw.gwid.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.uskat.core.*;
+import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.ugwis.*;
 import org.toxsoft.uskat.core.connection.*;
 
@@ -40,7 +42,18 @@ public class MnemoUtils {
    */
   public static boolean isEntityExists( Ugwi aUgwi, ISkCoreApi aCoreApi ) {
     ISkUgwiKind ugwiKind = aCoreApi.ugwiService().getKind( aUgwi );
-    return ugwiKind.isContent( aUgwi );
+    Gwid gwid = ugwiKind.ugwiKind().getGwid( aUgwi );
+    ISkClassInfo classInfo = aCoreApi.sysdescr().findClassInfo( gwid.classId() );
+    if( classInfo == null ) {
+      return false;
+    }
+    if( !classInfo.rtdata().list().hasKey( gwid.propId() ) ) {
+      return false;
+    }
+    if( aCoreApi.objService().find( gwid.skid() ) == null ) {
+      return false;
+    }
+    return true;
   }
 
   /**
