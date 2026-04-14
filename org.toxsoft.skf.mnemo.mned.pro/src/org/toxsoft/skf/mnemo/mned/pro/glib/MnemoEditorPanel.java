@@ -5,6 +5,7 @@ import static org.toxsoft.skf.mnemo.gui.ISkMnemoGuiConstants.*;
 import static org.toxsoft.skf.mnemo.mned.pro.glib.ISkResources.*;
 import static org.toxsoft.uskat.core.gui.ISkCoreGuiConstants.*;
 
+import org.eclipse.jface.action.*;
 import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
 import org.eclipse.swt.graphics.*;
@@ -27,11 +28,14 @@ import org.toxsoft.core.tsgui.ved.screen.asp.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
 import org.toxsoft.core.tsgui.ved.screen.items.*;
+import org.toxsoft.core.tsgui.widgets.contrib.*;
+import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.*;
 import org.toxsoft.core.tslib.bricks.strid.coll.impl.*;
 import org.toxsoft.core.tslib.bricks.strid.more.*;
 import org.toxsoft.core.tslib.gw.ugwi.*;
+import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.ext.mastobj.gui.main.*;
 import org.toxsoft.skf.ext.mastobj.gui.main.resolver.*;
@@ -238,6 +242,29 @@ public class MnemoEditorPanel
 
   }
 
+  class TextContribution
+      extends ControlContribution {
+
+    private final int width;
+    private final int swtStyle;
+
+    private Text fldText;
+
+    public TextContribution( String aId, int aWidth, int aSwtStyle ) {
+      super( aId );
+      width = aWidth;
+      swtStyle = aSwtStyle;
+    }
+
+    @Override
+    protected Control createControl( Composite aParent ) {
+      fldText = new Text( aParent, swtStyle );
+      fldText.setSize( width, SWT.DEFAULT );
+      return fldText;
+    }
+
+  }
+
   private final GenericChangeEventer mnemoChangedEventer;
 
   private final IdChain suppliedConnectionId;
@@ -284,6 +311,9 @@ public class MnemoEditorPanel
   private final TabItem   tiObjTree;
 
   private final TsToolbar toolbar;
+
+  TextContribution fldXCoord;
+  TextContribution fldYCoord;
   // private final IVedItemsPalette vedPalette;
   private final VedItemsPaletteBar vedPalette;
   private final Canvas             theCanvas;
@@ -306,6 +336,8 @@ public class MnemoEditorPanel
   private MnemoSubmastersPanel submastersPanel;
 
   private ActorSubmastersPanel actorSubmasters;
+
+  private Composite statusBar;
 
   /**
    * Constructor.
@@ -419,6 +451,13 @@ public class MnemoEditorPanel
     toolbar = TsToolbar.create( centerBoard, tsContext(), //
         actionsProvider.listHandledActionDefs().toArray( new ITsActionDef[0] ) );
     toolbar.addListener( actionsProvider );
+    toolbar.addContributionItem( new LabelContribution( "lx", 30, " X: ", SWT.NONE ) ); //$NON-NLS-1$ //$NON-NLS-2$
+    fldXCoord = new TextContribution( "fldX", 50, SWT.BORDER ); //$NON-NLS-1$
+    toolbar.addContributionItem( fldXCoord );
+    toolbar.addContributionItem( new LabelContribution( "ly", 30, " Y: ", SWT.NONE ) ); //$NON-NLS-1$ //$NON-NLS-2$
+    fldYCoord = new TextContribution( "fldY", 50, SWT.BORDER ); //$NON-NLS-1$
+    toolbar.addContributionItem( fldYCoord );
+
     toolbar.getControl().setLayoutData( BorderLayout.NORTH );
     // vedPalette = new VedItemsSimplePaletteBar( centerBoard, SWT.BORDER, vedScreen, true );
     vedPalette = new VedItemsPaletteBar( centerBoard, SWT.BORDER, vedScreen, true );
@@ -427,6 +466,26 @@ public class MnemoEditorPanel
 
     theCanvas = new Canvas( centerBoard, SWT.DOUBLE_BUFFERED | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL );
     theCanvas.setLayoutData( BorderLayout.CENTER );
+    theCanvas.addMouseMoveListener( aE -> {
+      ID2Point d2p = vedScreen.view().coorsConverter().swt2Screen( aE.x, aE.y );
+      fldXCoord.fldText.setText( TsLibUtils.EMPTY_STRING + d2p.x() );
+      fldYCoord.fldText.setText( TsLibUtils.EMPTY_STRING + d2p.y() );
+    } );
+
+    statusBar = new Composite( centerBoard, SWT.NONE );
+    statusBar.setLayoutData( BorderLayout.SOUTH );
+    statusBar.setLayout( new BorderLayout() );
+    Text fldX = new Text( statusBar, SWT.BORDER );
+    fldX.setText( "12345" );
+
+    // TsTooltipWindow ttw = new TsTooltipWindow( theCanvas, aContext, ( aControl, aMouseX, aMouseY ) -> {
+    // IStringList ids = vedScreen.view().listViselIdsAtPoint( new TsPoint( aMouseX, aMouseY ) );
+    // if( !ids.isEmpty() ) {
+    // VedAbstractVisel visel = vedScreen.model().visels().list().findByKey( ids.first() );
+    // return new ITsTooltipDataProvider.Data( null, visel.nmName() );
+    // }
+    // return null;
+    // } );
 
     vedScreen.attachTo( theCanvas );
     // EAST
