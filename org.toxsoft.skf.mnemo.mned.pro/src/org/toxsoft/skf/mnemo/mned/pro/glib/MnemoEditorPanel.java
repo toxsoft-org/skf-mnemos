@@ -448,7 +448,7 @@ public class MnemoEditorPanel
     // CENTER
     Composite centerBoard = new Composite( sfMain, SWT.BORDER );
     centerBoard.setLayout( new BorderLayout() );
-    toolbar = TsToolbar.create( centerBoard, tsContext(), //
+    toolbar = TsToolbar.create( centerBoard, tsContext(),
         actionsProvider.listHandledActionDefs().toArray( new ITsActionDef[0] ) );
     toolbar.addListener( actionsProvider );
     toolbar.addContributionItem( new LabelContribution( "lx", 30, " X: ", SWT.NONE ) ); //$NON-NLS-1$ //$NON-NLS-2$
