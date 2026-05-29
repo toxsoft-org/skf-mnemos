@@ -13,6 +13,7 @@ import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.uskat.core.*;
 import org.toxsoft.uskat.core.api.sysdescr.*;
 import org.toxsoft.uskat.core.api.ugwis.*;
+import org.toxsoft.uskat.core.api.ugwis.kinds.*;
 import org.toxsoft.uskat.core.connection.*;
 
 /**
@@ -47,8 +48,20 @@ public class MnemoUtils {
     if( classInfo == null ) {
       return false;
     }
-    if( !classInfo.rtdata().list().hasKey( gwid.propId() ) ) {
-      return false;
+    if( ugwiKind.id().equals( UgwiKindSkAttr.KIND_ID ) ) {
+      if( !classInfo.attrs().list().hasKey( gwid.propId() ) ) {
+        return false;
+      }
+    }
+    if( ugwiKind.id().equals( UgwiKindSkRtdata.KIND_ID ) ) {
+      if( !classInfo.rtdata().list().hasKey( gwid.propId() ) ) {
+        return false;
+      }
+    }
+    if( ugwiKind.id().equals( UgwiKindSkCmd.KIND_ID ) ) {
+      if( !classInfo.cmds().list().hasKey( gwid.propId() ) ) {
+        return false;
+      }
     }
     if( aCoreApi.objService().find( gwid.skid() ) == null ) {
       return false;
