@@ -123,10 +123,10 @@ public class VedTableLayoutController
     }
 
     IListEdit<Double> heightList = new ElemArrayList<>();
-    double fullHeight = 0;
+    // double fullHeight = 0;
     for( int i = 0; i < config.rowCount(); i++ ) {
       double h = calcSingleRowHeight( i, visels );
-      fullHeight += h;
+      // fullHeight += h;
       heightList.add( Double.valueOf( h ) );
     }
 
@@ -345,8 +345,106 @@ public class VedTableLayoutController
 
   @Override
   public IList<ID2Rectangle> calcCellRects( String aMasterId, IStringList aSlaveIds ) {
-    // TODO Auto-generated method stub
-    return null;
+    IListEdit<ID2Rectangle> result = new ElemArrayList<>();
+
+    IStringListEdit idsToRemove = new StringArrayList();
+    for( String slaveId : aSlaveIds ) {
+      if( !cellConfigs.keys().hasElem( slaveId ) ) {
+        idsToRemove.add( slaveId );
+      }
+    }
+
+    for( String id : idsToRemove ) {
+      cellConfigs.removeByKey( id );
+      cellConfigs.put( id, new CellLayoutData() );
+    }
+
+    for( String id : aSlaveIds ) {
+      if( !cellConfigs.keys().hasElem( id ) ) {
+        cellConfigs.put( id, new CellLayoutData() );
+      }
+    }
+
+    IStridablesList<IVedVisel> visels = VedScreenUtils.listVisels( aSlaveIds, vedScreen );
+
+    VedAbstractVisel masterVisel = VedScreenUtils.findVisel( aMasterId, vedScreen );
+    ID2Rectangle r = masterVisel.bounds();
+    r = calcClientRect( r, config.margins() );
+
+    // double currX = masterVisel.props().getDouble( PROPID_X ) + margins.left();
+    // double currY = masterVisel.props().getDouble( PROPID_Y ) + margins.top();
+
+    IListEdit<Double> widthList = new ElemArrayList<>();
+    double fullWidth = 0;
+    for( int i = 0; i < config.columnCount(); i++ ) {
+      double w = calcSingleColumnWidth( i, visels );
+      fullWidth += w;
+      widthList.add( Double.valueOf( w ) );
+    }
+
+    double freeWidth = r.width() - fullWidth;
+    IIntListEdit colIdxes = new IntArrayList();
+    for( int i = 0; i < config.columnCount(); i++ ) {
+      if( shouldOccupyFreeWidth( i, visels ) ) {
+        colIdxes.add( i );
+      }
+    }
+    if( colIdxes.size() > 0 ) {
+      double extraWidth = freeWidth / colIdxes.size();
+      for( Integer cIdx : colIdxes ) {
+        double newW = widthList.removeByIndex( cIdx.intValue() ).doubleValue() + extraWidth;
+        widthList.insert( cIdx.intValue(), Double.valueOf( newW ) );
+      }
+    }
+
+    IListEdit<Double> heightList = new ElemArrayList<>();
+    // double fullHeight = 0;
+    for( int i = 0; i < config.rowCount(); i++ ) {
+      double h = calcSingleRowHeight( i, visels );
+      // fullHeight += h;
+      heightList.add( Double.valueOf( h ) );
+    }
+
+    // ID2Margins d2m = config.margins();
+
+    IListEdit<Double> xList = new ElemArrayList<>();
+    double x = 0;
+    xList.add( Double.valueOf( x ) );
+    for( int i = 0; i < config.columnCount(); i++ ) {
+      x += widthList.get( i ).doubleValue() + config.horizontalGap();
+      xList.add( Double.valueOf( x ) );
+    }
+
+    IListEdit<Double> yList = new ElemArrayList<>();
+    double y = 0;
+    yList.add( Double.valueOf( y ) );
+    for( int i = 0; i < config.rowCount(); i++ ) {
+      y += heightList.get( i ).doubleValue() + config.verticalGap();
+      yList.add( Double.valueOf( y ) );
+    }
+
+    // разместим визуальные элементы
+    IStringListEdit viselIds = new StringArrayList(); // ИДы размещенных визелей
+    for( int i = 0; i < config.rowCount(); i++ ) {
+      for( int j = 0; j < config.columnCount(); j++ ) {
+        int viselIdx = cells[i][j];
+        if( viselIdx >= 0 && viselIdx < visels.size() ) {
+          IVedVisel visel = visels.get( viselIdx );
+          if( !viselIds.hasElem( visel.id() ) ) { // проверим не был ли visel уже размещен
+            viselIds.add( visel.id() );
+            double cellX = r.x1() + xList.get( j ).doubleValue();
+            double cellY = r.y1() + yList.get( i ).doubleValue();
+            CellLayoutData cld = config.cellDatas.get( viselIdx );
+            double cellW = xList.get( j + cld.horSpan() ).doubleValue() - xList.get( j ).doubleValue();
+            double cellH = yList.get( i + cld.verSpan() ).doubleValue() - yList.get( i ).doubleValue();
+            ID2Rectangle cellRect = new D2Rectangle( cellX, cellY, cellW, cellH );
+            result.add( cellRect );
+            // layoutCellContent( cellRect, cld, visel );
+          }
+        }
+      }
+    }
+    return result;
   }
 
   void layoutCellContent( ID2Rectangle aCellBounds, CellLayoutData aLayoutData, IVedVisel aVisel ) {
