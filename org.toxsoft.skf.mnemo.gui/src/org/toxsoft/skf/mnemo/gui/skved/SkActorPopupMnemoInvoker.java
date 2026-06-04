@@ -236,9 +236,21 @@ public class SkActorPopupMnemoInvoker
     int dh = p.y() - clientRect.height;
     wnd.setSize( p.x() + dw, p.y() + dh );
 
-    // Point ctrlP = scrCtrl.toControl( aCoors.x(), aCoors.y() );
     Point ctrlP = scrCtrl.toDisplay( aCoors.x(), aCoors.y() );
-    // ctrlP = getShell().toDisplay( ctrlP );
+
+    Shell shell = getShell();
+    Point shellOrigin = shell.getLocation();
+    Point shellSize = shell.getSize();
+
+    // Правый нижний угол окна приложения
+    Point rbPoint = new Point( shellOrigin.x + shellSize.x, shellOrigin.y + shellSize.y );
+
+    if( ctrlP.x + wnd.getSize().x > rbPoint.x ) {
+      ctrlP.x = rbPoint.x - wnd.getSize().x - 16;
+    }
+    if( ctrlP.y + wnd.getSize().y > rbPoint.y ) {
+      ctrlP.y = rbPoint.y - wnd.getSize().y - 16;
+    }
 
     wnd.setLocation( ctrlP.x, ctrlP.y );
     wnd.open();
