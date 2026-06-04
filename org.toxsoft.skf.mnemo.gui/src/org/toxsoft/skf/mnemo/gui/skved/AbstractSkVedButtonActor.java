@@ -244,7 +244,7 @@ public abstract class AbstractSkVedButtonActor
   // To use
   //
 
-  void setTooltipText( String aText ) {
+  protected void setTooltipText( String aText ) {
     tooltipText = aText;
   }
 
