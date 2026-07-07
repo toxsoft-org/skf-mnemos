@@ -26,7 +26,7 @@ public interface IRtControlFactory
   ITinTypeInfo typeInfo();
 
   /**
-   * Returns the information about VED item properties.
+   * Returns the information about RtControl properties.
    * <p>
    * The list of properties is unambiguously compiled from the information provided by {@link #typeInfo()}.
    *

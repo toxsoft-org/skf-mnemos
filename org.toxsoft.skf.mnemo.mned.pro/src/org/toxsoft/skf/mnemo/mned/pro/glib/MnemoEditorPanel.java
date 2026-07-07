@@ -42,6 +42,7 @@ import org.toxsoft.skf.ext.mastobj.gui.main.resolver.*;
 import org.toxsoft.skf.ext.mastobj.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.*;
+import org.toxsoft.skf.mnemo.gui.tsgui.asp.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.layout.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.tools.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.utils.*;
@@ -457,6 +458,11 @@ public class MnemoEditorPanel
     toolbar.addContributionItem( new LabelContribution( "ly", 30, " Y: ", SWT.NONE ) ); //$NON-NLS-1$ //$NON-NLS-2$
     fldYCoord = new TextContribution( "fldY", 50, SWT.BORDER ); //$NON-NLS-1$
     toolbar.addContributionItem( fldYCoord );
+
+    ITsActionSetProvider aspPrint = new AspPrint( vedScreen );
+    DropDownMenuActionFromAsp printAction;
+    printAction = new DropDownMenuActionFromAsp( "aspPrint", aspPrint, toolbar, tsContext() );
+    toolbar.addAction( printAction );
 
     toolbar.getControl().setLayoutData( BorderLayout.NORTH );
     // vedPalette = new VedItemsSimplePaletteBar( centerBoard, SWT.BORDER, vedScreen, true );

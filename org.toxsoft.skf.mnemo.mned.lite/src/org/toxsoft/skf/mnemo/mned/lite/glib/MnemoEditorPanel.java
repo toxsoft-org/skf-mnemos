@@ -2,6 +2,7 @@ package org.toxsoft.skf.mnemo.mned.lite.glib;
 
 import static org.toxsoft.uskat.core.gui.ISkCoreGuiConstants.*;
 
+import org.eclipse.jface.action.*;
 import org.eclipse.swt.*;
 import org.eclipse.swt.custom.*;
 import org.eclipse.swt.widgets.*;
@@ -19,8 +20,11 @@ import org.toxsoft.core.tsgui.ved.screen.*;
 import org.toxsoft.core.tsgui.ved.screen.asp.*;
 import org.toxsoft.core.tsgui.ved.screen.cfg.*;
 import org.toxsoft.core.tsgui.ved.screen.impl.*;
+import org.toxsoft.core.tsgui.widgets.contrib.*;
+import org.toxsoft.core.tslib.bricks.d2.*;
 import org.toxsoft.core.tslib.bricks.events.change.*;
 import org.toxsoft.core.tslib.bricks.strid.more.*;
+import org.toxsoft.core.tslib.utils.*;
 import org.toxsoft.core.tslib.utils.errors.*;
 import org.toxsoft.skf.mnemo.gui.skved.*;
 import org.toxsoft.skf.mnemo.gui.tsgui.*;
@@ -90,6 +94,29 @@ public class MnemoEditorPanel
 
   }
 
+  class TextContribution
+      extends ControlContribution {
+
+    private final int width;
+    private final int swtStyle;
+
+    private Text fldText;
+
+    public TextContribution( String aId, int aWidth, int aSwtStyle ) {
+      super( aId );
+      width = aWidth;
+      swtStyle = aSwtStyle;
+    }
+
+    @Override
+    protected Control createControl( Composite aParent ) {
+      fldText = new Text( aParent, swtStyle );
+      fldText.setSize( width, SWT.DEFAULT );
+      return fldText;
+    }
+
+  }
+
   private final GenericChangeEventer mnemoChangedEventer;
 
   private final IdChain suppliedConnectionId;
@@ -145,6 +172,9 @@ public class MnemoEditorPanel
   private final VedViselPositionHandler       viselsPositionHandler;
   private final VedViselMultiselectionHandler multiSelectionHandler;
   private final VedViselsDeleteHandler        deleteHandler;
+
+  TextContribution fldXCoord;
+  TextContribution fldYCoord;
 
   /**
    * Constructor.
@@ -225,6 +255,13 @@ public class MnemoEditorPanel
     DropDownMenuActionFromAsp settingsAction;
     settingsAction = new DropDownMenuActionFromAsp( "aspSettings", aspSettings, toolbar, tsContext() );
     toolbar.addAction( settingsAction );
+
+    toolbar.addContributionItem( new LabelContribution( "lx", 30, " X: ", SWT.NONE ) ); //$NON-NLS-1$ //$NON-NLS-2$
+    fldXCoord = new TextContribution( "fldX", 50, SWT.BORDER ); //$NON-NLS-1$
+    toolbar.addContributionItem( fldXCoord );
+    toolbar.addContributionItem( new LabelContribution( "ly", 30, " Y: ", SWT.NONE ) ); //$NON-NLS-1$ //$NON-NLS-2$
+    fldYCoord = new TextContribution( "fldY", 50, SWT.BORDER ); //$NON-NLS-1$
+    toolbar.addContributionItem( fldYCoord );
 
     guiTimersService().quickTimers().addListener( vedScreen );
 
@@ -333,6 +370,12 @@ public class MnemoEditorPanel
 
     theCanvas = new Canvas( centerBoard, SWT.DOUBLE_BUFFERED | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL );
     theCanvas.setLayoutData( BorderLayout.CENTER );
+    theCanvas.addMouseMoveListener( aE -> {
+      ID2Point d2p = vedScreen.view().coorsConverter().swt2Screen( aE.x, aE.y );
+      fldXCoord.fldText.setText( TsLibUtils.EMPTY_STRING + d2p.x() );
+      fldYCoord.fldText.setText( TsLibUtils.EMPTY_STRING + d2p.y() );
+    } );
+
     vedScreen.attachTo( theCanvas );
 
     // EAST

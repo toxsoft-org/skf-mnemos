@@ -62,18 +62,20 @@ public interface ISkMnemoGuiConstants {
   String ICONID_DIAGNOSTICS         = "checklist";        //$NON-NLS-1$
   String ICONID_USER_ACTION         = "user-action";      //$NON-NLS-1$
 
-  String ICONID_OBJECT  = "box";
-  String ICONID_RIVET   = "clip";
-  String ICONID_LINK    = "link";
-  String ICONID_OBJECTS = "dialog-error";
+  String ICONID_OBJECT  = "box";          //$NON-NLS-1$
+  String ICONID_RIVET   = "clip";         //$NON-NLS-1$
+  String ICONID_LINK    = "link";         //$NON-NLS-1$
+  String ICONID_OBJECTS = "dialog-error"; //$NON-NLS-1$
 
-  String ICONID_RESOLVED_OBJECT = "opened-box";
+  String ICONID_RESOLVED_OBJECT = "opened-box"; //$NON-NLS-1$
 
   String ICONID_VED_ACTOR_COLOR_DECORATOR = "ved-actor-color-decorator"; //$NON-NLS-1$
   String ICONID_ACTOR_CMD                 = "actor-cmd";                 //$NON-NLS-1$
 
   String ICONID_VISEL_PANEL     = "visel-panel";           //$NON-NLS-1$
   String ICONID_IMAGESET_BUTTON = "visel-imageset-button"; //$NON-NLS-1$
+
+  String ICONID_PRINT_MNEMO_TO_IMAGE = "print-mnemo-to-image"; //$NON-NLS-1$
 
   // ------------------------------------------------------------------------------------
   // actions
