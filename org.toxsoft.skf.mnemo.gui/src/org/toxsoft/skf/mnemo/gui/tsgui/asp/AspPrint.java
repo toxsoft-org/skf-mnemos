@@ -48,7 +48,7 @@ public class AspPrint
   // canvas = TsNullArgumentRtException.checkNull( aCanvas );
   public AspPrint( IVedScreen aVedScreen ) {
     vedScreen = TsNullArgumentRtException.checkNull( aVedScreen );
-    defineAction( ACDEF_ZOOM_IN, this::doHandlePrintToFile, this::doIsEnabledPrintToFile );
+    defineAction( ACDEF_PRINT_TO_FILE, this::doHandlePrintToFile, this::doIsEnabledPrintToFile );
     defineAction( ACDEF_PRINT, this::doHandlePrint, this::doIsEnabledPrint );
   }
 
