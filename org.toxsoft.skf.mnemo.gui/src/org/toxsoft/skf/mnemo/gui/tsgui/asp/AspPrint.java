@@ -32,7 +32,7 @@ public class AspPrint
   /**
    * Action: print the mnemo to file.
    */
-  static final ITsActionDef ACDEF_PRINT_TO_FILE = ofPush2( ACTID_PRINT, //
+  static final ITsActionDef ACDEF_PRINT_TO_FILE = ofPush2( ACTID_PRINT_TO_FILE, //
       STR_PRINT_TO_FILE, STR_PRINT_TO_FILE_D, ICONID_PRINT_MNEMO_TO_IMAGE );
 
   // private final Canvas canvas;
@@ -85,7 +85,7 @@ public class AspPrint
   }
 
   void doHandlePrint() {
-
+    System.out.println( "Print" );
   }
 
   boolean doIsEnabledPrintToFile() {
