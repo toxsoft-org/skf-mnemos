@@ -107,6 +107,9 @@ public class SkActorNameAndTooltip
         setStdViselPropValue( avStr( TsLibUtils.EMPTY_STRING ) );
       }
     }
+    else {
+      tooltipText = props().getStr( PROPID_DESCRIPTION );
+    }
   }
 
   @Override
