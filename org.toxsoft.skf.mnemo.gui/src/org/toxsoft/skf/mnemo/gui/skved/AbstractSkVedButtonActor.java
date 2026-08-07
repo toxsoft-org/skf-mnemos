@@ -128,7 +128,8 @@ public abstract class AbstractSkVedButtonActor
     if( visel.isYours( p ) ) {
       visel.props().setBool( ViselButton.PROPID_HOVERED, true );
       setHandCursor();
-      retVal = true;
+      // retVal = true; иначе tooltip не работает
+      retVal = false;
       if( currVisel == null ) {
         currVisel = visel;
         onMouseIn();

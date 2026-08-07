@@ -61,6 +61,7 @@ public class SkActorNameAndTooltip
       fields.add( TFI_IS_ACTIVE );
       fields.add( TFI_NAME );
       fields.add( TFI_DESCRIPTION );
+      fields.add( TFI_TEXT );
       fields.add( TFI_VISEL_ID );
       fields.add( TFI_VISEL_PROP_ID );
       fields.add( TFI_UGWI );
@@ -108,7 +109,9 @@ public class SkActorNameAndTooltip
       }
     }
     else {
-      tooltipText = props().getStr( PROPID_DESCRIPTION );
+      if( aChangedValues.hasKey( PROPID_TEXT ) ) {
+        tooltipText = props().getStr( PROPID_TEXT );
+      }
     }
   }
 
