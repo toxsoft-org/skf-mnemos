@@ -158,6 +158,12 @@ public class RuntimeMnemoPanel
     vedEnv.restart();
   }
 
+  @Override
+  public void resumeSoft() {
+    vedScreen.resume();
+    vedScreen.setActorsEnabled( true );
+  }
+
   // ------------------------------------------------------------------------------------
   // IGwTimeFleetable
   //
